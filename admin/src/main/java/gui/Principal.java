@@ -157,6 +157,11 @@ public class Principal {
 		JMenuItem menuItemEventosAlta = new JMenuItem("Alta de evento");
 		menuItemEventosAlta.setIcon(iconAlta);
 		menuEventos.add(menuItemEventosAlta);
+
+		ConsultaEvento internalFrameconsultaEvento = new ConsultaEvento();
+		internalFrameconsultaEvento.setVisible(false);
+		frame.getContentPane().add(internalFrameconsultaEvento);
+
 		
 		menuItemEventosAlta.addActionListener(
 				new ActionListener() {
@@ -169,6 +174,14 @@ public class Principal {
 		JMenuItem menuItemEventosConsulta = new JMenuItem("Consulta de evento");
 		menuItemEventosConsulta.setIcon(iconConsulta);
 		menuEventos.add(menuItemEventosConsulta);
+
+		menuItemEventosConsulta.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						internalFrameconsultaEvento.setVisible(true);
+					}
+				}
+			);
 
 		JMenuItem menuItemEventosEditar = new JMenuItem("Editar evento");
 		menuItemEventosEditar.setIcon(iconEditar);
