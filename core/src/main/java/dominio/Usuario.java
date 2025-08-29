@@ -1,57 +1,45 @@
 package dominio;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "persona")
-public class Usuario {
+@Table(name = "usuario",
+       indexes = @Index(name = "ix_usuario_nickname", columnList = "nickname"))
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo")
+public abstract class Usuario extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Column(nullable = false, unique = true, length = 40) private String nickname;
+  @Column(nullable = false, length = 120) private String nombre;
+  @Column(nullable = false, length = 120) private String apellido;
+  @Column(nullable = false, length = 180) private String correo;
 
-    private String nombre;
+  protected Usuario() {}
+  protected Usuario(String nickname, String nombre, String apellido, String correo) {
+    this.nickname = nickname; this.nombre = nombre; this.apellido = apellido; this.correo = correo;
+  }
 
-    private String correo;
+  public String getNickname(){ return nickname; }
+  public String getNombre(){ return nombre; }
+  public String getApellido(){ return apellido; }
+  public String getCorreo(){ return correo; }
+}
 
-    public Usuario() {
-        // requerido por JPA
-    }
+@Entity @DiscriminatorValue("ASISTENTE")
+class Asistente extends Usuario {
+  protected Asistente() {}
+  public Asistente(String nick, String nom, String ape, String mail) { super(nick, nom, ape, mail); }
+}
 
-    public Usuario(String nombre, String correo) {
-        this.nombre = nombre;
-        this.correo = correo;
-    }
-
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    @Override
-    public String toString() {
-        return "Persona{" +
-               "id=" + id +
-               ", nombre='" + nombre + '\'' +
-               ", correo='" + correo + '\'' +
-               '}';
-    }
+@Entity @DiscriminatorValue("ORGANIZADOR")
+class Organizador extends Usuario {
+  protected Organizador() {}
+  public Organizador(String nick, String nom, String ape, String mail) { super(nick, nom, ape, mail); }
 }
