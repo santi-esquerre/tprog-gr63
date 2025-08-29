@@ -23,9 +23,9 @@
   <dependencies>
     <!-- dependencia al core -->
     <dependency>
-      <groupId>uy.edu.tpgr63</groupId>
-      <artifactId>core</artifactId>
-      <version>0.1.0</version>
+    	<groupId>uy.edu.tpgr63</groupId>
+    	<artifactId>core</artifactId>
+    	<version>0.1.0</version>
     </dependency>
 
     <!-- Swing helpers (alineado a lo que ya usás) -->
