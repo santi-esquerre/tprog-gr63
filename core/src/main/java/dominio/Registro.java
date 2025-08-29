@@ -42,7 +42,7 @@ public class Registro extends BaseEntity {
               foreignKey = @ForeignKey(name = "fk_reg_tiporeg"))
   private TipoRegistro tipo;
 
-  protected Registro() {}
+  public Registro() {}
 
   public DTAsistente obtenerDTAsistente() {
     return new DTAsistente(asistente.getNickname(), asistente.getNombre(),

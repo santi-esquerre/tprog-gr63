@@ -2,7 +2,6 @@ package dominio;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
@@ -30,16 +29,4 @@ public abstract class Usuario extends BaseEntity {
   public String getNombre(){ return nombre; }
   public String getApellido(){ return apellido; }
   public String getCorreo(){ return correo; }
-}
-
-@Entity @DiscriminatorValue("ASISTENTE")
-class Asistente extends Usuario {
-  protected Asistente() {}
-  public Asistente(String nick, String nom, String ape, String mail) { super(nick, nom, ape, mail); }
-}
-
-@Entity @DiscriminatorValue("ORGANIZADOR")
-class Organizador extends Usuario {
-  protected Organizador() {}
-  public Organizador(String nick, String nom, String ape, String mail) { super(nick, nom, ape, mail); }
 }
