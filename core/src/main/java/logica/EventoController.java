@@ -9,6 +9,8 @@ import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTEventoAlta;
 import dominio.Categoria;
+import exceptions.EmptyInputException;
+import exceptions.ValidationInputException;
 import infra.Tx;
 import interfaces.IEventoController;
 import jakarta.persistence.EntityManager;
@@ -32,12 +34,21 @@ public final class EventoController implements IEventoController {
   }
 
   @Override
-  public boolean altaEvento(DTEventoAlta dta) {
+  public boolean altaEvento(DTEventoAlta dta) throws ValidationInputException {
     Objects.requireNonNull(dta, "DTEventoAlta requerido");
+    if (dta.nombre() == null || dta.nombre().isBlank())
+	  throw new EmptyInputException("Nombre de evento");
+    if (dta.descripcion() == null || dta.descripcion().isBlank())
+	  throw new EmptyInputException("Descripcion de evento");
+    if (dta.fechaAlta() == null)
+    	throw new EmptyInputException("Fecha de alta de evento");
+    if (dta.sigla() == null || dta.sigla().isBlank())
+    	throw new EmptyInputException("Sigla de evento");
     return Tx.inTx(em -> {
       var cats = mapCategorias(em, dta.categorias());
       return eventoFactory.crearEvento(em, dta.nombre(), dta.descripcion(), dta.fechaAlta(), dta.sigla(), cats);
     });
+    
   }
 
   @Override

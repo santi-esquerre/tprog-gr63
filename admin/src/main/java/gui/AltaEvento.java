@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -16,11 +18,19 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import com.github.lgooddatepicker.components.DatePicker;
+
+import datatypes.DTEventoAlta;
+import exceptions.ValidationInputException;
+import interfaces.IEventoController;
+import util.ExceptionHandler;
 
 public class AltaEvento extends JInternalFrame {
 
@@ -28,28 +38,13 @@ public class AltaEvento extends JInternalFrame {
     private JTextField txtNombre;
     private JTextArea txtDescripcion;
     private JTextField txtSigla;
-    private JTextField textField;
-    private JTextField textField_1;
-    private JTextField textField_2;
-
-    /**
-     * Launch the application (para probar de forma independiente).
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                AltaEvento frame = new AltaEvento();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    /**
-     * Create the frame.
-     */
-    public AltaEvento() {
+    private DatePicker dateFechaAlta;
+    private JSpinner numFechaAltaMes;
+    private JSpinner numFechaAltaAno;
+    IEventoController controller;
+    public AltaEvento(IEventoController controller) {
+    	this.controller = controller;
+    	
         setResizable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -98,11 +93,11 @@ public class AltaEvento extends JInternalFrame {
         JPanel panelBotones = new JPanel();
         getContentPane().add(panelBotones, BorderLayout.SOUTH);
 
-        JButton btnAceptar = new JButton("Aceptar");
-        panelBotones.add(btnAceptar);
+        JButton btnSave = new JButton("Aceptar");
+        panelBotones.add(btnSave);
 
-        JButton btnCancelar = new JButton("Cancelar");
-        panelBotones.add(btnCancelar);
+        JButton btnCancel = new JButton("Cancelar");
+        panelBotones.add(btnCancel);
         
         String[] categorias = {"Conferencia", "Taller", "Seminario", "Curso", "Feria"};
                                 
@@ -140,37 +135,30 @@ public class AltaEvento extends JInternalFrame {
                         gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
                         panel_3.setLayout(gbl_panel_3);
                         
-                        textField = new JTextField();
-                        textField.setText("21");
-                        textField.setEditable(false);
-                        textField.setColumns(10);
-                        GridBagConstraints gbc_textField = new GridBagConstraints();
-                        gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-                        gbc_textField.insets = new Insets(0, 0, 0, 5);
-                        gbc_textField.gridx = 0;
-                        gbc_textField.gridy = 0;
-                        panel_3.add(textField, gbc_textField);
+                        dateFechaAlta = new DatePicker();
+                        dateFechaAlta.setDateToToday();
+                        GridBagConstraints gbc_txtFechaAltaDia = new GridBagConstraints(
+                        		);
+                        gbc_txtFechaAltaDia.fill = GridBagConstraints.HORIZONTAL;
+                        gbc_txtFechaAltaDia.insets = new Insets(0, 0, 0, 5);
+                        gbc_txtFechaAltaDia.gridx = 0;
+                        gbc_txtFechaAltaDia.gridy = 0;
+                        panel_3.add(dateFechaAlta, gbc_txtFechaAltaDia);
                         
-                        textField_1 = new JTextField();
-                        textField_1.setText("12");
-                        textField_1.setEditable(false);
-                        textField_1.setColumns(10);
-                        GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-                        gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-                        gbc_textField_1.insets = new Insets(0, 0, 0, 5);
-                        gbc_textField_1.gridx = 1;
-                        gbc_textField_1.gridy = 0;
-                        panel_3.add(textField_1, gbc_textField_1);
+                        numFechaAltaMes = new JSpinner();
+                        GridBagConstraints gbc_txtFechaAltaMes = new GridBagConstraints();
+                        gbc_txtFechaAltaMes.fill = GridBagConstraints.HORIZONTAL;
+                        gbc_txtFechaAltaMes.insets = new Insets(0, 0, 0, 5);
+                        gbc_txtFechaAltaMes.gridx = 1;
+                        gbc_txtFechaAltaMes.gridy = 0;
+                        panel_3.add(numFechaAltaMes, gbc_txtFechaAltaMes);
                         
-                        textField_2 = new JTextField();
-                        textField_2.setText("2004");
-                        textField_2.setEditable(false);
-                        textField_2.setColumns(10);
-                        GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-                        gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-                        gbc_textField_2.gridx = 2;
-                        gbc_textField_2.gridy = 0;
-                        panel_3.add(textField_2, gbc_textField_2);
+                        numFechaAltaAno = new JSpinner();
+                        GridBagConstraints gbc_txtFechaAltaAno = new GridBagConstraints();
+                        gbc_txtFechaAltaAno.fill = GridBagConstraints.HORIZONTAL;
+                        gbc_txtFechaAltaAno.gridx = 2;
+                        gbc_txtFechaAltaAno.gridy = 0;
+                        panel_3.add(numFechaAltaAno, gbc_txtFechaAltaAno);
                 
                         JLabel lblSigla = new JLabel("Sigla:");
                         GridBagConstraints gbc_lblSigla = new GridBagConstraints();
@@ -205,30 +193,59 @@ public class AltaEvento extends JInternalFrame {
                 panel.add(listaCategorias, gbc_listaCategorias);
                 listaCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         // Listeners
-        btnAceptar.addActionListener(e -> {
-            String nombre = txtNombre.getText().trim();
-
-            if (nombre.isEmpty() || descripcion.isEmpty() || sigla.isEmpty()) {
-                JOptionPane.showMessageDialog(this, 
-                        "Debe completar todos los campos obligatorios.", 
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Acá iría la validación real contra BD o controlador:
-            if ("EventoDuplicado".equalsIgnoreCase(nombre)) {
-                JOptionPane.showMessageDialog(this, 
-                        "Ya existe un evento con ese nombre. Corrija los datos.", 
-                        "Evento duplicado", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            JOptionPane.showMessageDialog(this, 
-                    "Evento \"" + nombre + "\" dado de alta correctamente.", 
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+        btnSave.addActionListener(e -> {
+            saveAction(e);
         });
 
-        btnCancelar.addActionListener(e -> dispose());
+        btnCancel.addActionListener(e -> dispose());
+    }
+    
+    private void clearForm() {
+		txtNombre.setText("");
+		txtDescripcion.setText("");
+		txtSigla.setText("");
+		//categoriaList.clearSelection();
+	}
+    
+    //Actions
+    private void saveAction(ActionEvent e) {
+    	String nombre = txtNombre.getText().trim();
+    	String descripcion = txtDescripcion.getText().trim();
+    	String sigla = txtSigla.getText().trim();
+    	Date fechaAlta = Date.from(dateFechaAlta.getDate().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
+    	
+    	DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, null);
+    	
+    	try {
+        	controller.altaEvento(eventoData);
+            clearForm();
+            dispose();
+		} catch (Exception ex) {
+			ExceptionHandler.manageException(this, ex);
+		}finally {
+			
+		}
+    	
+    	/*
+
+        if (nombre.isEmpty() || descripcion.isEmpty() || sigla.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                    "Debe completar todos los campos obligatorios.", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Acá iría la validación real contra BD o controlador:
+        if ("EventoDuplicado".equalsIgnoreCase(nombre)) {
+            JOptionPane.showMessageDialog(this, 
+                    "Ya existe un evento con ese nombre. Corrija los datos.", 
+                    "Evento duplicado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, 
+                "Evento \"" + nombre + "\" dado de alta correctamente.", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        */
     }
 }
