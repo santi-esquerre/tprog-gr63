@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.Printable;
 import java.io.Console;
 import java.security.PublicKey;
 
@@ -22,7 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
+import factory.Factory;
 import jiconfont.swing.IconFontSwing;
+import util.ExceptionHandler;
 import jiconfont.icons.font_awesome.FontAwesome;
 
 import javax.swing.JMenuBar;
@@ -31,6 +34,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JDesktopPane;
 import java.awt.Color;
+
+
 
 public class Principal {
 	
@@ -45,27 +50,33 @@ public class Principal {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					Principal window = new Principal();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				Principal window = new Principal();
+				window.frame.setVisible(true);
 			}
 		});
 	}
+	
+	
 
 	/**
 	 * Create the application.
 	 */
 	public Principal() {
 		initialize();
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+		    public void uncaughtException(Thread t, Throwable e) {
+		        ExceptionHandler.manageException(null, new Exception(e));
+		        System.exit(1);
+		    }
+		});
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		final Factory factory = Factory.get();
+		System.out.println(factory);
 		IconFontSwing.register(FontAwesome.getIconFont());
 		
 		// Íconos
@@ -151,7 +162,7 @@ public class Principal {
 		menuEventos.getPopupMenu().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		menuBar.add(menuEventos);
 		
-		AltaEvento internalFramealtAltaEvento = new AltaEvento();
+		AltaEvento internalFramealtAltaEvento = new AltaEvento(factory.getIEventoController());
 		internalFramealtAltaEvento.setVisible(false);
 		frame.getContentPane().add(internalFramealtAltaEvento);
 		JMenuItem menuItemEventosAlta = new JMenuItem("Alta de evento");
