@@ -34,7 +34,7 @@ public class RegistroEdicionEvento extends JInternalFrame {
 		Factory factory = Factory.get();
 		var evento = factory.getIEventoController();
 		var asistentes = factory.getIUsuarioController();
-
+		setBounds(100, 100, 455, 461);
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		getContentPane().add(panel, BorderLayout.NORTH);

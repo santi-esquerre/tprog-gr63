@@ -14,4 +14,6 @@ public class Factory {
 	public IEdicionController getIEdicionController(){ return EdicionController.get(); }
 	
 	public IUsuarioController getIUsuarioController(){ return UsuarioController.get(); }
+	
+	public IInstitucionController getIInstitucionController(){ return InstitucionController.get(); }
 }

@@ -40,6 +40,7 @@ import javax.swing.event.InternalFrameEvent;
 
 
 public class AltaUsuario extends JInternalFrame {
+	private static final long serialVersionUID = 1L;
 	private JTextField txtCorreo;
 	private JTextField txtNombre;
 	private JTextField txtNickname;

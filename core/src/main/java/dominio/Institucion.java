@@ -13,7 +13,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "institucion", uniqueConstraints = @UniqueConstraint(name = "uk_institucion_nombre", columnNames = "nombre"))
-public class Institucion {
+public class Institucion extends BaseEntity {
 
 	@Column(nullable = false, length = 120)
 	private String nombre;
