@@ -11,10 +11,13 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Window;
+
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
@@ -37,8 +40,8 @@ import datatypes.DTTipoRegistro;
 
 public class TipoRegistroSeleccionado extends JDialog {
 	private String selectedValue = null; // Variable para almacenar el valor seleccionado
-	public TipoRegistroSeleccionado(Frame parent, String title, String nombreEdicion) {
-		super(parent, title, true);
+	public TipoRegistroSeleccionado(Window parent, String title, String nombreEdicion) {
+		super(parent, title, Dialog.ModalityType.APPLICATION_MODAL);
 		setResizable(true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		
@@ -79,8 +82,8 @@ public class TipoRegistroSeleccionado extends JDialog {
 		JTextArea textArea = new JTextArea();
 		
 		//se rellena el combobox
-		Factory factory = Factory.getInstance();
-		IEdicionController edicion = factory.getIEdicionController();
+		Factory factory = Factory.get();
+		var edicion = factory.getIEdicionController();
 		Vector<DTTipoRegistro> tiposDeRegistro = (Vector<DTTipoRegistro>) edicion.mostrarTiposDeRegistro(nombreEdicion); // Se trae los tipos de registro asociados a la edicion
 		Vector<Integer> indicesSinCupo = new Vector<Integer>(tiposDeRegistro.size()); // Vector para guardar los índices sin cupo
 		for (int i = 0; i < tiposDeRegistro.size() + 1; i++) {

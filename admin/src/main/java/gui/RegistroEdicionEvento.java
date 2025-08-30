@@ -9,19 +9,32 @@ import java.awt.GridBagConstraints;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Insets;
+import java.awt.Window;
+
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+
+import factory.Factory;
+
 import javax.swing.JScrollPane;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegistroEdicionEvento extends JInternalFrame {
 	private JTable table;
+	String seleccionado = null; // Variable que se usará para tomar el valor del tipo de registro seleccionado
 	public RegistroEdicionEvento() {
 		
+		Factory factory = Factory.get();
+		var evento = factory.getIEventoController();
+		var asistentes = factory.getIUsuarioController();
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		getContentPane().add(panel, BorderLayout.NORTH);
@@ -112,6 +125,21 @@ public class RegistroEdicionEvento extends JInternalFrame {
 		panelTabla.add(scrollPane, gbc_scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int fila = table.getSelectedRow();
+					if (fila != -1) {
+						Object valor = table.getValueAt(fila, 0);
+						Window parent = SwingUtilities.getWindowAncestor(table);
+						TipoRegistroSeleccionado dialog = new TipoRegistroSeleccionado(parent, "Tipo de Registro", valor.toString());
+						dialog.setVisible(true);
+						seleccionado = dialog.getSelectedValue();
+					}
+				}
+			}
+		});
 		scrollPane.setViewportView(table);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
