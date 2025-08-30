@@ -177,6 +177,7 @@ public class Principal {
 		menuItemEventosAlta.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						internalFramealtAltaEvento.loadForm();
 						internalFramealtAltaEvento.setVisible(true);
 					}
 				}

@@ -9,7 +9,10 @@ import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTEventoAlta;
 import dominio.Categoria;
+import exceptions.DuplicateEntityException;
 import exceptions.EmptyInputException;
+import exceptions.EmptySelectionInputException;
+import exceptions.InvalidSelectionInputException;
 import exceptions.ValidationInputException;
 import infra.Tx;
 import interfaces.IEventoController;
@@ -35,19 +38,29 @@ public final class EventoController implements IEventoController {
 
   @Override
   public boolean altaEvento(DTEventoAlta dta) throws ValidationInputException {
+	  // Validaciones
+	  System.out.println(dta.categorias());
     Objects.requireNonNull(dta, "DTEventoAlta requerido");
     if (dta.nombre() == null || dta.nombre().isBlank())
 	  throw new EmptyInputException("Nombre");
-    if (dta.descripcion() == null || dta.descripcion().isBlank())
+    if (dta.descripcion() == null)
 	  throw new EmptyInputException("Descripcion");
     if (dta.fechaAlta() == null)
     	throw new EmptyInputException("Fecha de alta");
     if (dta.sigla() == null || dta.sigla().isBlank())
     	throw new EmptyInputException("Sigla");
-    return Tx.inTx(em -> {
+    if (dta.categorias() == null || dta.categorias().isEmpty())
+    	throw new EmptySelectionInputException("Categoria");
+    if(this.obtenerCategorias().containsAll(dta.categorias()) == false)
+		throw new InvalidSelectionInputException("Categoria");
+    
+    //Transacción de alta de evento
+    boolean res = Tx.inTx(em -> {
       var cats = mapCategorias(em, dta.categorias());
       return eventoFactory.crearEvento(em, dta.nombre(), dta.descripcion(), dta.fechaAlta(), dta.sigla(), cats);
     });
+    if (!res) throw new DuplicateEntityException("nombre");
+    return res;
     
   }
 
