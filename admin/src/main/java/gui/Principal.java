@@ -35,6 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.JDesktopPane;
 import java.awt.Color;
 
+
+
 public class Principal {
 	
 	final int TAMANIO_ICONO = 20;
@@ -48,21 +50,25 @@ public class Principal {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					Principal window = new Principal();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					ExceptionHandler.manageException(null, e);
-				}
+				Principal window = new Principal();
+				window.frame.setVisible(true);
 			}
 		});
 	}
+	
+	
 
 	/**
 	 * Create the application.
 	 */
 	public Principal() {
 		initialize();
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+		    public void uncaughtException(Thread t, Throwable e) {
+		        ExceptionHandler.manageException(null, new Exception(e));
+		        System.exit(1);
+		    }
+		});
 	}
 
 	/**

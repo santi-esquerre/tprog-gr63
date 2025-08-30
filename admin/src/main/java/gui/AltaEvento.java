@@ -39,8 +39,6 @@ public class AltaEvento extends JInternalFrame {
     private JTextArea txtDescripcion;
     private JTextField txtSigla;
     private DatePicker dateFechaAlta;
-    private JSpinner numFechaAltaMes;
-    private JSpinner numFechaAltaAno;
     IEventoController controller;
     public AltaEvento(IEventoController controller) {
     	this.controller = controller;
@@ -136,7 +134,7 @@ public class AltaEvento extends JInternalFrame {
                         panel_3.setLayout(gbl_panel_3);
                         
                         dateFechaAlta = new DatePicker();
-                        dateFechaAlta.setDateToToday();
+                        //dateFechaAlta.setDateToToday();
                         GridBagConstraints gbc_txtFechaAltaDia = new GridBagConstraints(
                         		);
                         gbc_txtFechaAltaDia.fill = GridBagConstraints.HORIZONTAL;
@@ -144,21 +142,6 @@ public class AltaEvento extends JInternalFrame {
                         gbc_txtFechaAltaDia.gridx = 0;
                         gbc_txtFechaAltaDia.gridy = 0;
                         panel_3.add(dateFechaAlta, gbc_txtFechaAltaDia);
-                        
-                        numFechaAltaMes = new JSpinner();
-                        GridBagConstraints gbc_txtFechaAltaMes = new GridBagConstraints();
-                        gbc_txtFechaAltaMes.fill = GridBagConstraints.HORIZONTAL;
-                        gbc_txtFechaAltaMes.insets = new Insets(0, 0, 0, 5);
-                        gbc_txtFechaAltaMes.gridx = 1;
-                        gbc_txtFechaAltaMes.gridy = 0;
-                        panel_3.add(numFechaAltaMes, gbc_txtFechaAltaMes);
-                        
-                        numFechaAltaAno = new JSpinner();
-                        GridBagConstraints gbc_txtFechaAltaAno = new GridBagConstraints();
-                        gbc_txtFechaAltaAno.fill = GridBagConstraints.HORIZONTAL;
-                        gbc_txtFechaAltaAno.gridx = 2;
-                        gbc_txtFechaAltaAno.gridy = 0;
-                        panel_3.add(numFechaAltaAno, gbc_txtFechaAltaAno);
                 
                         JLabel lblSigla = new JLabel("Sigla:");
                         GridBagConstraints gbc_lblSigla = new GridBagConstraints();
