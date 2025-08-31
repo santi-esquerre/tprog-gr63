@@ -1,5 +1,4 @@
-package factory;
-import interfaces.*;
+package interfaces;
 import logica.*;
 
 public class Factory {

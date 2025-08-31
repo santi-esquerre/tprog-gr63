@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
-import factory.Factory;
+import interfaces.*;
 import jiconfont.swing.IconFontSwing;
 import util.ExceptionHandler;
 import jiconfont.icons.font_awesome.FontAwesome;

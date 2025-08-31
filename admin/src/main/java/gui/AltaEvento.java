@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -26,13 +28,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import org.hibernate.mapping.Set;
 
 import com.github.lgooddatepicker.components.DatePicker;
 
 import datatypes.DTEventoAlta;
+import exceptions.CategoriaRepetidaException;
 import exceptions.ValidationInputException;
 import interfaces.IEventoController;
+import util.Dialog;
 import util.ExceptionHandler;
 
 public class AltaEvento extends JInternalFrame {
@@ -45,9 +48,9 @@ public class AltaEvento extends JInternalFrame {
     private JList<String> listCategorias;
     IEventoController controller;
     DefaultListModel<String> categoriaslistModel;
+    
     public AltaEvento(IEventoController controller) {
     	this.controller = controller;
-    	
     	java.util.Set<String> categorias;
     	
         setResizable(true);
@@ -205,43 +208,25 @@ public class AltaEvento extends JInternalFrame {
     	String sigla = txtSigla.getText().trim();
     	Date fechaAlta = Date.from(dateFechaAlta.getDate().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
     	
-    	DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, listCategorias.getSelectedValuesList().stream().collect(java.util.stream.Collectors.toSet()));
     	
     	try {
-        	if(controller.altaEvento(eventoData)) {
-        						JOptionPane.showMessageDialog(this, 
-						"El evento fue dado de alta correctamente.", 
-						"Éxito", JOptionPane.INFORMATION_MESSAGE);
-			}else {
-			}
-            dispose();
+    		Boolean emptyFields = nombre.isBlank() || descripcion.isBlank() || sigla.isBlank() || fechaAlta == null;
+    	    if (emptyFields) 
+    	    	Dialog.showWarning(this, "Debe completar todos los campos.");
+    	    else {
+    	    	DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, listCategorias.getSelectedValuesList() != null ? new HashSet<>(listCategorias.getSelectedValuesList()) : new HashSet<>());
+            	if(controller.altaEvento(eventoData)) {
+            		Dialog.showSuccess(this, "El evento se ha dado de alta correctamente.");
+            		dispose();
+    			}
+                
+    	    }
+    	    
             
 		} catch (Exception ex) {
 			ExceptionHandler.manageException(this, ex);
 		}finally {
 			
 		}
-    	
-    	/*
-
-        if (nombre.isEmpty() || descripcion.isEmpty() || sigla.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                    "Debe completar todos los campos obligatorios.", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Acá iría la validación real contra BD o controlador:
-        if ("EventoDuplicado".equalsIgnoreCase(nombre)) {
-            JOptionPane.showMessageDialog(this, 
-                    "Ya existe un evento con ese nombre. Corrija los datos.", 
-                    "Evento duplicado", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        JOptionPane.showMessageDialog(this, 
-                "Evento \"" + nombre + "\" dado de alta correctamente.", 
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        */
     }
 }
