@@ -82,20 +82,7 @@ public class ConsultaEvento extends JInternalFrame {
 		dataPanel.setLayout(gbl_dataPanel);
 		
 		tableListadoEventos = new JTable();
-		tableListadoEventos.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Nombre", "Sigla", "Descripci\u00F3n", "Fecha de Alta"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
+		
 		GridBagConstraints gbc_tableListadoEventos = new GridBagConstraints();
 		gbc_tableListadoEventos.gridheight = 2;
 		gbc_tableListadoEventos.insets = new Insets(0, 0, 5, 0);
@@ -120,6 +107,7 @@ public class ConsultaEvento extends JInternalFrame {
 		detailsPanel.setLayout(gbl_detailsPanel);
 		
 		JLabel labelNombreEvento = new JLabel("Nombre:");
+		labelNombreEvento.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_labelNombreEvento = new GridBagConstraints();
 		gbc_labelNombreEvento.insets = new Insets(0, 0, 5, 5);
 		gbc_labelNombreEvento.gridx = 0;
@@ -134,10 +122,9 @@ public class ConsultaEvento extends JInternalFrame {
 		detailsPanel.add(lblNombreEventoPlaceholder, gbc_lblNombreEventoPlaceholder);
 		
 		JLabel lblSigla = new JLabel("Sigla:");
-		lblSigla.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSigla.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblSigla = new GridBagConstraints();
 		gbc_lblSigla.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSigla.anchor = GridBagConstraints.WEST;
 		gbc_lblSigla.gridx = 0;
 		gbc_lblSigla.gridy = 1;
 		detailsPanel.add(lblSigla, gbc_lblSigla);
@@ -150,10 +137,9 @@ public class ConsultaEvento extends JInternalFrame {
 		detailsPanel.add(lblSiglaPlaceholder, gbc_lblSiglaPlaceholder);
 		
 		JLabel lblCategorías = new JLabel("Categorías:");
-		lblCategorías.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCategorías.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblCategorías = new GridBagConstraints();
 		gbc_lblCategorías.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCategorías.anchor = GridBagConstraints.NORTH;
 		gbc_lblCategorías.gridx = 0;
 		gbc_lblCategorías.gridy = 2;
 		detailsPanel.add(lblCategorías, gbc_lblCategorías);
@@ -188,20 +174,7 @@ public class ConsultaEvento extends JInternalFrame {
 		panelDetalleEdiciones.setLayout(gbl_panelDetalleEdiciones);
 		
 		tableListadoEdiciones = new JTable();
-		tableListadoEdiciones.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Nombre", "Sigla", "Fecha de Inicio", "Fecha de Fin", "Ciudad", "Pa\u00EDs", "Fecha de Alta"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, Object.class, Object.class, String.class, String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
+		
 		GridBagConstraints gbc_tableListadoEdiciones = new GridBagConstraints();
 		gbc_tableListadoEdiciones.gridheight = 4;
 		gbc_tableListadoEdiciones.insets = new Insets(0, 0, 5, 0);
