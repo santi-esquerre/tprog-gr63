@@ -11,6 +11,7 @@ public final class JPA {
   private JPA() {}
   
   public static void switchToTesting() {
+	
 	if (emf != null && emf.isOpen()) emf.close();
 	emf = Persistence.createEntityManagerFactory("testPU");
   }
