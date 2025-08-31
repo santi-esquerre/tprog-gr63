@@ -222,7 +222,10 @@ public class Principal {
 		menuItemEdicionesConsulta.setIcon(iconConsulta);
 		menuEdicionesBar.add(menuItemEdicionesConsulta);
 		
-		RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento();
+		IEdicionController edicionController = factory.getIEdicionController();
+		IUsuarioController usuarioController = factory.getIUsuarioController();
+		
+		RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento(edicionController, usuarioController);
 		internalFrameRegistroEdicion.setVisible(false);
 		frame.getContentPane().add(internalFrameRegistroEdicion);
 		
@@ -278,7 +281,8 @@ public class Principal {
 		menuItemInstitucionesAlta.setIcon(iconAlta);
 		menuInstituciones.add(menuItemInstitucionesAlta);
 		
-		AltaInstitucion internalFramealtaInstitucion = new AltaInstitucion();
+		IInstitucionController institucionController = factory.getIInstitucionController();
+		AltaInstitucion internalFramealtaInstitucion = new AltaInstitucion(institucionController);
 		internalFramealtaInstitucion.setVisible(false);
 		frame.getContentPane().add(internalFramealtaInstitucion);
 		

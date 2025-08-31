@@ -13,7 +13,7 @@ import java.awt.Insets;
 import javax.swing.border.EmptyBorder;
 
 import exceptions.InstitucionRepetidaException;
-import factory.Factory;
+import interfaces.IInstitucionController;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -30,7 +30,9 @@ public class AltaInstitucion extends JInternalFrame{
 	private JTextField textNombre;
 	private JTextField textWeb;
 	private JTextArea textDesc;
-	public AltaInstitucion() {
+	private IInstitucionController institucionController;
+	public AltaInstitucion(IInstitucionController institucionController) {
+		this.institucionController = institucionController;
 		setBounds(100, 100, 400, 283);
 		setResizable(true);
 		setClosable(true);
@@ -133,9 +135,7 @@ public class AltaInstitucion extends JInternalFrame{
 		
 		if (checkCampos()) {
 			try {
-				Factory factory = Factory.get();
-				var institucion = factory.getIInstitucionController();
-				institucion.crearInstitucion(nombre, desc, web);
+				institucionController.crearInstitucion(nombre, desc, web);
 				JOptionPane.showMessageDialog(this, "Institución registrada correctamente", "Registro de Institucion", JOptionPane.INFORMATION_MESSAGE);
 			} catch (InstitucionRepetidaException i) {
 				JOptionPane.showMessageDialog(this, i.getMessage(), "Registro de Institucion", JOptionPane.ERROR_MESSAGE);

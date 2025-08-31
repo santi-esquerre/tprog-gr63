@@ -4,7 +4,6 @@ import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import exceptions.DataBaseErrorException;
 import exceptions.ValidationInputException;
 public class ExceptionHandler {
 	public static final boolean DEBUG = true;

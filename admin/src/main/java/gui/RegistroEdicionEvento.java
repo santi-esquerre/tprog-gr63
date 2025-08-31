@@ -16,7 +16,9 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import factory.Factory;
+import interfaces.IEdicionController;
+import interfaces.IEventoController;
+import interfaces.IUsuarioController;
 
 import javax.swing.JScrollPane;
 import javax.swing.Box;
@@ -29,11 +31,8 @@ import java.awt.event.MouseEvent;
 public class RegistroEdicionEvento extends JInternalFrame {
 	private JTable table;
 	String seleccionado = null; // Variable que se usará para tomar el valor del tipo de registro seleccionado
-	public RegistroEdicionEvento() {
-		
-		Factory factory = Factory.get();
-		var evento = factory.getIEventoController();
-		var asistentes = factory.getIUsuarioController();
+	public RegistroEdicionEvento(IEdicionController edicionController, IUsuarioController usuarioController) {
+	
 		setBounds(100, 100, 455, 461);
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -133,7 +132,7 @@ public class RegistroEdicionEvento extends JInternalFrame {
 					if (fila != -1) {
 						Object valor = table.getValueAt(fila, 0);
 						Window parent = SwingUtilities.getWindowAncestor(table);
-						TipoRegistroSeleccionado dialog = new TipoRegistroSeleccionado(parent, "Tipo de Registro", valor.toString());
+						TipoRegistroSeleccionado dialog = new TipoRegistroSeleccionado(parent, "Tipo de Registro", valor.toString(), edicionController);
 						dialog.setVisible(true);
 						seleccionado = dialog.getSelectedValue();
 					}

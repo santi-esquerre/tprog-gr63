@@ -1,24 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ----- Parámetros (podés exportarlos antes de correr el script) -----
+# ----- Parámetros -----
 PG_VERSION="${PG_VERSION:-16}"
 CONTAINER_NAME="${CONTAINER_NAME:-tpgr63-pg}"
 HOST_PORT="${PG_PORT:-5432}"
 DB_NAME="${DB_NAME:-tpgr63eventosuy}"
+DB_NAME_TEST="${DB_NAME_TEST:-tpgr63eventosuytest}"   # NUEVO: base de test
 DB_USER="${DB_USER:-tpgr63eventosuyadmin}"
 DB_PASS="${DB_PASS:-admin}"
-POSTGRES_SUPERPASS="${POSTGRES_SUPERPASS:-postgres}"   # password del superusuario postgres
+POSTGRES_SUPERPASS="${POSTGRES_SUPERPASS:-postgres}"
 DATA_DIR="${DATA_DIR:-$HOME/postgres-data/pg${PG_VERSION}}"
 
 # ----- Helpers -----
 in_path() { command -v "$1" >/dev/null 2>&1; }
-
 port_busy() {
-  # true si el puerto está ocupado
   ss -ltn 2>/dev/null | awk '{print $4}' | grep -q ":$1$" || nc -z 127.0.0.1 "$1" >/dev/null 2>&1
 }
-
 wait_healthy() {
   echo -n "Esperando a que PostgreSQL esté 'healthy'"
   for _ in $(seq 1 60); do
@@ -32,12 +30,11 @@ wait_healthy() {
   docker logs "$CONTAINER_NAME" || true
   exit 1
 }
-
 psql_super() {
   sudo docker exec -i "$CONTAINER_NAME" psql -v ON_ERROR_STOP=1 -U postgres -d postgres "$@"
 }
 
-# ----- 1) Instalar Docker si falta (Debian/Ubuntu) -----
+# ----- 1) Instalar Docker si falta -----
 if ! in_path docker; then
   echo "[+] Instalando Docker CE..."
   sudo apt-get update -y
@@ -87,26 +84,38 @@ fi
 
 wait_healthy
 
-# ----- 5) Crear/actualizar usuario y base (idempotente, sin DO $$ ... $$) -----
-echo "[+] Creando usuario y base si no existen..."
+# ----- 5) Crear/actualizar usuario y bases (idempotente) -----
+echo "[+] Creando usuario y bases si no existen..."
 
 # ROLE
 ROLE_EXISTS="$(psql_super -Atc "SELECT 1 FROM pg_roles WHERE rolname='${DB_USER}'" || true)"
 if [[ "$ROLE_EXISTS" != "1" ]]; then
   psql_super -c "CREATE ROLE ${DB_USER} LOGIN PASSWORD '${DB_PASS}';"
 else
-  # asegurar login y password (por si cambian)
   psql_super -c "ALTER ROLE ${DB_USER} WITH LOGIN PASSWORD '${DB_PASS}';"
 fi
 
-# DATABASE
+
+
+
+# DATABASE PRINCIPAL
 DB_EXISTS="$(psql_super -Atc "SELECT 1 FROM pg_database WHERE datname='${DB_NAME}'" || true)"
 if [[ "$DB_EXISTS" != "1" ]]; then
   psql_super -c "CREATE DATABASE ${DB_NAME} OWNER ${DB_USER};"
 fi
 
+# DATABASE TEST (NUEVO)
+DB_TEST_EXISTS="$(psql_super -Atc "SELECT 1 FROM pg_database WHERE datname='${DB_NAME_TEST}'" || true)"
+if [[ "$DB_TEST_EXISTS" != "1" ]]; then
+  psql_super -c "CREATE DATABASE ${DB_NAME_TEST} OWNER ${DB_USER};"
+fi
+
+psql_super -d "${DB_NAME}" -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${DB_USER};"
+psql_super -d "${DB_NAME_TEST}" -c "GRANT ALL PRIVILEGES ON SCHEMA public TO ${DB_USER};"
+
 # ----- 6) Smoke rápido -----
 sudo docker exec -i "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -c "SELECT current_database() AS db, current_user AS usr, version() AS version;" | sed 's/^/    /'
+sudo docker exec -i "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME_TEST" -c "SELECT current_database() AS db, current_user AS usr, version() AS version;" | sed 's/^/    /'
 
 # ----- 7) Salida -----
 echo
@@ -114,9 +123,12 @@ echo "PostgreSQL listo."
 echo "  Contenedor : $CONTAINER_NAME"
 echo "  Puerto     : $HOST_PORT"
 echo "  DB         : $DB_NAME"
+echo "  DB Test    : $DB_NAME_TEST"
 echo "  Usuario    : $DB_USER"
 echo "  JDBC       : jdbc:postgresql://localhost:$HOST_PORT/$DB_NAME"
+echo "  JDBC Test  : jdbc:postgresql://localhost:$HOST_PORT/$DB_NAME_TEST"
 echo
 echo "Tips:"
 echo "  docker logs -f $CONTAINER_NAME"
 echo "  docker exec -it $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME"
+echo "  docker exec -it $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME_TEST"
