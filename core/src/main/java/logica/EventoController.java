@@ -9,10 +9,10 @@ import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTEventoAlta;
 import dominio.Categoria;
-import exceptions.EventoRepetidoException;
 import exceptions.CategoriaRepetidaException;
-import exceptions.NingunaCategoriaSeleccionadaException;
 import exceptions.CategoriasInvalidasException;
+import exceptions.EventoRepetidoException;
+import exceptions.NingunaCategoriaSeleccionadaException;
 import exceptions.ValidationInputException;
 import infra.Tx;
 import interfaces.IEventoController;
@@ -25,10 +25,11 @@ public final class EventoController implements IEventoController {
 
   private EventoController() {}
   public static EventoController get(){ return INSTANCE; }
+  @Override
   public boolean altaCategoria(String nombre) throws ValidationInputException {
 	  Objects.requireNonNull(nombre, "Nombre de categoria requerido");
 	  CategoriaFactory categoriaFactory = CategoriaFactory.get();
-	  CategoriaRepository categoriaRepository = CategoriaRepository.get();
+	  // CategoriaRepository categoriaRepository = CategoriaRepository.get();
 	  // Validaciones de entrada
 	  if (this.obtenerCategorias().contains(nombre))
 		  throw new CategoriaRepetidaException("Ya existe la categoria " + nombre + "");
@@ -65,13 +66,12 @@ public final class EventoController implements IEventoController {
         throw new CategoriasInvalidasException("Alguna de las categorias seleccionadas no es válida");
     //Transacción de alta de evento
     
-        boolean res = Tx.inTx(em -> {
-          var cats = mapCategorias(em, dta.categorias());
-          return eventoFactory.crearEvento(em, dta.nombre(), dta.descripcion(), dta.fechaAlta(), dta.sigla(), cats);
-        });
-
-        if (!res) throw new EventoRepetidoException("Ya existe el evento de nombre " + dta.nombre() + "");
-        return res;
+    boolean res = Tx.inTx(em -> {
+      var cats = mapCategorias(em, dta.categorias());
+      return eventoFactory.crearEvento(em, dta.nombre(), dta.descripcion(), dta.fechaAlta(), dta.sigla(), cats);
+    });
+    if (!res) throw new EventoRepetidoException("Ya existe el evento de nombre " + dta.nombre() + "");
+    return res;
     
   }
 

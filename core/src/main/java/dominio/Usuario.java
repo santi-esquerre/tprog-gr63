@@ -1,5 +1,6 @@
 package dominio;
 
+import datatypes.DTUsuarioItemListado;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -27,4 +28,10 @@ public abstract class Usuario extends BaseEntity {
   public String getNickname(){ return nickname; }
   public String getNombre(){ return nombre; }
   public String getCorreo(){ return correo; }
+
+  // Métodos abstractos para conversión a DTOs
+  public abstract Object toDataType();
+  public abstract DTUsuarioItemListado toDTUsuarioItemListado();
+
+
 }

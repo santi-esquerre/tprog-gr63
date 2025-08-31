@@ -1,14 +1,11 @@
 package datatypes;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public record DTAsistente(
+public record DTUsuario(
         String nickname,
         String nombre,
-        String correo,
-        String apellido,
-        Date fechaNacimiento
+        String correo
 ) implements Serializable {
     @Override public String toString() { return nickname; }
 }

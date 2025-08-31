@@ -65,4 +65,8 @@ public class Evento extends BaseEntity {
   void addEdicion(Edicion e){ ediciones.add(e); e.setEvento(this); }
   public String getNombre() { return nombre; }
   public Set<Categoria> getCategorias() { return categorias; }
+  
+  public datatypes.DTEvento toDTEvento() {
+    return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta);
+  }
 }

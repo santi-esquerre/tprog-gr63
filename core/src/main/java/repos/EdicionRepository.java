@@ -1,6 +1,7 @@
 package repos;
 
 import dominio.Edicion;
+import dominio.TipoRegistro;
 import jakarta.persistence.EntityManager;
 
 public final class EdicionRepository {
@@ -16,6 +17,14 @@ public final class EdicionRepository {
       left join fetch r.asistente
       where ed.nombre = :n
     """, Edicion.class).setParameter("n", nombreEdicion)
+      .getResultStream().findFirst().orElse(null);
+  }
+
+  public TipoRegistro obtenerTipoRegistro(EntityManager em, String nombre) {
+    // Stub: in real integration would search for TipoRegistro by name in specific edition
+    return em.createQuery(
+      "SELECT tr FROM TipoRegistro tr WHERE tr.nombre = :nombre", TipoRegistro.class)
+      .setParameter("nombre", nombre)
       .getResultStream().findFirst().orElse(null);
   }
 }

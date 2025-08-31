@@ -1,9 +1,13 @@
 package dominio;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import datatypes.DTAsistente;
+import datatypes.DTUsuarioItemListado;
+import datatypes.TipoUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -44,4 +48,16 @@ public class Asistente extends Usuario {
   public LocalDate getFechaNacimiento() { return fechaNacimiento; }
   
   public void setInstitucion(Institucion inst) { this.institucion = inst; }
+
+  @Override
+  public DTAsistente toDataType() {
+    // Convertir LocalDate a Date para compatibilidad con el record DTAsistente
+    Date fechaNac = java.sql.Date.valueOf(fechaNacimiento);
+    return new DTAsistente(getNickname(), getNombre(), getCorreo(), apellido, fechaNac);
+  }
+
+  @Override
+  public DTUsuarioItemListado toDTUsuarioItemListado() {
+    return new DTUsuarioItemListado(getNickname(), getCorreo(), TipoUsuario.ASISTENTE);
+  }
 }

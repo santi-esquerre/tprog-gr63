@@ -66,12 +66,6 @@ public class ConsultaEvento extends JInternalFrame {
 		searchPanel.add(txtNombre);
 		txtNombre.setColumns(10);
 		
-		JLabel lblCategoria = new JLabel("Categoría:");
-		searchPanel.add(lblCategoria);
-		
-		JComboBox cmbCategorias = new JComboBox();
-		searchPanel.add(cmbCategorias);
-		
 		JPanel dataPanel = new JPanel();
 		getContentPane().add(dataPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_dataPanel = new GridBagLayout();

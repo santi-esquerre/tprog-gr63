@@ -1,8 +1,25 @@
 package dominio;
 
-import jakarta.persistence.*;
-import java.util.*;
-import datatypes.*;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import datatypes.DTAsistente;
+import datatypes.DTEdicion;
+import datatypes.DTEvento;
+import datatypes.DTTipoRegistro;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "edicion",
@@ -78,5 +95,10 @@ public class Edicion extends BaseEntity {
 
   void setEvento(Evento e){ this.evento = e; }
   public String getNombre(){ return nombre; }
+  public Evento getEvento(){ return evento; }
+  
+  public DTEdicion toDTEdicion() {
+    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais);
+  }
   
 }

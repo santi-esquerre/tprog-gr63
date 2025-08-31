@@ -3,6 +3,9 @@ package dominio;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import datatypes.DTOrganizador;
+import datatypes.DTUsuarioItemListado;
+import datatypes.TipoUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -32,6 +35,16 @@ public class Organizador extends Usuario {
   public Organizador(String nick, String nom, String mail, String desc) { 
 	super(nick, nom, mail);
 	this.descripcion = desc;
+  }
+  
+  @Override
+  public DTOrganizador toDataType() {
+    return new DTOrganizador(getNickname(), getNombre(), getCorreo(), sitioWeb, descripcion);
+  }
+
+  @Override
+  public DTUsuarioItemListado toDTUsuarioItemListado() {
+    return new DTUsuarioItemListado(getNickname(), getCorreo(), TipoUsuario.ORGANIZADOR);
   }
   
 }
