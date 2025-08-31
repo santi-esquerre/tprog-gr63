@@ -40,6 +40,7 @@ import javax.swing.event.InternalFrameEvent;
 
 
 public class AltaUsuario extends JInternalFrame {
+	private static final long serialVersionUID = 1L;
 	private JTextField txtCorreo;
 	private JTextField txtNombre;
 	private JTextField txtNickname;
@@ -49,8 +50,10 @@ public class AltaUsuario extends JInternalFrame {
 	
 	public AltaUsuario() {
 		setResizable(true);
-		setClosable(true);
-		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setClosable(true);
 		setTitle("Alta de Usuario");
 		setBounds(100, 100, 440, 358);
 		

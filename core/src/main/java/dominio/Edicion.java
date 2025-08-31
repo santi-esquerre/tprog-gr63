@@ -34,6 +34,11 @@ public class Edicion extends BaseEntity {
   @OneToMany(mappedBy = "edicion", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Registro> registros = new LinkedHashSet<>();
 
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "organizador_id", nullable = false,
+              foreignKey = @ForeignKey(name = "fk_edicion_organizador"))
+  private Organizador organizador; // Asociación con Organizador
+  
   protected Edicion() {}
 
   // DCD

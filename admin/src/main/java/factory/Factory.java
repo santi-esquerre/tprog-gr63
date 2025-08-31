@@ -1,5 +1,4 @@
 package factory;
-
 import interfaces.*;
 import logica.*;
 
@@ -13,4 +12,8 @@ public class Factory {
 	public IEventoController getIEventoController(){ return EventoController.get(); }
 	
 	public IEdicionController getIEdicionController(){ return EdicionController.get(); }
+	
+	public IUsuarioController getIUsuarioController(){ return UsuarioController.get(); }
+	
+	public IInstitucionController getIInstitucionController(){ return InstitucionController.get(); }
 }
