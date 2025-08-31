@@ -246,9 +246,23 @@ public class Principal {
 		menuPatrociniosBar.setIcon(iconPatrocinios);
 		menuEventos.add(menuPatrociniosBar);
 		
+		AltaPatrocinio internalFrameAltaPatrocinio = new AltaPatrocinio();
+		internalFrameAltaPatrocinio.setVisible(false);
+		frame.getContentPane().add(internalFrameAltaPatrocinio);
+		
 		JMenuItem menuItemPatrociniosAlta = new JMenuItem("Alta de patrocinio");
 		menuItemPatrociniosAlta.setIcon(iconAlta);
 		menuPatrociniosBar.add(menuItemPatrociniosAlta);
+		menuItemPatrociniosAlta.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Abriendo alta de patrocinio...");
+						internalFrameAltaPatrocinio.cargarDatos();
+						internalFrameAltaPatrocinio.setVisible(true);
+					}
+				}
+			);
+		
 		
 		JMenuItem menuItemPatrociniosConsulta = new JMenuItem("Consulta de patrocinio");
 		menuItemPatrociniosConsulta.setIcon(iconConsulta);

@@ -3,6 +3,7 @@ package dominio;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import datatypes.DTInstitucion;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +30,9 @@ public class Institucion extends BaseEntity {
 	@OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
 	private Set<Asistente> asistentes = new LinkedHashSet<>();
 	
+	@OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
+	private Set<Patrocinio> patrocinios = new LinkedHashSet<>();
+	
 	public Institucion(String nombre, String descripcion, String sitioWeb) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
@@ -38,5 +42,17 @@ public class Institucion extends BaseEntity {
 	public Institucion(String nombre, String descripcion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+	}
+	
+	public DTInstitucion obtenerDTInstitucion() {
+		return new DTInstitucion(nombre, descripcion, sitioWeb);
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public void addPatrocinio(Patrocinio p) {
+		this.patrocinios.add(p);
 	}
 }

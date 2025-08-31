@@ -39,6 +39,9 @@ public class Edicion extends BaseEntity {
               foreignKey = @ForeignKey(name = "fk_edicion_organizador"))
   private Organizador organizador; // Asociación con Organizador
   
+  @OneToMany(mappedBy = "edicion", fetch = FetchType.LAZY)
+  private Set<Patrocinio> patrocinios = new LinkedHashSet<>(); // Asociación con Patrocinio
+  
   protected Edicion() {}
 
   // DCD
@@ -68,6 +71,11 @@ public class Edicion extends BaseEntity {
     return tipos.stream().filter(t -> t.getNombre().equals(nombreTipo)).findFirst().orElse(null);
   }
 
+  
   void setEvento(Evento e){ this.evento = e; }
   public String getNombre(){ return nombre; }
+  
+  public void addPatrocinio(Patrocinio p) { this.patrocinios.add(p); }
+
 }
+

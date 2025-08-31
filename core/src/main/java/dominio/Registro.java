@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -41,6 +42,11 @@ public class Registro extends BaseEntity {
   @JoinColumn(name = "tipo_registro_id", nullable = false,
               foreignKey = @ForeignKey(name = "fk_reg_tiporeg"))
   private TipoRegistro tipo;
+  
+ @ManyToOne(fetch = FetchType.LAZY)
+ @JoinColumn(name = "patrocinio_id",
+ 			foreignKey = @ForeignKey(name = "fk_reg_patrocinio"))
+ private Patrocinio patrocinio; // Asociación con Patrocinio
 
   public Registro() {}
 

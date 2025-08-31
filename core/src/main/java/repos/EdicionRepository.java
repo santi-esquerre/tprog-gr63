@@ -13,9 +13,17 @@ public final class EdicionRepository {
       select ed from Edicion ed
       left join fetch ed.tipos
       left join fetch ed.registros r
-      left join fetch r.asistente
+      left join fetch p.patrocinios
       where ed.nombre = :n
     """, Edicion.class).setParameter("n", nombreEdicion)
       .getResultStream().findFirst().orElse(null);
+  }
+  
+  public boolean existePatrocinio(EntityManager em, String nombreEdicion, String nombreInstitucion) {
+	  Long c = em.createQuery("select count(p) from Patrocinio p where p.edicion.nombre = :ne and p.institucion.nombre = :ni", Long.class)
+			  .setParameter("ne", nombreEdicion)
+			  .setParameter("ni", nombreInstitucion)
+			  .getSingleResult();
+	  return c > 0;
   }
 }

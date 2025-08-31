@@ -1,14 +1,20 @@
 package logica;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
 import datatypes.DTAsistente;
 import datatypes.DTTipoRegistro;
+import datatypes.NivelPatrocinio;
 import dominio.Edicion;
+import dominio.TipoRegistro;
+import exceptions.CostoRegistrosGratuitosException;
+import exceptions.ExistePatrocinioException;
 import infra.Tx;
 import interfaces.IEdicionController;
 import repos.EdicionRepository;
+import repos.TipoRegistroRepository;
 import repos.UsuarioRepository;
 
 public final class EdicionController implements IEdicionController {
@@ -16,6 +22,8 @@ public final class EdicionController implements IEdicionController {
   private final EdicionRepository edicionRepo = EdicionRepository.get();
   private final UsuarioRepository usuarioRepo = UsuarioRepository.get();
   private final RegistroFactory registroFactory = RegistroFactory.get();
+  private final TipoRegistroRepository tipoRegistroRepo = TipoRegistroRepository.get();
+  private final PatrocinioFactory patrocinioFactory = PatrocinioFactory.get();
 
   // “edicionRecordada” como en el DCD
   private Edicion edicionRecordada;
@@ -75,6 +83,32 @@ public final class EdicionController implements IEdicionController {
       registroFactory.altaRegistro(em, ed, a, tr, tr.obtenerDTTipoRegistro().costo());
       return null;
     });
+  }
+  
+  @Override
+  public void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte, String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
+		  	throws ExistePatrocinioException, CostoRegistrosGratuitosException {
+	  
+	  if ( Tx.inTx(em -> {
+		  return edicionRepo.existePatrocinio(em, nombreEdicion, nombreInstitucion);
+	  })) {
+		  throw new ExistePatrocinioException(nombreInstitucion, nombreEdicion);
+	  }
+	  
+	  TipoRegistro tr = Tx.inTx(emt -> {return tipoRegistroRepo.buscarTipoRegistro(emt, nombreTipoRegistro, nombreEdicion);});
+	  
+	  if (tr.getCupo() < cantGratuitos) {
+		  throw new CostoRegistrosGratuitosException();
+	  }
+	  
+	  if (((tr.getCosto() * cantGratuitos) / aporte) > 0.2) {
+		  throw new CostoRegistrosGratuitosException();
+	  }
+	  
+	  Tx.inTx(em -> {
+		  patrocinioFactory.crearPatrocinio(em, fecha, nombreEdicion, nombreInstitucion, aporte, tr, cantGratuitos, codigo, nivelPatrocinio);
+		  return null;
+	  });
   }
 
   @Override

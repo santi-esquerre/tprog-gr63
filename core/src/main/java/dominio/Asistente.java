@@ -23,8 +23,8 @@ public class Asistente extends Usuario {
   @Column(nullable = false) 
   private LocalDate fechaNacimiento;
   
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "institucion_id", nullable = false,
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "institucion_id",
               foreignKey = @ForeignKey(name = "fk_asistente_institucion"))
   private Institucion institucion; // Asociación con Institucion
   
