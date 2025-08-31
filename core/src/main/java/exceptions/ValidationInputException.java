@@ -9,5 +9,9 @@ public class ValidationInputException extends Exception {
 	public ValidationInputException(String message) {
 		super(message);
 	}
+	
+	public ValidationInputException() {
+		super("Error de validación");
+	}
 
 }

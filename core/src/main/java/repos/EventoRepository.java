@@ -19,7 +19,6 @@ public final class EventoRepository {
     return c > 0;
   }
 
-  // Trae categorías y (si querés) ediciones con fetch ajustado
   public Evento buscarEvento(EntityManager em, String nombreEvento){
     return em.createQuery("""
         select e from Evento e
@@ -36,4 +35,5 @@ public final class EventoRepository {
       .map(Evento::obtenerDTEvento)
       .collect(Collectors.toCollection(LinkedHashSet::new));
   }
+  
 }

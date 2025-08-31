@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
-import factory.Factory;
+import interfaces.*;
 import jiconfont.swing.IconFontSwing;
 import util.ExceptionHandler;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -130,10 +130,20 @@ public class Principal {
 		menuUsuarios.getPopupMenu().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		menuBar.add(menuUsuarios);
 		
+		AltaUsuario internalFramealtaUsuario = new AltaUsuario();
+		internalFramealtaUsuario.setVisible(false);
+		frame.getContentPane().add(internalFramealtaUsuario);
+		
 		JMenuItem menuItemUsuariosAlta = new JMenuItem("Alta de usuario");
 		menuItemUsuariosAlta.setIcon(iconAlta);
+		menuItemUsuariosAlta.addActionListener( 
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Abriendo alta de usuario...");
+					internalFramealtaUsuario.setVisible(true);
+				}
+ 			});
 		menuUsuarios.add(menuItemUsuariosAlta);
-		
 
 		ConsultaUsuario internalFrameconsultaUsuario = new ConsultaUsuario();
 		internalFrameconsultaUsuario.setVisible(false);
@@ -177,6 +187,7 @@ public class Principal {
 		menuItemEventosAlta.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						internalFramealtAltaEvento.loadForm();
 						internalFramealtAltaEvento.setVisible(true);
 					}
 				}
@@ -211,8 +222,23 @@ public class Principal {
 		menuItemEdicionesConsulta.setIcon(iconConsulta);
 		menuEdicionesBar.add(menuItemEdicionesConsulta);
 		
+		IEdicionController edicionController = factory.getIEdicionController();
+		IUsuarioController usuarioController = factory.getIUsuarioController();
+		
+		RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento(edicionController, usuarioController);
+		internalFrameRegistroEdicion.setVisible(false);
+		frame.getContentPane().add(internalFrameRegistroEdicion);
+		
 		JMenuItem menuItemEdicionesRegistro = new JMenuItem("Registro a edición");
 		menuItemEdicionesRegistro.setIcon(iconRegistros);
+		menuItemEdicionesRegistro.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Abriendo registro a edición...");
+						internalFrameRegistroEdicion.setVisible(true);
+					}
+				}
+			);
 		menuEdicionesBar.add(menuItemEdicionesRegistro);
 		
 		JMenuItem menuItemEdicionesEditar = new JMenuItem("Consulta de registro");
@@ -254,6 +280,20 @@ public class Principal {
 		JMenuItem menuItemInstitucionesAlta = new JMenuItem("Alta de institución");
 		menuItemInstitucionesAlta.setIcon(iconAlta);
 		menuInstituciones.add(menuItemInstitucionesAlta);
+		
+		IInstitucionController institucionController = factory.getIInstitucionController();
+		AltaInstitucion internalFramealtaInstitucion = new AltaInstitucion(institucionController);
+		internalFramealtaInstitucion.setVisible(false);
+		frame.getContentPane().add(internalFramealtaInstitucion);
+		
+		menuItemInstitucionesAlta.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Abriendo alta de institución...");
+						internalFramealtaInstitucion.setVisible(true);
+					}
+				}
+			);
 		
 		JDesktopPane desktopPane = new JDesktopPane();
 		desktopPane.setForeground(new Color(0, 0, 0));

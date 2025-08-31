@@ -34,8 +34,17 @@ public class Edicion extends BaseEntity {
   @OneToMany(mappedBy = "edicion", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Registro> registros = new LinkedHashSet<>();
 
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "organizador_id", nullable = false,
+              foreignKey = @ForeignKey(name = "fk_edicion_organizador"))
+  private Organizador organizador; // Asociación con Organizador
+  
   protected Edicion() {}
 
+  	
+  public DTEvento obtenerDTEvento() {
+	return evento.obtenerDTEvento();
+  }
   // DCD
   public DTEdicion obtenerDTEdicion() {
     return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais);
@@ -59,10 +68,15 @@ public class Edicion extends BaseEntity {
   public boolean verificarNoRegistro(String nickname) {
     return registros.stream().noneMatch(r -> r.getAsistente().getNickname().equals(nickname));
   }
+  
+  public void agregarTipoRegistro(TipoRegistro tr) {
+	tipos.add(tr);
+  }
   public TipoRegistro buscarTipoRegistro(String nombreTipo) {
     return tipos.stream().filter(t -> t.getNombre().equals(nombreTipo)).findFirst().orElse(null);
   }
 
   void setEvento(Evento e){ this.evento = e; }
   public String getNombre(){ return nombre; }
+  
 }

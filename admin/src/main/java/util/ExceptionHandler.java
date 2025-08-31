@@ -1,6 +1,7 @@
 package util;
 import java.awt.Component;
 
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import exceptions.ValidationInputException;
@@ -10,13 +11,12 @@ public class ExceptionHandler {
 		e.printStackTrace();
 	}
 	
-	public static void manageException(Component parent, Exception e) {
+	public static void manageException(JComponent parent, Exception e) {
 		if (e instanceof ValidationInputException) {
-            JOptionPane.showMessageDialog(parent, e.getMessage(), "", JOptionPane.WARNING_MESSAGE);
-        } else {
+            Dialog.showWarning(parent, e.getMessage());
+        }else {
         	if (DEBUG) {
-                JOptionPane.showMessageDialog(parent, "Ocurrió un error inesperado: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+        		Dialog.showError(parent, "Ocurrió un error inesperado: " + e.getMessage());
         	}
         }
 		e.printStackTrace();

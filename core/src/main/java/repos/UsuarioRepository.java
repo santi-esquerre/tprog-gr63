@@ -14,4 +14,18 @@ public final class UsuarioRepository {
       .setParameter("n", nickname)
       .getResultStream().findFirst().orElse(null);
   }
+  
+  public boolean noExisteNickname(EntityManager em, String nickname) {
+	Long c = em.createQuery(
+		"select count(u) from Usuario u where u.nickname = :n", Long.class)
+		.setParameter("n", nickname).getSingleResult();
+	return c == 0;
+  }
+  
+  public boolean noExisteCorreo(EntityManager em, String correo) {
+	  Long c = em.createQuery(
+			 "select count(u) from Usuario u where u.correo = :c", Long.class)
+			  .setParameter("c", correo).getSingleResult();
+	  return c == 0;
+  }
 }
