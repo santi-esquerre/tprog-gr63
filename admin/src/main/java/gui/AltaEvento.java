@@ -70,7 +70,7 @@ public class AltaEvento extends JInternalFrame {
         gbl_panel.columnWidths = new int[] { 0, 0, 0 };
         gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
         gbl_panel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-        gbl_panel.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+        gbl_panel.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
         panel.setLayout(gbl_panel);
 
         JLabel lblNombre = new JLabel("Nombre:");
@@ -205,6 +205,11 @@ public class AltaEvento extends JInternalFrame {
     
     //Actions
     private void saveAction(ActionEvent e) {
+    	Boolean emptyFields = txtNombre.getText().trim().isBlank() || txtDescripcion.getText().isBlank() || txtSigla.getText().isBlank() || dateFechaAlta.getDate() == null;
+    	if (emptyFields) {
+    		Dialog.showWarning("Debe completar todos los campos.");
+    		return;
+    	} 
     	String nombre = txtNombre.getText().trim();
     	String descripcion = txtDescripcion.getText().trim();
     	String sigla = txtSigla.getText().trim();
@@ -212,18 +217,10 @@ public class AltaEvento extends JInternalFrame {
     	
     	
     	try {
-    		Boolean emptyFields = nombre.isBlank() || descripcion.isBlank() || sigla.isBlank() || fechaAlta == null;
-    	    if (emptyFields) 
-    	    	Dialog.showWarning("Debe completar todos los campos.");
-    	    else {
-    	    	DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, listCategorias.getSelectedValuesList() != null ? new HashSet<>(listCategorias.getSelectedValuesList()) : new HashSet<>());
-            	if(controller.altaEvento(eventoData)) {
-            		Dialog.showSuccess("El evento se ha dado de alta correctamente.");
-            		dispose();
-    			}
-                
-    	    }
-    	    
+    		DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, listCategorias.getSelectedValuesList() != null ? new HashSet<>(listCategorias.getSelectedValuesList()) : new HashSet<>());
+        	if(controller.altaEvento(eventoData)) {
+        		Dialog.showSuccess("El evento se ha dado de alta correctamente.");
+        		dispose();}
             
 		} catch (Exception ex) {
 			ExceptionHandler.manageException(parent, ex);
