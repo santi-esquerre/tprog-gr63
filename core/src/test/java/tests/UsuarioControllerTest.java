@@ -36,7 +36,7 @@ class UsuarioControllerTest {
 
     @BeforeEach
     void setUp() {
-        JPA.switchToTesting();
+        factory.getIRepository().switchToTesting();
     }
 
     @Test

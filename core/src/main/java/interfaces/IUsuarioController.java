@@ -6,6 +6,7 @@ import exceptions.ValidationInputException;
 import java.util.List;
 
 import datatypes.DTAsistente;
+import datatypes.DTOrganizador;
 import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioNicknameRepetidoException;
 

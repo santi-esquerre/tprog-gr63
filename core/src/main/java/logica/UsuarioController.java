@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.List;
 
 import datatypes.DTAsistente;
+import datatypes.DTOrganizador;
 import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
 import datatypes.DTUsuarioItemListado;
@@ -127,6 +128,18 @@ public class UsuarioController implements IUsuarioController {
 	@Override
 	public DTRegistroDetallado obtenerRegistroDetallado(String nicknameAsistente, String nombreEdicion) {
 		return Tx.inTx(em -> repoU.obtenerRegistroDetallado(em, nicknameAsistente, nombreEdicion));
+	}
+
+	@Override
+	public DTAsistente seleccionarAsistente(String nickname) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

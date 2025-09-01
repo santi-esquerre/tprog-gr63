@@ -1,5 +1,6 @@
 package dominio;
 
+import datatypes.DTUsuario;
 import datatypes.DTUsuarioItemListado;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -31,7 +32,7 @@ protected String correo;
   public String getCorreo(){ return correo; }
 
   // Métodos abstractos para conversión a DTOs
-  public abstract Object toDataType();
+  public abstract DTUsuario toDataType();
   public abstract DTUsuarioItemListado toDTUsuarioItemListado();
 
 

@@ -1,6 +1,6 @@
 package datatypes;
 
 public enum TipoUsuario {
-    ORGANIZADOR,
-    ASISTENTE
+	ASISTENTE,
+	ORGANIZADOR
 }

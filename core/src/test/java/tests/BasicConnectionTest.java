@@ -5,12 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import infra.JPA;
 import jakarta.persistence.EntityManager;
+import interfaces.Factory;
 
 class BasicConnectionTest {
 
     @Test
     void testDatabaseConnection() {
-        JPA.switchToTesting();
+        Factory.get().getIRepository().switchToTesting();
         EntityManager em = JPA.em();
         assertNotNull(em);
         em.close();
@@ -18,7 +19,7 @@ class BasicConnectionTest {
 
     @Test
     void testSimpleQuery() {
-        JPA.switchToTesting();
+        Factory.get().getIRepository().switchToTesting();
         EntityManager em = JPA.em();
         try {
             // Test que la BD existe y podemos hacer queries

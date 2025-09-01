@@ -67,9 +67,6 @@ public class Edicion extends BaseEntity {
   
   protected Edicion() {}
 
-  protected Edicion() {
-  }
-
   public DTEvento obtenerDTEvento() {
     return evento.obtenerDTEvento();
   }
@@ -137,14 +134,6 @@ public class Edicion extends BaseEntity {
     return organizador.toDataType();
   }
 
-  void setEvento(Evento e) {
-    this.evento = e;
-  }
-
-  public String getNombre() {
-    return nombre;
-  }
-
   public Evento getEvento() {
     return evento;
   }
@@ -170,34 +159,30 @@ public class Edicion extends BaseEntity {
     this.organizador = Objects.requireNonNull(organizador);
   }
 
-  // public datatypes.DTEdicionDetallada toDTEdicionDetallada() {
-  // // Convert edition
-  // datatypes.DTEdicion dtEdicion = this.toDTEdicion();
+   public datatypes.DTEdicionDetallada toDTEdicionDetallada() {
+   // Convert edition
+   datatypes.DTEdicion dtEdicion = this.toDTEdicion();
 
-  // // Convert organizador
-  // datatypes.DTOrganizador dtOrganizador = this.obtenerDTOrganizador();
+   // Convert organizador
+   datatypes.DTOrganizador dtOrganizador = this.obtenerDTOrganizador();
 
-  // // Convert tipos de registro
-  // Set<datatypes.DTTipoRegistro> dtTiposRegistro =
-  // this.listarDTTiposDeRegistro();
+   // Convert tipos de registro
+   Set<datatypes.DTTipoRegistro> dtTiposRegistro =
+   this.listarDTTiposDeRegistro();
 
-  // // Get patrocinios - this method should ideally be called from repository
-  // with EntityManager
-  // // For now, return empty set - the repository method will populate this
-  // properly
-  // Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
+   Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
 
   // // Convert registros to DTRegistro
-  // Set<datatypes.DTRegistro> dtRegistros = this.obtenerDTRegistros();
+  Set<datatypes.DTRegistro> dtRegistros = this.obtenerDTRegistros();
 
-  // return new datatypes.DTEdicionDetallada(
-  // dtEdicion,
-  // dtOrganizador,
-  // dtTiposRegistro,
-  // dtPatrocinios,
-  // dtRegistros
-  // );
-  // }
+  return new datatypes.DTEdicionDetallada(
+   dtEdicion,
+   dtOrganizador,
+   dtTiposRegistro,
+   dtPatrocinios,
+   dtRegistros
+   );
+   }
 
 }
 

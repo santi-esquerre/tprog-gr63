@@ -1,9 +1,14 @@
 package dominio;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
+import datatypes.DTInstitucion;
+import datatypes.DTPatrocinio;
 import datatypes.NivelPatrocinio;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,6 +58,9 @@ public class Patrocinio extends BaseEntity {
 	@JoinColumn(name = "patrocinio_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
 	private Set<Otorga> otorgan = new HashSet<>();
 	
+	@OneToMany(mappedBy = "patrocinio")
+    private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();
+	
 	public Patrocinio(float monto, String codigo, NivelPatrocinio nivel, LocalDate fechaRealizacion, Institucion institucion, Edicion edicion) {
 		this.monto = monto;
 		this.codigo = codigo;
@@ -65,6 +73,59 @@ public class Patrocinio extends BaseEntity {
 	public void addOtorga(Otorga o) {
 		this.otorgan.add(o);
 	}
+
+	public Institucion getInstitucion() {
+		return institucion;
+	}
+
+	public DTPatrocinio toDTPatrocinio(DTInstitucion dtInstitucion) {
+
+        int codInt;
+        try { 
+            codInt = Integer.parseInt(codigo); 
+        } catch (NumberFormatException e) { 
+            codInt = 0; 
+        }
+        Date date = Date.from(fechaRealizacion.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        //DTPatrocinio dtPatrocinio = new DTPatrocinio(date, monto, codInt, null, dtInstitucion);
+        return null; //dtPatrocinio;
+	}
+	
+	public static Patrocinio crearBasico(String codigo) {
+        Patrocinio p = new Patrocinio();
+        p.codigo = codigo;
+        p.nivel = NivelPatrocinio.BRONCE; // placeholder
+        p.fechaRealizacion = LocalDate.now();
+        p.monto = 0f;
+        return p;
+    }
+	
+	
+	public LocalDate getFechaRealizacion() { return fechaRealizacion; }
+    public float getMonto() { return monto; }
+    public String getCodigo() { return codigo; }
+    public NivelPatrocinio getNivel() { return nivel; }
+    public Edicion getEdicion() { return edicion; }
+    public Set<RegistroOtorgado> getRegistrosOtorgados() { return registrosOtorgados; }
+    public Set<Registro> getRegistros() { return registro; }
+    
+    public void setInstitucion(Institucion institucion) {
+        this.institucion = institucion;
+    }
+
+    public void setEdicion(Edicion edicion) {
+        this.edicion = edicion;
+    }
+
+    public void agregarRegistroOtorgado(RegistroOtorgado registro) {
+        this.registrosOtorgados.add(registro);
+        registro.setPatrocinio(this);
+    }
+
+    public void agregarRegistro(Registro registro) {
+        this.registro.add(registro);
+        registro.setPatrocinio(this);
+    }
 
 }
 
@@ -164,12 +225,5 @@ public class Patrocinio extends BaseEntity {
     }
 
     public DTPatrocinio toDTPatrocinio(DTInstitucion dtInst) {
-        int codInt;
-        try { 
-            codInt = Integer.parseInt(codigo); 
-        } catch (NumberFormatException e) { 
-            codInt = 0; 
-        }
-        return new DTPatrocinio(fechaRealizacion, monto, codInt, nivel, dtInst);
     }
 } */

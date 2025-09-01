@@ -11,4 +11,6 @@ public record DTPatrocinio(
     int codigo,
     NivelPatrocinio nivel,
     DTInstitucion institucion
+    
+    
 ) implements Serializable { }

@@ -282,8 +282,7 @@ public class Principal {
 		IEdicionController edicionController = factory.getIEdicionController();
 		IUsuarioController usuarioController = factory.getIUsuarioController();
 
-		RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento(edicionController,
-				usuarioController);
+		RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento();
 		internalFrameRegistroEdicion.setVisible(false);
 		frame.getContentPane().add(internalFrameRegistroEdicion);
 

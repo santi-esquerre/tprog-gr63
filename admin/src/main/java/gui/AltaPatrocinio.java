@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
-import factory.Factory;
+import interfaces.Factory;
 
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
@@ -427,13 +427,13 @@ public class AltaPatrocinio extends JInternalFrame {
 				JOptionPane.showMessageDialog(this, "Patrocinio registrado correctamente", "Alta de Patrocinio", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ExistePatrocinioException ep) {
-				util.ExceptionHandler.manageException(this, ep);
+				util.ExceptionHandler.manageException(ep);
 			}
 			catch (CostoRegistrosGratuitosException crg) {
-				util.ExceptionHandler.manageException(this, crg);
+				util.ExceptionHandler.manageException(crg);
 			}
 			catch (CantidadCuposDisponiblesException cde) {
-				util.ExceptionHandler.manageException(this, cde);
+				util.ExceptionHandler.manageException(cde);
 			}			
 			limpiarCampos();
 			setVisible(false);

@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import datatypes.DTAsistente;
+import datatypes.DTUsuario;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
 import jakarta.persistence.Column;
@@ -54,4 +55,17 @@ public class Asistente extends Usuario {
   public datatypes.DTAsistente obtenerDTAsistente() {
 	    return new datatypes.DTAsistente(nickname, nombre, apellido, correo, Date.from(fechaNacimiento.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()));
 	  }
+
+  @Override
+  public DTAsistente toDataType() {
+	return new DTAsistente(nickname, nombre, apellido, correo, Date.from(fechaNacimiento.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+  }
+
+  @Override
+  public DTUsuarioItemListado toDTUsuarioItemListado() {
+	// TODO Auto-generated method stub
+	return null;
+  }
+  
+  
 }

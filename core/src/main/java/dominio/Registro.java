@@ -42,11 +42,7 @@ public class Registro extends BaseEntity {
   @JoinColumn(name = "tipo_registro_id", nullable = false,
               foreignKey = @ForeignKey(name = "fk_reg_tiporeg"))
   private TipoRegistro tipo;
-  
- @ManyToOne(fetch = FetchType.LAZY)
- @JoinColumn(name = "patrocinio_id",
- 			foreignKey = @ForeignKey(name = "fk_reg_patrocinio"))
- private Patrocinio patrocinio; // Asociación con Patrocinio
+ 
 
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "patrocinio_id", nullable = true,

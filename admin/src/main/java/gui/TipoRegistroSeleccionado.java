@@ -1,30 +1,34 @@
 package gui;
+import javax.swing.JDialog;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
 
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JComboBox;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JTextPane;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -32,10 +36,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
-import factory.Factory;
+import interfaces.Factory;
 import interfaces.IEdicionController;
 import datatypes.DTTipoRegistro;
-import interfaces.IEdicionController;
 
 public class TipoRegistroSeleccionado extends JDialog {
 	Map<String, DTTipoRegistro> mapCombo = new HashMap<>();
@@ -86,7 +89,7 @@ public class TipoRegistroSeleccionado extends JDialog {
 		var edicion = factory.getIEdicionController();
 		Set<DTTipoRegistro> tiposDeRegistro = edicion.mostrarTiposDeRegistro(nombreEdicion); // Se trae los tipos de registro asociados a la edicion
 		for (DTTipoRegistro tipo : tiposDeRegistro) {
-			String texto = tipo.getNombre();
+			String texto = tipo.nombre();
 			int cupo = tipo.getCupo();
 			if (cupo == 0) {
 				texto += " (No hay cupo disponible)";

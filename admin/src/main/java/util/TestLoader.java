@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import datatypes.DTEventoAlta;
+import exceptions.UsuarioCorreoRepetidoException;
+import exceptions.UsuarioNicknameRepetidoException;
 import exceptions.ValidationInputException;
 import interfaces.Factory;
 import interfaces.IEdicionController;
@@ -68,7 +70,7 @@ public class TestLoader {
         return records;
     }
 
-    public void loadAll(String folderPath) throws IOException, ValidationInputException {
+    public void loadAll(String folderPath) throws IOException, ValidationInputException, UsuarioCorreoRepetidoException, UsuarioNicknameRepetidoException {
     	Factory factory = Factory.get();
     	IUsuarioController usuarioController = factory.getIUsuarioController();
     	IEventoController eventoController = factory.getIEventoController();

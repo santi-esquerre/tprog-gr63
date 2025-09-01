@@ -41,7 +41,7 @@ import datatypes.DTInstitucion;
 import exceptions.ExistePatrocinioException;
 import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioNicknameRepetidoException;
-import factory.Factory;
+import interfaces.Factory;
 
 
 public class AltaUsuario extends JInternalFrame {
@@ -417,10 +417,10 @@ public class AltaUsuario extends JInternalFrame {
 				}
 			}
 			catch (UsuarioNicknameRepetidoException en) {
-				util.ExceptionHandler.manageException(this, en);
+				util.ExceptionHandler.manageException(en);
 			}
 			catch (UsuarioCorreoRepetidoException ec) {
-				util.ExceptionHandler.manageException(this, ec);
+				util.ExceptionHandler.manageException(ec);
 			}
 			JOptionPane.showMessageDialog(this, "Usuario registrado correctamente", "Registro de Usuario", JOptionPane.INFORMATION_MESSAGE);
 			limpiarCampos();

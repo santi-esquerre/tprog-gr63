@@ -24,23 +24,25 @@ import exceptions.NingunaCategoriaSeleccionadaException;
 import exceptions.ValidationInputException;
 import interfaces.Factory;
 import interfaces.IEventoController;
+import interfaces.IRepository;
 import interfaces.IUsuarioController;
 
 public class EventoControllerTest {
 	static Factory factory = Factory.get();
 	private static IEventoController eventoController;
 	private static IUsuarioController usuarioController;
+	private static IRepository repo = Factory.get().getIRepository();
 
 	@BeforeAll
 	public static void iniciar() {
-		JPA.switchToTesting();
+		repo.switchToTesting();
 		eventoController = factory.getIEventoController();
 		usuarioController = factory.getIUsuarioController();
 	}
 
 	@AfterEach
 	public void clear() {
-		JPA.switchToTesting();
+		repo.switchToTesting();
 	}
 
 	@Test
