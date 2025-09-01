@@ -1,48 +1,61 @@
 package gui;
 
-import components.TagLabel;
-
-import java.awt.EventQueue;
-
-import javax.swing.JInternalFrame;
-import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JSplitPane;
-import java.awt.GridLayout;
-import javax.swing.JTable;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.border.TitledBorder;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.swing.JComboBox;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.SwingConstants;
+
+import datatypes.DTRegistro;
+import datatypes.DTRegistroDetallado;
+import datatypes.DTUsuarioItemListado;
+import datatypes.TipoUsuario;
+import interfaces.IUsuarioController;
 
 public class ConsultaRegistro extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JComboBox cmbUsuarios;
-	private JTable tableListadoRegistrosUsuario;
+	private final JComboBox<DTUsuarioItemListado> cmbUsuarios;
+	private final JTable tableListadoRegistrosUsuario;
+	private final IUsuarioController usuarioController;
+	
+	// Detail panel labels
+	private JLabel lblFechaRegistroValue;
+	private JLabel lblCostoValue;
+	private JLabel lblEventoValue;
+	private JLabel lblEdicionValue;
+	private JLabel lblAsistenteValue;
+	private JLabel lblTipoRegistroValue;
+	private JLabel lblPatrocinioValue;
+	private final JPanel detailsPanel;
+	
+	private final DefaultTableModel tableModel;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ConsultaRegistro frame = new ConsultaRegistro();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				// For testing purposes only - in real app, controller should be injected
+				ConsultaRegistro frame = new ConsultaRegistro(null);
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
@@ -50,8 +63,10 @@ public class ConsultaRegistro extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ConsultaRegistro() {
-		setBounds(100, 100, 450, 300);
+	public ConsultaRegistro(IUsuarioController usuarioController) {
+		this.usuarioController = usuarioController;
+		
+		setBounds(100, 100, 800, 600);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel searchPanel = new JPanel();
@@ -61,144 +76,335 @@ public class ConsultaRegistro extends JInternalFrame {
 		JLabel lblUsuario = new JLabel("Usuario:");
 		searchPanel.add(lblUsuario);
 		
-		cmbUsuarios = new JComboBox();
+		cmbUsuarios = new JComboBox<>();
 		cmbUsuarios.setToolTipText("Usuarios");
+		cmbUsuarios.setRenderer(new javax.swing.DefaultListCellRenderer() {
+			@Override
+			public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, 
+					int index, boolean isSelected, boolean cellHasFocus) {
+				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value == null) {
+					setText("Seleccionar asistente...");
+				}
+				return this;
+			}
+		});
 		searchPanel.add(cmbUsuarios);
-//		cmbUsuarios.setColumns(10);
 		
 		JPanel dataPanel = new JPanel();
 		getContentPane().add(dataPanel, BorderLayout.CENTER);
-		GridBagLayout gbl_dataPanel = new GridBagLayout();
-		gbl_dataPanel.columnWidths = new int[]{0, 0};
-		gbl_dataPanel.rowHeights = new int[]{0, 0, 0};
-		gbl_dataPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_dataPanel.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		dataPanel.setLayout(gbl_dataPanel);
+		dataPanel.setLayout(new BorderLayout(5, 5));
 		
-		tableListadoRegistrosUsuario = new JTable();
+		// Table setup
+		String[] columnNames = {"Fecha", "Costo", "Evento", "Edición", "Tipo Registro"};
+		tableModel = new DefaultTableModel(columnNames, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		tableListadoRegistrosUsuario = new JTable(tableModel);
+		tableListadoRegistrosUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		GridBagConstraints gbc_tableListadoRegistrosUsuario = new GridBagConstraints();
-		gbc_tableListadoRegistrosUsuario.gridheight = 2;
-		gbc_tableListadoRegistrosUsuario.insets = new Insets(0, 0, 5, 0);
-		gbc_tableListadoRegistrosUsuario.fill = GridBagConstraints.BOTH;
-		gbc_tableListadoRegistrosUsuario.gridx = 0;
-		gbc_tableListadoRegistrosUsuario.gridy = 0;
-		dataPanel.add(tableListadoRegistrosUsuario, gbc_tableListadoRegistrosUsuario);
+		JScrollPane scrollPane = new JScrollPane(tableListadoRegistrosUsuario);
+		dataPanel.add(scrollPane, BorderLayout.CENTER);
 		
-		JPanel detailsPanel = new JPanel();
+		// Details panel
+		detailsPanel = new JPanel();
 		detailsPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Detalle", TitledBorder.LEFT, TitledBorder.TOP, null, null));
-		GridBagConstraints gbc_detailsPanel = new GridBagConstraints();
-		gbc_detailsPanel.gridheight = 2;
-		gbc_detailsPanel.fill = GridBagConstraints.BOTH;
-		gbc_detailsPanel.gridx = 1;
-		gbc_detailsPanel.gridy = 0;
-		dataPanel.add(detailsPanel, gbc_detailsPanel);
+		detailsPanel.setPreferredSize(new java.awt.Dimension(300, 0));
+		dataPanel.add(detailsPanel, BorderLayout.EAST);
+		
+		initializeDetailsPanel();
+		setupEventHandlers();
+		loadAssistants();
+	}
+	
+	private void initializeDetailsPanel() {
 		GridBagLayout gbl_detailsPanel = new GridBagLayout();
 		gbl_detailsPanel.columnWidths = new int[]{0, 0, 0};
-		gbl_detailsPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_detailsPanel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_detailsPanel.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_detailsPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_detailsPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_detailsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		detailsPanel.setLayout(gbl_detailsPanel);
 		
+		// Fecha
 		JLabel labelFecha = new JLabel("Fecha:");
-		labelFecha.setVerticalAlignment(SwingConstants.TOP);
-		labelFecha.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_labelFecha = new GridBagConstraints();
-		gbc_labelFecha.insets = new Insets(0, 0, 5, 5);
+		gbc_labelFecha.insets = new Insets(5, 5, 5, 5);
+		gbc_labelFecha.anchor = GridBagConstraints.WEST;
 		gbc_labelFecha.gridx = 0;
 		gbc_labelFecha.gridy = 0;
 		detailsPanel.add(labelFecha, gbc_labelFecha);
 		
-		JLabel lblFechaRegistroPlaceholder = new JLabel("FechaReg");
-		GridBagConstraints gbc_lblFechaRegistroPlaceholder = new GridBagConstraints();
-		gbc_lblFechaRegistroPlaceholder.insets = new Insets(0, 0, 5, 0);
-		gbc_lblFechaRegistroPlaceholder.gridx = 1;
-		gbc_lblFechaRegistroPlaceholder.gridy = 0;
-		detailsPanel.add(lblFechaRegistroPlaceholder, gbc_lblFechaRegistroPlaceholder);
+		lblFechaRegistroValue = new JLabel("-");
+		GridBagConstraints gbc_lblFechaRegistroValue = new GridBagConstraints();
+		gbc_lblFechaRegistroValue.insets = new Insets(5, 0, 5, 5);
+		gbc_lblFechaRegistroValue.anchor = GridBagConstraints.WEST;
+		gbc_lblFechaRegistroValue.gridx = 1;
+		gbc_lblFechaRegistroValue.gridy = 0;
+		detailsPanel.add(lblFechaRegistroValue, gbc_lblFechaRegistroValue);
 		
+		// Costo
 		JLabel lblCostoRegistro = new JLabel("Costo:");
-		lblCostoRegistro.setVerticalAlignment(SwingConstants.TOP);
-		lblCostoRegistro.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblCostoRegistro = new GridBagConstraints();
-		gbc_lblCostoRegistro.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCostoRegistro.insets = new Insets(0, 5, 5, 5);
+		gbc_lblCostoRegistro.anchor = GridBagConstraints.WEST;
 		gbc_lblCostoRegistro.gridx = 0;
 		gbc_lblCostoRegistro.gridy = 1;
 		detailsPanel.add(lblCostoRegistro, gbc_lblCostoRegistro);
 		
-		JLabel lblSiglaPlaceholder = new JLabel("100");
-		GridBagConstraints gbc_lblSiglaPlaceholder = new GridBagConstraints();
-		gbc_lblSiglaPlaceholder.insets = new Insets(0, 0, 5, 0);
-		gbc_lblSiglaPlaceholder.gridx = 1;
-		gbc_lblSiglaPlaceholder.gridy = 1;
-		detailsPanel.add(lblSiglaPlaceholder, gbc_lblSiglaPlaceholder);
+		lblCostoValue = new JLabel("-");
+		GridBagConstraints gbc_lblCostoValue = new GridBagConstraints();
+		gbc_lblCostoValue.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCostoValue.anchor = GridBagConstraints.WEST;
+		gbc_lblCostoValue.gridx = 1;
+		gbc_lblCostoValue.gridy = 1;
+		detailsPanel.add(lblCostoValue, gbc_lblCostoValue);
 		
+		// Evento
 		JLabel lblEvento = new JLabel("Evento:");
-		lblEvento.setVerticalAlignment(SwingConstants.TOP);
-		lblEvento.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblEvento = new GridBagConstraints();
-		gbc_lblEvento.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEvento.insets = new Insets(0, 5, 5, 5);
+		gbc_lblEvento.anchor = GridBagConstraints.WEST;
 		gbc_lblEvento.gridx = 0;
 		gbc_lblEvento.gridy = 2;
 		detailsPanel.add(lblEvento, gbc_lblEvento);
 		
-		JLabel lblEventoPlaceholder = new JLabel("Evento_1");
-		lblEventoPlaceholder.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_lblEventoPlaceholder = new GridBagConstraints();
-		gbc_lblEventoPlaceholder.insets = new Insets(0, 0, 5, 0);
-		gbc_lblEventoPlaceholder.gridx = 1;
-		gbc_lblEventoPlaceholder.gridy = 2;
-		detailsPanel.add(lblEventoPlaceholder, gbc_lblEventoPlaceholder);
+		lblEventoValue = new JLabel("-");
+		GridBagConstraints gbc_lblEventoValue = new GridBagConstraints();
+		gbc_lblEventoValue.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEventoValue.anchor = GridBagConstraints.WEST;
+		gbc_lblEventoValue.gridx = 1;
+		gbc_lblEventoValue.gridy = 2;
+		detailsPanel.add(lblEventoValue, gbc_lblEventoValue);
 		
+		// Edición
 		JLabel lblEdicion = new JLabel("Edición:");
-		lblEdicion.setVerticalAlignment(SwingConstants.TOP);
-		lblEdicion.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblEdicion = new GridBagConstraints();
-		gbc_lblEdicion.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEdicion.insets = new Insets(0, 5, 5, 5);
+		gbc_lblEdicion.anchor = GridBagConstraints.WEST;
 		gbc_lblEdicion.gridx = 0;
 		gbc_lblEdicion.gridy = 3;
 		detailsPanel.add(lblEdicion, gbc_lblEdicion);
 		
-		JLabel lblEdiciónPlaceholder = new JLabel("Edición_1");
-		lblEdiciónPlaceholder.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_lblEdiciónPlaceholder = new GridBagConstraints();
-		gbc_lblEdiciónPlaceholder.insets = new Insets(0, 0, 5, 0);
-		gbc_lblEdiciónPlaceholder.gridx = 1;
-		gbc_lblEdiciónPlaceholder.gridy = 3;
-		detailsPanel.add(lblEdiciónPlaceholder, gbc_lblEdiciónPlaceholder);
+		lblEdicionValue = new JLabel("-");
+		GridBagConstraints gbc_lblEdicionValue = new GridBagConstraints();
+		gbc_lblEdicionValue.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEdicionValue.anchor = GridBagConstraints.WEST;
+		gbc_lblEdicionValue.gridx = 1;
+		gbc_lblEdicionValue.gridy = 3;
+		detailsPanel.add(lblEdicionValue, gbc_lblEdicionValue);
 		
+		// Asistente
 		JLabel lblAsistente = new JLabel("Asistente:");
-		lblAsistente.setVerticalAlignment(SwingConstants.TOP);
-		lblAsistente.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblAsistente = new GridBagConstraints();
-		gbc_lblAsistente.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAsistente.insets = new Insets(0, 5, 5, 5);
+		gbc_lblAsistente.anchor = GridBagConstraints.WEST;
 		gbc_lblAsistente.gridx = 0;
 		gbc_lblAsistente.gridy = 4;
 		detailsPanel.add(lblAsistente, gbc_lblAsistente);
 		
-		JLabel lblAsistentePlaceholder = new JLabel("Asistente_1");
-		lblAsistentePlaceholder.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_lblAsistentePlaceholder = new GridBagConstraints();
-		gbc_lblAsistentePlaceholder.insets = new Insets(0, 0, 5, 0);
-		gbc_lblAsistentePlaceholder.gridx = 1;
-		gbc_lblAsistentePlaceholder.gridy = 4;
-		detailsPanel.add(lblAsistentePlaceholder, gbc_lblAsistentePlaceholder);
+		lblAsistenteValue = new JLabel("-");
+		GridBagConstraints gbc_lblAsistenteValue = new GridBagConstraints();
+		gbc_lblAsistenteValue.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAsistenteValue.anchor = GridBagConstraints.WEST;
+		gbc_lblAsistenteValue.gridx = 1;
+		gbc_lblAsistenteValue.gridy = 4;
+		detailsPanel.add(lblAsistenteValue, gbc_lblAsistenteValue);
 		
+		// Tipo de Registro
 		JLabel lblTipoDeRegistro = new JLabel("Tipo de Registro:");
-		lblTipoDeRegistro.setVerticalAlignment(SwingConstants.TOP);
-		lblTipoDeRegistro.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblTipoDeRegistro = new GridBagConstraints();
-		gbc_lblTipoDeRegistro.insets = new Insets(0, 0, 0, 5);
+		gbc_lblTipoDeRegistro.insets = new Insets(0, 5, 5, 5);
+		gbc_lblTipoDeRegistro.anchor = GridBagConstraints.WEST;
 		gbc_lblTipoDeRegistro.gridx = 0;
 		gbc_lblTipoDeRegistro.gridy = 5;
 		detailsPanel.add(lblTipoDeRegistro, gbc_lblTipoDeRegistro);
 		
-		JLabel lblTipoderegistro = new JLabel("TipoDeRegistro_1");
-		lblTipoderegistro.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_lblTipoderegistro = new GridBagConstraints();
-		gbc_lblTipoderegistro.gridx = 1;
-		gbc_lblTipoderegistro.gridy = 5;
-		detailsPanel.add(lblTipoderegistro, gbc_lblTipoderegistro);
-
+		lblTipoRegistroValue = new JLabel("-");
+		GridBagConstraints gbc_lblTipoRegistroValue = new GridBagConstraints();
+		gbc_lblTipoRegistroValue.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTipoRegistroValue.anchor = GridBagConstraints.WEST;
+		gbc_lblTipoRegistroValue.gridx = 1;
+		gbc_lblTipoRegistroValue.gridy = 5;
+		detailsPanel.add(lblTipoRegistroValue, gbc_lblTipoRegistroValue);
+		
+		// Patrocinio
+		JLabel lblPatrocinio = new JLabel("Patrocinio:");
+		GridBagConstraints gbc_lblPatrocinio = new GridBagConstraints();
+		gbc_lblPatrocinio.insets = new Insets(0, 5, 0, 5);
+		gbc_lblPatrocinio.anchor = GridBagConstraints.WEST;
+		gbc_lblPatrocinio.gridx = 0;
+		gbc_lblPatrocinio.gridy = 6;
+		detailsPanel.add(lblPatrocinio, gbc_lblPatrocinio);
+		
+		lblPatrocinioValue = new JLabel("-");
+		GridBagConstraints gbc_lblPatrocinioValue = new GridBagConstraints();
+		gbc_lblPatrocinioValue.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPatrocinioValue.anchor = GridBagConstraints.WEST;
+		gbc_lblPatrocinioValue.gridx = 1;
+		gbc_lblPatrocinioValue.gridy = 6;
+		detailsPanel.add(lblPatrocinioValue, gbc_lblPatrocinioValue);
+		
+		// Initially disable the details panel
+		enableDetailsPanel(false);
+	}
+	
+	private void setupEventHandlers() {
+		// ComboBox selection handler
+		cmbUsuarios.addActionListener(e -> {
+			DTUsuarioItemListado selected = (DTUsuarioItemListado) cmbUsuarios.getSelectedItem();
+			if (selected != null) {
+				loadUserRegistrations(selected.nickname());
+			} else {
+				clearTable();
+			}
+		});
+		
+		// Table selection handler
+		tableListadoRegistrosUsuario.getSelectionModel().addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				int selectedRow = tableListadoRegistrosUsuario.getSelectedRow();
+				if (selectedRow >= 0) {
+					showRegistrationDetails(selectedRow);
+				} else {
+					clearDetailsPanel();
+				}
+			}
+		});
+	}
+	
+	private void loadAssistants() {
+		if (usuarioController == null) {
+			return; // For testing purposes
+		}
+		
+		try {
+			List<DTUsuarioItemListado> assistants = usuarioController.obtenerUsuarios(TipoUsuario.ASISTENTE);
+			cmbUsuarios.removeAllItems();
+			cmbUsuarios.addItem(null); // Add empty option
+			
+			for (DTUsuarioItemListado assistant : assistants) {
+				cmbUsuarios.addItem(assistant);
+			}
+		} catch (Exception e) {
+			// Handle error - could show a message dialog
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadUserRegistrations(String nickname) {
+		if (usuarioController == null) {
+			return;
+		}
+		
+		try {
+			List<DTRegistro> registrations = usuarioController.obtenerRegistrosUsuario(nickname);
+			updateTable(registrations);
+			clearDetailsPanel();
+		} catch (Exception e) {
+			// Handle error
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateTable(List<DTRegistro> registrations) {
+		tableModel.setRowCount(0);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		for (DTRegistro registro : registrations) {
+			Object[] rowData = {
+				dateFormat.format(registro.fecha()),
+				String.format("%.2f", registro.costo()),
+				registro.nombreEvento(),
+				registro.nombreEdicion(),
+				registro.tipoRegistro().nombre()
+			};
+			tableModel.addRow(rowData);
+		}
+	}
+	
+	private void clearTable() {
+		tableModel.setRowCount(0);
+		clearDetailsPanel();
+	}
+	
+	private void showRegistrationDetails(int rowIndex) {
+		if (usuarioController == null) {
+			return;
+		}
+		
+		// Get the selected assistant and edition from the table
+		DTUsuarioItemListado selectedAssistant = (DTUsuarioItemListado) cmbUsuarios.getSelectedItem();
+		if (selectedAssistant == null) {
+			return;
+		}
+		
+		String editionName = (String) tableModel.getValueAt(rowIndex, 3); // Edition column
+		
+		try {
+			DTRegistroDetallado detalle = usuarioController.obtenerRegistroDetallado(
+				selectedAssistant.nickname(), 
+				editionName
+			);
+			
+			if (detalle != null) {
+				updateDetailsPanel(detalle);
+				enableDetailsPanel(true);
+			}
+		} catch (Exception e) {
+			// Handle error
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateDetailsPanel(DTRegistroDetallado detalle) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		lblFechaRegistroValue.setText(dateFormat.format(detalle.fecha()));
+		lblCostoValue.setText(String.format("%.2f", detalle.costo()));
+		lblEventoValue.setText(detalle.evento().nombre());
+		lblEdicionValue.setText(detalle.edicion().nombre());
+		lblAsistenteValue.setText(detalle.asistente().nickname());
+		lblTipoRegistroValue.setText(detalle.tipoRegistro().nombre());
+		
+		// Handle patrocinio (optional)
+		if (detalle.patrocinio().isPresent()) {
+			var patrocinio = detalle.patrocinio().get();
+			String patrocinioText = String.format("%s - %s (Nivel: %s)", 
+				patrocinio.institucion().nombre(),
+				patrocinio.codigo(),
+				patrocinio.nivel().toString());
+			lblPatrocinioValue.setText(patrocinioText);
+		} else {
+			lblPatrocinioValue.setText("Sin patrocinio");
+		}
+	}
+	
+	private void clearDetailsPanel() {
+		lblFechaRegistroValue.setText("-");
+		lblCostoValue.setText("-");
+		lblEventoValue.setText("-");
+		lblEdicionValue.setText("-");
+		lblAsistenteValue.setText("-");
+		lblTipoRegistroValue.setText("-");
+		lblPatrocinioValue.setText("-");
+		enableDetailsPanel(false);
+	}
+	
+	private void enableDetailsPanel(boolean enabled) {
+		detailsPanel.setEnabled(enabled);
+		// You could also change the appearance to show it's disabled
+		java.awt.Color color = enabled ? java.awt.Color.BLACK : java.awt.Color.GRAY;
+		lblFechaRegistroValue.setForeground(color);
+		lblCostoValue.setForeground(color);
+		lblEventoValue.setForeground(color);
+		lblEdicionValue.setForeground(color);
+		lblAsistenteValue.setForeground(color);
+		lblTipoRegistroValue.setForeground(color);
+		lblPatrocinioValue.setForeground(color);
 	}
 
 }
