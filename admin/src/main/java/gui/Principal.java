@@ -140,6 +140,7 @@ public class Principal {
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("Abriendo alta de usuario...");
+					internalFramealtaUsuario.cargarDatos();
 					internalFramealtaUsuario.setVisible(true);
 				}
  			});

@@ -40,6 +40,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.Year;
+import java.awt.Dimension;
 
 public class AltaPatrocinio extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
@@ -63,7 +64,7 @@ public class AltaPatrocinio extends JInternalFrame {
 	private Integer[] anio;
 	
 	public AltaPatrocinio() {
-		setBounds(100, 100, 639, 414);
+		setBounds(100, 100, 687, 414);
 		setResizable(true);
 		setClosable(true);
 		setMaximizable(true);
@@ -97,7 +98,7 @@ public class AltaPatrocinio extends JInternalFrame {
 		panelIzq.setBorder(new EmptyBorder(10, 10, 10, 10));
 		splitPane.setLeftComponent(panelIzq);
 		GridBagLayout gbl_panelIzq = new GridBagLayout();
-		gbl_panelIzq.columnWidths = new int[]{259, 0, 0};
+		gbl_panelIzq.columnWidths = new int[]{259, 58, 0};
 		gbl_panelIzq.rowHeights = new int[]{0, 0, 0, 0, 0, 197, 0};
 		gbl_panelIzq.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		gbl_panelIzq.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
@@ -190,7 +191,7 @@ public class AltaPatrocinio extends JInternalFrame {
 			}
 		));
 		scrollPane.setViewportView(table);
-		table.setPreferredScrollableViewportSize(table.getPreferredSize());
+		table.setPreferredScrollableViewportSize(new Dimension(350, 192));
 		table.setDefaultEditor(Object.class, null);
 		JPanel panelDer = new JPanel();
 		panelDer.setBorder(new EmptyBorder(30, 15, 10, 10));

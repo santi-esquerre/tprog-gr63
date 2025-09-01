@@ -23,6 +23,7 @@ import java.awt.EventQueue;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -30,13 +31,21 @@ import javax.swing.JSpinner;
 import javax.swing.JScrollBar;
 import javax.swing.JToggleButton;
 import javax.swing.JFrame;
+
+import java.time.LocalDate;
 import java.time.Year;
+import java.util.Set;
 import java.awt.Panel;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.awt.event.ActionEvent;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import datatypes.DTInstitucion;
+import exceptions.ExistePatrocinioException;
+import exceptions.UsuarioCorreoRepetidoException;
+import exceptions.UsuarioNicknameRepetidoException;
+import factory.Factory;
 
 
 public class AltaUsuario extends JInternalFrame {
@@ -47,6 +56,21 @@ public class AltaUsuario extends JInternalFrame {
 	private JTextField txtApellido;
 	private JTextField txtLink;
 	private JTextField txtDescripcion;
+	private JComboBox<String> comboBoxInstitucion;
+	private JComboBox<Integer> comboBoxDia;
+	private JComboBox<String> comboBoxMes;
+	private JComboBox<Integer> comboBoxAnio;
+	private ButtonGroup seleccionRol;
+	private JRadioButton rbtnAsistente;
+	private JRadioButton rbtnOrganizador;
+	private CardLayout cl;
+	private JPanel cardPanel;
+	private String [] institucion;
+	private Integer[] dias;
+	private String[] meses;
+	private Integer[] anio;
+	private Factory factory = Factory.get();
+	
 	
 	public AltaUsuario() {
 		setResizable(true);
@@ -57,23 +81,21 @@ public class AltaUsuario extends JInternalFrame {
 		setTitle("Alta de Usuario");
 		setBounds(100, 100, 440, 358);
 		
-		String [] institucion = {"No corresponde"};
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		
-        Integer[] dias = new Integer[31];
+        dias = new Integer[31];
         for (int i = 0; i < 31; i++) dias[i] = i + 1;
 		
-		String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre"
+		meses = new String[] {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre"
 				, "Noviembre", "Diciembre"};
 		
 		int anioActual = Year.now().getValue();
 		int anioAIngresar = anioActual; 
-		Integer[] anio = new Integer[121];
+		anio = new Integer[121];
 		for (int i = 0; i <= 120; i++) {
 			anio[i] = anioAIngresar;
 			anioAIngresar--;
 		}
-		
-		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -167,7 +189,7 @@ public class AltaUsuario extends JInternalFrame {
 		panel.add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
 		
-		JPanel cardPanel = new JPanel();
+		cardPanel = new JPanel();
 		GridBagConstraints gbc_cardPanel = new GridBagConstraints();
 		gbc_cardPanel.fill = GridBagConstraints.BOTH;
 		gbc_cardPanel.insets = new Insets(0, 0, 5, 0);
@@ -175,12 +197,12 @@ public class AltaUsuario extends JInternalFrame {
 		gbc_cardPanel.gridy = 1;
 		panel_1.add(cardPanel, gbc_cardPanel);
 		cardPanel.setLayout(new CardLayout(0, 0));
-		CardLayout cl = (CardLayout) cardPanel.getLayout();
+		cl = (CardLayout) cardPanel.getLayout();
 		
 		JPanel emptyPanel = new JPanel();
 		cardPanel.add(emptyPanel, "Vacio");
 		
-		JRadioButton rbtnAsistente = new JRadioButton("Asistente");
+		rbtnAsistente = new JRadioButton("Asistente");
 		rbtnAsistente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cl.show(cardPanel, "Asistente");
@@ -188,7 +210,7 @@ public class AltaUsuario extends JInternalFrame {
 		});
 		panel_2.add(rbtnAsistente);
 		
-		JRadioButton rbtnOrganizador = new JRadioButton("Organizador");
+		rbtnOrganizador = new JRadioButton("Organizador");
 		rbtnOrganizador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cl.show(cardPanel, "Organizador");
@@ -196,7 +218,7 @@ public class AltaUsuario extends JInternalFrame {
 		});
 		panel_2.add(rbtnOrganizador);
 		
-		ButtonGroup seleccionRol = new ButtonGroup();
+		seleccionRol = new ButtonGroup();
 		seleccionRol.add(rbtnOrganizador);
 		seleccionRol.add(rbtnAsistente);
 		
@@ -234,7 +256,8 @@ public class AltaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_6.gridx = 0;
 		gbc_lblNewLabel_6.gridy = 1;
 		asistentePanel.add(lblNewLabel_6, gbc_lblNewLabel_6);
-		JComboBox<String> comboBoxInstitucion = new JComboBox<>(institucion);
+		institucion = new String[] {"No corresponde"};
+		comboBoxInstitucion = new JComboBox<>(institucion);
 		GridBagConstraints gbc_comboBoxInstitucion = new GridBagConstraints();
 		gbc_comboBoxInstitucion.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBoxInstitucion.fill = GridBagConstraints.BOTH;
@@ -258,16 +281,16 @@ public class AltaUsuario extends JInternalFrame {
 		gbc_panel_4.gridy = 3;
 		asistentePanel.add(panel_4, gbc_panel_4);
 		panel_4.setLayout(new BoxLayout(panel_4, BoxLayout.X_AXIS));
-		JComboBox<Integer> comboBoxDia = new JComboBox<>(dias);
+		comboBoxDia = new JComboBox<>(dias);
 		comboBoxDia.setBorder(new EmptyBorder(1, 1, 1, 1));
 		panel_4.add(comboBoxDia);
 		
 		panel_4.add(Box.createRigidArea(new Dimension(20, 10)));
-		JComboBox<String> comboBoxMes = new JComboBox<>(meses);
+		comboBoxMes = new JComboBox<>(meses);
 		panel_4.add(comboBoxMes);
 		
 		panel_4.add(Box.createRigidArea(new Dimension(20, 10)));
-		JComboBox<Integer> comboBoxAnio = new JComboBox<>(anio);
+		comboBoxAnio = new JComboBox<>(anio);
 		panel_4.add(comboBoxAnio);
 		
 		JPanel organizadorPanel = new JPanel();
@@ -322,12 +345,22 @@ public class AltaUsuario extends JInternalFrame {
 		panel_6.setLayout(new BoxLayout(panel_6, BoxLayout.X_AXIS));
 		
 		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				altaUsuarioActionPerformed(e);
+			}
+		});
 		panel_6.add(btnAceptar);
 		
 		panel_6.add(Box.createRigidArea(new Dimension(20, 10)));
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener( e -> doDefaultCloseAction());
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiarCampos();
+				setVisible(false);
+			}
+		});
 		panel_6.add(btnCancelar);
 		
 		GridBagConstraints gbc_textField1 = new GridBagConstraints();
@@ -340,22 +373,98 @@ public class AltaUsuario extends JInternalFrame {
 			@Override
 			public void internalFrameClosing(InternalFrameEvent e) {
 				txtNickname.setText("");
-				txtNombre.setText("");
-				txtCorreo.setText("");
-				txtApellido.setText("");
-				txtDescripcion.setText("");
-				txtLink.setText("");
-				comboBoxInstitucion.setSelectedIndex(0);
-				comboBoxDia.setSelectedIndex(0);
-				comboBoxMes.setSelectedIndex(0);
-				comboBoxAnio.setSelectedIndex(0);
-				seleccionRol.clearSelection();
-				cl.show(cardPanel, "Vacio");
+				limpiarCampos();
 				
 			}
 		});
 		
 		
+	}
+	
+	
+	protected void cargarDatos() {
+		var institucion = factory.getIInstitucionController();
+		Set<DTInstitucion> listaI = institucion.listarInstituciones();
+		for (var i : listaI) {
+			comboBoxInstitucion.addItem(i.nombre());
+		}
+	
+	}
+	
+	protected void altaUsuarioActionPerformed(ActionEvent e) {
+		if (checkCampos()) {
+			try {
+				var usuario = factory.getIUsuarioController();
+				String nickname = txtNickname.getText();
+				String nombre = txtNombre.getText();
+				String correo = txtCorreo.getText();
+				if (rbtnAsistente.isSelected()) {
+					String apellido = txtApellido.getText();
+					LocalDate fecha = LocalDate.of((Integer) comboBoxAnio.getSelectedItem(), comboBoxMes.getSelectedIndex() + 1, (Integer) comboBoxDia.getSelectedItem());
+					if (comboBoxInstitucion.getSelectedIndex() == 0) {
+						usuario.crearAsistente(nickname, nombre, apellido, correo, fecha);
+					}
+					else {
+						String institucion = (String) comboBoxInstitucion.getSelectedItem();
+						usuario.crearAsistente(nickname, nombre, apellido, correo, fecha, institucion);
+					}	
+				}
+				else {
+					String descripcion = txtDescripcion.getText();
+					if (txtLink.getText().isEmpty()) {
+						usuario.crearOrganizador(nickname, nombre, correo, descripcion);
+					}
+					else {
+						String linkSitioWeb = txtLink.getText();
+						usuario.crearOrganizador(nickname, nombre, correo, descripcion, linkSitioWeb);
+					}
+					
+				}
+			}
+			catch (UsuarioNicknameRepetidoException en) {
+				util.ExceptionHandler.manageException(this, en);
+			}
+			catch (UsuarioCorreoRepetidoException ec) {
+				util.ExceptionHandler.manageException(this, ec);
+			}
+			limpiarCampos();
+			setVisible(false);
+		}
+		
+	}
+	
+	private boolean checkCampos() {
+		if (!rbtnAsistente.isSelected() && !rbtnOrganizador.isSelected()) {
+			JOptionPane.showMessageDialog(this, "Quedan campos obligatorios por rellenar", "Alta de Usuario", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		else if (rbtnAsistente.isSelected() && (txtNickname.getText().isEmpty() || txtNombre.getText().isEmpty() || txtCorreo.getText().isEmpty() ||  txtApellido.getText().isEmpty() || comboBoxDia.getSelectedIndex() == -1 | comboBoxMes.getSelectedIndex() == -1 || comboBoxAnio.getSelectedIndex() == -1 )) {
+			JOptionPane.showMessageDialog(this, "Quedan campos obligatorios por rellenar", "Alta de Usuario", JOptionPane.ERROR_MESSAGE);
+			return false;			
+		}
+		else if (rbtnOrganizador.isSelected() && (txtNickname.getText().isEmpty() || txtNombre.getText().isEmpty() || txtCorreo.getText().isEmpty() ||  txtDescripcion.getText().isEmpty())) {
+			JOptionPane.showMessageDialog(this, "Quedan campos obligatorios por rellenar", "Alta de Usuario", JOptionPane.ERROR_MESSAGE);
+			return false;			
+		}
+		
+		return true;
+	}
+	
+	public void limpiarCampos() {
+		txtNickname.setText("");
+		txtNombre.setText("");
+		txtCorreo.setText("");
+		txtApellido.setText("");
+		txtDescripcion.setText("");
+		txtLink.setText("");
+		comboBoxInstitucion.setSelectedIndex(0);
+		comboBoxInstitucion.removeAllItems();
+		comboBoxInstitucion.addItem("No corresponde");
+		comboBoxDia.setSelectedIndex(0);
+		comboBoxMes.setSelectedIndex(0);
+		comboBoxAnio.setSelectedIndex(0);
+		seleccionRol.clearSelection();
+		cl.show(cardPanel, "Vacio");
 	}
 
 }

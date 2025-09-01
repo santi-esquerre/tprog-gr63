@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import datatypes.DTAsistente;
+import datatypes.DTPatrocinio;
 import datatypes.DTTipoRegistro;
 import datatypes.NivelPatrocinio;
 import dominio.Edicion;
@@ -111,6 +112,7 @@ public final class EdicionController implements IEdicionController {
 	  });
   }
 
+  
   @Override
   public void cancelarRegistroEdicionEvento() {
     // placeholder según DCD

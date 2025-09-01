@@ -3,8 +3,8 @@ package logica;
 import java.time.LocalDate;
 
 import dominio.Asistente;
+import dominio.Institucion;
 import dominio.Organizador;
-import infra.Tx;
 import jakarta.persistence.EntityManager;
 import repos.InstitucionRepository;
 
@@ -14,13 +14,12 @@ public final class UsuarioFactory {
 	public static UsuarioFactory get() { return INSTANCE; }
 	private final InstitucionRepository repoI = InstitucionRepository.get();
 	
-	public void altaAsistente(EntityManager entm, String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento, String nombreInstitucion) {
+	public void altaAsistente(EntityManager entm, String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento, Institucion i) {
 		var u = new Asistente(nickname, nombre, apellido, correo, fechaNacimiento);
-		var i = Tx.inTx(em -> repoI.buscarInstitucion(nombreInstitucion));
 		u.setInstitucion(i);
-		entm.getTransaction().begin();
+		i.addAsistente(u);
 		entm.persist(u);
-		entm.getTransaction().commit();
+		entm.merge(i);
 	}
 	
 	public void altaAsistente(EntityManager em, String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento) {

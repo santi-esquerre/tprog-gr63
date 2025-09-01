@@ -22,6 +22,13 @@ public final class InstitucionRepository {
 		.getResultStream().findFirst().orElse(null));
   }
   
+  public Institucion buscarInstitucion(EntityManager em, String nombre) {
+		return em.createQuery(
+			"select i from Institucion i where i.nombre = :n", Institucion.class)
+			.setParameter("n", nombre)
+			.getResultStream().findFirst().orElse(null);
+	  }
+  
   public boolean noExisteInstitucion(EntityManager em, String nombre) {
 		Long c = em.createQuery(
 				"select count(i) from Institucion i where i.nombre = :n", Long.class)

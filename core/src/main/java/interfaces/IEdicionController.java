@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import datatypes.DTAsistente;
+import datatypes.DTPatrocinio;
 import datatypes.DTTipoRegistro;
 import datatypes.NivelPatrocinio;
 import exceptions.CostoRegistrosGratuitosException;

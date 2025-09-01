@@ -52,6 +52,10 @@ public class Institucion extends BaseEntity {
 		return nombre;
 	}
 	
+	public void addAsistente(Asistente a) {
+		this.asistentes.add(a);
+	}
+	
 	public void addPatrocinio(Patrocinio p) {
 		this.patrocinios.add(p);
 	}
