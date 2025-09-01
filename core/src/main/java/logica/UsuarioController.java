@@ -1,6 +1,10 @@
 package logica;
 import java.time.LocalDate;
+import java.util.Set;
 
+import datatypes.DTAsistente;
+import datatypes.DTOrganizador;
+import datatypes.DTUsuarioListado;
 import interfaces.IUsuarioController;
 import repos.UsuarioRepository;
 import repos.InstitucionRepository;
@@ -58,6 +62,23 @@ public class UsuarioController implements IUsuarioController {
 			faU.altaOrganizador(em, nickname, nombre, correo, descripcion); 
 			return null;
 			});
+	}
+
+	@Override
+	public Set<DTUsuarioListado> listadoUsuarios(String nickname) throws Exception {
+		return null;
+	}
+
+	@Override
+	public DTAsistente seleccionarAsistente(String nickname) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
