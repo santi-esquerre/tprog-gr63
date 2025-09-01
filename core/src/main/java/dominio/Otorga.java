@@ -13,7 +13,7 @@ public class Otorga extends BaseEntity {
 	protected Otorga() {}
 	
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "tipo_registro_id", unique = true, nullable = false,
+	@JoinColumn(name = "tipo_registro_id", nullable = false,
 			foreignKey = @ForeignKey(name = "fk_ortoga_tiporegistro"))
 	private TipoRegistro tipoRegistro; // Asociación con TipoRegistro
 	
