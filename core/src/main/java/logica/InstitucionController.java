@@ -11,6 +11,10 @@ import dominio.Patrocinio;
 import exceptions.InstitucionRepetidaException;
 import infra.Tx;
 import repos.InstitucionRepository;
+import exceptions.InstitucionRepetidaException;
+import java.util.Set;
+
+import datatypes.DTInstitucion;
 
 public class InstitucionController implements interfaces.IInstitucionController {
 
@@ -42,18 +46,10 @@ public class InstitucionController implements interfaces.IInstitucionController 
 			throw new InstitucionRepetidaException("La institución " + nombre + " ya está registrada.");
 		}
 	}
-
-	@Override
+	
 	public Set<DTInstitucion> listarInstituciones() {
-		return Tx.inTx(em -> 
-			institucionRepo.getAllInstituciones(em)
-					.stream()
-					.map(Institucion::toDTInstitucion)
-					.collect(Collectors.toSet())
-		);
+		return Tx.inTx(em -> institucionRepo.listarInstituciones(em));
 	}
-
-	@Override
 	public boolean crearPatrocinio(String nombreEdicionEvento, String nombreInstitucion,
 								   DTRegistrosOtorgados registrosAOtorgar, String codigo) {
 		// Placeholder implementation - would need full business logic

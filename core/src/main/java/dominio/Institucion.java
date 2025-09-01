@@ -4,6 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import datatypes.DTInstitucion;
+import jakarta.persistence.CascadeType;
+import datatypes.DTInstitucion;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,6 +43,19 @@ public class Institucion extends BaseEntity {
 	public Institucion(String nombre, String descripcion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+	}
+	
+	public DTInstitucion obtenerDTInstitucion() {
+		return new DTInstitucion(nombre, descripcion, sitioWeb);
+	}
+
+	
+	public void addAsistente(Asistente a) {
+		this.asistentes.add(a);
+	}
+	
+	public void addPatrocinio(Patrocinio p) {
+		this.patrocinios.add(p);
 	}
 	
 	// Getters

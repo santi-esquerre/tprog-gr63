@@ -61,6 +61,11 @@ public class Edicion extends BaseEntity {
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "organizador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_edicion_organizador"))
   private Organizador organizador; // Asociación con Organizador
+  
+  @OneToMany(mappedBy = "edicion", fetch = FetchType.LAZY)
+  private Set<Patrocinio> patrocinios = new LinkedHashSet<>(); // Asociación con Patrocinio
+  
+  protected Edicion() {}
 
   protected Edicion() {
   }
@@ -121,6 +126,12 @@ public class Edicion extends BaseEntity {
   public TipoRegistro buscarTipoRegistro(String nombreTipo) {
     return tipos.stream().filter(t -> t.getNombre().equals(nombreTipo)).findFirst().orElse(null);
   }
+
+  
+  void setEvento(Evento e){ this.evento = e; }
+  public String getNombre(){ return nombre; }
+  
+  public void addPatrocinio(Patrocinio p) { this.patrocinios.add(p); }
 
   public datatypes.DTOrganizador obtenerDTOrganizador() {
     return organizador.toDataType();
@@ -189,3 +200,4 @@ public class Edicion extends BaseEntity {
   // }
 
 }
+

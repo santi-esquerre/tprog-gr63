@@ -11,6 +11,15 @@ import dominio.Organizador;
 import dominio.Registro;
 import dominio.Usuario;
 import jakarta.persistence.EntityManager;
+import dominio.Asistente;
+import dominio.Evento;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import datatypes.DTAsistente;
+import infra.Tx;
 
 public final class UsuarioRepository {
   private static final UsuarioRepository INSTANCE = new UsuarioRepository();
@@ -41,6 +50,14 @@ public final class UsuarioRepository {
         "select count(u) from Usuario u where u.correo = :c", Long.class)
         .setParameter("c", correo).getSingleResult();
     return c == 0;
+  }
+  
+  public Set<DTAsistente>listarAsistentes(EntityManager em) {
+	    return em.createQuery(
+	            "select a from Asistente a order by a.nombre", Asistente.class)
+	          .getResultStream()
+	          .map(Asistente::obtenerDTAsistente)
+	          .collect(Collectors.toCollection(LinkedHashSet::new));	  
   }
 
   /**

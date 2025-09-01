@@ -1,7 +1,8 @@
 package dominio;
 
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.ZoneId;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,12 +27,10 @@ public class Asistente extends Usuario {
 
   @Column(nullable = false)
   private LocalDate fechaNacimiento;
-
-  @Column(nullable = false, length = 300)
-  private String descripcion = "Asistente"; // Valor por defecto
-
-  @ManyToOne(optional = true, fetch = FetchType.LAZY)
-  @JoinColumn(name = "institucion_id", nullable = true, foreignKey = @ForeignKey(name = "fk_asistente_institucion"))
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "institucion_id",
+              foreignKey = @ForeignKey(name = "fk_asistente_institucion"))
   private Institucion institucion; // Asociación con Institucion
 
   @OneToMany(mappedBy = "asistente")
@@ -45,36 +44,14 @@ public class Asistente extends Usuario {
     this.apellido = ape;
     this.fechaNacimiento = fnac;
   }
-
-  public String getApellido() {
-    return apellido;
-  }
-
-  public LocalDate getFechaNacimiento() {
-    return fechaNacimiento;
-  }
-
-  public String getDescripcion() {
-    return descripcion;
-  }
-
-  public void setDescripcion(String descripcion) {
-    this.descripcion = descripcion;
-  }
-
-  public void setInstitucion(Institucion inst) {
-    this.institucion = inst;
-  }
-
-  @Override
-  public DTAsistente toDataType() {
-    // Convertir LocalDate a Date para compatibilidad con el record DTAsistente
-    Date fechaNac = java.sql.Date.valueOf(fechaNacimiento);
-    return new DTAsistente(getNickname(), getNombre(), getCorreo(), apellido, fechaNac);
-  }
-
-  @Override
-  public DTUsuarioItemListado toDTUsuarioItemListado() {
-    return new DTUsuarioItemListado(getNickname(), getCorreo(), TipoUsuario.ASISTENTE);
-  }
+  
+  public String getApellido() { return apellido; }
+  
+  public LocalDate getFechaNacimiento() { return fechaNacimiento; }
+  
+  public void setInstitucion(Institucion inst) { this.institucion = inst; }
+  
+  public datatypes.DTAsistente obtenerDTAsistente() {
+	    return new datatypes.DTAsistente(nickname, nombre, apellido, correo, Date.from(fechaNacimiento.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()));
+	  }
 }

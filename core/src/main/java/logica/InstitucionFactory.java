@@ -2,7 +2,6 @@ package logica;
 
 import dominio.Institucion;
 import jakarta.persistence.EntityManager;
-import repos.InstitucionRepository;
 
 public class InstitucionFactory {
 	

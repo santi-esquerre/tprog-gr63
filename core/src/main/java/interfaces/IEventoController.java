@@ -18,6 +18,7 @@ public interface IEventoController {
   Set<DTEvento> listarEventos();
 
   Set<DTEdicion> mostrarEdiciones(String nombreEvento) throws ValidationInputException;
+  void altaDeCategoria(String nombreCategoria) throws ValidationInputException;
 
   boolean agregarEdicionAEvento(String nombreEvento,
       String nicknameOrganizador,

@@ -153,7 +153,7 @@ public class AltaInstitucion extends JInternalFrame{
 		return true;
 	}
 	
-	void limpiarCampos() {
+	private void limpiarCampos() {
 		textNombre.setText("");
 		textWeb.setText("");
 		textDesc.setText("");

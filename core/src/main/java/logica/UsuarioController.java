@@ -1,7 +1,9 @@
 package logica;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.List;
 
+import datatypes.DTAsistente;
 import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
 import datatypes.DTUsuarioItemListado;
@@ -9,6 +11,14 @@ import datatypes.TipoUsuario;
 import infra.Tx;
 import interfaces.IUsuarioController;
 import repos.UsuarioRepository;
+import repos.InstitucionRepository;
+import dominio.Asistente;
+import dominio.Organizador;
+import exceptions.InstitucionRepetidaException;
+import exceptions.UsuarioCorreoRepetidoException;
+import exceptions.UsuarioNicknameRepetidoException;
+import infra.Tx;
+import dominio.Institucion;
 
 
 public class UsuarioController implements IUsuarioController {
@@ -18,6 +28,7 @@ public class UsuarioController implements IUsuarioController {
 	
 	private final UsuarioRepository repoU = UsuarioRepository.get();
 	private final UsuarioFactory faU = UsuarioFactory.get();
+	private final InstitucionRepository repoI = InstitucionRepository.get();
 
 	public static UsuarioController get() { return INSTANCE; }
 	
@@ -32,17 +43,30 @@ public class UsuarioController implements IUsuarioController {
 	}
 	
 
-    @Override
-	public void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento, String nombreInstitucion) {
+	public void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento, String nombreInstitucion) throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
+		if (!verificarNoExistenciaNickname(nickname)) {
+			throw new UsuarioNicknameRepetidoException(nickname);
+		}
+		
+		if (!verificarNoExistenciaCorreo(correo)) {
+			throw new UsuarioCorreoRepetidoException(nickname);
+		}
 		Tx.inTx(em -> { 
-			faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento, nombreInstitucion); 
+			var i = (Institucion) repoI.buscarInstitucion(em, nombreInstitucion);
+			faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento, i); 
 			return null;
 			});
 	}
 	
 	
-    @Override
-	public void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento) {
+	public void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento) throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
+		if (!verificarNoExistenciaNickname(nickname)) {
+			throw new UsuarioNicknameRepetidoException(nickname);
+		}
+		
+		if (!verificarNoExistenciaCorreo(correo)) {
+			throw new UsuarioCorreoRepetidoException(nickname);
+		}
 		Tx.inTx(em -> { 
 			faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento); 
 			return null;
@@ -50,8 +74,14 @@ public class UsuarioController implements IUsuarioController {
 	} 
 	
 	
-    @Override
-	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion, String linkSitioWeb) {
+	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion, String linkSitioWeb)throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
+		if (!verificarNoExistenciaNickname(nickname)) {
+			throw new UsuarioNicknameRepetidoException(nickname);
+		}
+		
+		if (!verificarNoExistenciaCorreo(correo)) {
+			throw new UsuarioCorreoRepetidoException(nickname);
+		}
 		Tx.inTx(em -> { 
 			faU.altaOrganizador(em, nickname, nombre, correo, descripcion, linkSitioWeb); 
 			return null;
@@ -59,12 +89,24 @@ public class UsuarioController implements IUsuarioController {
 	}
 	
 	
-    @Override
-	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion) {
+	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion) throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
+		if (!verificarNoExistenciaNickname(nickname)) {
+			throw new UsuarioNicknameRepetidoException(nickname);
+		}
+		
+		if (!verificarNoExistenciaCorreo(correo)) {
+			throw new UsuarioCorreoRepetidoException(nickname);
+		}		
+		
 		Tx.inTx(em -> { 
 			faU.altaOrganizador(em, nickname, nombre, correo, descripcion); 
 			return null;
 			});
+	}
+	
+	@Override
+	public Set<DTAsistente> mostrarAsistentes() {
+		return Tx.inTx(repoU::listarAsistentes);
 	}
 
 	@Override

@@ -29,14 +29,19 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
+
 import java.awt.Color;
+import javax.swing.JButton;
 
 public class Principal {
 
 	final int TAMANIO_ICONO = 20;
 	final String CODIGO_VERSION = "0.1.0";
-
+	Factory factory = Factory.get();
 	private JFrame frame;
 
 	/**
@@ -165,13 +170,14 @@ public class Principal {
 
 		JMenuItem menuItemUsuariosAlta = new JMenuItem("Alta de usuario");
 		menuItemUsuariosAlta.setIcon(iconAlta);
-		menuItemUsuariosAlta.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						System.out.println("Abriendo alta de usuario...");
-						internalFramealtaUsuario.setVisible(true);
-					}
-				});
+		menuItemUsuariosAlta.addActionListener( 
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Abriendo alta de usuario...");
+					internalFramealtaUsuario.cargarDatos();
+					internalFramealtaUsuario.setVisible(true);
+				}
+ 			});
 		menuUsuarios.add(menuItemUsuariosAlta);
 
 		ConsultaUsuario internalFrameconsultaUsuario = new ConsultaUsuario();
@@ -286,7 +292,9 @@ public class Principal {
 		menuItemEdicionesRegistro.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						internalFrameRegistroEdicion.setSize(550, 513);
 						System.out.println("Abriendo registro a edición...");
+						internalFrameRegistroEdicion.cargarDatos();
 						internalFrameRegistroEdicion.setVisible(true);
 					}
 				});
@@ -311,11 +319,25 @@ public class Principal {
 		JMenu menuPatrociniosBar = new JMenu("Patrocinios");
 		menuPatrociniosBar.setIcon(iconPatrocinios);
 		menuEventos.add(menuPatrociniosBar);
-
+		
+		AltaPatrocinio internalFrameAltaPatrocinio = new AltaPatrocinio();
+		internalFrameAltaPatrocinio.setVisible(false);
+		frame.getContentPane().add(internalFrameAltaPatrocinio);
+		
 		JMenuItem menuItemPatrociniosAlta = new JMenuItem("Alta de patrocinio");
 		menuItemPatrociniosAlta.setIcon(iconAlta);
 		menuPatrociniosBar.add(menuItemPatrociniosAlta);
-
+		menuItemPatrociniosAlta.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Abriendo alta de patrocinio...");
+						internalFrameAltaPatrocinio.cargarDatos();
+						internalFrameAltaPatrocinio.setVisible(true);
+					}
+				}
+			);
+		
+		
 		JMenuItem menuItemPatrociniosConsulta = new JMenuItem("Consulta de patrocinio");
 		menuItemPatrociniosConsulta.setIcon(iconConsulta);
 		menuPatrociniosBar.add(menuItemPatrociniosConsulta);
@@ -370,12 +392,15 @@ public class Principal {
 						System.out.println("Abriendo alta de institución...");
 						internalFramealtaInstitucion.setVisible(true);
 					}
-				});
-
+				}
+			);
+		
 		JDesktopPane desktopPane = new JDesktopPane();
 		desktopPane.setForeground(new Color(0, 0, 0));
 		desktopPane.setBackground(new Color(238, 238, 238));
 		frame.getContentPane().add(desktopPane, BorderLayout.CENTER);
+		
+		
 
 		// JLabel lblNewLabel = new JLabel("Versión " + CODIGO_VERSION + " ");
 		// lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -384,4 +409,5 @@ public class Principal {
 		// lblNewLabel.setVerticalAlignment(SwingConstants.BOTTOM);
 
 	}
+	
 }

@@ -19,13 +19,13 @@ public final class EdicionRepository {
 
   public Edicion buscarEdicion(EntityManager em, String nombreEdicion) {
     return em.createQuery("""
-          select ed from Edicion ed
-          left join fetch ed.tipos
-          left join fetch ed.registros r
-          left join fetch r.asistente
-          where ed.nombre = :n
-        """, Edicion.class).setParameter("n", nombreEdicion)
-        .getResultStream().findFirst().orElse(null);
+      select ed from Edicion ed
+      left join fetch ed.tipos
+      left join fetch ed.registros r
+      left join fetch ed.patrocinios
+      where ed.nombre = :n
+    """, Edicion.class).setParameter("n", nombreEdicion)
+      .getResultStream().findFirst().orElse(null);
   }
 
   public TipoRegistro obtenerTipoRegistro(EntityManager em, String nombre) {
@@ -96,4 +96,12 @@ public final class EdicionRepository {
         .getSingleResult() > 0;
   }
 
+  
+  public boolean existePatrocinio(EntityManager em, String nombreEdicion, String nombreInstitucion) {
+	  Long c = em.createQuery("select count(p) from Patrocinio p where p.edicion.nombre = :ne and p.institucion.nombre = :ni", Long.class)
+			  .setParameter("ne", nombreEdicion)
+			  .setParameter("ni", nombreInstitucion)
+			  .getSingleResult();
+	  return c > 0;
+  }
 }
