@@ -25,20 +25,20 @@ import java.awt.GridLayout;
 public class ConsultaUsuario extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JTable table;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTable tblUsuarios;
+	private JTextField txtNombreOrganizador;
+	private JTextField txtCorreoOrganizador;
+	private JTextField txtNicknameOrganizador;
+	private JTextField txtLinkOrganizador;
 	private JTable table_1;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTable table_2;
-	private JTextField txtSadsad;
-	private JTextField textField_9;
-	private JTextField textField_10;
+	private JTextField txtNicknameAsistente;
+	private JTextField txtNombreAsistente;
+	private JTextField txtApellidoAsistente;
+	private JTextField txtCorreoAsistente;
+	private JTable tblRegistros;
+	private JTextField txtDia;
+	private JTextField txtMes;
+	private JTextField txtAnio;
 
 	/**
 	 * Launch the application.
@@ -76,10 +76,10 @@ public class ConsultaUsuario extends JInternalFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 		
-		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(
+		tblUsuarios = new JTable();
+		tblUsuarios.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		scrollPane.setViewportView(tblUsuarios);
+		tblUsuarios.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"jdoe", "jdoe@email.com", "Organizador"},
 				{"asmith", "asmith@email.com", "Asistente"},
@@ -136,15 +136,15 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNickname.gridy = 0;
 		panel.add(lblNickname, gbc_lblNickname);
 		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 1;
-		gbc_textField_2.gridy = 0;
-		panel.add(textField_2, gbc_textField_2);
+		txtNicknameOrganizador = new JTextField();
+		txtNicknameOrganizador.setEditable(false);
+		txtNicknameOrganizador.setColumns(10);
+		GridBagConstraints gbc_txtNicknameOrganizador = new GridBagConstraints();
+		gbc_txtNicknameOrganizador.insets = new Insets(0, 0, 5, 0);
+		gbc_txtNicknameOrganizador.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNicknameOrganizador.gridx = 1;
+		gbc_txtNicknameOrganizador.gridy = 0;
+		panel.add(txtNicknameOrganizador, gbc_txtNicknameOrganizador);
 		
 		JLabel lblNewLabel = new JLabel("Nombre:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -155,15 +155,15 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel.gridy = 1;
 		panel.add(lblNewLabel, gbc_lblNewLabel);
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 0);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 1;
-		panel.add(textField, gbc_textField);
-		textField.setColumns(10);
+		txtNombreOrganizador = new JTextField();
+		txtNombreOrganizador.setEditable(false);
+		GridBagConstraints gbc_txtNombreOrganizador = new GridBagConstraints();
+		gbc_txtNombreOrganizador.insets = new Insets(0, 0, 5, 0);
+		gbc_txtNombreOrganizador.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNombreOrganizador.gridx = 1;
+		gbc_txtNombreOrganizador.gridy = 1;
+		panel.add(txtNombreOrganizador, gbc_txtNombreOrganizador);
+		txtNombreOrganizador.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Correo electrónico:");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
@@ -173,15 +173,15 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1.gridy = 2;
 		panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 1;
-		gbc_textField_1.gridy = 2;
-		panel.add(textField_1, gbc_textField_1);
+		txtCorreoOrganizador = new JTextField();
+		txtCorreoOrganizador.setEditable(false);
+		txtCorreoOrganizador.setColumns(10);
+		GridBagConstraints gbc_txtCorreoOrganizador = new GridBagConstraints();
+		gbc_txtCorreoOrganizador.insets = new Insets(0, 0, 5, 0);
+		gbc_txtCorreoOrganizador.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCorreoOrganizador.gridx = 1;
+		gbc_txtCorreoOrganizador.gridy = 2;
+		panel.add(txtCorreoOrganizador, gbc_txtCorreoOrganizador);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Link del sitio web:");
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -192,15 +192,15 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1_1.gridy = 3;
 		panel.add(lblNewLabel_1_1, gbc_lblNewLabel_1_1);
 		
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setColumns(10);
-		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
-		gbc_textField_3.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_3.gridx = 1;
-		gbc_textField_3.gridy = 3;
-		panel.add(textField_3, gbc_textField_3);
+		txtLinkOrganizador = new JTextField();
+		txtLinkOrganizador.setEditable(false);
+		txtLinkOrganizador.setColumns(10);
+		GridBagConstraints gbc_txtLinkOrganizador = new GridBagConstraints();
+		gbc_txtLinkOrganizador.insets = new Insets(0, 0, 5, 0);
+		gbc_txtLinkOrganizador.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtLinkOrganizador.gridx = 1;
+		gbc_txtLinkOrganizador.gridy = 3;
+		panel.add(txtLinkOrganizador, gbc_txtLinkOrganizador);
 		
 		JLabel lblNewLabel_2 = new JLabel("Descripción:");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
@@ -211,15 +211,15 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_2.gridy = 4;
 		panel.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setEditable(false);
-		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.insets = new Insets(0, 0, 5, 0);
-		gbc_textArea.gridwidth = 2;
-		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 0;
-		gbc_textArea.gridy = 5;
-		panel.add(textArea, gbc_textArea);
+		JTextArea txtDescripcionOrganizador = new JTextArea();
+		txtDescripcionOrganizador.setEditable(false);
+		GridBagConstraints gbc_txtDescripcionOrganizador = new GridBagConstraints();
+		gbc_txtDescripcionOrganizador.insets = new Insets(0, 0, 5, 0);
+		gbc_txtDescripcionOrganizador.gridwidth = 2;
+		gbc_txtDescripcionOrganizador.fill = GridBagConstraints.BOTH;
+		gbc_txtDescripcionOrganizador.gridx = 0;
+		gbc_txtDescripcionOrganizador.gridy = 5;
+		panel.add(txtDescripcionOrganizador, gbc_txtDescripcionOrganizador);
 		
 		JLabel lblNewLabel_3 = new JLabel("Ediciones que organiza:");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
@@ -269,15 +269,15 @@ public class ConsultaUsuario extends JInternalFrame {
 		table_1.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		scrollPane_1.setViewportView(table_1);
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new EmptyBorder(10, 10, 10, 10));
+		JPanel pnlAsistentes = new JPanel();
+		pnlAsistentes.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
-		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[]{0, 0, 0};
-		gbl_panel_2.rowHeights = new int[]{0,0,0,0,0,1,0};
-		gbl_panel_2.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
-		panel_2.setLayout(gbl_panel_2);
+		GridBagLayout gbl_pnlAsistentes = new GridBagLayout();
+		gbl_pnlAsistentes.columnWidths = new int[]{0, 0, 0};
+		gbl_pnlAsistentes.rowHeights = new int[]{0,0,0,0,0,1,0};
+		gbl_pnlAsistentes.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_pnlAsistentes.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+		pnlAsistentes.setLayout(gbl_pnlAsistentes);
 		
 		JLabel lblNickname_1 = new JLabel("Nickname:");
 		lblNickname_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -286,17 +286,17 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNickname_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNickname_1.gridx = 0;
 		gbc_lblNickname_1.gridy = 0;
-		panel_2.add(lblNickname_1, gbc_lblNickname_1);
+		pnlAsistentes.add(lblNickname_1, gbc_lblNickname_1);
 		
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setColumns(10);
-		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
-		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_4.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_4.gridx = 1;
-		gbc_textField_4.gridy = 0;
-		panel_2.add(textField_4, gbc_textField_4);
+		txtNicknameAsistente = new JTextField();
+		txtNicknameAsistente.setEditable(false);
+		txtNicknameAsistente.setColumns(10);
+		GridBagConstraints gbc_txtNicknameAsistente = new GridBagConstraints();
+		gbc_txtNicknameAsistente.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNicknameAsistente.insets = new Insets(0, 0, 5, 0);
+		gbc_txtNicknameAsistente.gridx = 1;
+		gbc_txtNicknameAsistente.gridy = 0;
+		pnlAsistentes.add(txtNicknameAsistente, gbc_txtNicknameAsistente);
 		
 		JLabel lblNewLabel_4 = new JLabel("Nombre:");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.LEFT);
@@ -305,17 +305,17 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_4.gridx = 0;
 		gbc_lblNewLabel_4.gridy = 1;
-		panel_2.add(lblNewLabel_4, gbc_lblNewLabel_4);
+		pnlAsistentes.add(lblNewLabel_4, gbc_lblNewLabel_4);
 		
-		textField_5 = new JTextField();
-		textField_5.setEditable(false);
-		textField_5.setColumns(10);
-		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_5.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_5.gridx = 1;
-		gbc_textField_5.gridy = 1;
-		panel_2.add(textField_5, gbc_textField_5);
+		txtNombreAsistente = new JTextField();
+		txtNombreAsistente.setEditable(false);
+		txtNombreAsistente.setColumns(10);
+		GridBagConstraints gbc_txtNombreAsistente = new GridBagConstraints();
+		gbc_txtNombreAsistente.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNombreAsistente.insets = new Insets(0, 0, 5, 0);
+		gbc_txtNombreAsistente.gridx = 1;
+		gbc_txtNombreAsistente.gridy = 1;
+		pnlAsistentes.add(txtNombreAsistente, gbc_txtNombreAsistente);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("Apellido:");
 		GridBagConstraints gbc_lblNewLabel_1_2 = new GridBagConstraints();
@@ -323,17 +323,17 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1_2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1_2.gridx = 0;
 		gbc_lblNewLabel_1_2.gridy = 2;
-		panel_2.add(lblNewLabel_1_2, gbc_lblNewLabel_1_2);
+		pnlAsistentes.add(lblNewLabel_1_2, gbc_lblNewLabel_1_2);
 		
-		textField_6 = new JTextField();
-		textField_6.setEditable(false);
-		textField_6.setColumns(10);
-		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
-		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_6.gridx = 1;
-		gbc_textField_6.gridy = 2;
-		panel_2.add(textField_6, gbc_textField_6);
+		txtApellidoAsistente = new JTextField();
+		txtApellidoAsistente.setEditable(false);
+		txtApellidoAsistente.setColumns(10);
+		GridBagConstraints gbc_txtApellidoAsistente = new GridBagConstraints();
+		gbc_txtApellidoAsistente.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtApellidoAsistente.insets = new Insets(0, 0, 5, 0);
+		gbc_txtApellidoAsistente.gridx = 1;
+		gbc_txtApellidoAsistente.gridy = 2;
+		pnlAsistentes.add(txtApellidoAsistente, gbc_txtApellidoAsistente);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Correo electrónico:");
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -342,17 +342,17 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1_1_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1_1_1.gridx = 0;
 		gbc_lblNewLabel_1_1_1.gridy = 3;
-		panel_2.add(lblNewLabel_1_1_1, gbc_lblNewLabel_1_1_1);
+		pnlAsistentes.add(lblNewLabel_1_1_1, gbc_lblNewLabel_1_1_1);
 		
-		textField_7 = new JTextField();
-		textField_7.setEditable(false);
-		textField_7.setColumns(10);
-		GridBagConstraints gbc_textField_7 = new GridBagConstraints();
-		gbc_textField_7.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_7.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_7.gridx = 1;
-		gbc_textField_7.gridy = 3;
-		panel_2.add(textField_7, gbc_textField_7);
+		txtCorreoAsistente = new JTextField();
+		txtCorreoAsistente.setEditable(false);
+		txtCorreoAsistente.setColumns(10);
+		GridBagConstraints gbc_txtCorreoAsistente = new GridBagConstraints();
+		gbc_txtCorreoAsistente.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCorreoAsistente.insets = new Insets(0, 0, 5, 0);
+		gbc_txtCorreoAsistente.gridx = 1;
+		gbc_txtCorreoAsistente.gridy = 3;
+		pnlAsistentes.add(txtCorreoAsistente, gbc_txtCorreoAsistente);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Fecha de nacimiento:");
 		GridBagConstraints gbc_lblNewLabel_2_1 = new GridBagConstraints();
@@ -360,7 +360,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_2_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_2_1.gridx = 0;
 		gbc_lblNewLabel_2_1.gridy = 4;
-		panel_2.add(lblNewLabel_2_1, gbc_lblNewLabel_2_1);
+		pnlAsistentes.add(lblNewLabel_2_1, gbc_lblNewLabel_2_1);
 		
 		JPanel panel_3 = new JPanel();
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
@@ -368,7 +368,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_panel_3.fill = GridBagConstraints.BOTH;
 		gbc_panel_3.gridx = 1;
 		gbc_panel_3.gridy = 4;
-		panel_2.add(panel_3, gbc_panel_3);
+		pnlAsistentes.add(panel_3, gbc_panel_3);
 		GridBagLayout gbl_panel_3 = new GridBagLayout();
 		gbl_panel_3.columnWidths = new int[]{0, 0, 0, 0};
 		gbl_panel_3.rowHeights = new int[]{0, 0};
@@ -376,37 +376,37 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panel_3.setLayout(gbl_panel_3);
 		
-		txtSadsad = new JTextField();
-		txtSadsad.setEditable(false);
-		txtSadsad.setText("21");
-		GridBagConstraints gbc_txtSadsad = new GridBagConstraints();
-		gbc_txtSadsad.insets = new Insets(0, 0, 0, 5);
-		gbc_txtSadsad.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtSadsad.gridx = 0;
-		gbc_txtSadsad.gridy = 0;
-		panel_3.add(txtSadsad, gbc_txtSadsad);
-		txtSadsad.setColumns(10);
+		txtDia = new JTextField();
+		txtDia.setEditable(false);
+		txtDia.setText("21");
+		GridBagConstraints gbc_txtDia = new GridBagConstraints();
+		gbc_txtDia.insets = new Insets(0, 0, 0, 5);
+		gbc_txtDia.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtDia.gridx = 0;
+		gbc_txtDia.gridy = 0;
+		panel_3.add(txtDia, gbc_txtDia);
+		txtDia.setColumns(10);
 		
-		textField_9 = new JTextField();
-		textField_9.setEditable(false);
-		textField_9.setText("12");
-		GridBagConstraints gbc_textField_9 = new GridBagConstraints();
-		gbc_textField_9.insets = new Insets(0, 0, 0, 5);
-		gbc_textField_9.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_9.gridx = 1;
-		gbc_textField_9.gridy = 0;
-		panel_3.add(textField_9, gbc_textField_9);
-		textField_9.setColumns(10);
+		txtMes = new JTextField();
+		txtMes.setEditable(false);
+		txtMes.setText("12");
+		GridBagConstraints gbc_txtMes = new GridBagConstraints();
+		gbc_txtMes.insets = new Insets(0, 0, 0, 5);
+		gbc_txtMes.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtMes.gridx = 1;
+		gbc_txtMes.gridy = 0;
+		panel_3.add(txtMes, gbc_txtMes);
+		txtMes.setColumns(10);
 		
-		textField_10 = new JTextField();
-		textField_10.setEditable(false);
-		textField_10.setText("2004");
-		GridBagConstraints gbc_textField_10 = new GridBagConstraints();
-		gbc_textField_10.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_10.gridx = 2;
-		gbc_textField_10.gridy = 0;
-		panel_3.add(textField_10, gbc_textField_10);
-		textField_10.setColumns(10);
+		txtAnio = new JTextField();
+		txtAnio.setEditable(false);
+		txtAnio.setText("2004");
+		GridBagConstraints gbc_txtAnio = new GridBagConstraints();
+		gbc_txtAnio.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtAnio.gridx = 2;
+		gbc_txtAnio.gridy = 0;
+		panel_3.add(txtAnio, gbc_txtAnio);
+		txtAnio.setColumns(10);
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Registros:");
 		GridBagConstraints gbc_lblNewLabel_3_1 = new GridBagConstraints();
@@ -415,7 +415,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_3_1.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_3_1.gridx = 0;
 		gbc_lblNewLabel_3_1.gridy = 5;
-		panel_2.add(lblNewLabel_3_1, gbc_lblNewLabel_3_1);
+		pnlAsistentes.add(lblNewLabel_3_1, gbc_lblNewLabel_3_1);
 		
 		JScrollPane scrollPane_1_1 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_1_1 = new GridBagConstraints();
@@ -423,11 +423,11 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_scrollPane_1_1.gridwidth = 2;
 		gbc_scrollPane_1_1.gridx = 0;
 		gbc_scrollPane_1_1.gridy = 6;
-		panel_2.add(scrollPane_1_1, gbc_scrollPane_1_1);
-		scrollPane_1_1.setViewportView(table_2);
+		pnlAsistentes.add(scrollPane_1_1, gbc_scrollPane_1_1);
+		scrollPane_1_1.setViewportView(tblRegistros);
 		
-		table_2 = new JTable();
-		table_2.setModel(new DefaultTableModel(
+		tblRegistros = new JTable();
+		tblRegistros.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null},
 				{null, null, null, null, null},
@@ -444,12 +444,12 @@ public class ConsultaUsuario extends JInternalFrame {
 				return columnEditables[column];
 			}
 		});
-		table_2.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		scrollPane_1_1.setViewportView(table_2);
-		table.getColumnModel().getColumn(1).setPreferredWidth(98);
+		tblRegistros.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		scrollPane_1_1.setViewportView(tblRegistros);
+		tblUsuarios.getColumnModel().getColumn(1).setPreferredWidth(98);
 		
-		//panel_1.add(panel);
-		panel_1.add(panel_2);
+		panel_1.add(panel);
+		//panel_1.add(pnlAsistentes);
 
 	}
 

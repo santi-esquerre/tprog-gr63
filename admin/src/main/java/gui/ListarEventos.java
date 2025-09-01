@@ -27,6 +27,7 @@ public class ListarEventos extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private IReceiver parentReceiver;
 	private JTable table;
+	DefaultTableModel model;
 	/**
 	 * Launch the application.
 	 */
@@ -66,7 +67,7 @@ public class ListarEventos extends JDialog {
 						return columnEditables[column];
 					}
 				});
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model = (DefaultTableModel) table.getModel();
 
 				scrollPane.setViewportView(table);
 				
@@ -76,10 +77,7 @@ public class ListarEventos extends JDialog {
 						"Nombre", "Sigla", "Descripci\u00F3n", "Fecha de Alta"
 					});
 				
-				if(model.getRowCount() == 0) {
-					Dialog.showWarning("No hay eventos para mostrar");
-					dispose();
-				}
+				
 			}
 		}
 		
@@ -94,6 +92,15 @@ public class ListarEventos extends JDialog {
 		        }
 		    }
 		});
+	}
+	
+	public void resetData() {
+		//TO DO: actualizar datos
+		model.fireTableDataChanged();
+		if(model.getRowCount() == 0) {
+			Dialog.showWarning("No hay eventos para mostrar");
+			dispose();
+		}
 	}
 
 }

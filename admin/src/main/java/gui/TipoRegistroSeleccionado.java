@@ -31,15 +31,19 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
+import interfaces.Factory;
 import interfaces.IEdicionController;
 import datatypes.DTTipoRegistro;
 
 public class TipoRegistroSeleccionado extends JDialog {
-	private String selectedValue = null; // Variable para almacenar el valor seleccionado
-	public TipoRegistroSeleccionado(Window parent, String title, String nombreEdicion, IEdicionController edicionController) {
+	Map<String, DTTipoRegistro> mapCombo = new HashMap<>();
+	private DTTipoRegistro selectedValue = null; // Variable para almacenar el valor seleccionado
+	public TipoRegistroSeleccionado(Window parent, String title, String nombreEdicion) {
 		super(parent, title, Dialog.ModalityType.APPLICATION_MODAL);
 		setResizable(true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -81,52 +85,29 @@ public class TipoRegistroSeleccionado extends JDialog {
 		JTextArea textArea = new JTextArea();
 		
 		//se rellena el combobox
-		Vector<DTTipoRegistro> tiposDeRegistro = (Vector<DTTipoRegistro>) edicionController.mostrarTiposDeRegistro(nombreEdicion); // Se trae los tipos de registro asociados a la edicion
-		Vector<Integer> indicesSinCupo = new Vector<Integer>(tiposDeRegistro.size()); // Vector para guardar los índices sin cupo
-		for (int i = 0; i < tiposDeRegistro.size() + 1; i++) {
-			indicesSinCupo.add(0); // Inicializa todos los índices con 0 
-		}
+		Factory factory = Factory.get();
+		var edicion = factory.getIEdicionController();
+		Set<DTTipoRegistro> tiposDeRegistro = edicion.mostrarTiposDeRegistro(nombreEdicion); // Se trae los tipos de registro asociados a la edicion
 		for (DTTipoRegistro tipo : tiposDeRegistro) {
-			String texto = tipo.getNombe();
+			String texto = tipo.nombre();
 			int cupo = tipo.getCupo();
 			if (cupo == 0) {
 				texto += " (No hay cupo disponible)";
-				indicesSinCupo.set(comboBox.getItemCount(), 1);
 			} else {
 				int costo = tipo.getCupo();
 				texto += " $" + Float.toString(costo); 
 			}
 			comboBox.addItem(texto);
+			mapCombo.put(texto, tipo);
 		}
-		
-		comboBox.setRenderer(new DefaultListCellRenderer() {
-			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if (index > 0 && indicesSinCupo.get(index) == 1) // Verifica si el índice actual está en la lista de sin cupo
-					c.setForeground(Color.GRAY); // Cambia el color de texto del elemento sin cupo a gris
-				return c;
-			}
-		});
 	
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = comboBox.getSelectedIndex();
-				if (selectedIndex > 0 && indicesSinCupo.get(selectedIndex) == 0) {
-					JOptionPane.showMessageDialog(comboBox, "No se puede seleccionar un tipo de registro sin cupo", "Tipo de Registro",
-		                    JOptionPane.ERROR_MESSAGE);
-					comboBox.setSelectedIndex(0);
-					textArea.setText("Descripción: ");
-				} 
-				else if (selectedIndex == 0) { 
-					selectedValue = null; // Si se selecciona el primer elemento, se guarda null
-					textArea.setText("Descripción: "); 
-					}
-				
-				else {
-					selectedValue = tiposDeRegistro.get(selectedIndex - 1).getNombe(); // Se guarda el nombre del tipo de registro seleccionado
-					textArea.setText("Descripción: " + tiposDeRegistro.get(selectedIndex - 1).getDescripcion());
-				} 
+				if (comboBox.getSelectedIndex() > 0) {
+					String opcionSeleccionada = (String) comboBox.getSelectedItem();
+					textArea.setText("Descripción: " + mapCombo.get(opcionSeleccionada).getDescripcion());
+				}
 					
 			}
 		});
@@ -183,14 +164,25 @@ public class TipoRegistroSeleccionado extends JDialog {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-				if (selectedValue == null) {
+				if (comboBox.getSelectedIndex() > 0) {
+					
+					String opcionSeleccionada = (String) comboBox.getSelectedItem();
+					if (mapCombo.get(opcionSeleccionada).cupo() == 0) {
+						
+						JOptionPane.showMessageDialog(btnAceptar, "Debe seleccionar un tipo de registro con cupo", "Tipo de Registro",
+			                    JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						selectedValue = mapCombo.get(opcionSeleccionada);
+						dispose(); // Cierra la ventana 
+					}
+					
+				}
+				else 
 					JOptionPane.showMessageDialog(btnAceptar, "Debe seleccionar un tipo de registro", "Tipo de Registro",
 		                    JOptionPane.ERROR_MESSAGE);
-				} else {
-					dispose(); // Cierra la ventana 
 				}
-			}
-		});
+			});
 		
 		
 		btnAceptar.setPreferredSize(new Dimension(90, 30));
@@ -213,7 +205,7 @@ public class TipoRegistroSeleccionado extends JDialog {
 	}
 	
 	// Metodo para regresar el valor seleccionado
-	public String getSelectedValue() {
+	public DTTipoRegistro getSelectedValue() {
 		return selectedValue;
 	}
 }

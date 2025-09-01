@@ -1,12 +1,8 @@
 package logica;
 
-import java.util.Set;
-
 import dominio.Categoria;
-import dominio.Evento;
 import jakarta.persistence.EntityManager;
 import repos.CategoriaRepository;
-import repos.EventoRepository;
 public class CategoriaFactory {
 	  private static final CategoriaFactory INSTANCE = new CategoriaFactory();
 	  private CategoriaFactory() {}

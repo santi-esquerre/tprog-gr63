@@ -3,7 +3,9 @@ package dominio;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import datatypes.DTInstitucion;
 import jakarta.persistence.CascadeType;
+import datatypes.DTInstitucion;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +31,9 @@ public class Institucion extends BaseEntity {
 	@OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
 	private Set<Asistente> asistentes = new LinkedHashSet<>();
 	
+	@OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
+	private Set<Patrocinio> patrocinios = new LinkedHashSet<>();
+	
 	public Institucion(String nombre, String descripcion, String sitioWeb) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
@@ -38,5 +43,41 @@ public class Institucion extends BaseEntity {
 	public Institucion(String nombre, String descripcion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+	}
+	
+	public DTInstitucion obtenerDTInstitucion() {
+		return new DTInstitucion(nombre, descripcion, sitioWeb);
+	}
+
+	
+	public void addAsistente(Asistente a) {
+		this.asistentes.add(a);
+	}
+	
+	public void addPatrocinio(Patrocinio p) {
+		this.patrocinios.add(p);
+	}
+	
+	// Getters
+	public String getNombre() { return nombre; }
+	public String getDescripcion() { return descripcion; }
+	public String getSitioWeb() { return sitioWeb; }
+	public Set<Asistente> getAsistentes() { return asistentes; }
+	public Set<Patrocinio> getPatrocinios() { return patrocinios; }
+
+	// DTO conversion
+	public DTInstitucion toDTInstitucion() {
+		return new DTInstitucion(nombre, descripcion, sitioWeb);
+	}
+
+	// Business methods
+	public void agregarAsistente(Asistente asistente) {
+		this.asistentes.add(asistente);
+		asistente.setInstitucion(this);
+	}
+	
+	public void agregarPatrocinio(Patrocinio patrocinio) {
+		this.patrocinios.add(patrocinio);
+		patrocinio.setInstitucion(this);
 	}
 }

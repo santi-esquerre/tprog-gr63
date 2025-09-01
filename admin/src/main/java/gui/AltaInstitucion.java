@@ -17,11 +17,8 @@ import interfaces.IInstitucionController;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.Dimension;
-
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
-import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -156,7 +153,7 @@ public class AltaInstitucion extends JInternalFrame{
 		return true;
 	}
 	
-	void limpiarCampos() {
+	private void limpiarCampos() {
 		textNombre.setText("");
 		textWeb.setText("");
 		textDesc.setText("");

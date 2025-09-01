@@ -1,3 +1,4 @@
+
 package dominio;
 
 import datatypes.DTTipoRegistro;
@@ -40,6 +41,17 @@ public class TipoRegistro extends BaseEntity {
     return new DTTipoRegistro(nombre, descripcion, costo, cupo);
   }
 
+  public TipoRegistro(Edicion edicion, String nombre, String descripcion, float costo, int cupo) {
+	this.edicion = edicion;
+	this.nombre = nombre;
+	this.descripcion = descripcion;
+	this.costo = costo;
+	this.cupo = cupo;
+  }
+  
   public String getNombre(){ return nombre; }
   public int getCupo(){ return cupo; }
+  public float getCosto() { return costo; }
+  public void decrementarCupo() { cupo--;}
+
 }
