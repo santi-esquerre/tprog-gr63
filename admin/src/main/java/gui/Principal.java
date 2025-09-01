@@ -6,9 +6,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.print.Printable;
-import java.io.Console;
-import java.security.PublicKey;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -21,7 +18,6 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
 
 import interfaces.*;
 import jiconfont.swing.IconFontSwing;
@@ -31,7 +27,6 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JLabel;
 import javax.swing.JDesktopPane;
 import java.awt.Color;
 
@@ -179,7 +174,7 @@ public class Principal {
 		menuItemEventosAlta.setIcon(iconAlta);
 		menuEventos.add(menuItemEventosAlta);
 
-		ConsultaEvento internalFrameconsultaEvento = new ConsultaEvento();
+		ConsultaEvento internalFrameconsultaEvento = new ConsultaEvento(factory.getIEventoController(), factory.getIEdicionController());
 		internalFrameconsultaEvento.setVisible(false);
 		frame.getContentPane().add(internalFrameconsultaEvento);
 

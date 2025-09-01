@@ -76,6 +76,21 @@ public class Edicion extends BaseEntity {
     for (Registro r : registros) out.add(r.obtenerDTAsistente());
     return out;
   }
+  
+  public Set<datatypes.DTRegistro> obtenerDTRegistros() {
+    Set<datatypes.DTRegistro> out = new LinkedHashSet<>();
+    for (Registro r : registros) {
+      out.add(new datatypes.DTRegistro(
+        r.getFecha(),
+        r.getCosto(),
+        this.getEvento().getNombre(),
+        this.getNombre(),
+        r.getAsistente().getNickname(),
+        r.getTipo().obtenerDTTipoRegistro()
+      ));
+    }
+    return out;
+  }
   public boolean cupoDisponible(String nombreTipo) {
     var t = buscarTipoRegistro(nombreTipo);
     if (t == null) return false;
@@ -92,6 +107,10 @@ public class Edicion extends BaseEntity {
   public TipoRegistro buscarTipoRegistro(String nombreTipo) {
     return tipos.stream().filter(t -> t.getNombre().equals(nombreTipo)).findFirst().orElse(null);
   }
+  
+  public datatypes.DTOrganizador obtenerDTOrganizador() {
+    return organizador.toDataType();
+  }
 
   void setEvento(Evento e){ this.evento = e; }
   public String getNombre(){ return nombre; }
@@ -100,5 +119,31 @@ public class Edicion extends BaseEntity {
   public DTEdicion toDTEdicion() {
     return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais);
   }
+  
+  // public datatypes.DTEdicionDetallada toDTEdicionDetallada() {
+  //   // Convert edition
+  //   datatypes.DTEdicion dtEdicion = this.toDTEdicion();
+    
+  //   // Convert organizador
+  //   datatypes.DTOrganizador dtOrganizador = this.obtenerDTOrganizador();
+    
+  //   // Convert tipos de registro
+  //   Set<datatypes.DTTipoRegistro> dtTiposRegistro = this.listarDTTiposDeRegistro();
+    
+  //   // Get patrocinios - this method should ideally be called from repository with EntityManager
+  //   // For now, return empty set - the repository method will populate this properly
+  //   Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
+    
+  //   // Convert registros to DTRegistro
+  //   Set<datatypes.DTRegistro> dtRegistros = this.obtenerDTRegistros();
+    
+  //   return new datatypes.DTEdicionDetallada(
+  //     dtEdicion,
+  //     dtOrganizador,
+  //     dtTiposRegistro,
+  //     dtPatrocinios,
+  //     dtRegistros
+  //   );
+  // }
   
 }

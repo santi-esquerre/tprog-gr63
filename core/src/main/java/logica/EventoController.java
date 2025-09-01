@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTEventoAlta;
+import datatypes.DTEventoDetallado;
 import dominio.Categoria;
 import exceptions.CategoriaRepetidaException;
 import exceptions.CategoriasInvalidasException;
@@ -88,6 +89,13 @@ public final class EventoController implements IEventoController {
       var ev = eventoRepo.buscarEvento(em, nombreEvento);
       return (ev == null) ? Set.of() : ev.listarDTEdiciones();
     });
+  }
+  
+  @Override
+  public DTEventoDetallado obtenerDatosDetalladosEvento(String nombreEvento) throws ValidationInputException {
+    Objects.requireNonNull(nombreEvento, "nombreEvento requerido");
+    EventoRepository eventoRepo = EventoRepository.get();
+    return Tx.inTx(em -> eventoRepo.obtenerDatosDetalladosEvento(em, nombreEvento));
   }
 
   private Set<Categoria> mapCategorias(EntityManager em, Set<String> nombres) {

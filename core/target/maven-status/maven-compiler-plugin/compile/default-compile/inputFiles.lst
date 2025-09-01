@@ -37,11 +37,13 @@ C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Prog
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\repos\EdicionRepository.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\logica\EdicionController.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\exceptions\TipoRegistroRepetidoException.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\datatypes\DTEdicionDetallada.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\datatypes\DTRegistro.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\interfaces\IEdicionController.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\infra\JPAUtil.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\datatypes\DTEvento.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\datatypes\TipoUsuario.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\datatypes\DTEventoDetallado.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\exceptions\InstitucionRepetidaException.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\exceptions\EventoRepetidoException.java
 C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\core\src\main\java\infra\JPA.java

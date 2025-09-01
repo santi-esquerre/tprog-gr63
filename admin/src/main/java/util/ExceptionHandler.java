@@ -1,8 +1,6 @@
 package util;
-import java.awt.Component;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 import exceptions.ValidationInputException;
 public class ExceptionHandler {

@@ -3,9 +3,8 @@ package interfaces;
 import java.util.Set;
 
 import datatypes.DTAsistente;
+import datatypes.DTEdicionDetallada;
 import datatypes.DTTipoRegistro;
-import exceptions.EdicionInexistenteException;
-import exceptions.TipoRegistroInexistenteException;
 import exceptions.ValidationInputException;
 
 public interface IEdicionController {
@@ -17,4 +16,7 @@ public interface IEdicionController {
   boolean asistenteNoRegistrado(String nickname);                    // idem
   void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname);
   void cancelarRegistroEdicionEvento();
+  
+  // Obtener datos detallados de una edición
+  DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion) throws ValidationInputException;
 }

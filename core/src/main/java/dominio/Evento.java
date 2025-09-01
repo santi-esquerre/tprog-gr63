@@ -69,4 +69,24 @@ public class Evento extends BaseEntity {
   public datatypes.DTEvento toDTEvento() {
     return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta);
   }
+  
+  public datatypes.DTEventoDetallado toDTEventoDetallado() {
+    // Convert categories to names
+    Set<String> categoriasNombres = new LinkedHashSet<>();
+    for (Categoria cat : categorias) {
+      categoriasNombres.add(cat.getNombre());
+    }
+    
+    // Convert editions to DTEdicion
+    Set<datatypes.DTEdicion> dtEdiciones = new LinkedHashSet<>();
+    for (Edicion ed : ediciones) {
+      dtEdiciones.add(ed.toDTEdicion());
+    }
+    
+    return new datatypes.DTEventoDetallado(
+      this.toDTEvento(),
+      categoriasNombres,
+      dtEdiciones
+    );
+  }
 }

@@ -152,4 +152,11 @@ public final class EdicionController implements IEdicionController {
   public void cancelarRegistroEdicionEvento() {
     // placeholder según DCD
   }
+  
+  @Override
+  public datatypes.DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion) throws ValidationInputException {
+    java.util.Objects.requireNonNull(nombreEvento, "nombreEvento requerido");
+    java.util.Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
+    return Tx.inTx(em -> edicionRepo.obtenerDatosDetalladosEdicion(em, nombreEvento, nombreEdicion));
+  }
 }

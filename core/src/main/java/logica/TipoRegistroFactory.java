@@ -1,11 +1,8 @@
 package logica;
 
-import java.util.Date;
 
 import datatypes.DTTipoRegistro;
-import dominio.Asistente;
 import dominio.Edicion;
-import dominio.Registro;
 import dominio.TipoRegistro;
 import jakarta.persistence.EntityManager;
 
