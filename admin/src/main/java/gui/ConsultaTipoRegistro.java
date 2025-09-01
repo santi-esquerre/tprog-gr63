@@ -134,7 +134,7 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 		txtNombre.setColumns(10);
 		
 		JLabel lblCupo_1 = new JLabel("Costo:");
-		panel_1.add(lblCupo_1, "cell 0 5");
+		panel_1.add(lblCupo_1, "cell 0 5,alignx right");
 		
 		txtCosto = new JTextField();
 		panel_1.add(txtCosto, "cell 1 5,growx");
@@ -216,6 +216,8 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 		}
 	}
 	private void selectEventoAction(ActionEvent e) {
+		listarEventosDialog.pack();
+		listarEventosDialog.setLocationRelativeTo(this);
 		listarEventosDialog.setVisible(true);
 	}
 	

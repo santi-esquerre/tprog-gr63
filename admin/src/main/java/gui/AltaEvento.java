@@ -57,7 +57,6 @@ public class AltaEvento extends JInternalFrame {
     	java.util.Set<String> categorias;
     	
         setResizable(true);
-        setIconifiable(true);
         setMaximizable(true);
         setClosable(true);
         setTitle("Alta de Evento");

@@ -94,6 +94,11 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver {
 		panel.add(btnSave);
 		
 		JButton btnCancel = new JButton("Descartar");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		panel.add(btnCancel);
 		
 		JPanel panel_1 = new JPanel();
@@ -178,6 +183,8 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver {
 	}
 	
 	private void selectEventoAction(ActionEvent e) {
+		listarEventosDialog.pack();
+		listarEventosDialog.setLocationRelativeTo(this);
 		listarEventosDialog.setVisible(true);
 	}
 	
