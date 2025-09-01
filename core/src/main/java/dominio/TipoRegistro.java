@@ -29,11 +29,12 @@ public class TipoRegistro extends BaseEntity {
   protected TipoRegistro() {}
   
   
-  public TipoRegistro(String nombreEvento, String edicionEvento, String descripcion, float costo, int cupo) {
-	  	this.nombre = nombreEvento;
+  public TipoRegistro(String nombre, Edicion edicion, String descripcion, float costo, int cupo) {
+	  	this.nombre = nombre;
 	  	this.descripcion = descripcion;
 	  	this.costo = costo;
 	  	this.cupo = cupo;
+	  	this.edicion = edicion;
   }
   public DTTipoRegistro obtenerDTTipoRegistro() {
     return new DTTipoRegistro(nombre, descripcion, costo, cupo);

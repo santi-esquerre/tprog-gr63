@@ -172,7 +172,7 @@ public class Principal {
 		menuEventos.getPopupMenu().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		menuBar.add(menuEventos);
 		
-		AltaEvento internalFramealtAltaEvento = new AltaEvento(factory.getIEventoController());
+		AltaEvento internalFramealtAltaEvento = new AltaEvento(null, factory.getIEventoController());
 		internalFramealtAltaEvento.setVisible(false);
 		frame.getContentPane().add(internalFramealtAltaEvento);
 		JMenuItem menuItemEventosAlta = new JMenuItem("Alta de evento");
@@ -266,8 +266,24 @@ public class Principal {
 		JMenuItem menuItemRegistrosAlta = new JMenuItem("Alta de tipo de registro");
 		menuItemRegistrosAlta.setIcon(iconAlta);
 		menuRegistrosBar.add(menuItemRegistrosAlta);
+		AltaTipoRegistro internalFramealtaConsultaTipoRegistro = new AltaTipoRegistro(factory.getIEventoController(), edicionController);
+		frame.getContentPane().add(internalFramealtaConsultaTipoRegistro);
+		menuItemRegistrosAlta.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						internalFramealtaConsultaTipoRegistro.setVisible(true);
+					}
+				}
+			);
 		
+		ConsultaTipoRegistro internalFrameconsultaTipoRegistro = new ConsultaTipoRegistro(factory.getIEventoController(), edicionController);
+		frame.getContentPane().add(internalFrameconsultaTipoRegistro);
 		JMenuItem menuItemRegistrosConsulta = new JMenuItem("Consulta de tipo de registro");
+		menuItemRegistrosConsulta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				internalFrameconsultaTipoRegistro.setVisible(true);
+			}
+		});
 		menuItemRegistrosConsulta.setIcon(iconConsulta);
 		menuRegistrosBar.add(menuItemRegistrosConsulta);
 		

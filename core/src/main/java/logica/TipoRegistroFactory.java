@@ -15,7 +15,7 @@ public final class TipoRegistroFactory {
 		  public static TipoRegistroFactory get() { return INSTANCE; }
 
 		  public void altaTipoRegistro(EntityManager em, Edicion ed, DTTipoRegistro datosTipoRegistro) {
-		    var r = new TipoRegistro(ed.getNombre(), datosTipoRegistro.nombre(), datosTipoRegistro.descripcion(), datosTipoRegistro.costo(), datosTipoRegistro.cupo());
+		    var r = new TipoRegistro(datosTipoRegistro.nombre(), ed, datosTipoRegistro.descripcion(), datosTipoRegistro.costo(), datosTipoRegistro.cupo());
 		    // Seteo por reflexión para mantener entidades sin setters públicos
 		    em.persist(r);
 		  }

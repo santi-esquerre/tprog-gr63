@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,8 +49,10 @@ public class AltaEvento extends JInternalFrame {
     private JList<String> listCategorias;
     IEventoController controller;
     DefaultListModel<String> categoriaslistModel;
+    private JFrame parent;
     
-    public AltaEvento(IEventoController controller) {
+    public AltaEvento(JFrame parent, IEventoController controller) {
+    	this.parent = parent;
     	this.controller = controller;
     	java.util.Set<String> categorias;
     	
@@ -212,11 +215,11 @@ public class AltaEvento extends JInternalFrame {
     	try {
     		Boolean emptyFields = nombre.isBlank() || descripcion.isBlank() || sigla.isBlank() || fechaAlta == null;
     	    if (emptyFields) 
-    	    	Dialog.showWarning(this, "Debe completar todos los campos.");
+    	    	Dialog.showWarning("Debe completar todos los campos.");
     	    else {
     	    	DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, listCategorias.getSelectedValuesList() != null ? new HashSet<>(listCategorias.getSelectedValuesList()) : new HashSet<>());
             	if(controller.altaEvento(eventoData)) {
-            		Dialog.showSuccess(this, "El evento se ha dado de alta correctamente.");
+            		Dialog.showSuccess("El evento se ha dado de alta correctamente.");
             		dispose();
     			}
                 
@@ -224,7 +227,7 @@ public class AltaEvento extends JInternalFrame {
     	    
             
 		} catch (Exception ex) {
-			ExceptionHandler.manageException(this, ex);
+			ExceptionHandler.manageException(parent, ex);
 		}finally {
 			
 		}
