@@ -1,6 +1,8 @@
 package logica;
 import java.time.LocalDate;
+import java.util.Set;
 
+import datatypes.DTAsistente;
 import interfaces.IUsuarioController;
 import repos.UsuarioRepository;
 import repos.InstitucionRepository;
@@ -92,6 +94,11 @@ public class UsuarioController implements IUsuarioController {
 			faU.altaOrganizador(em, nickname, nombre, correo, descripcion); 
 			return null;
 			});
+	}
+	
+	@Override
+	public Set<DTAsistente> mostrarAsistentes() {
+		return Tx.inTx(repoU::listarAsistentes);
 	}
 
 }

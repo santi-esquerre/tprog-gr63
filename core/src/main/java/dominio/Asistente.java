@@ -1,6 +1,8 @@
 package dominio;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -44,4 +46,8 @@ public class Asistente extends Usuario {
   public LocalDate getFechaNacimiento() { return fechaNacimiento; }
   
   public void setInstitucion(Institucion inst) { this.institucion = inst; }
+  
+  public datatypes.DTAsistente obtenerDTAsistente() {
+	    return new datatypes.DTAsistente(nickname, nombre, apellido, correo, Date.from(fechaNacimiento.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()));
+	  }
 }

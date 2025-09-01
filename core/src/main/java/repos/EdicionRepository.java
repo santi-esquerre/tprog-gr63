@@ -13,7 +13,7 @@ public final class EdicionRepository {
       select ed from Edicion ed
       left join fetch ed.tipos
       left join fetch ed.registros r
-      left join fetch p.patrocinios
+      left join fetch ed.patrocinios
       where ed.nombre = :n
     """, Edicion.class).setParameter("n", nombreEdicion)
       .getResultStream().findFirst().orElse(null);

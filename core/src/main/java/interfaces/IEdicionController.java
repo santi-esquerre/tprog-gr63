@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public interface IEdicionController {
   Set<DTAsistente> mostrarAsistentes();                              // usa edicionRecordada
   boolean cupoDisponible(String nombreTipoRegistro);                 // idem
   boolean asistenteNoRegistrado(String nickname);                    // idem
-  void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname);
+  void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname, Date fecha);
   void cancelarRegistroEdicionEvento();
   void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte, String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
   	throws ExistePatrocinioException, CostoRegistrosGratuitosException;

@@ -1,11 +1,11 @@
 package logica;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
 import datatypes.DTAsistente;
-import datatypes.DTPatrocinio;
 import datatypes.DTTipoRegistro;
 import datatypes.NivelPatrocinio;
 import dominio.Edicion;
@@ -70,7 +70,7 @@ public final class EdicionController implements IEdicionController {
   }
 
   @Override
-  public void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname) {
+  public void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname, Date fecha) {
     if (edicionRecordada == null) throw new IllegalStateException("Edición no seleccionada");
     Tx.inTx(em -> {
       var ed = edicionRepo.buscarEdicion(em, edicionRecordada.getNombre());
@@ -81,7 +81,10 @@ public final class EdicionController implements IEdicionController {
       if (a == null) throw new IllegalArgumentException("Asistente inexistente");
       if (!ed.cupoDisponible(nombreTipoRegistro)) throw new IllegalStateException("Sin cupo");
       if (!ed.verificarNoRegistro(nickname)) throw new IllegalStateException("Ya registrado");
-      registroFactory.altaRegistro(em, ed, a, tr, tr.obtenerDTTipoRegistro().costo());
+      registroFactory.altaRegistro(em, ed, a, tr, tr.obtenerDTTipoRegistro().costo(), fecha);
+      tr.decrementarCupo();
+      em.merge(tr);
+      edicionRecordada = null;
       return null;
     });
   }
@@ -115,6 +118,6 @@ public final class EdicionController implements IEdicionController {
   
   @Override
   public void cancelarRegistroEdicionEvento() {
-    // placeholder según DCD
+	  edicionRecordada = null;
   }
 }

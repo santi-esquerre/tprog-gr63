@@ -42,5 +42,6 @@ public class TipoRegistro extends BaseEntity {
   public String getNombre(){ return nombre; }
   public int getCupo(){ return cupo; }
   public float getCosto() { return costo; }
+  public void decrementarCupo() { cupo--;}
 
 }

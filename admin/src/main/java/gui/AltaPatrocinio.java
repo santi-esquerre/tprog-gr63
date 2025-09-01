@@ -171,25 +171,12 @@ public class AltaPatrocinio extends JInternalFrame {
 				}
 			}
 		});
+		table.setFillsViewportHeight(true);
 		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-			},
-			new String[] {
-				"Nombre", "Sigla", "Fecha Inicio", "Fecha Fin"
-			}
-		));
+		                new Object[][]{},
+		                new String[]{"Nombre", "Sigla", "Fecha Inicio", "Fecha Fin"}
+		        )  );
+		
 		scrollPane.setViewportView(table);
 		table.setPreferredScrollableViewportSize(new Dimension(350, 192));
 		table.setDefaultEditor(Object.class, null);
@@ -483,6 +470,9 @@ public class AltaPatrocinio extends JInternalFrame {
 		rdbtnPlata.setSelected(false);
 		rdbtnBronce.setSelected(false);
 		table.clearSelection();
-		table.setModel(new DefaultTableModel());
+		table.setModel(new DefaultTableModel(
+			    new Object[][] {}, 
+			    new String[] { "Nombre", "Sigla", "Fecha Inicio", "Fecha Fin" }
+			));
 	}
 }

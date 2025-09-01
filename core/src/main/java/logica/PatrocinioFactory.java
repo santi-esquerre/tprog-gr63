@@ -21,8 +21,8 @@ public class PatrocinioFactory {
 	public void crearPatrocinio(EntityManager em, LocalDate fecha, String nombreEdicion, String nombreInstitucion, float aporte, TipoRegistro tr, int cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio) {
 		var repoI = InstitucionRepository.get();
 		var repoE = EdicionRepository.get();
-		var i = repoI.buscarInstitucion(nombreInstitucion);
-		var e = Tx.inTx(emt -> repoE.buscarEdicion(emt, nombreEdicion));
+		var i = repoI.buscarInstitucion(em, nombreInstitucion);
+		var e = repoE.buscarEdicion(em, nombreEdicion);
 		var p = new Patrocinio(aporte,codigo, nivelPatrocinio, fecha, i,  e);
 		i.addPatrocinio(p);
 		e.addPatrocinio(p);

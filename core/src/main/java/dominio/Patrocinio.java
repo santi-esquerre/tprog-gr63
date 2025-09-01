@@ -1,6 +1,7 @@
 package dominio;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import datatypes.NivelPatrocinio;
@@ -50,7 +51,7 @@ public class Patrocinio extends BaseEntity {
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patrocinio_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
-	private Set<Otorga> otorgan;
+	private Set<Otorga> otorgan = new HashSet<>();
 	
 	public Patrocinio(float monto, String codigo, NivelPatrocinio nivel, LocalDate fechaRealizacion, Institucion institucion, Edicion edicion) {
 		this.monto = monto;

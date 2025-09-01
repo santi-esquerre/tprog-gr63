@@ -22,6 +22,7 @@ public final class EventoController implements IEventoController {
   private final CategoriaRepository catRepo = CategoriaRepository.get();
   private final EventoRepository eventoRepo = EventoRepository.get();
   private final EventoFactory eventoFactory = EventoFactory.get();
+  private final CategoriaFactory catFactory = CategoriaFactory.get();
 
   private EventoController() {}
   public static EventoController get(){ return INSTANCE; }
@@ -73,4 +74,23 @@ public final class EventoController implements IEventoController {
     }
     return out;
   }
+  
+  @Override
+  public void altaDeCategoria(String nombreCategoria) throws ValidationInputException {
+		if(Tx.inTx(em -> {
+			try {
+				var categoria = catRepo.buscarPorNombre(em, nombreCategoria);
+				return categoria == null;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		})) {
+			Tx.inTx(emt -> { catFactory.crearCategoria(emt, nombreCategoria); 
+				return null;});
+		}
+		else 
+			throw new ValidationInputException("La categoria " + nombreCategoria + " ya está registrada.");
+  }
+  
 }

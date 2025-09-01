@@ -388,7 +388,6 @@ public class AltaUsuario extends JInternalFrame {
 		for (var i : listaI) {
 			comboBoxInstitucion.addItem(i.nombre());
 		}
-	
 	}
 	
 	protected void altaUsuarioActionPerformed(ActionEvent e) {
@@ -427,6 +426,7 @@ public class AltaUsuario extends JInternalFrame {
 			catch (UsuarioCorreoRepetidoException ec) {
 				util.ExceptionHandler.manageException(this, ec);
 			}
+			JOptionPane.showMessageDialog(this, "Usuario registrado correctamente", "Registro de Usuario", JOptionPane.INFORMATION_MESSAGE);
 			limpiarCampos();
 			setVisible(false);
 		}

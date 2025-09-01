@@ -7,7 +7,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.Printable;
+import java.io.BufferedReader;
 import java.io.Console;
+import java.io.File;
+import java.io.FileReader;
 import java.security.PublicKey;
 
 import javax.swing.BorderFactory;
@@ -31,9 +34,13 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
+
 import java.awt.Color;
+import javax.swing.JButton;
 
 
 
@@ -41,7 +48,7 @@ public class Principal {
 	
 	final int TAMANIO_ICONO = 20;
 	final String CODIGO_VERSION = "0.1.0";
-
+	Factory factory = Factory.get();
 	private JFrame frame;
 
 	/**
@@ -231,7 +238,9 @@ public class Principal {
 		menuItemEdicionesRegistro.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						internalFrameRegistroEdicion.setSize(550, 513);
 						System.out.println("Abriendo registro a edición...");
+						internalFrameRegistroEdicion.cargarDatos();
 						internalFrameRegistroEdicion.setVisible(true);
 					}
 				}
@@ -305,11 +314,6 @@ public class Principal {
 				}
 			);
 		
-		JDesktopPane desktopPane = new JDesktopPane();
-		desktopPane.setForeground(new Color(0, 0, 0));
-		desktopPane.setBackground(new Color(238, 238, 238));
-		frame.getContentPane().add(desktopPane, BorderLayout.CENTER);
-		
 		
 		
 //		JLabel lblNewLabel = new JLabel("Versión " + CODIGO_VERSION + " ");
@@ -358,5 +362,4 @@ public class Principal {
             }
         }
     }
-
 }
