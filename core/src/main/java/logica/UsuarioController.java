@@ -1,17 +1,14 @@
 package logica;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
-import datatypes.DTAsistente;
-import datatypes.DTOrganizador;
-import datatypes.DTUsuarioListado;
+import datatypes.DTRegistro;
+import datatypes.DTRegistroDetallado;
+import datatypes.DTUsuarioItemListado;
+import datatypes.TipoUsuario;
+import infra.Tx;
 import interfaces.IUsuarioController;
 import repos.UsuarioRepository;
-import repos.InstitucionRepository;
-import dominio.Asistente;
-import dominio.Organizador;
-import infra.Tx;
-import dominio.Institucion;
 
 
 public class UsuarioController implements IUsuarioController {
@@ -24,15 +21,18 @@ public class UsuarioController implements IUsuarioController {
 
 	public static UsuarioController get() { return INSTANCE; }
 	
+    @Override
 	public boolean verificarNoExistenciaNickname(String nickname) {  
 		return Tx.inTx(em -> repoU.noExisteNickname(em, nickname));
 	}
 	
+    @Override
 	public boolean verificarNoExistenciaCorreo(String correo) {
 		return Tx.inTx(em -> repoU.noExisteCorreo(em, correo));
 	}
 	
 
+    @Override
 	public void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento, String nombreInstitucion) {
 		Tx.inTx(em -> { 
 			faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento, nombreInstitucion); 
@@ -41,6 +41,7 @@ public class UsuarioController implements IUsuarioController {
 	}
 	
 	
+    @Override
 	public void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento) {
 		Tx.inTx(em -> { 
 			faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento); 
@@ -49,6 +50,7 @@ public class UsuarioController implements IUsuarioController {
 	} 
 	
 	
+    @Override
 	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion, String linkSitioWeb) {
 		Tx.inTx(em -> { 
 			faU.altaOrganizador(em, nickname, nombre, correo, descripcion, linkSitioWeb); 
@@ -57,6 +59,7 @@ public class UsuarioController implements IUsuarioController {
 	}
 	
 	
+    @Override
 	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion) {
 		Tx.inTx(em -> { 
 			faU.altaOrganizador(em, nickname, nombre, correo, descripcion); 
@@ -65,20 +68,23 @@ public class UsuarioController implements IUsuarioController {
 	}
 
 	@Override
-	public Set<DTUsuarioListado> listadoUsuarios(String nickname) throws Exception {
-		return null;
+	public List<DTUsuarioItemListado> obtenerUsuarios(TipoUsuario tipoUsuario) {
+		return Tx.inTx(em -> repoU.obtenerUsuarios(em, tipoUsuario));
 	}
 
 	@Override
-	public DTAsistente seleccionarAsistente(String nickname) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DTUsuarioItemListado> obtenerUsuarios() {
+		return Tx.inTx(em -> repoU.obtenerUsuarios(em));
 	}
 
 	@Override
-	public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DTRegistro> obtenerRegistrosUsuario(String nickname) {
+		return Tx.inTx(em -> repoU.obtenerRegistrosUsuario(em, nickname));
+	}
+
+	@Override
+	public DTRegistroDetallado obtenerRegistroDetallado(String nicknameAsistente, String nombreEdicion) {
+		return Tx.inTx(em -> repoU.obtenerRegistroDetallado(em, nicknameAsistente, nombreEdicion));
 	}
 
 }

@@ -1,11 +1,20 @@
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\components\package-info.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\gui\AltaUsuario.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\actions\package-info.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\gui\ConsultaEvento.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\util\package-info.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\gui\AltaEvento.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\util\Dialog.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\components\TagLabel.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\gui\ConsultaUsuario.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\gui\Principal.java
-D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\admin\src\main\java\util\ExceptionHandler.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\Principal.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\AltaConsultaTipoRegistro.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\util\ExceptionHandler.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\ConsultaRegistro.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\ConsultaEdicionEvento.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\AltaEvento.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\models\GenericRecordTableModel.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\ConsultaUsuario.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\components\package-info.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\AltaEdicionEvento.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\AltaUsuario.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\util\Dialog.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\ConsultaEvento.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\AltaInstitucion.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\util\package-info.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\RegistroEdicionEvento.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\gui\TipoRegistroSeleccionado.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\util\TableHelper.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\actions\package-info.java
+C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tpgr63\admin\src\main\java\components\TagLabel.java

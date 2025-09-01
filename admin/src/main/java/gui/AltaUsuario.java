@@ -1,10 +1,12 @@
 package gui;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
+
 import java.awt.Insets;
 
 import javax.swing.JTextField;
@@ -12,29 +14,20 @@ import javax.swing.JRadioButton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.SpringLayout;
-import java.awt.FlowLayout;
+
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import javax.swing.SwingConstants;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import javax.swing.JList;
+
 import javax.swing.JComboBox;
-import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.JScrollBar;
-import javax.swing.JToggleButton;
 import javax.swing.JFrame;
+
 import java.time.Year;
-import java.awt.Panel;
 import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
 import java.awt.event.ActionEvent;
+
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 

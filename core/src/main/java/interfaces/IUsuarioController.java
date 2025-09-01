@@ -2,13 +2,16 @@ package interfaces;
 import java.time.LocalDate;
 import java.util.Set;
 
-import datatypes.DTAsistente;
-import datatypes.DTOrganizador;
-import datatypes.DTUsuarioListado;
 import exceptions.ValidationInputException;
+import java.util.List;
+
+import datatypes.DTRegistro;
+import datatypes.DTRegistroDetallado;
+import datatypes.DTUsuarioItemListado;
+import datatypes.TipoUsuario;
 
 public interface IUsuarioController {
-	Set<DTUsuarioListado> listadoUsuarios(String nickname) throws Exception;
+	// Set<DTUsuarioListado> listadoUsuarios(String nickname) throws Exception;
 	DTAsistente seleccionarAsistente(String nickname) throws Exception;
 	DTOrganizador seleccionarOrganizador(String nickname) throws Exception;
 	boolean verificarNoExistenciaNickname(String nickname) throws Exception;
@@ -17,4 +20,14 @@ public interface IUsuarioController {
 	void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento);
 	void crearOrganizador(String nickname, String nombre, String correo, String descripcion, String linkSitioWeb);
 	void crearOrganizador(String nickname, String nombre, String correo, String descripcion);
+	
+	// Métodos para obtener usuarios como DTUsuarioItemListado
+	List<DTUsuarioItemListado> obtenerUsuarios(TipoUsuario tipoUsuario);
+	List<DTUsuarioItemListado> obtenerUsuarios();
+	
+	// Método para obtener registros de un usuario
+	List<DTRegistro> obtenerRegistrosUsuario(String nickname);
+	
+	// Método para obtener registro detallado de un asistente en una edición específica
+	DTRegistroDetallado obtenerRegistroDetallado(String nicknameAsistente, String nombreEdicion);
 }

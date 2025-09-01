@@ -1,41 +1,33 @@
 package gui;
-import javax.swing.JDialog;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
-import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JComboBox;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
+import javax.swing.border.EmptyBorder;
 
-import java.awt.event.ActionListener;
-import java.util.Set;
-import java.util.Vector;
-import java.awt.event.ActionEvent;
-import interfaces.IEdicionController;
 import datatypes.DTTipoRegistro;
+import interfaces.IEdicionController;
 
 public class TipoRegistroSeleccionado extends JDialog {
 	private String selectedValue = null; // Variable para almacenar el valor seleccionado
@@ -87,7 +79,7 @@ public class TipoRegistroSeleccionado extends JDialog {
 			indicesSinCupo.add(0); // Inicializa todos los índices con 0 
 		}
 		for (DTTipoRegistro tipo : tiposDeRegistro) {
-			String texto = tipo.getNombe();
+			String texto = tipo.getNombre();
 			int cupo = tipo.getCupo();
 			if (cupo == 0) {
 				texto += " (No hay cupo disponible)";
@@ -124,7 +116,7 @@ public class TipoRegistroSeleccionado extends JDialog {
 					}
 				
 				else {
-					selectedValue = tiposDeRegistro.get(selectedIndex - 1).getNombe(); // Se guarda el nombre del tipo de registro seleccionado
+					selectedValue = tiposDeRegistro.get(selectedIndex - 1).getNombre(); // Se guarda el nombre del tipo de registro seleccionado
 					textArea.setText("Descripción: " + tiposDeRegistro.get(selectedIndex - 1).getDescripcion());
 				} 
 					

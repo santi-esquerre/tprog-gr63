@@ -42,6 +42,11 @@ public class Registro extends BaseEntity {
               foreignKey = @ForeignKey(name = "fk_reg_tiporeg"))
   private TipoRegistro tipo;
 
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
+  @JoinColumn(name = "patrocinio_id", nullable = true,
+              foreignKey = @ForeignKey(name = "fk_reg_patrocinio"))
+  private Patrocinio patrocinio;
+
   public Registro() {}
 
   public DTAsistente obtenerDTAsistente() {
@@ -51,4 +56,12 @@ public class Registro extends BaseEntity {
 
   public TipoRegistro getTipo(){ return tipo; }
   public Asistente getAsistente(){ return asistente; }
+  public Date getFecha(){ return fecha; }
+  public float getCosto(){ return costo; }
+  public Edicion getEdicion(){ return edicion; }
+  public Patrocinio getPatrocinio(){ return patrocinio; }
+  
+  public void setPatrocinio(Patrocinio patrocinio) { 
+    this.patrocinio = patrocinio; 
+  }
 }

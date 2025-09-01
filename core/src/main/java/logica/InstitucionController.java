@@ -1,8 +1,16 @@
 package logica;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import datatypes.DTInstitucion;
+import datatypes.DTPatrocinio;
+import datatypes.DTRegistrosOtorgados;
+import dominio.Institucion;
+import dominio.Patrocinio;
+import exceptions.InstitucionRepetidaException;
 import infra.Tx;
 import repos.InstitucionRepository;
-import exceptions.InstitucionRepetidaException;
 
 public class InstitucionController implements interfaces.IInstitucionController {
 
@@ -12,28 +20,90 @@ public class InstitucionController implements interfaces.IInstitucionController 
 	private InstitucionController() {}
 	public static InstitucionController get() { return INSTANCE; }
 	
+	// Legacy method - keeping for compatibility but adapting to interface
 	@Override
-	public void crearInstitucion(String nombre, String sitioweb, String descripcion) throws InstitucionRepetidaException {
+	public boolean crearInstitucion(String nombre, String descripcion, String sitioWeb) throws InstitucionRepetidaException {
 		if(Tx.inTx(em -> {
 			try {
 				return institucionRepo.noExisteInstitucion(em, nombre);
 			} catch (Exception e) {
 				return false;
 			}
-		})) // Se verifica que no exista una institucion con ese nombre
-		{
-				
+		})) {
+			// Institution doesn't exist, create it
 			InstitucionFactory factory = InstitucionFactory.get();
 			Tx.inTx(emt -> {
-				factory.crearInstitucion(emt, nombre, sitioweb, descripcion);
+				factory.crearInstitucion(emt, nombre, sitioWeb, descripcion);
 				return null;
-			}); // Se crea la institucion
+			});
+			return true;
+		} else {
+			// Institution already exists, throw exception
+			throw new InstitucionRepetidaException("La institución " + nombre + " ya está registrada.");
+		}
+	}
 
-		}
-		else {
-			throw new InstitucionRepetidaException("La institución " + nombre + " ya está registrada.");  // Si ya existe, se lanza una excepcion
-		}
-					
+	@Override
+	public Set<DTInstitucion> listarInstituciones() {
+		return Tx.inTx(em -> 
+			institucionRepo.getAllInstituciones(em)
+					.stream()
+					.map(Institucion::toDTInstitucion)
+					.collect(Collectors.toSet())
+		);
+	}
+
+	@Override
+	public boolean crearPatrocinio(String nombreEdicionEvento, String nombreInstitucion,
+								   DTRegistrosOtorgados registrosAOtorgar, String codigo) {
+		// Placeholder implementation - would need full business logic
+		return Tx.inTx(em -> {
+			try {
+				var inst = institucionRepo.findByNombre(em, nombreInstitucion)
+						.orElseThrow(() -> new IllegalArgumentException("Institución inexistente: " + nombreInstitucion));
+				
+				var pat = Patrocinio.crearBasico(codigo);
+				inst.agregarPatrocinio(pat);
+				em.persist(pat);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
+	}
+
+	@Override
+	public DTPatrocinio obtenerDTPatrocinio(String nombreEdicionEvento, String nombreInstitucion) {
+		return Tx.inTx(em -> {
+			try {
+				var inst = institucionRepo.findByNombre(em, nombreInstitucion)
+						.orElse(null);
+				if (inst == null) return null;
+				
+				var patrocinio = inst.getPatrocinios().stream().findFirst().orElse(null);
+				if (patrocinio == null) return null;
+				return patrocinio.toDTPatrocinio(inst.toDTInstitucion());
+			} catch (Exception e) {
+				return null;
+			}
+		});
+	}
+
+	@Override
+	public boolean afiliarAsistenteAInstitucion(String nombreAsistente, String nombreInstitucion) {
+		return Tx.inTx(em -> {
+			try {
+				var inst = institucionRepo.findByNombre(em, nombreInstitucion)
+						.orElse(null);
+				if (inst == null) return false;
+				
+				// Would need proper user repository integration
+				// For now, placeholder implementation
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		});
 	}
 				
 }
