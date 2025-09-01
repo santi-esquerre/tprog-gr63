@@ -90,6 +90,8 @@ public class Principal {
 		final Icon iconRegistros = IconFontSwing.buildIcon(FontAwesome.TICKET, TAMANIO_ICONO);
 		final Icon iconPatrocinios = IconFontSwing.buildIcon(FontAwesome.MONEY, TAMANIO_ICONO);
 		final Icon iconInstituciones = IconFontSwing.buildIcon(FontAwesome.UNIVERSITY, TAMANIO_ICONO);
+		final Icon iconSalir = IconFontSwing.buildIcon(FontAwesome.SIGN_OUT, TAMANIO_ICONO);
+		final Icon iconTestIcon = IconFontSwing.buildIcon(FontAwesome.FILE_TEXT_O, TAMANIO_ICONO);
 		
 		// Ventana
 		frame = new JFrame("Eventos UY");
@@ -104,28 +106,57 @@ public class Principal {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
+
+		
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		
 		
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		panel.setBackground(new Color(240, 240, 240));
 		frame.getContentPane().add(panel, BorderLayout.WEST);
 		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBorderPainted(false);
-		menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.Y_AXIS));
-		menuBar.setMargin(new Insets(0, 0, 0, 0));
-		menuBar.setBorder(BorderFactory.createEmptyBorder());
-		panel.add(menuBar);
+//		JMenuBar menuBar1 = new JMenuBar();
+//		menuBar.setBorderPainted(false);
+//		menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.Y_AXIS));
+//		menuBar.setMargin(new Insets(0, 0, 0, 0));
+//		menuBar.setBorder(BorderFactory.createEmptyBorder());
+		//panel.add(menuBar);
 		
 		// Opciones del menú
 		
 		// Sistema
-		JMenu menuSistema = new HorizontalMenu("Sistema");
+		JMenu menuSistema = new JMenu("Sistema");
 		menuSistema.setIcon(iconSistema);
 		menuSistema.getPopupMenu().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		menuBar.add(menuSistema);
 		
+		JMenuItem menuItemCargarPruebas = new JMenuItem("Cargar datos de prueba");
+		menuItemCargarPruebas.setIcon(iconTestIcon);
+		menuItemCargarPruebas.addActionListener(
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Cargando datos de prueba...");
+					//TO DO: cargar datos de prueba csv
+				}
+			}
+		);
+		menuSistema.add(menuItemCargarPruebas);
+		
+		JMenuItem menuItemSalir = new JMenuItem("Salir");
+		menuItemSalir.setIcon(iconSalir);
+		menuItemSalir.addActionListener(
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Saliendo...");
+					System.exit(0);
+				}
+			}
+		);
+		menuSistema.add(menuItemSalir);
+		
 		// Opciones de Usuarios
-		JMenu menuUsuarios = new HorizontalMenu("Usuarios");
+		JMenu menuUsuarios = new JMenu("Usuarios");
 		menuUsuarios.setIcon(iconUsuarios);
 		menuUsuarios.getPopupMenu().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		menuBar.add(menuUsuarios);
@@ -167,12 +198,12 @@ public class Principal {
 		menuUsuarios.add(menuItemUsuariosEditar);
 		
 		// Opciones de Eventos
-		JMenu menuEventos = new HorizontalMenu("Eventos");
+		JMenu menuEventos = new JMenu("Eventos");
 		menuEventos.setIcon(iconEventos);
 		menuEventos.getPopupMenu().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		menuBar.add(menuEventos);
 		
-		AltaEvento internalFramealtAltaEvento = new AltaEvento(factory.getIEventoController());
+		AltaEvento internalFramealtAltaEvento = new AltaEvento(null, factory.getIEventoController());
 		internalFramealtAltaEvento.setVisible(false);
 		frame.getContentPane().add(internalFramealtAltaEvento);
 		JMenuItem menuItemEventosAlta = new JMenuItem("Alta de evento");
@@ -210,7 +241,7 @@ public class Principal {
 		menuEventos.add(menuItemEventosEditar);
 		
 		// Subopciones de Ediciones
-		JMenu menuEdicionesBar = new HorizontalMenu("Ediciones");
+		JMenu menuEdicionesBar = new JMenu("Ediciones");
 		menuEdicionesBar.setIcon(iconEdiciones);
 		menuEventos.add(menuEdicionesBar);
 		
@@ -246,7 +277,7 @@ public class Principal {
 		menuEdicionesBar.add(menuItemEdicionesEditar);
 		
 		// Subopciones de Patrocinios
-		JMenu menuPatrociniosBar = new HorizontalMenu("Patrocinios");
+		JMenu menuPatrociniosBar = new JMenu("Patrocinios");
 		menuPatrociniosBar.setIcon(iconPatrocinios);
 		menuEventos.add(menuPatrociniosBar);
 		
@@ -259,21 +290,37 @@ public class Principal {
 		menuPatrociniosBar.add(menuItemPatrociniosConsulta);
 		
 		// Subopciones de Tipos de registros
-		JMenu menuRegistrosBar = new HorizontalMenu("Tipos de registros");
+		JMenu menuRegistrosBar = new JMenu("Tipos de registros");
 		menuRegistrosBar.setIcon(iconRegistros);
 		menuEventos.add(menuRegistrosBar);
 		
 		JMenuItem menuItemRegistrosAlta = new JMenuItem("Alta de tipo de registro");
 		menuItemRegistrosAlta.setIcon(iconAlta);
 		menuRegistrosBar.add(menuItemRegistrosAlta);
+		AltaTipoRegistro internalFramealtaConsultaTipoRegistro = new AltaTipoRegistro(factory.getIEventoController(), edicionController);
+		frame.getContentPane().add(internalFramealtaConsultaTipoRegistro);
+		menuItemRegistrosAlta.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						internalFramealtaConsultaTipoRegistro.setVisible(true);
+					}
+				}
+			);
 		
+		ConsultaTipoRegistro internalFrameconsultaTipoRegistro = new ConsultaTipoRegistro(factory.getIEventoController(), edicionController);
+		frame.getContentPane().add(internalFrameconsultaTipoRegistro);
 		JMenuItem menuItemRegistrosConsulta = new JMenuItem("Consulta de tipo de registro");
+		menuItemRegistrosConsulta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				internalFrameconsultaTipoRegistro.setVisible(true);
+			}
+		});
 		menuItemRegistrosConsulta.setIcon(iconConsulta);
 		menuRegistrosBar.add(menuItemRegistrosConsulta);
 		
 		// Opciones de Instituciones
 		
-		JMenu menuInstituciones = new HorizontalMenu("Instituciones");
+		JMenu menuInstituciones = new JMenu("Instituciones");
 		menuInstituciones.setIcon(iconInstituciones);
 		menuBar.add(menuInstituciones);
 		
@@ -309,44 +356,4 @@ public class Principal {
 //		lblNewLabel.setVerticalAlignment(SwingConstants.BOTTOM);
 
 	}
-	
-	class HorizontalMenu extends JMenu {
-        HorizontalMenu(String label) {
-            super(label);
-            JPopupMenu pm = getPopupMenu();
-            pm.setLayout(new BoxLayout(pm, BoxLayout.Y_AXIS));
-        }
- 
-        public Dimension getMinimumSize() {
-            return getPreferredSize();
-        }
- 
-        public Dimension getMaximumSize() {
-            return getPreferredSize();
-        }
- 
-        public void setPopupMenuVisible(boolean b) {
-            boolean isVisible = isPopupMenuVisible();
-            if (b != isVisible) {
-                if ((b==true) && isShowing()) {
-                    //Set location of popupMenu (pulldown or pullright).
-                    //Perhaps this should be dictated by L&F.
-                    int x = 0;
-                    int y = 0;
-                    Container parent = getParent();
-                    if (parent instanceof JPopupMenu) {
-                        x = getWidth() + 1;
-                        y = getHeight() - getSize().height;
-                    } else {
-                        x = getWidth();
-                        y = 0;
-                    }
-                    getPopupMenu().show(this, x, y);
-                } else {
-                    getPopupMenu().setVisible(false);
-                }
-            }
-        }
-    }
-
 }

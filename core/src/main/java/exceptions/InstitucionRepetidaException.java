@@ -1,7 +1,7 @@
 package exceptions;
 
 
-public class InstitucionRepetidaException extends Exception {
+public class InstitucionRepetidaException extends ValidationInputException {
 	
 	private static final long serialVersionUID = 1L;
 	

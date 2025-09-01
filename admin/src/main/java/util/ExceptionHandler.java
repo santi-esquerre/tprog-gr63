@@ -2,6 +2,7 @@ package util;
 import java.awt.Component;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import exceptions.ValidationInputException;
@@ -11,7 +12,7 @@ public class ExceptionHandler {
 		e.printStackTrace();
 	}
 	
-	public static void manageException(JComponent parent, Exception e) {
+	public static void manageException(JFrame parent, Exception e) {
 		if (e instanceof ValidationInputException) {
             Dialog.showWarning(parent, e.getMessage());
         }else {
@@ -20,5 +21,9 @@ public class ExceptionHandler {
         	}
         }
 		e.printStackTrace();
+	}
+	
+	public static void manageException(Exception e) {
+		manageException(null, e);
 	}
 }
