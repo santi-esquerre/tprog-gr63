@@ -26,6 +26,7 @@ import javax.swing.SwingConstants;
 import interfaces.*;
 import jiconfont.swing.IconFontSwing;
 import util.ExceptionHandler;
+import util.TestLoader;
 import jiconfont.icons.font_awesome.FontAwesome;
 
 import javax.swing.JMenuBar;
@@ -137,7 +138,12 @@ public class Principal {
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("Cargando datos de prueba...");
-					//TO DO: cargar datos de prueba csv
+					TestLoader testLoader = new TestLoader();
+					try {
+						testLoader.loadAll("assets/tests");
+					} catch (Exception ex) {
+						ExceptionHandler.manageException(frame, ex);
+					}
 				}
 			}
 		);
