@@ -32,6 +32,7 @@ repos\CategoriaRepository.class
 interfaces\IUsuarioController.class
 dominio\RegistroOtorgado.class
 exceptions\EdicionInexistenteException.class
+datatypes\DTEventoDetallado.class
 dominio\Patrocinio.class
 dominio\Institucion.class
 repos\EventoRepository.class
@@ -49,9 +50,11 @@ logica\InstitucionFactory.class
 datatypes\DTEvento.class
 logica\EventoFactory.class
 logica\InstitucionController.class
+datatypes\DTEdicionDetallada.class
 repos\UsuarioRepository.class
 interfaces\package-info.class
 dominio\Edicion.class
+logica\EdicionFactory.class
 datatypes\DTAsistente.class
 datatypes\DTRegistro.class
 logica\TipoRegistroFactory.class

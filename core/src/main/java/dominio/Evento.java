@@ -18,8 +18,7 @@ import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "evento",
-       uniqueConstraints = @UniqueConstraint(name = "uk_evento_nombre", columnNames = "nombre"))
+@Table(name = "evento", uniqueConstraints = @UniqueConstraint(name = "uk_evento_nombre", columnNames = "nombre"))
 public class Evento extends BaseEntity {
 
   @Column(nullable = false, length = 120)
@@ -36,57 +35,69 @@ public class Evento extends BaseEntity {
   private String sigla;
 
   @ManyToMany
-  @JoinTable(name = "evento_categoria",
-      joinColumns = @JoinColumn(name = "evento_id",
-          foreignKey = @ForeignKey(name = "fk_ev_cat_evento")),
-      inverseJoinColumns = @JoinColumn(name = "categoria_id",
-          foreignKey = @ForeignKey(name = "fk_ev_cat_categoria")))
+  @JoinTable(name = "evento_categoria", joinColumns = @JoinColumn(name = "evento_id", foreignKey = @ForeignKey(name = "fk_ev_cat_evento")), inverseJoinColumns = @JoinColumn(name = "categoria_id", foreignKey = @ForeignKey(name = "fk_ev_cat_categoria")))
   private Set<Categoria> categorias = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Edicion> ediciones = new LinkedHashSet<>();
 
-  protected Evento() {}
+  protected Evento() {
+  }
+
   public Evento(String nombre, String descripcion, Date fechaAlta, String sigla, Set<Categoria> cats) {
-    this.nombre = nombre; this.descripcion = descripcion; this.fechaAlta = fechaAlta; this.sigla = sigla;
-    if (cats != null) categorias.addAll(cats);
+    this.nombre = nombre;
+    this.descripcion = descripcion;
+    this.fechaAlta = fechaAlta;
+    this.sigla = sigla;
+    if (cats != null)
+      categorias.addAll(cats);
   }
 
   // DCD
   public datatypes.DTEvento obtenerDTEvento() {
     return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta);
   }
+
   public Set<datatypes.DTEdicion> listarDTEdiciones() {
     Set<datatypes.DTEdicion> out = new LinkedHashSet<>();
-    for (Edicion e : ediciones) out.add(e.obtenerDTEdicion());
+    for (Edicion e : ediciones)
+      out.add(e.obtenerDTEdicion());
     return out;
   }
 
-  void addEdicion(Edicion e){ ediciones.add(e); e.setEvento(this); }
-  public String getNombre() { return nombre; }
-  public Set<Categoria> getCategorias() { return categorias; }
-  
+  public void addEdicion(Edicion e) {
+    ediciones.add(e);
+    e.setEvento(this);
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public Set<Categoria> getCategorias() {
+    return categorias;
+  }
+
   public datatypes.DTEvento toDTEvento() {
     return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta);
   }
-  
+
   public datatypes.DTEventoDetallado toDTEventoDetallado() {
     // Convert categories to names
     Set<String> categoriasNombres = new LinkedHashSet<>();
     for (Categoria cat : categorias) {
       categoriasNombres.add(cat.getNombre());
     }
-    
+
     // Convert editions to DTEdicion
     Set<datatypes.DTEdicion> dtEdiciones = new LinkedHashSet<>();
     for (Edicion ed : ediciones) {
       dtEdiciones.add(ed.toDTEdicion());
     }
-    
+
     return new datatypes.DTEventoDetallado(
-      this.toDTEvento(),
-      categoriasNombres,
-      dtEdiciones
-    );
+        this.toDTEvento(),
+        categoriasNombres,
+        dtEdiciones);
   }
 }
