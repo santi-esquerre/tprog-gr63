@@ -10,26 +10,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datatypes.DTEventoAlta;
-import infra.JPA;
 import interfaces.Factory;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
+import interfaces.IRepository;
 
 class EdicionControllerTest {
 	
 	private static IEdicionController edicionController;
 	private static IEventoController eventoController;
+	private static IRepository repository;
 
 	@BeforeAll
 	static void iniciar() {
 		eventoController = Factory.get().getIEventoController();
 		edicionController = Factory.get().getIEdicionController();
+		repository = Factory.get().getIRepository();
 	}
 	
 	
 	@BeforeEach
 	private void setUpBeforeClass()  {
-		JPA.switchToTesting();
+		repository.switchToTesting();
 	}
 	
 	@Test

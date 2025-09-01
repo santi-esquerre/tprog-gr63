@@ -74,6 +74,7 @@ public class TestLoader {
     	IEventoController eventoController = factory.getIEventoController();
     	IEdicionController edicionController = factory.getIEdicionController();
     	IInstitucionController institucionController = factory.getIInstitucionController();
+    	factory.getIRepository().reset();
         Map<String,List<Map<String, String>>> allRecords = new HashMap<>();
         File folder = new File(folderPath);
         File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".csv"));
@@ -82,8 +83,6 @@ public class TestLoader {
             	allRecords.put(file.getName(), loadCsvWithHeader(file.getAbsolutePath()));
             }
         }
-        System.out.println(files.length + " archivos leidos.");
-        System.out.println("lEYENDO: " + FileName.INSTITUCIONES.label);
         
         //Carga de instituciones
         List<Map<String, String>> instituciones = allRecords.get(FileName.INSTITUCIONES.label);
@@ -103,58 +102,52 @@ public class TestLoader {
 
 
 		for (Map<String, String> user : users) {
-			
-			if (user != null) {
-				try {
-					String nickname = user.get("Nickname");
-					String nombre = user.get("Nombre");
-					String email = user.get("Email");
-					if(user.get("Tipo").equals("O")) {
-						Map<String, String> orga = organizadores.stream()
-								.filter(o -> o.get("Ref").equals(user.get("Ref")))
-								.findFirst()
-								.orElse(null);
-						
-						String descripcion = orga.get("Descripcion");
-						String linkSitioWeb = orga.get("LinkSitioWeb");
-						usuarioController.crearOrganizador(nickname,
-								nombre,
-								email,
-								descripcion,
-								linkSitioWeb);
-					}else if(user.get("Tipo").equals("A")) {
-						Map<String, String> asist = asistentes.stream()
-								.filter(a -> a.get("Ref").equals(user.get("Ref")))
-								.findFirst()
-								.orElse(null);
+			String nickname = user.get("Nickname");
+			String nombre = user.get("Nombre");
+			String email = user.get("Correo");
+			if(user.get("Tipo").equals("O")) {
+				Map<String, String> orga = organizadores.stream()
+						.filter(o -> o.get("Ref").equals(user.get("Ref")))
+						.findFirst()
+						.orElse(null);
+				
+				String descripcion = orga.get("Descripcion");
+				String linkSitioWeb = orga.get("LinkSitioWeb");
+				usuarioController.crearOrganizador(nickname,
+						nombre,
+						email,
+						descripcion,
+						linkSitioWeb);
+			}else if(user.get("Tipo").equals("A")) {
+				Map<String, String> asist = asistentes.stream()
+						.filter(a -> a.get("Ref").equals(user.get("Ref")))
+						.findFirst()
+						.orElse(null);
 
-						Map<String, String> insti = instituciones.stream()
-								.filter(i -> i.get("Ref").equals(asist.get("Institucion")))
-								.findFirst()
-								.orElse(null);
-						
-						String apellido = asist.get("Apellido");
-						LocalDate fechaNac = LocalDate.parse(asist.get("FechaNacimiento"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-						if (insti == null) {
-							usuarioController.crearAsistente(nickname,
-									nombre,
-									apellido,
-									email,
-									fechaNac);
-						}else {
-							usuarioController.crearAsistente(nickname,
-									nombre,
-									apellido,
-									email,
-									fechaNac,
-									insti.get("Nombre"));
-						}
-
-						
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
+				Map<String, String> insti = instituciones.stream()
+						.filter(i -> i.get("Ref").equals(asist.get("Institucion")))
+						.findFirst()
+						.orElse(null);
+				
+				String apellido = asist.get("Apellido");
+				LocalDate fechaNac = LocalDate.parse(asist.get("FechaNacimiento"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+				if (insti == null) {
+					usuarioController.crearAsistente(nickname,
+							nombre,
+							apellido,
+							email,
+							fechaNac);
+				}else {
+					usuarioController.crearAsistente(nickname,
+							nombre,
+							apellido,
+							email,
+							fechaNac,
+							insti.get("Nombre"));
 				}
+
+				
+			}
 				
 			
 		}
@@ -175,21 +168,21 @@ public class TestLoader {
 			String descripcion = evento.get("Descripcion");
 			String sigla = evento.get("Sigla");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			Date fechaAlta = Date.from(LocalDate.parse(evento.get("fechaAlta"), formatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Set<String> categoriasRefs = new HashSet<String>(Arrays.asList(evento.get("Categoria").split(",")) );
+			Date fechaAlta = Date.from(LocalDate.parse(evento.get("FechaAlta"), formatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
+			Set<String> categoriasRefs = new HashSet<String>(Arrays.asList(evento.get("Categorias").split(",")) );
 			Set<String> categoriasEvento = new HashSet<String>();
 			for (String c : categoriasRefs) {
 			    categoriasEvento.add(categorias.stream()
-			    		.filter(cat -> cat.get("Ref").equals(c))
+			    		.filter(cat -> cat.get("Ref").equals(c.trim()))
 			    		.map(cat -> cat.get("Nombre"))
 			    		.findFirst()
 			    		.orElse(null));
 			}
 			
-			categoriasEvento.forEach(c -> {c=c.trim();});
 			DTEventoAlta dtEvento = new DTEventoAlta(nombre, descripcion,fechaAlta, sigla, categoriasEvento);
 			eventoController.altaEvento(dtEvento);
 		}
+		
 		
 		// Carga de ediciones
 		List<Map<String, String>> ediciones = allRecords.get(FileName.EDICIONES.label);
@@ -200,8 +193,11 @@ public class TestLoader {
 					.map(e -> e.get("Nombre"))
 					.findFirst()
 					.orElse(null);
-			String organizador = organizadores.stream()
-					.filter(o -> o.get("Ref").equals(edicion.get("Organizador")))
+			System.out.println(organizadores.stream()
+			.filter(o -> o.get("Ref").equals(edicion.get("Organizador"))).findFirst());
+			
+			String organizador = users.stream()
+					.filter(u -> u.get("Ref").equals(edicion.get("Organizador")))
 					.map(o -> o.get("Nickname"))
 					.findFirst()
 					.orElse(null);
@@ -216,7 +212,7 @@ public class TestLoader {
 		//Carga de tipos de registro
 		List<Map<String, String>> tiposRegistro = allRecords.get(FileName.TIPOREGISTROS.label);
 		for (Map<String, String> tipoRegistro : tiposRegistro) {
-			String edicion = ediciones.stream().filter(e -> e.get("Ref").equals(tipoRegistro.get("Edicion"))).findFirst().orElse(null).get("Nombre");
+			String edicion = ediciones.stream().filter(e -> e.get("Ref").equals(tipoRegistro.get("EdicionEvento"))).findFirst().orElse(null).get("Nombre");
 			
 			String nombre = tipoRegistro.get("Nombre");
 			String descripcion = tipoRegistro.get("Descripcion");
@@ -224,7 +220,7 @@ public class TestLoader {
 			int cupo = Integer.parseInt(tipoRegistro.get("Cupo"));
 			
 			edicionController.altaTipoRegistro(edicion, new datatypes.DTTipoRegistro(nombre, descripcion, costo, cupo));
-			//TO DO: altaTipoRegistro implementar
+
 		}
 		
 		//Carga de patrocinios
@@ -263,5 +259,5 @@ public class TestLoader {
 			//TO DO: registrarAsistenteEdicion implentar
 			}
 		
-    }}
-}
+    }
+    }

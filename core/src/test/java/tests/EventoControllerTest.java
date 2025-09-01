@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Date;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datatypes.DTEventoAlta;
@@ -17,23 +17,24 @@ import exceptions.CategoriasInvalidasException;
 import exceptions.EventoRepetidoException;
 import exceptions.NingunaCategoriaSeleccionadaException;
 import exceptions.ValidationInputException;
-import infra.JPA;
 import interfaces.Factory;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
+import interfaces.IRepository;
 
 public class EventoControllerTest {
 	static Factory factory = Factory.get();
 	private static IEventoController eventoController;
+	private static IRepository repository;
 		@BeforeAll
 		public static void iniciar() {
-			JPA.switchToTesting();
+			repository = factory.getIRepository();
 			eventoController = factory.getIEventoController();
 		}
 		
-		@AfterEach
+		@BeforeEach
 		public void clear() {
-			JPA.switchToTesting();
+			repository.switchToTesting();
 		}
 		
 		@Test

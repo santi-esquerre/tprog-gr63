@@ -1,6 +1,7 @@
 package interfaces;
 
 import logica.*;
+import repos.Repository;
 
 public class Factory {
 	// Singleton
@@ -16,4 +17,6 @@ public class Factory {
 	public IUsuarioController getIUsuarioController(){ return UsuarioController.get(); }
 	
 	public IInstitucionController getIInstitucionController(){ return InstitucionController.get(); }
+	
+	public IRepository getIRepository(){ return Repository.get(); }
 }

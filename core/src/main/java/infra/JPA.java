@@ -10,10 +10,9 @@ public final class JPA {
   
   private JPA() {}
   
-  public static void switchToTesting() {
-	
+  public static void switchPU(String puName) {
 	if (emf != null && emf.isOpen()) emf.close();
-	emf = Persistence.createEntityManagerFactory("testPU");
+	emf = Persistence.createEntityManagerFactory(puName);
   }
   
   public static EntityManager em() { return emf.createEntityManager(); }
