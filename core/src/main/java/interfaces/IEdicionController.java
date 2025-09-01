@@ -8,6 +8,7 @@ import datatypes.DTAsistente;
 import datatypes.DTPatrocinio;
 import datatypes.DTTipoRegistro;
 import datatypes.NivelPatrocinio;
+import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
 import exceptions.ExistePatrocinioException;
 
@@ -19,5 +20,5 @@ public interface IEdicionController {
   void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname, Date fecha);
   void cancelarRegistroEdicionEvento();
   void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte, String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
-  	throws ExistePatrocinioException, CostoRegistrosGratuitosException;
+  	throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException;
 }

@@ -10,6 +10,7 @@ import datatypes.DTTipoRegistro;
 import datatypes.NivelPatrocinio;
 import dominio.Edicion;
 import dominio.TipoRegistro;
+import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
 import exceptions.ExistePatrocinioException;
 import infra.Tx;
@@ -91,7 +92,7 @@ public final class EdicionController implements IEdicionController {
   
   @Override
   public void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte, String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
-		  	throws ExistePatrocinioException, CostoRegistrosGratuitosException {
+		  	throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException {
 	  
 	  if ( Tx.inTx(em -> {
 		  return edicionRepo.existePatrocinio(em, nombreEdicion, nombreInstitucion);
@@ -100,9 +101,9 @@ public final class EdicionController implements IEdicionController {
 	  }
 	  
 	  TipoRegistro tr = Tx.inTx(emt -> {return tipoRegistroRepo.buscarTipoRegistro(emt, nombreTipoRegistro, nombreEdicion);});
-	  
-	  if (tr.getCupo() < cantGratuitos) {
-		  throw new CostoRegistrosGratuitosException();
+	  int cupos = tr.getCupo();
+	  if (cupos < cantGratuitos) {
+		  throw new CantidadCuposDisponiblesException(cupos, nombreTipoRegistro);
 	  }
 	  
 	  if (((tr.getCosto() * cantGratuitos) / aporte) > 0.2) {

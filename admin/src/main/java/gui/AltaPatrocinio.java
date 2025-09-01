@@ -33,6 +33,7 @@ import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTInstitucion;
 import datatypes.NivelPatrocinio;
+import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
 import exceptions.ExistePatrocinioException;
 import exceptions.ValidationInputException;
@@ -431,6 +432,9 @@ public class AltaPatrocinio extends JInternalFrame {
 			catch (CostoRegistrosGratuitosException crg) {
 				util.ExceptionHandler.manageException(this, crg);
 			}
+			catch (CantidadCuposDisponiblesException cde) {
+				util.ExceptionHandler.manageException(this, cde);
+			}			
 			limpiarCampos();
 			setVisible(false);
 		}
