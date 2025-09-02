@@ -22,13 +22,6 @@ public class Organizador extends Usuario {
   @Column(length = 120)
   private String sitioWeb;
 
-  // Campos necesarios para el esquema SINGLE_TABLE (valores por defecto)
-  @Column(nullable = false)
-  private LocalDate fechaNacimiento = LocalDate.of(1990, 1, 1);
-
-  @Column(nullable = false, length = 180)
-  private String apellido = "N/A";
-
   @OneToMany(mappedBy = "organizador")
   private Set<Edicion> ediciones = new LinkedHashSet<>();
 
@@ -52,14 +45,6 @@ public class Organizador extends Usuario {
 
   public String getSitioWeb() {
     return sitioWeb;
-  }
-
-  public LocalDate getFechaNacimiento() {
-    return fechaNacimiento;
-  }
-
-  public void setFechaNacimiento(LocalDate fechaNacimiento) {
-    this.fechaNacimiento = fechaNacimiento;
   }
 
   @Override
