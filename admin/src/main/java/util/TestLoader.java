@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import datatypes.DTEventoAlta;
+import datatypes.DTRegistrosOtorgados;
+import datatypes.DTTipoRegistro;
 import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioNicknameRepetidoException;
 import exceptions.ValidationInputException;
@@ -157,7 +159,6 @@ public class TestLoader {
 		// Carga de categorias
 		List<Map<String, String>> categorias = allRecords.get(FileName.CATEGORIAS.label);
 		for (Map<String, String> categoria : categorias) {
-			System.out.println("CATEGORIA: " + categoria);
 			if (categoria.get("Nombre") == null) continue;
 			String nombre = categoria.get("Nombre");
 			eventoController.altaCategoria(nombre);
@@ -195,8 +196,9 @@ public class TestLoader {
 					.map(e -> e.get("Nombre"))
 					.findFirst()
 					.orElse(null);
-			System.out.println(organizadores.stream()
-			.filter(o -> o.get("Ref").equals(edicion.get("Organizador"))).findFirst());
+			String sigla = edicion.get("Sigla");
+			String ciudad = edicion.get("Ciudad");
+			String pais = edicion.get("Pais");
 			
 			String organizador = users.stream()
 					.filter(u -> u.get("Ref").equals(edicion.get("Organizador")))
@@ -207,8 +209,9 @@ public class TestLoader {
 			Date fechaInicio = Date.from(LocalDate.parse(edicion.get("FechaInicio"), formatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Date fechaFin = Date.from(LocalDate.parse(edicion.get("FechaFin"), formatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Date fechaAlta = Date.from(LocalDate.parse(edicion.get("FechaAlta"), formatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
-			String url = edicion.get("URL");
-			//TO DO: altaEdicionEvento implementar
+			
+			
+			eventoController.agregarEdicionAEvento(evento, organizador, new datatypes.DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais));
 		}
 		
 		//Carga de tipos de registro
@@ -229,25 +232,29 @@ public class TestLoader {
 		
 		List<Map<String, String>> patrocinios = allRecords.get(FileName.PATROCINIOS.label);
 		for (Map<String, String> patrocinio : patrocinios) {
-			String edicion = ediciones.stream().filter(e -> e.get("Ref").equals(patrocinio.get("Edicion"))).findFirst().orElse(null).get("Nombre");
+			System.out.println(patrocinio);
+			String edicion = ediciones.stream().filter(e -> e.get("Ref").equals(patrocinio.get("EdicionEvento"))).findFirst().orElse(null).get("Nombre");
 			String institucion = instituciones.stream().filter(i -> i.get("Ref").equals(patrocinio.get("Institucion"))).findFirst().orElse(null).get("Nombre");
-			String descripcion = patrocinio.get("Descripcion");
-			float monto = Float.parseFloat(patrocinio.get("Monto"));
-			;
-			//TO DO: agregarPatrocinio implementar
+			String codigo = patrocinio.get("codigoPatrocinio");
+			int cantidadRegistros = Integer.parseInt(patrocinio.get("cantidadRegistros"));
+			Map<String, String> tipoRegistroMap = tiposRegistro.stream().filter(t -> t.get("Ref").equals(patrocinio.get("TipoRegistro"))).findFirst().orElse(null);
+			String nombreTR = tipoRegistroMap.get("Nombre");
+			String descripcionTR = tipoRegistroMap.get("Descripcion");
+			float costoTR = Float.parseFloat(tipoRegistroMap.get("Costo"));
+			int cupoTR = Integer.parseInt(tipoRegistroMap.get("Cupo"));
+			institucionController.crearPatrocinio(edicion,
+					institucion, 
+					new DTRegistrosOtorgados(
+							new DTTipoRegistro(nombreTR, descripcionTR, costoTR, cupoTR),
+							cantidadRegistros), codigo);
 		}
 		
 		//Carga de registros
 		List<Map<String, String>> registros = allRecords.get(FileName.REGISTROS.label);
 		for (Map<String, String> registro : registros) {
-			String asistente = asistentes.stream()
-					.filter(a -> a.get("Ref").equals(registro.get("Asistente")))
+			String asistente = users.stream()
+					.filter(a -> a.get("Ref").equals(registro.get("Usuario")))
 					.map(a -> a.get("Nickname"))
-					.findFirst()
-					.orElse(null);
-			String edicion = ediciones.stream()
-					.filter(e -> e.get("Ref").equals(registro.get("Edicion")))
-					.map(e -> e.get("Nombre"))
 					.findFirst()
 					.orElse(null);
 			String tipoRegistro = tiposRegistro.stream()
@@ -258,8 +265,35 @@ public class TestLoader {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			Date fechaRegistro = Date.from(LocalDate.parse(registro.get("FechaRegistro"), formatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
 			
-			//TO DO: registrarAsistenteEdicion implentar
+
+			Map<String, String> edicion = ediciones.stream()
+					.filter(e -> e.get("Ref").equals(registro.get("EdicionEvento")))
+					.findFirst()
+					.orElse(null);
+			
+		    String evento = eventos.stream()
+		    		.filter(e -> e.get("Ref").equals(edicion.get("Evento")))
+		    		.map(e -> e.get("Nombre"))
+		    		.findFirst()
+		    		.orElse(null);
+		    
+		    String edicionNombre = edicion.get("Nombre");
+		    
+			eventoController.mostrarEdiciones(evento);
+			
+			edicionController.mostrarTiposDeRegistro(edicionNombre);
+			
+			if(!(edicionController.cupoDisponible(tipoRegistro))){
+				throw new ValidationInputException("TestLoader: No se puede registrar al asistente " + asistente + " en la edicion " + edicionNombre + " con el tipo de registro " + tipoRegistro + ". No quedan cupos disponibles");
 			}
+			
+			if(!edicionController.asistenteNoRegistrado(asistente)) {
+				throw new ValidationInputException("TestLoader: No se puede registrar al asistente " + asistente + " en la edicion " + edicionNombre + " con el tipo de registro " + tipoRegistro + ". El asistente ya se encuentra registrado en la edicion");
+			}
+			
+			edicionController.altaRegistroEdicionEvento(tipoRegistro, asistente, fechaRegistro);
+			
+			
 		
-    }
+    }}
     }

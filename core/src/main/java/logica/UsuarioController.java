@@ -53,7 +53,11 @@ public class UsuarioController implements IUsuarioController {
 			throw new UsuarioCorreoRepetidoException(nickname);
 		}
 		Tx.inTx(em -> { 
-			var i = (Institucion) repoI.buscarInstitucion(em, nombreInstitucion);
+			if(nombreInstitucion == null || nombreInstitucion.isBlank()) {
+				faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento); 
+				return null;
+			}
+			var i = repoI.buscarInstitucion(em, nombreInstitucion);
 			faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento, i); 
 			return null;
 			});
