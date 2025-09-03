@@ -15,6 +15,7 @@ import repos.UsuarioRepository;
 import repos.InstitucionRepository;
 import dominio.Asistente;
 import dominio.Organizador;
+import exceptions.UsuarioInexistenteException;
 import exceptions.InstitucionRepetidaException;
 import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioNicknameRepetidoException;
@@ -46,6 +47,7 @@ public class UsuarioController implements IUsuarioController {
 
 	public void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento, String nombreInstitucion) throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
 		if (!verificarNoExistenciaNickname(nickname)) {
+			
 			throw new UsuarioNicknameRepetidoException(nickname);
 		}
 		
@@ -136,14 +138,29 @@ public class UsuarioController implements IUsuarioController {
 
 	@Override
 	public DTAsistente seleccionarAsistente(String nickname) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Asistente asistente = Tx.inTx(em -> {
+			return repoU.obtenerAsistente(em, nickname);
+		});
+		
+		if (asistente == null) {
+			throw new UsuarioInexistenteException("No existe un asistente con el nickname: " + nickname);
+		}
+		
+		return asistente.toDataType();
 	}
 
 	@Override
 	public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Organizador organizador = Tx.inTx(em -> {
+			return repoU.obtenerOrganizador(em, nickname);
+		});
+		
+		if (organizador == null) {
+			throw new UsuarioInexistenteException("No existe un organizador con el nickname: " + nickname);
+		}
+		
+		return organizador.toDataType();
 	}
 
 }

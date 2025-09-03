@@ -104,4 +104,10 @@ public final class EdicionRepository {
 			  .getSingleResult();
 	  return c > 0;
   }
+  
+  public Set<Edicion> obtenerEdicionesPorOrganizador(EntityManager em, String nicknameOrganizador) {
+	return new LinkedHashSet<>(em.createQuery("select e from Edicion e where e.organizador.nickname = :ne", Edicion.class)
+		.setParameter("ne", nicknameOrganizador)
+		.getResultList());
+  }
 }

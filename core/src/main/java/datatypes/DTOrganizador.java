@@ -19,4 +19,6 @@ public class DTOrganizador extends DTUsuario implements Serializable {
   @Override public String nombre() { return nombre; }
   @Override public String correo() { return correo; }
   @Override public String toString() { return nickname; }
+  public String linkSitioWeb() { return linkSitioWeb; }
+  public String descripcion() { return descripcion; }
 }

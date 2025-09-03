@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import datatypes.DTAsistente;
+import datatypes.DTEdicion;
 import datatypes.DTPatrocinio;
 import datatypes.DTEdicionDetallada;
 import datatypes.DTTipoRegistro;
@@ -35,4 +36,6 @@ public interface IEdicionController {
   // Obtener datos detallados de una edición
   DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion)
       throws ValidationInputException;
+  
+  Set<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador) throws ValidationInputException;
 }

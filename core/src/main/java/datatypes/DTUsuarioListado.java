@@ -1,3 +1,3 @@
 package datatypes;
 
-public record DTUsuarioListado(String nickname, String correo, TipoUsuario tipo) {}
+//public record DTUsuarioListado(String nickname, String correo, TipoUsuario tipo) {}

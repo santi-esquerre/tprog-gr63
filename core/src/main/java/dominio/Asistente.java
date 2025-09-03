@@ -50,6 +50,8 @@ public class Asistente extends Usuario {
   
   public LocalDate getFechaNacimiento() { return fechaNacimiento; }
   
+  public Institucion getInstitucion() { return institucion; }
+  
   public void setInstitucion(Institucion inst) { this.institucion = inst; }
   
   public datatypes.DTAsistente obtenerDTAsistente() {

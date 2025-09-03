@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.naming.directory.InvalidAttributesException;
 
 import datatypes.DTAsistente;
+import datatypes.DTEdicion;
 import datatypes.DTTipoRegistro;
 import datatypes.NivelPatrocinio;
 import dominio.Edicion;
@@ -245,5 +246,12 @@ public final class EdicionController implements IEdicionController {
           "No existe la edición '" + nombreEdicion + "' para el evento '" + nombreEvento + "'");
     }
     return resultado;
+  }
+  
+  @Override
+  public Set<datatypes.DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador) throws ValidationInputException {
+	java.util.Objects.requireNonNull(nicknameOrganizador, "nicknameOrganizador requerido");
+	Set<DTEdicion> resultado = Set.of(Tx.inTx(em -> edicionRepo.obtenerEdicionesPorOrganizador(em, nicknameOrganizador)).stream().map(e-> e.toDTEdicion()).toArray(DTEdicion[]::new));
+	return resultado;
   }
 }
