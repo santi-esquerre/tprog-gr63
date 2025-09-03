@@ -142,6 +142,12 @@ public class AltaEdicionEvento extends JInternalFrame {
         loadOrganizadores();
     }
 
+    public void loadForm() {
+        loadEventos();
+        loadOrganizadores();
+        // clearForm();
+    }
+
     private static void setDateEditor(JSpinner sp, String pattern) {
         sp.setEditor(new JSpinner.DateEditor(sp, pattern));
         ((JSpinner.DefaultEditor) sp.getEditor()).getTextField().setColumns(10);

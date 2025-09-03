@@ -1,22 +1,30 @@
 package gui;
 
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Panel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import java.awt.BorderLayout;
-import java.awt.Button;
-
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import datatypes.DTAsistente;
@@ -26,29 +34,8 @@ import datatypes.DTRegistro;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
 import interfaces.IEdicionController;
-import interfaces.IEventoController;
 import interfaces.IUsuarioController;
 import util.ExceptionHandler;
-
-import javax.swing.JScrollPane;
-import javax.swing.JLabel;
-import javax.swing.ListSelectionModel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Panel;
-
-import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Set;
-import java.awt.CardLayout;
-import java.awt.Component;
-
 
 public class ConsultaUsuario extends JInternalFrame {
 
@@ -100,19 +87,19 @@ public class ConsultaUsuario extends JInternalFrame {
 		this.usuarioController = usuarioController;
 		this.edicionController = edicionController;
 		setResizable(true);
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        setClosable(true);
-        setTitle("Consulta de usuario");
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setClosable(true);
+		setTitle("Consulta de usuario");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout(0, 0));
-		
+
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.5);
 		getContentPane().add(splitPane);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
-		
+
 		tableUsuarios = new JTable();
 		tableUsuarios.addMouseListener(new MouseAdapter() {
 			@Override
@@ -120,18 +107,18 @@ public class ConsultaUsuario extends JInternalFrame {
 				int selectedRow = tableUsuarios.getSelectedRow();
 				if (selectedRow >= 0) {
 					String nickname = (String) modelUsuarios.getValueAt(selectedRow, 0);
-					
+
 					try {
 						DTUsuarioItemListado usuarioItemListado = null;
 						for (var u : usuariosData) {
-							if(nickname == u.nickname()) {
+							if (nickname == u.nickname()) {
 								usuarioItemListado = u;
 								break;
 							}
 						}
-						
+
 						if (usuarioItemListado.tipoUsuario() == TipoUsuario.ORGANIZADOR) {
-							
+
 							pnlOrganizadores.setVisible(true);
 							pnlAsistentes.setVisible(false);
 
@@ -139,28 +126,28 @@ public class ConsultaUsuario extends JInternalFrame {
 							txtNicknameOrganizador.setText(usuario.nickname());
 							txtNombreOrganizador.setText(usuario.nombre());
 							txtCorreoOrganizador.setText(usuario.correo());
-							
+
 							txtLinkOrganizador.setText(usuario.linkSitioWeb());
 							txtDescripcionOrganizador.setText(usuario.descripcion());
-							
+
 							Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador(nickname);
 							modelEdiciones.setRowCount(0);
 							for (var ed : ediciones) {
 								modelEdiciones.addRow(new Object[] {
-									ed.nombre(),
-									ed.fechaAlta(),
-									ed.fechaInicio(),
-									ed.fechaFin(),
-									ed.pais(),
-									ed.ciudad()
+										ed.nombre(),
+										ed.fechaAlta(),
+										ed.fechaInicio(),
+										ed.fechaFin(),
+										ed.pais(),
+										ed.ciudad()
 								});
 							}
-							
+
 						} else if (usuarioItemListado.tipoUsuario() == TipoUsuario.ASISTENTE) {
-							
+
 							pnlOrganizadores.setVisible(false);
 							pnlAsistentes.setVisible(true);
-							
+
 							DTAsistente usuario = usuarioController.seleccionarAsistente(nickname);
 							txtNicknameAsistente.setText(usuario.nickname());
 							txtNombreAsistente.setText(usuario.nombre());
@@ -175,51 +162,52 @@ public class ConsultaUsuario extends JInternalFrame {
 							modelRegistros.setRowCount(0);
 							for (var r : registros) {
 								modelRegistros.addRow(new Object[] {
-									r.nombreEvento(),
-									r.nombreEdicion(),
-									r.fecha(),
-									r.costo(),
-									r.tipoRegistro().nombre()
+										r.nombreEvento(),
+										r.nombreEdicion(),
+										r.fecha(),
+										r.costo(),
+										r.tipoRegistro().nombre()
 								});
 							}
-							
+
 						}
 					} catch (Exception ex) {
 						ExceptionHandler.manageException(ex);
 					}
-					
-					
-				}}});
+
+				}
+			}
+		});
 		tableUsuarios.setFillsViewportHeight(true);
 		tableUsuarios.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		scrollPane.setViewportView(tableUsuarios);
 
 		// Table setup
-		String[] columnNames = {"Nickname", "Correo", "Tipo de usuario"};
+		String[] columnNames = { "Nickname", "Correo", "Tipo de usuario" };
 		modelUsuarios = new DefaultTableModel(columnNames, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
-		
+
 		tableUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		tableUsuarios.setModel(modelUsuarios);
-		
+
 		JPanel panel_1 = new JPanel();
 		splitPane.setRightComponent(panel_1);
-		
+
 		pnlOrganizadores = new JPanel();
-		
+
 		GridBagLayout gbl_pnlOrganizadores = new GridBagLayout();
-		gbl_pnlOrganizadores.columnWidths = new int[]{0, 0, 0};
-		gbl_pnlOrganizadores.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_pnlOrganizadores.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_pnlOrganizadores.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_pnlOrganizadores.columnWidths = new int[] { 0, 0, 0 };
+		gbl_pnlOrganizadores.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_pnlOrganizadores.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_pnlOrganizadores.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		pnlOrganizadores.setBorder(new EmptyBorder(10, 10, 10, 10));
 		pnlOrganizadores.setLayout(gbl_pnlOrganizadores);
-		
+
 		JLabel lblNickname = new JLabel("Nickname:");
 		lblNickname.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblNickname = new GridBagConstraints();
@@ -228,7 +216,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNickname.gridx = 0;
 		gbc_lblNickname.gridy = 0;
 		pnlOrganizadores.add(lblNickname, gbc_lblNickname);
-		
+
 		txtNicknameOrganizador = new JTextField();
 		txtNicknameOrganizador.setEditable(false);
 		txtNicknameOrganizador.setColumns(10);
@@ -238,7 +226,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtNicknameOrganizador.gridx = 1;
 		gbc_txtNicknameOrganizador.gridy = 0;
 		pnlOrganizadores.add(txtNicknameOrganizador, gbc_txtNicknameOrganizador);
-		
+
 		JLabel lblNewLabel = new JLabel("Nombre:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -247,7 +235,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 1;
 		pnlOrganizadores.add(lblNewLabel, gbc_lblNewLabel);
-		
+
 		txtNombreOrganizador = new JTextField();
 		txtNombreOrganizador.setEditable(false);
 		GridBagConstraints gbc_txtNombreOrganizador = new GridBagConstraints();
@@ -257,7 +245,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtNombreOrganizador.gridy = 1;
 		pnlOrganizadores.add(txtNombreOrganizador, gbc_txtNombreOrganizador);
 		txtNombreOrganizador.setColumns(10);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Correo electrónico:");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
@@ -265,7 +253,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 2;
 		pnlOrganizadores.add(lblNewLabel_1, gbc_lblNewLabel_1);
-		
+
 		txtCorreoOrganizador = new JTextField();
 		txtCorreoOrganizador.setEditable(false);
 		txtCorreoOrganizador.setColumns(10);
@@ -275,7 +263,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtCorreoOrganizador.gridx = 1;
 		gbc_txtCorreoOrganizador.gridy = 2;
 		pnlOrganizadores.add(txtCorreoOrganizador, gbc_txtCorreoOrganizador);
-		
+
 		JLabel lblNewLabel_1_1 = new JLabel("Link del sitio web:");
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblNewLabel_1_1 = new GridBagConstraints();
@@ -284,7 +272,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1_1.gridx = 0;
 		gbc_lblNewLabel_1_1.gridy = 3;
 		pnlOrganizadores.add(lblNewLabel_1_1, gbc_lblNewLabel_1_1);
-		
+
 		txtLinkOrganizador = new JTextField();
 		txtLinkOrganizador.setEditable(false);
 		txtLinkOrganizador.setColumns(10);
@@ -294,7 +282,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtLinkOrganizador.gridx = 1;
 		gbc_txtLinkOrganizador.gridy = 3;
 		pnlOrganizadores.add(txtLinkOrganizador, gbc_txtLinkOrganizador);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("Descripción:");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 0);
@@ -303,7 +291,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_2.gridx = 0;
 		gbc_lblNewLabel_2.gridy = 4;
 		pnlOrganizadores.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		
+
 		txtDescripcionOrganizador = new JTextArea();
 		txtDescripcionOrganizador.setEditable(false);
 		GridBagConstraints gbc_txtDescripcionOrganizador = new GridBagConstraints();
@@ -313,7 +301,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtDescripcionOrganizador.gridx = 0;
 		gbc_txtDescripcionOrganizador.gridy = 5;
 		pnlOrganizadores.add(txtDescripcionOrganizador, gbc_txtDescripcionOrganizador);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Ediciones que organiza:");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
 		gbc_lblNewLabel_3.gridwidth = 2;
@@ -322,9 +310,9 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_3.gridx = 0;
 		gbc_lblNewLabel_3.gridy = 6;
 		pnlOrganizadores.add(lblNewLabel_3, gbc_lblNewLabel_3);
-		
+
 		JScrollPane scrollPane_1 = new JScrollPane();
-		
+
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.gridwidth = 2;
 		gbc_scrollPane_1.insets = new Insets(0, 0, 0, 5);
@@ -332,18 +320,19 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_scrollPane_1.gridx = 0;
 		gbc_scrollPane_1.gridy = 7;
 		pnlOrganizadores.add(scrollPane_1, gbc_scrollPane_1);
-		
+
 		modelEdiciones = new DefaultTableModel(new String[] {
-			"Nombre", "Alta", "Inicio", "Fin", "País", "Ciudad"
+				"Nombre", "Alta", "Inicio", "Fin", "País", "Ciudad"
 		}, 0) {
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false
+					false, false, false, false, false
 			};
+
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		};
-		
+
 		tableEdiciones = new JTable();
 		tableEdiciones.setModel(modelEdiciones);
 		tableEdiciones.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -351,21 +340,22 @@ public class ConsultaUsuario extends JInternalFrame {
 		tableEdiciones.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				SubConsultaEdicionConsultaUsuario subEdicion = new SubConsultaEdicionConsultaUsuario(edicionController, modelEdiciones.getValueAt(tableEdiciones.getSelectedRow(), 0).toString());
+				SubConsultaEdicionConsultaUsuario subEdicion = new SubConsultaEdicionConsultaUsuario(edicionController,
+						modelEdiciones.getValueAt(tableEdiciones.getSelectedRow(), 0).toString());
 				subEdicion.setVisible(true);
 			}
 		});
-		
+
 		pnlAsistentes = new JPanel();
 		pnlAsistentes.setBorder(new EmptyBorder(10, 10, 10, 10));
-		
+
 		GridBagLayout gbl_pnlAsistentes = new GridBagLayout();
-		gbl_pnlAsistentes.columnWidths = new int[]{0, 0, 0};
-		gbl_pnlAsistentes.rowHeights = new int[]{0,0,0,0,0,1,0};
-		gbl_pnlAsistentes.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_pnlAsistentes.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+		gbl_pnlAsistentes.columnWidths = new int[] { 0, 0, 0 };
+		gbl_pnlAsistentes.rowHeights = new int[] { 0, 0, 0, 0, 0, 1, 0 };
+		gbl_pnlAsistentes.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_pnlAsistentes.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 		pnlAsistentes.setLayout(gbl_pnlAsistentes);
-		
+
 		JLabel lblNickname_1 = new JLabel("Nickname:");
 		lblNickname_1.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblNickname_1 = new GridBagConstraints();
@@ -374,7 +364,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNickname_1.gridx = 0;
 		gbc_lblNickname_1.gridy = 0;
 		pnlAsistentes.add(lblNickname_1, gbc_lblNickname_1);
-		
+
 		txtNicknameAsistente = new JTextField();
 		txtNicknameAsistente.setEditable(false);
 		txtNicknameAsistente.setColumns(10);
@@ -384,7 +374,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtNicknameAsistente.gridx = 1;
 		gbc_txtNicknameAsistente.gridy = 0;
 		pnlAsistentes.add(txtNicknameAsistente, gbc_txtNicknameAsistente);
-		
+
 		JLabel lblNewLabel_4 = new JLabel("Nombre:");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
@@ -393,7 +383,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_4.gridx = 0;
 		gbc_lblNewLabel_4.gridy = 1;
 		pnlAsistentes.add(lblNewLabel_4, gbc_lblNewLabel_4);
-		
+
 		txtNombreAsistente = new JTextField();
 		txtNombreAsistente.setEditable(false);
 		txtNombreAsistente.setColumns(10);
@@ -403,7 +393,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtNombreAsistente.gridx = 1;
 		gbc_txtNombreAsistente.gridy = 1;
 		pnlAsistentes.add(txtNombreAsistente, gbc_txtNombreAsistente);
-		
+
 		JLabel lblNewLabel_1_2 = new JLabel("Apellido:");
 		GridBagConstraints gbc_lblNewLabel_1_2 = new GridBagConstraints();
 		gbc_lblNewLabel_1_2.anchor = GridBagConstraints.WEST;
@@ -411,7 +401,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1_2.gridx = 0;
 		gbc_lblNewLabel_1_2.gridy = 2;
 		pnlAsistentes.add(lblNewLabel_1_2, gbc_lblNewLabel_1_2);
-		
+
 		txtApellidoAsistente = new JTextField();
 		txtApellidoAsistente.setEditable(false);
 		txtApellidoAsistente.setColumns(10);
@@ -421,7 +411,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtApellidoAsistente.gridx = 1;
 		gbc_txtApellidoAsistente.gridy = 2;
 		pnlAsistentes.add(txtApellidoAsistente, gbc_txtApellidoAsistente);
-		
+
 		JLabel lblNewLabel_1_1_1 = new JLabel("Correo electrónico:");
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblNewLabel_1_1_1 = new GridBagConstraints();
@@ -430,7 +420,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_1_1_1.gridx = 0;
 		gbc_lblNewLabel_1_1_1.gridy = 3;
 		pnlAsistentes.add(lblNewLabel_1_1_1, gbc_lblNewLabel_1_1_1);
-		
+
 		txtCorreoAsistente = new JTextField();
 		txtCorreoAsistente.setEditable(false);
 		txtCorreoAsistente.setColumns(10);
@@ -440,7 +430,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtCorreoAsistente.gridx = 1;
 		gbc_txtCorreoAsistente.gridy = 3;
 		pnlAsistentes.add(txtCorreoAsistente, gbc_txtCorreoAsistente);
-		
+
 		JLabel lblNewLabel_2_1 = new JLabel("Fecha de nacimiento:");
 		GridBagConstraints gbc_lblNewLabel_2_1 = new GridBagConstraints();
 		gbc_lblNewLabel_2_1.anchor = GridBagConstraints.WEST;
@@ -448,7 +438,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_2_1.gridx = 0;
 		gbc_lblNewLabel_2_1.gridy = 4;
 		pnlAsistentes.add(lblNewLabel_2_1, gbc_lblNewLabel_2_1);
-		
+
 		JPanel panel_3 = new JPanel();
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
 		gbc_panel_3.insets = new Insets(0, 0, 5, 0);
@@ -457,12 +447,12 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_panel_3.gridy = 4;
 		pnlAsistentes.add(panel_3, gbc_panel_3);
 		GridBagLayout gbl_panel_3 = new GridBagLayout();
-		gbl_panel_3.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panel_3.rowHeights = new int[]{0, 0};
-		gbl_panel_3.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel_3.columnWidths = new int[] { 0, 0, 0, 0 };
+		gbl_panel_3.rowHeights = new int[] { 0, 0 };
+		gbl_panel_3.columnWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
+		gbl_panel_3.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panel_3.setLayout(gbl_panel_3);
-		
+
 		txtDia = new JTextField();
 		txtDia.setEditable(false);
 		txtDia.setText("21");
@@ -473,7 +463,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtDia.gridy = 0;
 		panel_3.add(txtDia, gbc_txtDia);
 		txtDia.setColumns(10);
-		
+
 		txtMes = new JTextField();
 		txtMes.setEditable(false);
 		txtMes.setText("12");
@@ -484,7 +474,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtMes.gridy = 0;
 		panel_3.add(txtMes, gbc_txtMes);
 		txtMes.setColumns(10);
-		
+
 		txtAnio = new JTextField();
 		txtAnio.setEditable(false);
 		txtAnio.setText("2004");
@@ -494,7 +484,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_txtAnio.gridy = 0;
 		panel_3.add(txtAnio, gbc_txtAnio);
 		txtAnio.setColumns(10);
-		
+
 		JLabel lblNewLabel_3_1 = new JLabel("Registros:");
 		GridBagConstraints gbc_lblNewLabel_3_1 = new GridBagConstraints();
 		gbc_lblNewLabel_3_1.anchor = GridBagConstraints.WEST;
@@ -503,7 +493,7 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_lblNewLabel_3_1.gridx = 0;
 		gbc_lblNewLabel_3_1.gridy = 5;
 		pnlAsistentes.add(lblNewLabel_3_1, gbc_lblNewLabel_3_1);
-		
+
 		JScrollPane scrollPane_1_1 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_1_1 = new GridBagConstraints();
 		gbc_scrollPane_1_1.fill = GridBagConstraints.BOTH;
@@ -512,56 +502,58 @@ public class ConsultaUsuario extends JInternalFrame {
 		gbc_scrollPane_1_1.gridy = 6;
 		pnlAsistentes.add(scrollPane_1_1, gbc_scrollPane_1_1);
 		scrollPane_1_1.setViewportView(tblRegistros);
-		
+
 		tblRegistros = new JTable();
 		tblRegistros.setFillsViewportHeight(true);
-		
-		modelRegistros = new DefaultTableModel(new Object[][] {},new String[] {"Evento", "Edición", "Fecha", "Costo", "Tipo"}) {
-		boolean[] columnEditables = new boolean[] {
-			false, false, false, false, false
+
+		modelRegistros = new DefaultTableModel(new Object[][] {},
+				new String[] { "Evento", "Edición", "Fecha", "Costo", "Tipo" }) {
+			boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false
+			};
+
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
 		};
-		public boolean isCellEditable(int row, int column) {
-			return columnEditables[column];
-		}};
-		
-		
+
 		tblRegistros.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		tblRegistros.setModel(modelRegistros);
 		scrollPane_1_1.setViewportView(tblRegistros);
 		tableUsuarios.getColumnModel().getColumn(1).setPreferredWidth(98);
 		panel_1.setLayout(new CardLayout(0, 0));
-		
+
 		panel_1.add(pnlOrganizadores, "organizadores");
 		panel_1.add(pnlAsistentes, "asistentes");
 
 		panel_1.add(new Panel());
-		
-		
-	    // Carga inicial
-	    loadData();
+
+		// Carga inicial
+		loadData();
 
 	}
-	
+
 	public void loadData() {
+		System.out.println("Cargando datos...");
 		modelUsuarios.setRowCount(0);
 		modelEdiciones.setRowCount(0);
 		modelRegistros.setRowCount(0);
 		usuariosData = usuarioController.obtenerUsuarios();
 		for (var u : usuariosData) {
-			if (u == null) continue;
+			if (u == null)
+				continue;
 			modelUsuarios.addRow(new Object[] {
-				u.nickname(),
-				u.correo(),
-				u.tipoUsuario() == TipoUsuario.ORGANIZADOR ? "Organizador" : (u.tipoUsuario() == TipoUsuario.ASISTENTE ? "Asistente" : "Otro")
+					u.nickname(),
+					u.correo(),
+					u.tipoUsuario() == TipoUsuario.ORGANIZADOR ? "Organizador"
+							: (u.tipoUsuario() == TipoUsuario.ASISTENTE ? "Asistente" : "Otro")
 			});
 		}
-		
 		if (modelUsuarios.getRowCount() > 0) {
 			tableUsuarios.getSelectionModel().clearSelection();
 		}
-		
 		pnlOrganizadores.setVisible(false);
 		pnlAsistentes.setVisible(false);
 	}
-	
+
 }

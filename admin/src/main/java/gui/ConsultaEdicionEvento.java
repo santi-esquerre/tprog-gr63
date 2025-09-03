@@ -46,7 +46,8 @@ import interfaces.IEventoController;
  * - Carga inicial: listarEventos() -> tblEventos
  * - Filtro incremental por nombre (txtBuscarEvento)
  * - Selección de evento -> obtenerDatosDetalladosEvento() -> tblEdiciones
- * - Selección de edición -> obtenerDatosDetalladosEdicion() -> pnlDetalle + tabs
+ * - Selección de edición -> obtenerDatosDetalladosEdicion() -> pnlDetalle +
+ * tabs
  * - Botones Ver... abren JDialog con el DT correspondiente
  */
 public class ConsultaEdicionEvento extends JInternalFrame {
@@ -120,8 +121,11 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     pnlSearch.add(btnBuscar);
     pnlEventos.add(pnlSearch, BorderLayout.NORTH);
 
-    eventosModel = new DefaultTableModel(new Object[]{"Nombre", "Sigla", "Descripción", "Fecha alta"}, 0) {
-      @Override public boolean isCellEditable(int r, int c) { return false; }
+    eventosModel = new DefaultTableModel(new Object[] { "Nombre", "Sigla", "Descripción", "Fecha alta" }, 0) {
+      @Override
+      public boolean isCellEditable(int r, int c) {
+        return false;
+      }
     };
     tblEventos.setModel(eventosModel);
     tblEventos.setAutoCreateRowSorter(true);
@@ -135,8 +139,11 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     pnlEdiciones.setBorder(new EmptyBorder(8, 4, 8, 4));
     pnlEdiciones.add(new JLabel("Ediciones del evento seleccionado"), BorderLayout.NORTH);
 
-    edicionesModel = new DefaultTableModel(new Object[]{"Nombre", "Sigla", "Ciudad", "País", "Inicio", "Fin"}, 0) {
-      @Override public boolean isCellEditable(int r, int c) { return false; }
+    edicionesModel = new DefaultTableModel(new Object[] { "Nombre", "Sigla", "Ciudad", "País", "Inicio", "Fin" }, 0) {
+      @Override
+      public boolean isCellEditable(int r, int c) {
+        return false;
+      }
     };
     tblEdiciones.setModel(edicionesModel);
     tblEdiciones.setAutoCreateRowSorter(true);
@@ -155,16 +162,25 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     gbc.anchor = GridBagConstraints.WEST;
 
     int y = 0;
-    addLbl(hdr, gbc, 0, y, "Nombre:");    hdrAdd(hdr, gbc, lblNomEd, 1, y++);
-    addLbl(hdr, gbc, 0, y, "Sigla:");     hdrAdd(hdr, gbc, lblSiglaEd, 1, y++);
-    addLbl(hdr, gbc, 0, y, "Inicio:");    hdrAdd(hdr, gbc, lblFIni, 1, y++);
-    addLbl(hdr, gbc, 0, y, "Fin:");       hdrAdd(hdr, gbc, lblFFin, 1, y++);
-    addLbl(hdr, gbc, 0, y, "Ciudad:");    hdrAdd(hdr, gbc, lblCiudad, 1, y++);
-    addLbl(hdr, gbc, 0, y, "País:");      hdrAdd(hdr, gbc, lblPais, 1, y++);
+    addLbl(hdr, gbc, 0, y, "Nombre:");
+    hdrAdd(hdr, gbc, lblNomEd, 1, y++);
+    addLbl(hdr, gbc, 0, y, "Sigla:");
+    hdrAdd(hdr, gbc, lblSiglaEd, 1, y++);
+    addLbl(hdr, gbc, 0, y, "Inicio:");
+    hdrAdd(hdr, gbc, lblFIni, 1, y++);
+    addLbl(hdr, gbc, 0, y, "Fin:");
+    hdrAdd(hdr, gbc, lblFFin, 1, y++);
+    addLbl(hdr, gbc, 0, y, "Ciudad:");
+    hdrAdd(hdr, gbc, lblCiudad, 1, y++);
+    addLbl(hdr, gbc, 0, y, "País:");
+    hdrAdd(hdr, gbc, lblPais, 1, y++);
 
-    addLbl(hdr, gbc, 2, 0, "Organizador (nick):"); hdrAdd(hdr, gbc, lblOrgNick, 3, 0);
-    addLbl(hdr, gbc, 2, 1, "Nombre:");             hdrAdd(hdr, gbc, lblOrgNombre, 3, 1);
-    addLbl(hdr, gbc, 2, 2, "Correo:");             hdrAdd(hdr, gbc, lblOrgCorreo, 3, 2);
+    addLbl(hdr, gbc, 2, 0, "Organizador (nick):");
+    hdrAdd(hdr, gbc, lblOrgNick, 3, 0);
+    addLbl(hdr, gbc, 2, 1, "Nombre:");
+    hdrAdd(hdr, gbc, lblOrgNombre, 3, 1);
+    addLbl(hdr, gbc, 2, 2, "Correo:");
+    hdrAdd(hdr, gbc, lblOrgCorreo, 3, 2);
 
     pnlDetalle.add(hdr, BorderLayout.NORTH);
 
@@ -173,8 +189,11 @@ public class ConsultaEdicionEvento extends JInternalFrame {
 
     // TAB TIPOS
     JPanel tabTipos = new JPanel(new BorderLayout(4, 4));
-    tiposModel = new DefaultTableModel(new Object[]{"Nombre", "Descripción", "Costo", "Cupo"}, 0) {
-      @Override public boolean isCellEditable(int r, int c) { return false; }
+    tiposModel = new DefaultTableModel(new Object[] { "Nombre", "Descripción", "Costo", "Cupo" }, 0) {
+      @Override
+      public boolean isCellEditable(int r, int c) {
+        return false;
+      }
     };
     tblTipos.setModel(tiposModel);
     tblTipos.setAutoCreateRowSorter(true);
@@ -187,8 +206,11 @@ public class ConsultaEdicionEvento extends JInternalFrame {
 
     // TAB REGISTROS
     JPanel tabReg = new JPanel(new BorderLayout(4, 4));
-    registrosModel = new DefaultTableModel(new Object[]{"Fecha", "Costo", "Asistente", "Tipo registro"}, 0) {
-      @Override public boolean isCellEditable(int r, int c) { return false; }
+    registrosModel = new DefaultTableModel(new Object[] { "Fecha", "Costo", "Asistente", "Tipo registro" }, 0) {
+      @Override
+      public boolean isCellEditable(int r, int c) {
+        return false;
+      }
     };
     tblRegistros.setModel(registrosModel);
     tblRegistros.setAutoCreateRowSorter(true);
@@ -197,8 +219,11 @@ public class ConsultaEdicionEvento extends JInternalFrame {
 
     // TAB PATROCINIOS
     JPanel tabPatro = new JPanel(new BorderLayout(4, 4));
-    patrociniosModel = new DefaultTableModel(new Object[]{"Patrocinador", "Nivel", "Monto"}, 0) {
-      @Override public boolean isCellEditable(int r, int c) { return false; }
+    patrociniosModel = new DefaultTableModel(new Object[] { "Patrocinador", "Nivel", "Monto" }, 0) {
+      @Override
+      public boolean isCellEditable(int r, int c) {
+        return false;
+      }
     };
     tblPatrocinios.setModel(patrociniosModel);
     tblPatrocinios.setAutoCreateRowSorter(true);
@@ -215,38 +240,55 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     // ==== Handlers ====
     // Habilitar botones de “ver…” cuando haya selección
     tblTipos.getSelectionModel().addListSelectionListener(e -> {
-      if (!e.getValueIsAdjusting()) btnVerTipo.setEnabled(tblTipos.getSelectedRow() >= 0 && edicionDetActual != null);
+      if (!e.getValueIsAdjusting())
+        btnVerTipo.setEnabled(tblTipos.getSelectedRow() >= 0 && edicionDetActual != null);
     });
     tblPatrocinios.getSelectionModel().addListSelectionListener(e -> {
-      if (!e.getValueIsAdjusting()) btnVerPatro.setEnabled(tblPatrocinios.getSelectedRow() >= 0 && edicionDetActual != null);
+      if (!e.getValueIsAdjusting())
+        btnVerPatro.setEnabled(tblPatrocinios.getSelectedRow() >= 0 && edicionDetActual != null);
     });
 
     // Filtro incremental + botón "Filtrar"
     DocumentListener doc = new DocumentListener() {
-      @Override public void insertUpdate(DocumentEvent e) { filterEventos(); }
-      @Override public void removeUpdate(DocumentEvent e) { filterEventos(); }
-      @Override public void changedUpdate(DocumentEvent e) { filterEventos(); }
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        filterEventos();
+      }
+
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        filterEventos();
+      }
+
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+        filterEventos();
+      }
     };
     txtBuscarEvento.getDocument().addDocumentListener(doc);
     btnBuscar.addActionListener(e -> filterEventos());
 
     // Selección de evento
     tblEventos.getSelectionModel().addListSelectionListener(e -> {
-      if (e.getValueIsAdjusting()) return;
+      if (e.getValueIsAdjusting())
+        return;
       onEventoSelectionChanged();
     });
 
     // Selección de edición
     tblEdiciones.getSelectionModel().addListSelectionListener(e -> {
-      if (e.getValueIsAdjusting()) return;
+      if (e.getValueIsAdjusting())
+        return;
       onEdicionSelectionChanged();
     });
 
     // Botón ver tipo
     btnVerTipo.addActionListener(e -> {
-      if (edicionDetActual == null) return;
+      if (edicionDetActual == null)
+        return;
       int sel = tblTipos.getSelectedRow();
-      if (sel < 0) return;
+      if (sel < 0)
+        return;
       int mi = tblTipos.convertRowIndexToModel(sel);
       String nombreTipo = (String) tiposModel.getValueAt(mi, 0);
       edicionDetActual.tiposRegistro().stream()
@@ -257,9 +299,11 @@ public class ConsultaEdicionEvento extends JInternalFrame {
 
     // Botón ver patrocinio
     btnVerPatro.addActionListener(e -> {
-      if (edicionDetActual == null) return;
+      if (edicionDetActual == null)
+        return;
       int sel = tblPatrocinios.getSelectedRow();
-      if (sel < 0) return;
+      if (sel < 0)
+        return;
       int mi = tblPatrocinios.convertRowIndexToModel(sel);
       String nombreInst = (String) patrociniosModel.getValueAt(mi, 0);
       edicionDetActual.patrocinios().stream()
@@ -276,13 +320,27 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     loadEventos();
   }
 
+  public void loadForm() {
+    System.out.println("Cargando datos...");
+    // reset
+    // txtBuscarEvento.setText("");
+    // tblEventos.clearSelection();
+    // clearEdicionesPanel();
+    // clearDetallePanel();
+    // recargar
+    loadEventos();
+  }
+
   // ==== Helpers de layout del header ====
   private static void addLbl(JPanel p, GridBagConstraints gbc, int x, int y, String text) {
-    gbc.gridx = x; gbc.gridy = y;
+    gbc.gridx = x;
+    gbc.gridy = y;
     p.add(new JLabel(text), gbc);
   }
+
   private static void hdrAdd(JPanel p, GridBagConstraints gbc, JLabel comp, int x, int y) {
-    gbc.gridx = x; gbc.gridy = y;
+    gbc.gridx = x;
+    gbc.gridy = y;
     p.add(comp, gbc);
   }
 
@@ -294,7 +352,7 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     allEventos.sort(Comparator.comparing(DTEvento::nombre, String.CASE_INSENSITIVE_ORDER));
     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     for (DTEvento ev : allEventos) {
-      eventosModel.addRow(new Object[]{ev.nombre(), ev.sigla(), ev.descripcion(), df.format(ev.fechaAlta())});
+      eventosModel.addRow(new Object[] { ev.nombre(), ev.sigla(), ev.descripcion(), df.format(ev.fechaAlta()) });
     }
   }
 
@@ -304,7 +362,7 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     for (DTEvento ev : allEventos) {
       if (q.isEmpty() || ev.nombre().toLowerCase().contains(q)) {
-        eventosModel.addRow(new Object[]{ev.nombre(), ev.sigla(), ev.descripcion(), df.format(ev.fechaAlta())});
+        eventosModel.addRow(new Object[] { ev.nombre(), ev.sigla(), ev.descripcion(), df.format(ev.fechaAlta()) });
       }
     }
     // Al cambiar el listado, limpiar ediciones/detalle
@@ -346,7 +404,7 @@ public class ConsultaEdicionEvento extends JInternalFrame {
         .sorted(Comparator.<DTEdicion, Long>comparing(e -> e.fechaInicio().getTime()).thenComparing(DTEdicion::nombre))
         .collect(Collectors.toList());
     for (DTEdicion ed : orden) {
-      edicionesModel.addRow(new Object[]{
+      edicionesModel.addRow(new Object[] {
           ed.nombre(), ed.sigla(), ed.ciudad(), ed.pais(),
           df.format(ed.fechaInicio()), df.format(ed.fechaFin())
       });
@@ -404,7 +462,7 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     tiposModel.setRowCount(0);
     det.tiposRegistro().stream()
         .sorted(Comparator.comparing(DTTipoRegistro::nombre))
-        .forEach(tr -> tiposModel.addRow(new Object[]{tr.nombre(), tr.descripcion(), tr.costo(), tr.cupo()}));
+        .forEach(tr -> tiposModel.addRow(new Object[] { tr.nombre(), tr.descripcion(), tr.costo(), tr.cupo() }));
     btnVerTipo.setEnabled(false);
 
     // Registros
@@ -412,7 +470,7 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     SimpleDateFormat dft = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     det.registros().stream()
         .sorted(Comparator.<DTRegistro, Long>comparing(r -> r.fecha().getTime()).reversed())
-        .forEach(r -> registrosModel.addRow(new Object[]{
+        .forEach(r -> registrosModel.addRow(new Object[] {
             dft.format(r.fecha()), String.format("%.2f", r.costo()),
             r.nicknameAsistente(), r.tipoRegistro().nombre()
         }));
@@ -421,7 +479,7 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     patrociniosModel.setRowCount(0);
     det.patrocinios().stream()
         .sorted(Comparator.comparing((DTPatrocinio p) -> p.institucion() != null ? p.institucion().nombre() : ""))
-        .forEach(p -> patrociniosModel.addRow(new Object[]{
+        .forEach(p -> patrociniosModel.addRow(new Object[] {
             p.institucion() != null ? p.institucion().nombre() : "(s/i)",
             p.nivel(), String.format("%.2f", p.monto())
         }));
@@ -500,7 +558,10 @@ public class ConsultaEdicionEvento extends JInternalFrame {
   }
 
   private static void addDlgRow(JDialog d, GridBagConstraints g, int x, int y, String k, String v) {
-    g.gridx = x; g.gridy = y; d.add(new JLabel(k), g);
-    g.gridx = x+1; d.add(new JLabel(v), g);
+    g.gridx = x;
+    g.gridy = y;
+    d.add(new JLabel(k), g);
+    g.gridx = x + 1;
+    d.add(new JLabel(v), g);
   }
 }

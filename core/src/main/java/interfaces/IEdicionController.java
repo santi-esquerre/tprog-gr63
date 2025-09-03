@@ -1,12 +1,11 @@
 package interfaces;
 
-import java.util.Date;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 import datatypes.DTAsistente;
 import datatypes.DTEdicion;
-import datatypes.DTPatrocinio;
 import datatypes.DTEdicionDetallada;
 import datatypes.DTTipoRegistro;
 import datatypes.NivelPatrocinio;
@@ -21,13 +20,22 @@ public interface IEdicionController {
   DTTipoRegistro consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro) throws ValidationInputException;
 
   Set<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion); // fija edicionRecordada
-  Set<DTAsistente> mostrarAsistentes();                              // usa edicionRecordada
-  boolean cupoDisponible(String nombreTipoRegistro);                 // idem
-  boolean asistenteNoRegistrado(String nickname);                    // idem
+
+  Set<DTAsistente> mostrarAsistentes(); // usa edicionRecordada
+
+  boolean cupoDisponible(String nombreTipoRegistro); // idem
+
+  boolean asistenteNoRegistrado(String nickname); // idem
+
+  void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname);
+
   void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname, Date fecha);
+
   void cancelarRegistroEdicionEvento();
-  void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte, String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
-  	throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException;
+
+  void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
+      String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
+      throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException;
 
   // boolean altaEdicion(String nombreEvento,
   // String nicknameOrganizador,
@@ -36,6 +44,6 @@ public interface IEdicionController {
   // Obtener datos detallados de una edición
   DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion)
       throws ValidationInputException;
-  
+
   Set<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador) throws ValidationInputException;
 }

@@ -10,7 +10,6 @@ import java.util.HashSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -40,12 +39,12 @@ public class AltaEvento extends JInternalFrame {
     IEventoController controller;
     DefaultListModel<String> categoriaslistModel;
     private JFrame parent;
-    
+
     public AltaEvento(JFrame parent, IEventoController controller) {
-    	this.parent = parent;
-    	this.controller = controller;
-    	java.util.Set<String> categorias;
-    	
+        this.parent = parent;
+        this.controller = controller;
+        java.util.Set<String> categorias;
+
         setResizable(true);
         setMaximizable(true);
         setClosable(true);
@@ -98,19 +97,19 @@ public class AltaEvento extends JInternalFrame {
 
         JButton btnCancel = new JButton("Cancelar");
         panelBotones.add(btnCancel);
-                                
-	    txtDescripcion = new JTextArea(4, 20);
-	    txtDescripcion.setLineWrap(true);
-	    txtDescripcion.setWrapStyleWord(true);
-	    GridBagConstraints gbc_txtDescripcion = new GridBagConstraints();
-	    gbc_txtDescripcion.gridwidth = 2;
-	    gbc_txtDescripcion.insets = new Insets(0, 0, 5, 0);
-	    gbc_txtDescripcion.fill = GridBagConstraints.BOTH;
-	    gbc_txtDescripcion.gridx = 0;
-	    gbc_txtDescripcion.gridy = 2;
-	    panel.add(txtDescripcion, gbc_txtDescripcion);
-	    String descripcion = txtDescripcion.getText().trim();
-                        
+
+        txtDescripcion = new JTextArea(4, 20);
+        txtDescripcion.setLineWrap(true);
+        txtDescripcion.setWrapStyleWord(true);
+        GridBagConstraints gbc_txtDescripcion = new GridBagConstraints();
+        gbc_txtDescripcion.gridwidth = 2;
+        gbc_txtDescripcion.insets = new Insets(0, 0, 5, 0);
+        gbc_txtDescripcion.fill = GridBagConstraints.BOTH;
+        gbc_txtDescripcion.gridx = 0;
+        gbc_txtDescripcion.gridy = 2;
+        panel.add(txtDescripcion, gbc_txtDescripcion);
+        String descripcion = txtDescripcion.getText().trim();
+
         JLabel lblFechaAlta = new JLabel("Fecha de alta:");
         GridBagConstraints gbc_lblFechaAlta = new GridBagConstraints();
         gbc_lblFechaAlta.anchor = GridBagConstraints.WEST;
@@ -118,64 +117,63 @@ public class AltaEvento extends JInternalFrame {
         gbc_lblFechaAlta.gridx = 0;
         gbc_lblFechaAlta.gridy = 3;
         panel.add(lblFechaAlta, gbc_lblFechaAlta);
-                        
+
         JPanel panel_3 = new JPanel();
         GridBagConstraints gbc_panel_3 = new GridBagConstraints();
         gbc_panel_3.insets = new Insets(0, 0, 5, 0);
         gbc_panel_3.fill = GridBagConstraints.BOTH;
         gbc_panel_3.gridx = 1;
         gbc_panel_3.gridy = 3;
-                        panel.add(panel_3, gbc_panel_3);
-                        GridBagLayout gbl_panel_3 = new GridBagLayout();
-                        gbl_panel_3.columnWidths = new int[]{0, 0, 0, 0};
-                        gbl_panel_3.rowHeights = new int[]{0, 0};
-                        gbl_panel_3.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
-                        gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-                        panel_3.setLayout(gbl_panel_3);
-                        
-                        dateFechaAlta = new DatePicker();
-                        dateFechaAlta.setDateToToday();
-                        GridBagConstraints gbc_txtFechaAltaDia = new GridBagConstraints(
-                        		);
-                        gbc_txtFechaAltaDia.fill = GridBagConstraints.HORIZONTAL;
-                        gbc_txtFechaAltaDia.insets = new Insets(0, 0, 0, 5);
-                        gbc_txtFechaAltaDia.gridx = 0;
-                        gbc_txtFechaAltaDia.gridy = 0;
-                        panel_3.add(dateFechaAlta, gbc_txtFechaAltaDia);
-                
-                        JLabel lblSigla = new JLabel("Sigla:");
-                        GridBagConstraints gbc_lblSigla = new GridBagConstraints();
-                        gbc_lblSigla.anchor = GridBagConstraints.WEST;
-                        gbc_lblSigla.insets = new Insets(0, 0, 5, 5);
-                        gbc_lblSigla.gridx = 0;
-                        gbc_lblSigla.gridy = 4;
-                        panel.add(lblSigla, gbc_lblSigla);
-                
-                        txtSigla = new JTextField();
-                        GridBagConstraints gbc_txtSigla = new GridBagConstraints();
-                        gbc_txtSigla.insets = new Insets(0, 0, 5, 0);
-                        gbc_txtSigla.fill = GridBagConstraints.HORIZONTAL;
-                        gbc_txtSigla.gridx = 1;
-                        gbc_txtSigla.gridy = 4;
-                        panel.add(txtSigla, gbc_txtSigla);
-                        txtSigla.setColumns(10);
-                        String sigla = txtSigla.getText().trim();
-        
-                JLabel lblCategorias = new JLabel("Categorías:");
-                GridBagConstraints gbc_lblCategorias = new GridBagConstraints();
-                gbc_lblCategorias.anchor = GridBagConstraints.WEST;
-                gbc_lblCategorias.insets = new Insets(0, 0, 0, 5);
-                gbc_lblCategorias.gridx = 0;
-                gbc_lblCategorias.gridy = 5;
-                panel.add(lblCategorias, gbc_lblCategorias);
-                categoriaslistModel = new DefaultListModel<>();
-                listCategorias = new JList(categoriaslistModel);
-                GridBagConstraints gbc_listCategorias = new GridBagConstraints();
-                gbc_listCategorias.fill = GridBagConstraints.HORIZONTAL;
-                gbc_listCategorias.gridx = 1;
-                gbc_listCategorias.gridy = 5;
-                panel.add(listCategorias, gbc_listCategorias);
-                listCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        panel.add(panel_3, gbc_panel_3);
+        GridBagLayout gbl_panel_3 = new GridBagLayout();
+        gbl_panel_3.columnWidths = new int[] { 0, 0, 0, 0 };
+        gbl_panel_3.rowHeights = new int[] { 0, 0 };
+        gbl_panel_3.columnWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
+        gbl_panel_3.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+        panel_3.setLayout(gbl_panel_3);
+
+        dateFechaAlta = new DatePicker();
+        dateFechaAlta.setDateToToday();
+        GridBagConstraints gbc_txtFechaAltaDia = new GridBagConstraints();
+        gbc_txtFechaAltaDia.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txtFechaAltaDia.insets = new Insets(0, 0, 0, 5);
+        gbc_txtFechaAltaDia.gridx = 0;
+        gbc_txtFechaAltaDia.gridy = 0;
+        panel_3.add(dateFechaAlta, gbc_txtFechaAltaDia);
+
+        JLabel lblSigla = new JLabel("Sigla:");
+        GridBagConstraints gbc_lblSigla = new GridBagConstraints();
+        gbc_lblSigla.anchor = GridBagConstraints.WEST;
+        gbc_lblSigla.insets = new Insets(0, 0, 5, 5);
+        gbc_lblSigla.gridx = 0;
+        gbc_lblSigla.gridy = 4;
+        panel.add(lblSigla, gbc_lblSigla);
+
+        txtSigla = new JTextField();
+        GridBagConstraints gbc_txtSigla = new GridBagConstraints();
+        gbc_txtSigla.insets = new Insets(0, 0, 5, 0);
+        gbc_txtSigla.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txtSigla.gridx = 1;
+        gbc_txtSigla.gridy = 4;
+        panel.add(txtSigla, gbc_txtSigla);
+        txtSigla.setColumns(10);
+        String sigla = txtSigla.getText().trim();
+
+        JLabel lblCategorias = new JLabel("Categorías:");
+        GridBagConstraints gbc_lblCategorias = new GridBagConstraints();
+        gbc_lblCategorias.anchor = GridBagConstraints.WEST;
+        gbc_lblCategorias.insets = new Insets(0, 0, 0, 5);
+        gbc_lblCategorias.gridx = 0;
+        gbc_lblCategorias.gridy = 5;
+        panel.add(lblCategorias, gbc_lblCategorias);
+        categoriaslistModel = new DefaultListModel<>();
+        listCategorias = new JList(categoriaslistModel);
+        GridBagConstraints gbc_listCategorias = new GridBagConstraints();
+        gbc_listCategorias.fill = GridBagConstraints.HORIZONTAL;
+        gbc_listCategorias.gridx = 1;
+        gbc_listCategorias.gridy = 5;
+        panel.add(listCategorias, gbc_listCategorias);
+        listCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         // Listeners
         btnSave.addActionListener(e -> {
             saveAction(e);
@@ -183,39 +181,44 @@ public class AltaEvento extends JInternalFrame {
 
         btnCancel.addActionListener(e -> dispose());
     }
-    
+
     public void loadForm() {
-		txtNombre.setText("");
-		txtDescripcion.setText("");
-		txtSigla.setText("");
-		categoriaslistModel.clear();
-		categoriaslistModel.addAll(controller.obtenerCategorias());
-    	listCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        txtNombre.setText("");
+        txtDescripcion.setText("");
+        txtSigla.setText("");
+        categoriaslistModel.clear();
+        System.out.println("Cargando datos...");
+        categoriaslistModel.addAll(controller.obtenerCategorias());
+        listCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
-    
-    //Actions
+
+    // Actions
     private void saveAction(ActionEvent e) {
-    	Boolean emptyFields = txtNombre.getText().trim().isBlank() || txtDescripcion.getText().isBlank() || txtSigla.getText().isBlank() || dateFechaAlta.getDate() == null;
-    	if (emptyFields) {
-    		Dialog.showWarning("Debe completar todos los campos.");
-    		return;
-    	} 
-    	String nombre = txtNombre.getText().trim();
-    	String descripcion = txtDescripcion.getText().trim();
-    	String sigla = txtSigla.getText().trim();
-    	Date fechaAlta = Date.from(dateFechaAlta.getDate().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
-    	
-    	
-    	try {
-    		DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, listCategorias.getSelectedValuesList() != null ? new HashSet<>(listCategorias.getSelectedValuesList()) : new HashSet<>());
-        	if(controller.altaEvento(eventoData)) {
-        		Dialog.showSuccess("El evento se ha dado de alta correctamente.");
-        		dispose();}
-            
-		} catch (Exception ex) {
-			ExceptionHandler.manageException(parent, ex);
-		}finally {
-			
-		}
+        Boolean emptyFields = txtNombre.getText().trim().isBlank() || txtDescripcion.getText().isBlank()
+                || txtSigla.getText().isBlank() || dateFechaAlta.getDate() == null;
+        if (emptyFields) {
+            Dialog.showWarning("Debe completar todos los campos.");
+            return;
+        }
+        String nombre = txtNombre.getText().trim();
+        String descripcion = txtDescripcion.getText().trim();
+        String sigla = txtSigla.getText().trim();
+        Date fechaAlta = Date.from(dateFechaAlta.getDate().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
+
+        try {
+            DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla,
+                    listCategorias.getSelectedValuesList() != null
+                            ? new HashSet<>(listCategorias.getSelectedValuesList())
+                            : new HashSet<>());
+            if (controller.altaEvento(eventoData)) {
+                Dialog.showSuccess("El evento se ha dado de alta correctamente.");
+                dispose();
+            }
+
+        } catch (Exception ex) {
+            ExceptionHandler.manageException(parent, ex);
+        } finally {
+
+        }
     }
 }

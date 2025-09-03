@@ -10,49 +10,50 @@
 
     <properties>
       <!-- JDBC (dev) -->
-      <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/tpgr63eventosuy"/>
-      <property name="jakarta.persistence.jdbc.user" value="tpgr63eventosuyadmin"/>
-      <property name="jakarta.persistence.jdbc.password" value="admin"/>
+      <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
+      <property name="jakarta.persistence.jdbc.url"
+        value="jdbc:postgresql://localhost:5432/tpgr63eventosuy" />
+      <property name="jakarta.persistence.jdbc.user" value="tpgr63eventosuyadmin" />
+      <property name="jakarta.persistence.jdbc.password" value="admin" />
 
       <!-- Pool Hikari (a través de Hibernate) -->
-      <property name="hibernate.hikari.maximumPoolSize" value="10"/>
-      <property name="hibernate.hikari.minimumIdle" value="1"/>
+      <property name="hibernate.hikari.maximumPoolSize" value="10" />
+      <property name="hibernate.hikari.minimumIdle" value="1" />
 
       <!-- Hibernate -->
-      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>   <!-- dev: update/validate -->
-      <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="true"/>
-      <property name="hibernate.default_schema" value="public"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+      <property name="hibernate.hbm2ddl.auto" value="create-drop" />   <!-- dev: update/validate -->
+      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.format_sql" value="true" />
+      <property name="hibernate.default_schema" value="public" />
     </properties>
   </persistence-unit>
-  
+
   <persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-    <!-- Registra tus @Entity -->
-    <!-- <class>uy.edu.tpgr63.core.dominio.Evento</class> -->
-    <!-- <class>uy.edu.tpgr63.core.dominio.EdicionEvento</class> -->
+    <!-- @Entity s -->
     <!-- ... -->
+
     <properties>
       <!-- JDBC (dev) -->
-      <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/tpgr63eventosuytest"/>
-      <property name="jakarta.persistence.jdbc.user" value="tpgr63eventosuyadmin"/>
-      <property name="jakarta.persistence.jdbc.password" value="admin"/>
-      
+      <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
+      <property name="jakarta.persistence.jdbc.url"
+        value="jdbc:postgresql://localhost:5432/tpgr63eventosuytest" />
+      <property name="jakarta.persistence.jdbc.user" value="tpgr63eventosuyadmin" />
+      <property name="jakarta.persistence.jdbc.password" value="admin" />
+
 
       <!-- Pool Hikari (a través de Hibernate) -->
-      <property name="hibernate.hikari.maximumPoolSize" value="10"/>
-      <property name="hibernate.hikari.minimumIdle" value="1"/>
+      <property name="hibernate.hikari.maximumPoolSize" value="10" />
+      <property name="hibernate.hikari.minimumIdle" value="1" />
 
       <!-- Hibernate -->
-      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-      <property name="hibernate.hbm2ddl.auto" value="create-drop"/>   <!-- dev: update/validate -->
-      <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="true"/>
-      <property name="hibernate.default_schema" value="public"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+      <property name="hibernate.hbm2ddl.auto" value="create-drop" />   <!-- dev: update/validate -->
+      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.format_sql" value="true" />
+      <property name="hibernate.default_schema" value="public" />
     </properties>
   </persistence-unit>
 </persistence>

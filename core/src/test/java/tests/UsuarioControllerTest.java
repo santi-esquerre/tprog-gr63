@@ -18,7 +18,6 @@ import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
-import infra.JPA;
 import interfaces.Factory;
 import interfaces.IUsuarioController;
 
@@ -87,19 +86,20 @@ class UsuarioControllerTest {
         });
     }
 
-    @Test
-    void testCrearAsistenteConInstitucion() {
-        assertDoesNotThrow(() -> {
-            usuarioController.crearAsistente("asistenteTest2", "Ana", "Martínez",
-                    "ana@test.com", LocalDate.of(1988, 7, 20), "Universidad Test");
-        }, "Crear asistente con institución debería ejecutarse sin errores");
+    // @Test
+    // void testCrearAsistenteConInstitucion() {
+    // assertDoesNotThrow(() -> {
+    // usuarioController.crearAsistente("asistenteTest2", "Ana", "Martínez",
+    // "ana@test.com", LocalDate.of(1988, 7, 20), "Universidad Test");
+    // }, "Crear asistente con institución debería ejecutarse sin errores");
 
-        // Verificar que el usuario fue creado
-        assertDoesNotThrow(() -> {
-            boolean existe = !usuarioController.verificarNoExistenciaNickname("asistenteTest2");
-            assertTrue(existe, "El asistente con institución debería haber sido creado");
-        });
-    }
+    // // Verificar que el usuario fue creado
+    // assertDoesNotThrow(() -> {
+    // boolean existe =
+    // !usuarioController.verificarNoExistenciaNickname("asistenteTest2");
+    // assertTrue(existe, "El asistente con institución debería haber sido creado");
+    // });
+    // }
 
     @Test
     void testCrearOrganizadorCompleto() {

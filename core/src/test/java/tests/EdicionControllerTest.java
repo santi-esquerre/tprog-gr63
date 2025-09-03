@@ -3,7 +3,6 @@ package tests;
 import java.util.Date;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,7 +20,6 @@ import datatypes.DTTipoRegistro;
 import exceptions.EdicionInexistenteException;
 import exceptions.TipoRegistroRepetidoException;
 import exceptions.ValidationInputException;
-import infra.JPA;
 import interfaces.Factory;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
@@ -44,9 +42,8 @@ class EdicionControllerTest {
 
 	@BeforeEach
 	void setUp() {
-        factory.getIRepository().switchToTesting();
+		factory.getIRepository().switchToTesting();
 	}
-
 
 	@Test
 	void testAltaTipoRegistro() {
@@ -251,14 +248,14 @@ class EdicionControllerTest {
 			edicionController.mostrarTiposDeRegistro("EdicionRegistro1");
 
 			// Realizar registro
-			//edicionController.altaRegistroEdicionEvento("TipoRegistroReg1", "asistenteReg1");
+			edicionController.altaRegistroEdicionEvento("TipoRegistroReg1", "asistenteReg1");
 
 		}, "El alta de registro debería ejecutarse sin errores");
 
 		// Test sin edición recordada
 		edicionController.cancelarRegistroEdicionEvento(); // Reset estado
 		assertThrows(IllegalStateException.class, () -> {
-			//edicionController.altaRegistroEdicionEvento("TipoInexistente", "asistenteInexistente");
+			edicionController.altaRegistroEdicionEvento("TipoInexistente", "asistenteInexistente");
 		}, "Debería lanzar excepción sin edición recordada");
 	}
 
