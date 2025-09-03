@@ -362,6 +362,7 @@ public class Principal {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("Abriendo consulta de registro...");
 						internalFrameConsultaRegistro.setVisible(true);
+
 						internalFrameConsultaRegistro.moveToFront();
 						try {
 							internalFrameConsultaRegistro.setMaximum(false);
@@ -369,6 +370,9 @@ public class Principal {
 						} catch (PropertyVetoException e1) {
 							// TODO Auto-generated catch block
 						}
+
+						internalFrameConsultaRegistro.loadAssistants();
+
 					}
 				});
 
