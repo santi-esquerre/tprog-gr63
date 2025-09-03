@@ -51,17 +51,16 @@ public class Registro extends BaseEntity {
 
   public Registro() {}
 
-  public DTAsistente obtenerDTAsistente() {
-    return new DTAsistente(asistente.getNickname(), asistente.getNombre(),
-                           asistente.getApellido(), asistente.getCorreo(), null);
-  }
-
   public TipoRegistro getTipo(){ return tipo; }
   public Asistente getAsistente(){ return asistente; }
   public Date getFecha(){ return fecha; }
   public float getCosto(){ return costo; }
   public Edicion getEdicion(){ return edicion; }
   public Patrocinio getPatrocinio(){ return patrocinio; }
+  
+  public DTAsistente obtenerDTAsistente() {
+	return asistente.toDataType();
+  }
   
   public void setPatrocinio(Patrocinio patrocinio) { 
     this.patrocinio = patrocinio; 

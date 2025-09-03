@@ -18,6 +18,10 @@ import java.util.Set;
 import datatypes.DTEventoAlta;
 import datatypes.DTRegistrosOtorgados;
 import datatypes.DTTipoRegistro;
+import datatypes.NivelPatrocinio;
+import exceptions.CantidadCuposDisponiblesException;
+import exceptions.CostoRegistrosGratuitosException;
+import exceptions.ExistePatrocinioException;
 import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioNicknameRepetidoException;
 import exceptions.ValidationInputException;
@@ -74,7 +78,7 @@ public class TestLoader {
 	}
 
 	public void loadAll(String folderPath) throws IOException, ValidationInputException, UsuarioCorreoRepetidoException,
-			UsuarioNicknameRepetidoException {
+			UsuarioNicknameRepetidoException, ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException {
 		Factory factory = Factory.get();
 		IUsuarioController usuarioController = factory.getIUsuarioController();
 		IEventoController eventoController = factory.getIEventoController();
@@ -247,14 +251,12 @@ public class TestLoader {
 			String descripcionTR = tipoRegistroMap.get("Descripcion");
 			float costoTR = Float.parseFloat(tipoRegistroMap.get("Costo"));
 			int cupoTR = Integer.parseInt(tipoRegistroMap.get("Cupo"));
-
-			System.out.println("Creando patrocinio: Edicion=" + edicion + ", Institucion=" + institucion
-					+ ", Codigo=" + codigo + ", CantidadRegistros=" + cantidadRegistros + ", TipoRegistro=[Nombre="
-					+ nombreTR + ", Descripcion=" + descripcionTR + ", Costo=" + costoTR + ", Cupo=" + cupoTR + "]");
-			institucionController.crearPatrocinio(edicion,
-					institucion,
-					new DTRegistrosOtorgados(new DTTipoRegistro(nombreTR, descripcionTR, costoTR, cupoTR),cantidadRegistros),
-					codigo);
+			LocalDate fechaRealizacion = LocalDate.parse(patrocinio.get("fechaPatrocinio"),
+					DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			Float aporte = Float.parseFloat(patrocinio.get("Aporte"));
+			NivelPatrocinio nivel = NivelPatrocinio.valueOf(patrocinio.get("Nivel").toUpperCase());
+			System.out.println("Cargando patrocinio: " + institucion + " - " + edicion + " - " + nivel + " con aporte " + aporte + " y " + cantidadRegistros + " registros de tipo " + nombreTR + ". Codigo: " + codigo + ". Costo TR: " + costoTR + ", cupo TR: " + cupoTR + ", descripcion TR: " + descripcionTR); 
+			edicionController.altaPatrocinio(fechaRealizacion, edicion, institucion, aporte, nombreTR, cantidadRegistros, codigo, nivel);
 		}
 
 		// Carga de registros

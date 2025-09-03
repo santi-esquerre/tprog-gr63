@@ -12,6 +12,7 @@ import datatypes.NivelPatrocinio;
 import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
 import exceptions.ExistePatrocinioException;
+import exceptions.InstitucionNoExistenteException;
 import exceptions.ValidationInputException;
 
 public interface IEdicionController {
@@ -27,15 +28,13 @@ public interface IEdicionController {
 
   boolean asistenteNoRegistrado(String nickname); // idem
 
-  void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname);
-
   void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname, Date fecha);
 
   void cancelarRegistroEdicionEvento();
 
   void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
       String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
-      throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException;
+      throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException, InstitucionNoExistenteException;
 
   // boolean altaEdicion(String nombreEvento,
   // String nicknameOrganizador,

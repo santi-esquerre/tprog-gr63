@@ -1,6 +1,6 @@
 package exceptions;
 
-public class ExistePatrocinioException extends Exception {
+public class ExistePatrocinioException extends ValidationInputException {
 	
 	private static final long serialVersionUID = 1L;
 	

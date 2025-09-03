@@ -1,6 +1,6 @@
 package exceptions;
 
-public class CostoRegistrosGratuitosException extends Exception {
+public class CostoRegistrosGratuitosException extends ValidationInputException {
 	
 	private static final long serialVersionUID = 1L;
 	

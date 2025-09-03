@@ -1,6 +1,6 @@
 package exceptions;
 
-public class UsuarioNicknameRepetidoException extends Exception {
+public class UsuarioNicknameRepetidoException extends ValidationInputException {
 
 	private static final long serialVersionUID = 1L;
 	

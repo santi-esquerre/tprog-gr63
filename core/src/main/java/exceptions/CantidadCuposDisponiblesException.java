@@ -1,6 +1,6 @@
 package exceptions;
 
-public class CantidadCuposDisponiblesException extends Exception {
+public class CantidadCuposDisponiblesException extends ValidationInputException {
 
 	private static final long serialVersionUID = 1L;
 	
