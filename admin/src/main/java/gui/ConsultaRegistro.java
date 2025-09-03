@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -75,6 +76,15 @@ public class ConsultaRegistro extends JInternalFrame {
 		
 		JLabel lblUsuario = new JLabel("Usuario:");
 		searchPanel.add(lblUsuario);
+		
+		setBounds(100, 100, 687, 414);
+		setResizable(true);
+		setClosable(true);
+		setMaximizable(true);
+		setIconifiable(true);
+		setTitle("Consulta de Registro");
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 		cmbUsuarios = new JComboBox<>();
 		cmbUsuarios.setToolTipText("Usuarios");
@@ -275,7 +285,7 @@ public class ConsultaRegistro extends JInternalFrame {
 		});
 	}
 	
-	private void loadAssistants() {
+	protected void loadAssistants() {
 		if (usuarioController == null) {
 			return; // For testing purposes
 		}
@@ -286,9 +296,10 @@ public class ConsultaRegistro extends JInternalFrame {
 			cmbUsuarios.addItem(null); // Add empty option
 			
 			for (DTUsuarioItemListado assistant : assistants) {
-				cmbUsuarios.addItem(assistant);
+				if (assistant != null) cmbUsuarios.addItem(assistant);
 			}
 		} catch (Exception e) {
+			
 			// Handle error - could show a message dialog
 			e.printStackTrace();
 		}

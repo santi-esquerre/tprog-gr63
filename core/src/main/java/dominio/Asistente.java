@@ -63,8 +63,7 @@ public class Asistente extends Usuario {
 
   @Override
   public DTUsuarioItemListado toDTUsuarioItemListado() {
-	// TODO Auto-generated method stub
-	return null;
+	return new DTUsuarioItemListado(nickname, correo, TipoUsuario.ASISTENTE);
   }
   
   

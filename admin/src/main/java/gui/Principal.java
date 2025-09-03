@@ -311,6 +311,7 @@ public class Principal {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("Abriendo consulta de registro...");
 						internalFrameConsultaRegistro.setVisible(true);
+						internalFrameConsultaRegistro.loadAssistants();
 					}
 				});
 
