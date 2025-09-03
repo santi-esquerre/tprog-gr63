@@ -71,6 +71,13 @@ public class SubConsultaEdicionConsultaUsuario extends JDialog {
 	 * Create the dialog.
 	 */
 	public SubConsultaEdicionConsultaUsuario(IEdicionController edicionController, String nombreEdicion) {
+		this.setModal(true);
+		
+		this.setBounds(100, 100, 800, 600);
+		this.setTitle("Consulta de edición de usuario");
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		
 		lblNomEd = new JLabel("-");
 	    lblSiglaEd = new JLabel("-");
 	    lblFIni = new JLabel("-");
@@ -204,6 +211,8 @@ public class SubConsultaEdicionConsultaUsuario extends JDialog {
 	          .findFirst()
 	          .ifPresent(this::showPatroDialog);
 	    });
+	    
+	    cargarDetalle(nombreEdicion);
 
 
 	}
@@ -223,16 +232,11 @@ public class SubConsultaEdicionConsultaUsuario extends JDialog {
 	  }
 	
 	  // ==== Selección de edición -> cargar detalle ====
-	  private void onEdicionSelectionChanged() {
-	    int sel = tblEdiciones.getSelectedRow();
-	    if (sel < 0 || nombreEventoSeleccionado == null) {
-	      clearDetallePanel();
-	      return;
-	    }
-	    int mi = tblEdiciones.convertRowIndexToModel(sel);
-	    String nombreEdicion = (String) edicionesModel.getValueAt(mi, 0);
+	  private void cargarDetalle(String nombreEdicion) {
+	    clearDetallePanel();
 	    try {
-	      edicionDetActual = edicionController.obtenerDatosDetalladosEdicion(nombreEventoSeleccionado, nombreEdicion);
+	      edicionDetActual = edicionController.obtenerDatosDetalladosEdicion(nombreEdicion);
+	     
 	      if (edicionDetActual == null) {
 	        clearDetallePanel();
 	        return;

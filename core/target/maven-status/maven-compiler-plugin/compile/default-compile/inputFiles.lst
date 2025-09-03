@@ -1,78 +1,78 @@
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\infra\Tx.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\infra\JPA.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\EdicionFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\package-info.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTPatrocinio.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\interfaces\IEdicionController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\interfaces\IEventoController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\Repository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\ValidationInputException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\EventoRepository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\InstitucionController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Categoria.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\EventoRepetidoException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTEdicionDetallada.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTEventoAlta.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Asistente.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTInstitucion.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\EdicionRepository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTEventoDetallado.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTRegistro.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\TipoRegistroInexistenteException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTAsistente.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Usuario.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\InstitucionRepository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTUsuarioListado.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\interfaces\IUsuarioController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\interfaces\IInstitucionController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\EventoController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTEdicion.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\TipoRegistroRepetidoException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\interfaces\Factory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\InstitucionFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Institucion.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\NivelPatrocinio.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTTipoRegistro.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\package-info.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\interfaces\IRepository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\UsuarioCorreoRepetidoException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\EventoFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Otorga.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\BaseEntity.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTRegistrosOtorgados.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\RegistroOtorgado.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\ExistePatrocinioException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\PatrocinioFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\TipoRegistroFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\EdicionInexistenteException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\CategoriaRepetidaException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\CategoriaFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\TipoRegistroRepository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\CategoriaRepository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Registro.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\CategoriasInvalidasException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\UsuarioController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Patrocinio.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\UsuarioNicknameRepetidoException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\TipoUsuario.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Evento.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\NingunaCategoriaSeleccionadaException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Organizador.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\package-info.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTEvento.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\Edicion.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\EdicionController.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTOrganizador.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\InstitucionRepetidaException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTUsuarioItemListado.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTUsuario.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\datatypes\DTRegistroDetallado.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\CostoRegistrosGratuitosException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\RegistroFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\logica\UsuarioFactory.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\interfaces\package-info.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\repos\UsuarioRepository.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\UsuarioInexistenteException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\CantidadCuposDisponiblesException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\exceptions\InstitucionNoExistenteException.java
-C:\Users\sesquerre\OneDrive - Facultad de Ingeniería\Universidad\Taller de Programación\tprog-gr63\core\src\main\java\dominio\TipoRegistro.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\TipoRegistroRepetidoException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTEdicion.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\NingunaCategoriaSeleccionadaException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTAsistente.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\RegistroFactory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\EdicionController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\TipoUsuario.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTUsuario.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\interfaces\IEdicionController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Evento.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\UsuarioRepository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\CategoriaRepetidaException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Usuario.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\UsuarioNicknameRepetidoException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\CategoriasInvalidasException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\EventoController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\UsuarioController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\EventoRepetidoException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTEdicionDetallada.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\interfaces\IRepository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\TipoRegistroFactory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\EdicionInexistenteException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTRegistrosOtorgados.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\EdicionFactory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\ValidationInputException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Edicion.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTOrganizador.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTUsuarioItemListado.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\CategoriaRepository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\UsuarioInexistenteException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTEventoDetallado.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Organizador.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\infra\Tx.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\ExistePatrocinioException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\package-info.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\CostoRegistrosGratuitosException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\InstitucionRepetidaException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Asistente.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\interfaces\IInstitucionController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Registro.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\TipoRegistro.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\interfaces\IUsuarioController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\BaseEntity.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\Repository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTRegistro.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTUsuarioListado.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\interfaces\Factory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Otorga.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\InstitucionRepository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\TipoRegistroInexistenteException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTPatrocinio.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\InstitucionController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Institucion.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\PatrocinioFactory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\TipoRegistroRepository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\package-info.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\EventoFactory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Patrocinio.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\infra\JPA.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\CategoriaFactory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\interfaces\package-info.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\package-info.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\UsuarioFactory.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\CantidadCuposDisponiblesException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTRegistroDetallado.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\EventoRepository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTEventoAlta.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTTipoRegistro.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\NivelPatrocinio.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\RegistroOtorgado.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\UsuarioCorreoRepetidoException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTInstitucion.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\dominio\Categoria.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\repos\EdicionRepository.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\datatypes\DTEvento.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\exceptions\InstitucionNoExistenteException.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\interfaces\IEventoController.java
+D:\Jhoel\Universidad\2025\Taller de programación\tpgr63\core\src\main\java\logica\InstitucionFactory.java

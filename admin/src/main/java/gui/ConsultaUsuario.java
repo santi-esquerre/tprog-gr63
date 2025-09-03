@@ -78,6 +78,8 @@ public class ConsultaUsuario extends JInternalFrame {
 	private Button btnVerTipo;
 	private DefaultTableModel registrosModel;
 
+	private List<DTRegistro> registros;
+
 	/**
 	 * Create the frame.
 	 */
@@ -90,11 +92,11 @@ public class ConsultaUsuario extends JInternalFrame {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setClosable(true);
 		setTitle("Consulta de usuario");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 616, 300);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.5);
+		splitPane.setResizeWeight(0.6);
 		getContentPane().add(splitPane);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -102,6 +104,7 @@ public class ConsultaUsuario extends JInternalFrame {
 
 		tableUsuarios = new JTable();
 		tableUsuarios.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int selectedRow = tableUsuarios.getSelectedRow();
@@ -158,7 +161,7 @@ public class ConsultaUsuario extends JInternalFrame {
 							txtDia.setText(fechaNac[0]);
 							txtMes.setText(fechaNac[1]);
 							txtAnio.setText(fechaNac[2]);
-							List<DTRegistro> registros = usuarioController.obtenerRegistrosUsuario(nickname);
+							registros = usuarioController.obtenerRegistrosUsuario(nickname);
 							modelRegistros.setRowCount(0);
 							for (var r : registros) {
 								modelRegistros.addRow(new Object[] {
@@ -329,11 +332,12 @@ public class ConsultaUsuario extends JInternalFrame {
 			};
 
 			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
+				return false;
 			}
 		};
 
 		tableEdiciones = new JTable();
+		tableEdiciones.setFillsViewportHeight(true);
 		tableEdiciones.setModel(modelEdiciones);
 		tableEdiciones.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		scrollPane_1.setViewportView(tableEdiciones);
@@ -504,6 +508,17 @@ public class ConsultaUsuario extends JInternalFrame {
 		scrollPane_1_1.setViewportView(tblRegistros);
 
 		tblRegistros = new JTable();
+		tblRegistros.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int selectedRow = tblRegistros.getSelectedRow();
+				if (selectedRow >= 0) {
+					SubConsultaRegistroConsultaUsuario subEdicion = new SubConsultaRegistroConsultaUsuario(usuarioController,registros.get(selectedRow));
+					System.out.println("Abriendo registro de " + registros.get(selectedRow).nombreEvento() + " - " + registros.get(selectedRow).nombreEdicion());
+					subEdicion.setVisible(true);
+				}
+			}
+		});
 		tblRegistros.setFillsViewportHeight(true);
 
 		modelRegistros = new DefaultTableModel(new Object[][] {},

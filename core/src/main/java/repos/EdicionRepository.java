@@ -3,6 +3,7 @@ package repos;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import datatypes.DTEdicionDetallada;
 import dominio.Edicion;
 import dominio.TipoRegistro;
 import jakarta.persistence.EntityManager;
@@ -36,6 +37,53 @@ public final class EdicionRepository {
         .setParameter("nombre", nombre)
         .getResultStream().findFirst().orElse(null);
   }
+  
+  public DTEdicionDetallada obtenerDatosDetalladosEdicion(EntityManager em, String nombreEdicion) {
+	  	// Query to get the edition with all related data
+	var edicion = em.createQuery("""
+		  select ed from Edicion ed
+		  left join fetch ed.organizador
+		  left join fetch ed.tipos
+		  left join fetch ed.registros r
+		  left join fetch r.asistente
+		  left join fetch r.tipo
+		  where ed.nombre = :nombreEdicion
+		""", dominio.Edicion.class)
+		.setParameter("nombreEdicion", nombreEdicion)
+		.getResultStream().findFirst().orElse(null);
+
+	if (edicion == null)
+	  return null;
+
+	// Get patrocinios for this edition
+	var patrocinios = em.createQuery("""
+		  select p from Patrocinio p
+		  left join fetch p.institucion
+		  where p.edicion = :edicion
+		""", dominio.Patrocinio.class)
+		.setParameter("edicion", edicion)
+		.getResultList();
+
+	// Create DTEdicionDetallada manually with patrocinios included
+	var dtEdicion = edicion.toDTEdicion();
+	var dtOrganizador = edicion.obtenerDTOrganizador();
+
+	var dtTiposRegistro = edicion.listarDTTiposDeRegistro();
+
+	Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
+	for (var p : patrocinios) {
+	  dtPatrocinios.add(p.toDTPatrocinio(p.getInstitucion().toDTInstitucion()));
+	}
+
+	var dtRegistros = edicion.obtenerDTRegistros();
+
+	return new datatypes.DTEdicionDetallada(
+		dtEdicion,
+		dtOrganizador,
+		dtTiposRegistro,
+		dtPatrocinios,
+		dtRegistros);
+	}
 
   /**
    * Obtiene los datos detallados de una edición específica de un evento
@@ -110,4 +158,6 @@ public final class EdicionRepository {
 		.setParameter("ne", nicknameOrganizador)
 		.getResultList());
   }
+
+  
 }

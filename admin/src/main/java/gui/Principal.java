@@ -167,7 +167,16 @@ public class Principal {
 				System.out.println("Cargando datos de prueba...");
 				TestLoader testLoader = new TestLoader();
 				try {
-					testLoader.loadAll("admin/assets/tests");
+					String userDir = System.getProperty("user.dir");
+					String folderPath;
+					if (userDir.replace("\\", "/").endsWith("/admin")) {
+						folderPath = "assets/tests";
+					} else {
+						folderPath = "admin/assets/tests";
+					}
+					System.out.println("Ruta de carga de pruebas: " + folderPath);
+					testLoader.loadAll(folderPath);
+					
 					util.Dialog.showSuccess(frame);
 				} catch (Exception ex) {
 					ExceptionHandler.manageException(frame, ex);
@@ -405,9 +414,9 @@ public class Principal {
 		});
 
 		// Subopciones de Patrocinios
-		JMenu menuPatrociniosBar = new JMenu("Patrocinios");
-		menuPatrociniosBar.setIcon(iconPatrocinios);
-		menuEventos.add(menuPatrociniosBar);
+//		JMenu menuPatrociniosBar = new JMenu("Patrocinios");
+//		menuPatrociniosBar.setIcon(iconPatrocinios);
+//		menuEventos.add(menuPatrociniosBar);
 
 		/*
 		 * AltaPatrocinio internalFrameAltaPatrocinio = new AltaPatrocinio();
@@ -493,32 +502,32 @@ public class Principal {
 		menuInstituciones.setIcon(iconInstituciones);
 		menuBar.add(menuInstituciones);
 
-		/*
-		 * JMenuItem menuItemInstitucionesAlta = new JMenuItem("Alta de institución");
-		 * menuItemInstitucionesAlta.setIcon(iconAlta);
-		 * menuInstituciones.add(menuItemInstitucionesAlta);
-		 * 
-		 * IInstitucionController institucionController =
-		 * factory.getIInstitucionController();
-		 * AltaInstitucion internalFramealtaInstitucion = new
-		 * AltaInstitucion(institucionController);
-		 * internalFramealtaInstitucion.setVisible(false);
-		 * frame.getContentPane().add(internalFramealtaInstitucion);
-		 * 
-		 * menuItemInstitucionesAlta.addActionListener(
-		 * new ActionListener() {
-		 * public void actionPerformed(ActionEvent e) {
-		 * System.out.println("Abriendo alta de institución...");
-		 * internalFramealtaInstitucion.setVisible(true);
-		 * internalFramealtaInstitucion.moveToFront();
-		 * try {
-		 * internalFramealtaInstitucion.setSelected(true);
-		 * } catch (PropertyVetoException e1) {
-		 * // TODO Auto-generated catch block
-		 * }
-		 * }
-		 * });
-		 */
+		
+		  JMenuItem menuItemInstitucionesAlta = new JMenuItem("Alta de institución");
+		  menuItemInstitucionesAlta.setIcon(iconAlta);
+		  menuInstituciones.add(menuItemInstitucionesAlta);
+		  
+		  IInstitucionController institucionController =
+		  factory.getIInstitucionController();
+		  AltaInstitucion internalFramealtaInstitucion = new
+		  AltaInstitucion(institucionController);
+		  internalFramealtaInstitucion.setVisible(false);
+		  frame.getContentPane().add(internalFramealtaInstitucion);
+		  
+		  menuItemInstitucionesAlta.addActionListener(
+		  new ActionListener() {
+		  public void actionPerformed(ActionEvent e) {
+		  System.out.println("Abriendo alta de institución...");
+		  internalFramealtaInstitucion.setVisible(true);
+		  internalFramealtaInstitucion.moveToFront();
+		  try {
+		  internalFramealtaInstitucion.setSelected(true);
+		  } catch (PropertyVetoException e1) {
+		  // TODO Auto-generated catch block
+		  }
+		  }
+		  });
+		 
 
 		JDesktopPane desktopPane = new JDesktopPane();
 		desktopPane.setForeground(new Color(0, 0, 0));
