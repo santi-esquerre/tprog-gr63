@@ -19,4 +19,6 @@ public class DTAsistente extends DTUsuario implements Serializable {
   @Override public String nombre() { return nombre; }
   @Override public String correo() { return correo; }
   @Override public String toString() { return nickname; }
+  public String apellido() { return apellido; }
+  public Date fechaNacimiento() { return fechaNacimiento; }
 }

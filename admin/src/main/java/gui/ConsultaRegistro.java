@@ -64,6 +64,9 @@ public class ConsultaRegistro extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public ConsultaRegistro(IUsuarioController usuarioController) {
+		setClosable(true);
+		setResizable(true);
+		setMaximizable(true);
 		this.usuarioController = usuarioController;
 		
 		setBounds(100, 100, 800, 600);

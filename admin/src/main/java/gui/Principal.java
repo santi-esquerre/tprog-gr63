@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -94,6 +95,7 @@ public class Principal {
 		// Ventana
 		frame = new JFrame("Eventos UY");
 		frame.setIconImage(IconFontSwing.buildImage(FontAwesome.CALENDAR, 50));
+		frame.setUndecorated(false);
 		// Center and double size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int width = 900;
@@ -176,11 +178,18 @@ public class Principal {
 					System.out.println("Abriendo alta de usuario...");
 					internalFramealtaUsuario.cargarDatos();
 					internalFramealtaUsuario.setVisible(true);
+					internalFramealtaUsuario.moveToFront();
+					try {
+						internalFramealtaUsuario.setMaximum(false);
+						internalFramealtaUsuario.setSelected(true);
+					} catch (PropertyVetoException e1) {
+						// TODO Auto-generated catch block
+					}
 				}
  			});
 		menuUsuarios.add(menuItemUsuariosAlta);
 
-		ConsultaUsuario internalFrameconsultaUsuario = new ConsultaUsuario();
+		ConsultaUsuario internalFrameconsultaUsuario = new ConsultaUsuario(factory.getIUsuarioController(), factory.getIEdicionController());
 		internalFrameconsultaUsuario.setVisible(false);
 		frame.getContentPane().add(internalFrameconsultaUsuario);
 
@@ -191,6 +200,13 @@ public class Principal {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("Abriendo consulta de usuario...");
 						internalFrameconsultaUsuario.setVisible(true);
+						internalFrameconsultaUsuario.moveToFront();
+						try {
+							internalFrameconsultaUsuario.setMaximum(false);
+							internalFrameconsultaUsuario.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				});
 		menuUsuarios.add(menuItemUsuariosConsulta);
@@ -222,6 +238,13 @@ public class Principal {
 					public void actionPerformed(ActionEvent e) {
 						internalFramealtAltaEvento.loadForm();
 						internalFramealtAltaEvento.setVisible(true);
+						internalFramealtAltaEvento.moveToFront();
+						try {
+							internalFramealtAltaEvento.setMaximum(false);
+							internalFramealtAltaEvento.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				});
 
@@ -233,6 +256,13 @@ public class Principal {
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						internalFrameconsultaEvento.setVisible(true);
+						internalFrameconsultaEvento.moveToFront();
+						try {
+							internalFrameconsultaEvento.setMaximum(false);
+							internalFrameconsultaEvento.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				});
 
@@ -260,6 +290,13 @@ public class Principal {
 						System.out.println("Abriendo alta de edición...");
 						// internalFrameAltaEdicion.loadForm();
 						internalFrameAltaEdicion.setVisible(true);
+						internalFrameAltaEdicion.moveToFront();
+						try {
+							internalFrameAltaEdicion.setMaximum(false);
+							internalFrameAltaEdicion.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				});
 
@@ -276,6 +313,13 @@ public class Principal {
 		menuItemEdicionesConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				internalFrameConsultaEdicion.setVisible(true);
+				try {
+					internalFrameConsultaEdicion.setMaximum(false);
+					internalFrameConsultaEdicion.moveToFront();
+					internalFrameConsultaEdicion.setSelected(true);
+				} catch (PropertyVetoException e1) {
+					// TODO Auto-generated catch block
+				}
 			}
 		});
 
@@ -295,6 +339,13 @@ public class Principal {
 						System.out.println("Abriendo registro a edición...");
 						internalFrameRegistroEdicion.cargarDatos();
 						internalFrameRegistroEdicion.setVisible(true);
+						internalFrameRegistroEdicion.moveToFront();
+						try {
+							internalFrameRegistroEdicion.setMaximum(false);
+							internalFrameRegistroEdicion.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				});
 		menuEdicionesBar.add(menuItemEdicionesRegistro);
@@ -311,6 +362,13 @@ public class Principal {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("Abriendo consulta de registro...");
 						internalFrameConsultaRegistro.setVisible(true);
+						internalFrameConsultaRegistro.moveToFront();
+						try {
+							internalFrameConsultaRegistro.setMaximum(false);
+							internalFrameConsultaRegistro.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				});
 
@@ -332,6 +390,15 @@ public class Principal {
 						System.out.println("Abriendo alta de patrocinio...");
 						internalFrameAltaPatrocinio.cargarDatos();
 						internalFrameAltaPatrocinio.setVisible(true);
+						internalFrameAltaPatrocinio.moveToFront();
+						try {
+							internalFrameAltaPatrocinio.setMaximum(false);
+							internalFrameAltaPatrocinio.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
+						
+						
 					}
 				}
 			);
@@ -355,6 +422,13 @@ public class Principal {
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						internalFramealtaConsultaTipoRegistro.setVisible(true);
+						internalFramealtaConsultaTipoRegistro.moveToFront();
+						try {
+							internalFramealtaConsultaTipoRegistro.setMaximum(false);
+							internalFramealtaConsultaTipoRegistro.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				}
 			);
@@ -365,6 +439,13 @@ public class Principal {
 		menuItemRegistrosConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				internalFrameconsultaTipoRegistro.setVisible(true);
+				internalFrameconsultaTipoRegistro.moveToFront();
+				try {
+					internalFrameconsultaTipoRegistro.setMaximum(false);
+					internalFrameconsultaTipoRegistro.setSelected(true);
+				} catch (PropertyVetoException e1) {
+					// TODO Auto-generated catch block
+				}
 			}
 		});
 		menuItemRegistrosConsulta.setIcon(iconConsulta);
@@ -390,6 +471,12 @@ public class Principal {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("Abriendo alta de institución...");
 						internalFramealtaInstitucion.setVisible(true);
+						internalFramealtaInstitucion.moveToFront();
+						try {
+							internalFramealtaInstitucion.setSelected(true);
+						} catch (PropertyVetoException e1) {
+							// TODO Auto-generated catch block
+						}
 					}
 				}
 			);
@@ -398,6 +485,7 @@ public class Principal {
 		desktopPane.setForeground(new Color(0, 0, 0));
 		desktopPane.setBackground(new Color(238, 238, 238));
 		frame.getContentPane().add(desktopPane, BorderLayout.CENTER);
+		
 		
 		
 

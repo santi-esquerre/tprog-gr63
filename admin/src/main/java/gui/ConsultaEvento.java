@@ -77,6 +77,9 @@ public class ConsultaEvento extends JInternalFrame {
 	public ConsultaEvento(IEventoController eventoController, IEdicionController edicionController) {
 		this.eventoController = eventoController;
 		this.edicionController = edicionController;
+		this.setMaximizable(true);
+		this.setClosable(true);
+		this.setTitle("Consulta de Evento");
 		
 		setBounds(100, 100, 1000, 700);
 		getContentPane().setLayout(new BorderLayout(0, 0));

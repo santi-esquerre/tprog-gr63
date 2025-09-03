@@ -37,6 +37,13 @@ public final class UsuarioRepository {
         .setParameter("n", nickname)
         .getResultStream().findFirst().orElse(null);
   }
+  
+  public Organizador obtenerOrganizador(EntityManager em, String nickname) {
+	return em.createQuery(
+		"select o from Organizador o where o.nickname = :n", Organizador.class)
+		.setParameter("n", nickname)
+		.getResultStream().findFirst().orElse(null);
+  }
 
   public boolean noExisteNickname(EntityManager em, String nickname) {
     Long c = em.createQuery(
