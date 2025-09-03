@@ -78,6 +78,12 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">-->
 
   <build>
     <resources>
+    <resource>
+        <directory>assets/tests</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
       <resource>
         <directory>src/main/resources</directory>
         <includes>

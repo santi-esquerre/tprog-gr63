@@ -266,6 +266,16 @@ public final class EdicionController implements IEdicionController {
   public void cancelarRegistroEdicionEvento() {
     edicionRecordada = null;
   }
+  
+  @Override
+  public datatypes.DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEdicion) throws ValidationInputException {
+	java.util.Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
+	var resultado = Tx.inTx(em -> edicionRepo.obtenerDatosDetalladosEdicion(em, nombreEdicion));
+	if (resultado == null) {
+	  throw new EdicionInexistenteException("No existe la edición '" + nombreEdicion + "'");
+	}
+	return resultado;
+  }
 
   @Override
   public datatypes.DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion)

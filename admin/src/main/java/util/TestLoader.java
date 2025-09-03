@@ -97,8 +97,6 @@ public class TestLoader {
 			String nombre = institucion.get("Nombre");
 			String direccion = institucion.get("Descripcion");
 			String descripcion = institucion.get("SitioWeb");
-
-			System.out.println(allRecords);
 			institucionController.crearInstitucion(nombre, direccion, descripcion);
 		}
 		// Carga de usuarios
@@ -117,7 +115,7 @@ public class TestLoader {
 						.orElse(null);
 
 				String descripcion = orga.get("Descripcion");
-				String linkSitioWeb = orga.get("LinkSitioWeb");
+				String linkSitioWeb = orga.get("SitioWeb");
 				usuarioController.crearOrganizador(nickname,
 						nombre,
 						email,
@@ -237,7 +235,6 @@ public class TestLoader {
 
 		List<Map<String, String>> patrocinios = allRecords.get(FileName.PATROCINIOS.label);
 		for (Map<String, String> patrocinio : patrocinios) {
-			System.out.println(patrocinio);
 			String edicion = ediciones.stream().filter(e -> e.get("Ref").equals(patrocinio.get("EdicionEvento")))
 					.findFirst().orElse(null).get("Nombre");
 			String institucion = instituciones.stream().filter(i -> i.get("Ref").equals(patrocinio.get("Institucion")))
@@ -250,11 +247,13 @@ public class TestLoader {
 			String descripcionTR = tipoRegistroMap.get("Descripcion");
 			float costoTR = Float.parseFloat(tipoRegistroMap.get("Costo"));
 			int cupoTR = Integer.parseInt(tipoRegistroMap.get("Cupo"));
+
+			System.out.println("Creando patrocinio: Edicion=" + edicion + ", Institucion=" + institucion
+					+ ", Codigo=" + codigo + ", CantidadRegistros=" + cantidadRegistros + ", TipoRegistro=[Nombre="
+					+ nombreTR + ", Descripcion=" + descripcionTR + ", Costo=" + costoTR + ", Cupo=" + cupoTR + "]");
 			institucionController.crearPatrocinio(edicion,
 					institucion,
-					new DTRegistrosOtorgados(
-							new DTTipoRegistro(nombreTR, descripcionTR, costoTR, cupoTR),
-							cantidadRegistros),
+					new DTRegistrosOtorgados(new DTTipoRegistro(nombreTR, descripcionTR, costoTR, cupoTR),cantidadRegistros),
 					codigo);
 		}
 

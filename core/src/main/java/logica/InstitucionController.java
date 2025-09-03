@@ -8,6 +8,7 @@ import datatypes.DTPatrocinio;
 import datatypes.DTRegistrosOtorgados;
 import dominio.Institucion;
 import dominio.Patrocinio;
+import exceptions.InstitucionNoExistenteException;
 import exceptions.InstitucionRepetidaException;
 import infra.Tx;
 import repos.InstitucionRepository;
@@ -56,7 +57,7 @@ public class InstitucionController implements interfaces.IInstitucionController 
 		return Tx.inTx(em -> {
 			try {
 				var inst = institucionRepo.findByNombre(em, nombreInstitucion)
-						.orElseThrow(() -> new IllegalArgumentException("Institución inexistente: " + nombreInstitucion));
+						.orElseThrow(() -> new InstitucionNoExistenteException("Institución inexistente: " + nombreInstitucion));
 				
 				var pat = Patrocinio.crearBasico(codigo);
 				inst.agregarPatrocinio(pat);

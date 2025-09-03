@@ -44,6 +44,8 @@ public interface IEdicionController {
   // Obtener datos detallados de una edición
   DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion)
       throws ValidationInputException;
+  // Obtener datos detallados de una edición, identifcada solo por su nombre
+  DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEdicion) throws ValidationInputException;
 
   Set<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador) throws ValidationInputException;
 }
