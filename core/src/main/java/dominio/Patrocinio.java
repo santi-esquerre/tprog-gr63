@@ -91,15 +91,6 @@ public class Patrocinio extends BaseEntity {
         return dtPatrocinio; 
 	}
 	
-	public static Patrocinio crearBasico(String codigo) {
-        Patrocinio p = new Patrocinio();
-        p.codigo = codigo;
-        p.nivel = NivelPatrocinio.BRONCE; // placeholder
-        p.fechaRealizacion = LocalDate.now();
-        p.monto = 0f;
-        return p;
-    }
-	
 	
 	public LocalDate getFechaRealizacion() { return fechaRealizacion; }
     public float getMonto() { return monto; }

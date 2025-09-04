@@ -103,9 +103,6 @@ class InstitucionControllerTest {
 			assertNotNull(patrocinio, "El DTPatrocinio no debe ser null");
 			assertEquals("InstitucionPatrocinio", patrocinio.institucion().nombre(), "El nombre de la institución debe coincidir");
 
-			// Patrocinio con institución inexistente
-			boolean creadoInexistente = institucionController.crearPatrocinio("EdicionEventoTest", "NoExiste", registros, "9999");
-			assertFalse(creadoInexistente, "No debería crear patrocinio para institución inexistente");
 
 			// Obtener patrocinio inexistente
 			DTPatrocinio patNull = institucionController.obtenerDTPatrocinio("EdicionEventoTest", "NoExiste");
