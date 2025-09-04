@@ -443,11 +443,6 @@ public class Principal {
 		  }
 		  });
 		  
-		  JMenuItem menuItemPatrociniosConsulta = new
-		  JMenuItem("Consulta de patrocinio");
-		  menuItemPatrociniosConsulta.setIcon(iconConsulta);
-		  menuPatrociniosBar.add(menuItemPatrociniosConsulta);
-		  
 		 
 
 		// Subopciones de Tipos de registros
