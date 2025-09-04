@@ -413,42 +413,42 @@ public class Principal {
 			}
 		});
 
-		// Subopciones de Patrocinios
-//		JMenu menuPatrociniosBar = new JMenu("Patrocinios");
-//		menuPatrociniosBar.setIcon(iconPatrocinios);
-//		menuEventos.add(menuPatrociniosBar);
+		//Subopciones de Patrocinios
+		JMenu menuPatrociniosBar = new JMenu("Patrocinios");
+		menuPatrociniosBar.setIcon(iconPatrocinios);
+		menuEventos.add(menuPatrociniosBar);
 
-		/*
-		 * AltaPatrocinio internalFrameAltaPatrocinio = new AltaPatrocinio();
-		 * internalFrameAltaPatrocinio.setVisible(false);
-		 * frame.getContentPane().add(internalFrameAltaPatrocinio);
-		 * 
-		 * JMenuItem menuItemPatrociniosAlta = new JMenuItem("Alta de patrocinio");
-		 * menuItemPatrociniosAlta.setIcon(iconAlta);
-		 * menuPatrociniosBar.add(menuItemPatrociniosAlta);
-		 * menuItemPatrociniosAlta.addActionListener(
-		 * new ActionListener() {
-		 * public void actionPerformed(ActionEvent e) {
-		 * System.out.println("Abriendo alta de patrocinio...");
-		 * internalFrameAltaPatrocinio.cargarDatos();
-		 * internalFrameAltaPatrocinio.setVisible(true);
-		 * internalFrameAltaPatrocinio.moveToFront();
-		 * try {
-		 * internalFrameAltaPatrocinio.setMaximum(false);
-		 * internalFrameAltaPatrocinio.setSelected(true);
-		 * } catch (PropertyVetoException e1) {
-		 * // TODO Auto-generated catch block
-		 * }
-		 * 
-		 * }
-		 * });
-		 * 
-		 * JMenuItem menuItemPatrociniosConsulta = new
-		 * JMenuItem("Consulta de patrocinio");
-		 * menuItemPatrociniosConsulta.setIcon(iconConsulta);
-		 * menuPatrociniosBar.add(menuItemPatrociniosConsulta);
-		 * 
-		 */
+		
+		  AltaPatrocinio internalFrameAltaPatrocinio = new AltaPatrocinio();
+		  internalFrameAltaPatrocinio.setVisible(false);
+		  frame.getContentPane().add(internalFrameAltaPatrocinio);
+		  
+		  JMenuItem menuItemPatrociniosAlta = new JMenuItem("Alta de patrocinio");
+		  menuItemPatrociniosAlta.setIcon(iconAlta);
+		  menuPatrociniosBar.add(menuItemPatrociniosAlta);
+		  menuItemPatrociniosAlta.addActionListener(
+		  new ActionListener() {
+		  public void actionPerformed(ActionEvent e) {
+		  System.out.println("Abriendo alta de patrocinio...");
+		  internalFrameAltaPatrocinio.cargarDatos();
+		  internalFrameAltaPatrocinio.setVisible(true);
+		  internalFrameAltaPatrocinio.moveToFront();
+		  try {
+		  internalFrameAltaPatrocinio.setMaximum(false);
+		  internalFrameAltaPatrocinio.setSelected(true);
+		  } catch (PropertyVetoException e1) {
+		  // TODO Auto-generated catch block
+		  }
+		  
+		  }
+		  });
+		  
+		  JMenuItem menuItemPatrociniosConsulta = new
+		  JMenuItem("Consulta de patrocinio");
+		  menuItemPatrociniosConsulta.setIcon(iconConsulta);
+		  menuPatrociniosBar.add(menuItemPatrociniosConsulta);
+		  
+		 
 
 		// Subopciones de Tipos de registros
 		JMenu menuRegistrosBar = new JMenu("Tipos de registros");

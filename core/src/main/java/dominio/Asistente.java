@@ -60,7 +60,7 @@ public class Asistente extends Usuario {
 
   @Override
   public DTAsistente toDataType() {
-	return new DTAsistente(nickname, nombre, apellido, correo, Date.from(fechaNacimiento.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	return new DTAsistente(nickname, nombre, correo, apellido, Date.from(fechaNacimiento.atStartOfDay(ZoneId.systemDefault()).toInstant()));
   }
 
   @Override

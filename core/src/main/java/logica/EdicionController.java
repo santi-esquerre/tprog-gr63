@@ -15,11 +15,13 @@ import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
 import exceptions.EdicionInexistenteException;
 import exceptions.ExistePatrocinioException;
+import exceptions.InstitucionNoExistenteException;
 import exceptions.TipoRegistroRepetidoException;
 import exceptions.ValidationInputException;
 import infra.Tx;
 import interfaces.IEdicionController;
 import repos.EdicionRepository;
+import repos.InstitucionRepository;
 import repos.TipoRegistroRepository;
 import repos.UsuarioRepository;
 
@@ -206,36 +208,15 @@ public final class EdicionController implements IEdicionController {
   }
 
   @Override
-  public void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname) {
-    Date fecha = new Date();
-    if (edicionRecordada == null)
-      throw new IllegalStateException("Edición no seleccionada");
-    Tx.inTx(em -> {
-      var ed = edicionRepo.buscarEdicion(em, edicionRecordada.getNombre());
-      if (ed == null)
-        throw new IllegalArgumentException("Edición inexistente");
-      var tr = ed.buscarTipoRegistro(nombreTipoRegistro);
-      if (tr == null)
-        throw new IllegalArgumentException("Tipo de registro inexistente");
-      var a = usuarioRepo.obtenerAsistente(em, nickname);
-      if (a == null)
-        throw new IllegalArgumentException("Asistente inexistente");
-      if (!ed.cupoDisponible(nombreTipoRegistro))
-        throw new IllegalStateException("Sin cupo");
-      if (!ed.verificarNoRegistro(nickname))
-        throw new IllegalStateException("Ya registrado");
-      registroFactory.altaRegistro(em, ed, a, tr, tr.obtenerDTTipoRegistro().costo(), fecha);
-      tr.decrementarCupo();
-      em.merge(tr);
-      edicionRecordada = null;
-      return null;
-    });
-  }
-
-  @Override
   public void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
       String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
-      throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException {
+      throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException, InstitucionNoExistenteException {
+	  
+	  //Chequear si existe la institución
+	  Objects.requireNonNull(nombreInstitucion, "nombreInstitucion requerido");
+	  	if (Tx.inTx(em -> {return InstitucionRepository.get().noExisteInstitucion(em,nombreInstitucion);})) {
+	  throw new InstitucionNoExistenteException("No existe la institución '" + nombreInstitucion + "'");
+	}
 
     if (Tx.inTx(em -> {
       return edicionRepo.existePatrocinio(em, nombreEdicion, nombreInstitucion);
@@ -250,8 +231,10 @@ public final class EdicionController implements IEdicionController {
     if (cupos < cantGratuitos) {
       throw new CantidadCuposDisponiblesException(cupos, nombreTipoRegistro);
     }
+    
+    System.out.println(((tr.getCosto() * cantGratuitos) / aporte) + "Datos: " + tr.getCosto() + ", " + cantGratuitos + ", " + aporte);
 
-    if (((tr.getCosto() * cantGratuitos) / aporte) > 0.2) {
+    if (((tr.getCosto() * cantGratuitos) / aporte) > 0.2f) {
       throw new CostoRegistrosGratuitosException();
     }
 

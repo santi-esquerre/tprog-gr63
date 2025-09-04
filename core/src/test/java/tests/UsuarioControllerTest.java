@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,19 +19,76 @@ import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
+import exceptions.InstitucionNoExistenteException;
+import exceptions.UsuarioCorreoRepetidoException;
+import exceptions.UsuarioNicknameRepetidoException;
 import interfaces.Factory;
+import interfaces.IInstitucionController;
 import interfaces.IUsuarioController;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UsuarioControllerTest {
+    @Test
+    void testSeleccionarAsistenteYDTAsistente() throws Exception {
+        usuarioController.crearAsistente("asistDT", "NombreA", "ApellidoA", "asistdt@test.com", LocalDate.of(1995, 5, 5));
+        var asistente = usuarioController.seleccionarAsistente("asistDT");
+        assertNotNull(asistente, "Debe devolver un DTAsistente válido");
+        assertEquals("asistDT", asistente.nickname());
+        assertEquals("NombreA", asistente.nombre());
+        assertEquals("ApellidoA", asistente.apellido());
+        assertEquals("asistdt@test.com", asistente.correo());
+        assertNotNull(asistente.fechaNacimiento());
+        assertEquals("asistDT", asistente.toString());
+        assertEquals(datatypes.TipoUsuario.ASISTENTE, asistente.getTipoUsuario());
+
+        // Caso borde: nickname inexistente
+        Exception ex = assertThrows(Exception.class, () -> usuarioController.seleccionarAsistente("noexiste"));
+        assertNotNull(ex);
+    }
+
+    @Test
+    void testSeleccionarOrganizadorYDTOrganizador() throws Exception {
+        usuarioController.crearOrganizador("orgDT", "NombreO", "orgdt@test.com", "desc org", "http://org.com");
+        var organizador = usuarioController.seleccionarOrganizador("orgDT");
+        assertNotNull(organizador, "Debe devolver un DTOrganizador válido");
+        assertEquals("orgDT", organizador.nickname());
+        assertEquals("NombreO", organizador.nombre());
+        assertEquals("orgdt@test.com", organizador.correo());
+        assertEquals("desc org", organizador.descripcion());
+        assertEquals("http://org.com", organizador.linkSitioWeb());
+        assertEquals("orgDT", organizador.toString());
+        assertEquals(datatypes.TipoUsuario.ORGANIZADOR, organizador.getTipoUsuario());
+
+        // Caso borde: nickname inexistente
+        Exception ex = assertThrows(Exception.class, () -> usuarioController.seleccionarOrganizador("noexiste"));
+        assertNotNull(ex);
+    }
+
+    @Test
+    void testDTUsuarioYDTUsuarioItemListado() {
+        datatypes.DTUsuario usuario = new datatypes.DTUsuario("nickU", "NombreU", "correoU@test.com");
+        assertEquals("nickU", usuario.nickname());
+        assertEquals("NombreU", usuario.nombre());
+        assertEquals("correoU@test.com", usuario.correo());
+        assertEquals("nickU", usuario.toString());
+
+        datatypes.DTUsuarioItemListado item = new datatypes.DTUsuarioItemListado("nickU", "correoU@test.com", datatypes.TipoUsuario.ASISTENTE);
+        assertEquals("nickU", item.nickname());
+        assertEquals("correoU@test.com", item.correo());
+        assertEquals(datatypes.TipoUsuario.ASISTENTE, item.tipoUsuario());
+        assertTrue(item.toString().contains("nickU"));
+        assertTrue(item.toString().contains("ASISTENTE"));
+    }
 
     private static IUsuarioController usuarioController;
+	private static IInstitucionController institucionController;
     private static Factory factory;
 
     @BeforeAll
     static void iniciar() {
         factory = Factory.get();
         usuarioController = factory.getIUsuarioController();
+        institucionController = factory.getIInstitucionController();
     }
 
     @BeforeEach
@@ -86,20 +144,38 @@ class UsuarioControllerTest {
         });
     }
 
-    // @Test
-    // void testCrearAsistenteConInstitucion() {
-    // assertDoesNotThrow(() -> {
-    // usuarioController.crearAsistente("asistenteTest2", "Ana", "Martínez",
-    // "ana@test.com", LocalDate.of(1988, 7, 20), "Universidad Test");
-    // }, "Crear asistente con institución debería ejecutarse sin errores");
-
-    // // Verificar que el usuario fue creado
-    // assertDoesNotThrow(() -> {
-    // boolean existe =
-    // !usuarioController.verificarNoExistenciaNickname("asistenteTest2");
-    // assertTrue(existe, "El asistente con institución debería haber sido creado");
-    // });
-    // }
+     @Test
+     void testCrearAsistenteConInstitucion() {
+	     assertDoesNotThrow(() -> {
+	    	 institucionController.crearInstitucion("InstitucionTest1", "Descripción de prueba", "http://www.universidadtest.com");
+	     usuarioController.crearAsistente("asistenteTest2", "Ana", "Martínez",
+	     "ana@test.com", LocalDate.of(1988, 7, 20), "InstitucionTest1");
+	     }, "Crear asistente con institución debería ejecutarse sin errores");
+	
+	     // Verificar que el usuario fue creado
+	     assertDoesNotThrow(() -> {
+	     boolean existe =
+	     !usuarioController.verificarNoExistenciaNickname("asistenteTest2");
+	     assertTrue(existe, "El asistente con institución debería haber sido creado");
+	     });
+     }
+     
+     @Test
+     void testCrearAsistenteValidaciones() {
+		 // Intentar crear asistente con nickname duplicado
+		 assertThrows(UsuarioNicknameRepetidoException.class ,() -> {
+			 usuarioController.crearAsistente("asistenteDuplicado", "Nombre1", "Apellido1", "uncorreo@correo.com", LocalDate.of(1990, 1, 1));
+			 usuarioController.crearAsistente("asistenteDuplicado", "Nombre2", "Apellido2", "otrocorreo@correo.com", LocalDate.of(1990, 1, 1));
+		 });
+		 
+		 assertThrows(UsuarioCorreoRepetidoException.class, ()->{
+			 usuarioController.crearAsistente("asistenteUnico", "Nombre1", "Apellido1", "uncorreo@correo.com", LocalDate.of(1990, 1, 1));
+		 });
+		 //Prueba de institucion inexistente
+		 assertThrows(InstitucionNoExistenteException.class, ()->{
+			 usuarioController.crearAsistente("asistenteUnico2", "Nombre3", "Apellido3", "tercercorreo@correo.com", LocalDate.of(1990, 1, 1), "InstitucionInexistente");
+		});
+	}
 
     @Test
     void testCrearOrganizadorCompleto() {

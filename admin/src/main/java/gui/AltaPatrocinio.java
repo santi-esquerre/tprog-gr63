@@ -36,6 +36,7 @@ import datatypes.NivelPatrocinio;
 import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
 import exceptions.ExistePatrocinioException;
+import exceptions.InstitucionNoExistenteException;
 import exceptions.ValidationInputException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -426,15 +427,9 @@ public class AltaPatrocinio extends JInternalFrame {
 				edicion.altaPatrocinio(fecha, edicionSeleccionada, institucionSeleccionada, Float.parseFloat(aporte), tipoRegistro, Integer.parseInt(cantGratuitos), codigo, nivelPatrocinio);
 				JOptionPane.showMessageDialog(this, "Patrocinio registrado correctamente", "Alta de Patrocinio", JOptionPane.INFORMATION_MESSAGE);
 			} 
-			catch (ExistePatrocinioException ep) {
+			catch (Exception ep) {
 				util.ExceptionHandler.manageException(ep);
-			}
-			catch (CostoRegistrosGratuitosException crg) {
-				util.ExceptionHandler.manageException(crg);
-			}
-			catch (CantidadCuposDisponiblesException cde) {
-				util.ExceptionHandler.manageException(cde);
-			}			
+			}		
 			limpiarCampos();
 			setVisible(false);
 		}

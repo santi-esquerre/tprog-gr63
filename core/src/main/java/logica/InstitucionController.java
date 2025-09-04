@@ -51,23 +51,6 @@ public class InstitucionController implements interfaces.IInstitucionController 
 	public Set<DTInstitucion> listarInstituciones() {
 		return Tx.inTx(em -> institucionRepo.listarInstituciones(em));
 	}
-	public boolean crearPatrocinio(String nombreEdicionEvento, String nombreInstitucion,
-								   DTRegistrosOtorgados registrosAOtorgar, String codigo) {
-		// Placeholder implementation - would need full business logic
-		return Tx.inTx(em -> {
-			try {
-				var inst = institucionRepo.findByNombre(em, nombreInstitucion)
-						.orElseThrow(() -> new InstitucionNoExistenteException("Institución inexistente: " + nombreInstitucion));
-				
-				var pat = Patrocinio.crearBasico(codigo);
-				inst.agregarPatrocinio(pat);
-				em.persist(pat);
-				return true;
-			} catch (Exception e) {
-				return false;
-			}
-		});
-	}
 
 	@Override
 	public DTPatrocinio obtenerDTPatrocinio(String nombreEdicionEvento, String nombreInstitucion) {

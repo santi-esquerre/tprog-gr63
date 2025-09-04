@@ -5,6 +5,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -248,14 +249,14 @@ class EdicionControllerTest {
 			edicionController.mostrarTiposDeRegistro("EdicionRegistro1");
 
 			// Realizar registro
-			edicionController.altaRegistroEdicionEvento("TipoRegistroReg1", "asistenteReg1");
+			edicionController.altaRegistroEdicionEvento("TipoRegistroReg1", "asistenteReg1", new Date());
 
 		}, "El alta de registro debería ejecutarse sin errores");
 
 		// Test sin edición recordada
 		edicionController.cancelarRegistroEdicionEvento(); // Reset estado
 		assertThrows(IllegalStateException.class, () -> {
-			edicionController.altaRegistroEdicionEvento("TipoInexistente", "asistenteInexistente");
+			edicionController.altaRegistroEdicionEvento("TipoInexistente", "asistenteInexistente", new Date());
 		}, "Debería lanzar excepción sin edición recordada");
 	}
 
@@ -285,6 +286,10 @@ class EdicionControllerTest {
 			DTEdicionDetallada detalles = edicionController.obtenerDatosDetalladosEdicion("EventoDetallado1",
 					"EdicionDetallada1");
 			assertNotNull(detalles, "Los detalles no deberían ser null");
+			
+			detalles = edicionController.obtenerDatosDetalladosEdicion("EdicionDetallada1");
+			
+			assertNotNull(detalles, "Los detalles no deberían ser null");
 
 		}, "Obtener datos detallados debería ejecutarse sin errores");
 
@@ -294,6 +299,23 @@ class EdicionControllerTest {
 		}, "Debería lanzar excepción con evento inexistente");
 	}
 
+	@Test
+	void testObtenerEdicionesPorOrganizador() {
+		assertDoesNotThrow(() -> {
+			// Preparar datos
+			usuarioController.crearOrganizador("orgTest1", "Organizador1", "", "");
+			eventoController.altaCategoria("CategoriaOrg1");
+			eventoController.altaEvento(new DTEventoAlta("EventoOrg1", "Descripcion Org", new Date(0), "SIGLA_ORG1",
+					Set.of("CategoriaOrg1")));
+			eventoController.agregarEdicionAEvento("EventoOrg1", "orgTest1",
+					new DTEdicion("EdicionOrg1", "SIGLA_EORG1", new Date(1000), new Date(2000), new Date(0), "Ciudad",
+							"País"));
+			Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador("orgTest1");
+			assertEquals(1, ediciones.size(), "Debería devolver al menos una edición");
+			
+
+		});
+	}                                                                      
 	@Test
 	void testValidacionesEntrada() {
 		// Test con parámetros null
@@ -330,6 +352,25 @@ class EdicionControllerTest {
 
 			DTTipoRegistro tipoVacio = new DTTipoRegistro("", "", 0.0f, 0);
 			edicionController.altaTipoRegistro("EdicionVacia1", tipoVacio);
+			
+			// Test con nombres vacíos
+			assertThrows(ValidationInputException.class, () -> {
+				edicionController.obtenerDatosDetalladosEdicion("", "EdicionTest");
+			}, "Debería lanzar excepción con nombreEvento vacío");
+
+			assertThrows(ValidationInputException.class, () -> {
+				edicionController.obtenerDatosDetalladosEdicion("EventoTest", "");
+			}, "Debería lanzar excepción con nombreEdicion vacío");
+
+			// Test con nombres muy largos
+			String nombreMuyLargo = "N".repeat(5000);
+			assertThrows(ValidationInputException.class, () -> {
+				edicionController.obtenerDatosDetalladosEdicion(nombreMuyLargo, "EdicionTest");
+			}, "Debería lanzar excepción con nombreEvento muy largo");
+
+			assertThrows(ValidationInputException.class, () -> {
+				edicionController.obtenerDatosDetalladosEdicion("EventoTest", nombreMuyLargo);
+			}, "Debería lanzar excepción con nombreEdicion muy largo");
 
 		}, "Debería manejar strings vacíos");
 
