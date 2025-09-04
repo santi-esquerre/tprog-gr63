@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datatypes.DTEdicion;
@@ -22,27 +20,38 @@ import exceptions.CategoriasInvalidasException;
 import exceptions.EventoRepetidoException;
 import exceptions.NingunaCategoriaSeleccionadaException;
 import exceptions.ValidationInputException;
-import interfaces.Factory;
-import interfaces.IEventoController;
-import interfaces.IRepository;
-import interfaces.IUsuarioController;
 
-public class EventoControllerTest {
-	static Factory factory = Factory.get();
-	private static IEventoController eventoController;
-	private static IUsuarioController usuarioController;
-	private static IRepository repo = Factory.get().getIRepository();
-
-	@BeforeAll
-	public static void iniciar() {
-		repo.switchToTesting();
-		eventoController = factory.getIEventoController();
-		usuarioController = factory.getIUsuarioController();
-	}
+public class EventoControllerTest extends BaseTest {
 
 	@AfterEach
 	public void clear() {
-		repo.switchToTesting();
+		factory.getIRepository().switchToTesting();
+	}
+
+	@Test
+	public void testAltaDeCategoria() {
+		// Test the missing altaCategoria method that was identified in coverage
+		// analysis
+		String nombreCategoria = generateUniqueName("Cat");
+
+		// Test creating a new category
+		assertDoesNotThrow(() -> {
+			eventoController.altaDeCategoria(nombreCategoria);
+		});
+
+		// Verify it was created
+		Set<String> categorias = eventoController.obtenerCategorias();
+		assertTrue(categorias.contains(nombreCategoria), "Category should be created");
+
+		// Test creating the same category again (should throw ValidationInputException)
+		assertThrows(ValidationInputException.class, () -> {
+			eventoController.altaDeCategoria(nombreCategoria);
+		});
+
+		// Test with null name - should throw ValidationInputException
+		assertThrows(ValidationInputException.class, () -> {
+			eventoController.altaDeCategoria(null);
+		});
 	}
 
 	@Test

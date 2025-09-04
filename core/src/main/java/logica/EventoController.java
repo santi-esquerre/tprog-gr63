@@ -178,23 +178,26 @@ public final class EventoController implements IEventoController {
     }
   }
 
-  
   @Override
   public void altaDeCategoria(String nombreCategoria) throws ValidationInputException {
-		if(Tx.inTx(em -> {
-			try {
-				var categoria = catRepo.buscarPorNombre(em, nombreCategoria);
-				return categoria == null;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-		})) {
-			Tx.inTx(emt -> { catFactory.crearCategoria(emt, nombreCategoria); 
-				return null;});
-		}
-		else 
-			throw new ValidationInputException("La categoria " + nombreCategoria + " ya está registrada.");
+    if (nombreCategoria == null)
+      throw new ValidationInputException("Nombre de categoria requerido");
+
+    if (Tx.inTx(em -> {
+      try {
+        var categoria = catRepo.buscarPorNombre(em, nombreCategoria);
+        return categoria == null;
+      } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+      }
+    })) {
+      Tx.inTx(emt -> {
+        catFactory.crearCategoria(emt, nombreCategoria);
+        return null;
+      });
+    } else
+      throw new ValidationInputException("La categoria " + nombreCategoria + " ya está registrada.");
   }
-  
+
 }

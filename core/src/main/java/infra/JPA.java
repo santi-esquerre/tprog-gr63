@@ -7,14 +7,23 @@ import jakarta.persistence.Persistence;
 
 public final class JPA {
   private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("eventosPU");
-  
-  private JPA() {}
-  
-  public static void switchPU(String puName) {
-	if (emf != null && emf.isOpen()) emf.close();
-	emf = Persistence.createEntityManagerFactory(puName);
+
+  private JPA() {
   }
-  
-  public static EntityManager em() { return emf.createEntityManager(); }
-  public static void close() { emf.close(); }
+
+  public static void switchPU(String puName) {
+    if (emf != null && emf.isOpen()) {
+      emf.close();
+      emf = null;
+    }
+    emf = Persistence.createEntityManagerFactory(puName);
+  }
+
+  public static EntityManager em() {
+    return emf.createEntityManager();
+  }
+
+  public static void close() {
+    emf.close();
+  }
 }

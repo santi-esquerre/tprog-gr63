@@ -5,12 +5,9 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import datatypes.DTAsistente;
@@ -21,30 +18,8 @@ import datatypes.DTTipoRegistro;
 import exceptions.EdicionInexistenteException;
 import exceptions.TipoRegistroRepetidoException;
 import exceptions.ValidationInputException;
-import interfaces.Factory;
-import interfaces.IEdicionController;
-import interfaces.IEventoController;
-import interfaces.IUsuarioController;
 
-class EdicionControllerTest {
-
-	private static IEdicionController edicionController;
-	private static IEventoController eventoController;
-	private static IUsuarioController usuarioController;
-	private static Factory factory;
-
-	@BeforeAll
-	static void iniciar() {
-		factory = Factory.get();
-		eventoController = factory.getIEventoController();
-		edicionController = factory.getIEdicionController();
-		usuarioController = factory.getIUsuarioController();
-	}
-
-	@BeforeEach
-	void setUp() {
-		factory.getIRepository().switchToTesting();
-	}
+class EdicionControllerTest extends BaseTest {
 
 	@Test
 	void testAltaTipoRegistro() {
@@ -286,9 +261,9 @@ class EdicionControllerTest {
 			DTEdicionDetallada detalles = edicionController.obtenerDatosDetalladosEdicion("EventoDetallado1",
 					"EdicionDetallada1");
 			assertNotNull(detalles, "Los detalles no deberían ser null");
-			
+
 			detalles = edicionController.obtenerDatosDetalladosEdicion("EdicionDetallada1");
-			
+
 			assertNotNull(detalles, "Los detalles no deberían ser null");
 
 		}, "Obtener datos detallados debería ejecutarse sin errores");
@@ -312,10 +287,10 @@ class EdicionControllerTest {
 							"País"));
 			Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador("orgTest1");
 			assertEquals(1, ediciones.size(), "Debería devolver al menos una edición");
-			
 
 		});
-	}                                                                      
+	}
+
 	@Test
 	void testValidacionesEntrada() {
 		// Test con parámetros null
@@ -352,7 +327,7 @@ class EdicionControllerTest {
 
 			DTTipoRegistro tipoVacio = new DTTipoRegistro("", "", 0.0f, 0);
 			edicionController.altaTipoRegistro("EdicionVacia1", tipoVacio);
-			
+
 			// Test con nombres vacíos
 			assertThrows(ValidationInputException.class, () -> {
 				edicionController.obtenerDatosDetalladosEdicion("", "EdicionTest");

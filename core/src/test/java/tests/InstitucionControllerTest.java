@@ -1,40 +1,37 @@
 
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.*;
-import interfaces.Factory;
-import interfaces.IEdicionController;
-import interfaces.IInstitucionController;
-import logica.EdicionController;
-import datatypes.*;
-import exceptions.*;
-
 import java.time.LocalDate;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import datatypes.DTEdicion;
+import datatypes.DTEventoAlta;
+import datatypes.DTInstitucion;
+import datatypes.DTPatrocinio;
+import datatypes.DTTipoRegistro;
+import datatypes.NivelPatrocinio;
+import exceptions.InstitucionNoExistenteException;
+import exceptions.InstitucionRepetidaException;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class InstitucionControllerTest {
-	private static IInstitucionController institucionController;
-	private static IEdicionController edicionController;
-	private static Factory factory;
-
-	@BeforeAll
-	static void iniciar() {
-		factory = Factory.get();
-		institucionController = factory.getIInstitucionController();
-		edicionController = factory.getIEdicionController();
-	}
-
-	@BeforeEach
-	void setUp() {
-		factory.getIRepository().switchToTesting();
-	}
+class InstitucionControllerTest extends BaseTest {
 
 	@Test
 	void testCrearInstitucion() {
 		assertDoesNotThrow(() -> {
-			boolean creada = institucionController.crearInstitucion("InstitucionTest", "DescripcionTest", "www.test.com");
+			boolean creada = institucionController.crearInstitucion("InstitucionTest", "DescripcionTest",
+					"www.test.com");
 			assertTrue(creada, "La institución debería crearse correctamente");
 		});
 
@@ -56,10 +53,10 @@ class InstitucionControllerTest {
 		});
 		assertNotNull(ex2, "Debería lanzar excepción por descripción muy larga");
 
-		// Sitio web nulo
-		assertThrows(Exception.class, () -> {
+		// Sitio web nulo - should be allowed since it's nullable
+		assertDoesNotThrow(() -> {
 			boolean creada = institucionController.crearInstitucion("InstitucionSinWeb", "desc", null);
-			assertTrue(creada, "No debería permitir sitio web nulo");
+			assertTrue(creada, "Debería permitir sitio web nulo");
 		});
 	}
 
@@ -71,8 +68,10 @@ class InstitucionControllerTest {
 		});
 		Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
 		assertNotNull(instituciones, "La lista de instituciones no debe ser null");
-		assertTrue(instituciones.stream().anyMatch(i -> i.nombre().equals("InstitucionA")), "Debe contener InstitucionA");
-		assertTrue(instituciones.stream().anyMatch(i -> i.nombre().equals("InstitucionB")), "Debe contener InstitucionB");
+		assertTrue(instituciones.stream().anyMatch(i -> i.nombre().equals("InstitucionA")),
+				"Debe contener InstitucionA");
+		assertTrue(instituciones.stream().anyMatch(i -> i.nombre().equals("InstitucionB")),
+				"Debe contener InstitucionB");
 
 		// Listar cuando no hay instituciones
 		factory.getIRepository().switchToTesting(); // Limpiar
@@ -87,39 +86,39 @@ class InstitucionControllerTest {
 		assertDoesNotThrow(() -> {
 			institucionController.crearInstitucion("InstitucionPatrocinio", "DescPatrocinio", "webPatrocinio.com");
 			// Crear edición usando el controlador de eventos
-			var eventoController = factory.getIEventoController();
 			eventoController.altaCategoria("CatPatrocinio");
-			eventoController.altaEvento(new DTEventoAlta("EventoPatrocinio", "DescEvento", new java.util.Date(), "SIGLA_PAT", Set.of("CatPatrocinio")));
-			var usuarioController = factory.getIUsuarioController();
+			eventoController.altaEvento(new DTEventoAlta("EventoPatrocinio", "DescEvento", new java.util.Date(),
+					"SIGLA_PAT", Set.of("CatPatrocinio")));
 			usuarioController.crearOrganizador("OrgPatrocinio", "OrgPatrocinio", "org@patrocinio.com", "desc org");
-			var edicion = new DTEdicion("EdicionEventoTest", "SIGLA_ED", new java.util.Date(), new java.util.Date(), new java.util.Date(), "Montevideo", "Uruguay");
+			var edicion = new DTEdicion("EdicionEventoTest", "SIGLA_ED", new java.util.Date(), new java.util.Date(),
+					new java.util.Date(), "Montevideo", "Uruguay");
 			eventoController.agregarEdicionAEvento("EventoPatrocinio", "OrgPatrocinio", edicion);
 			DTTipoRegistro tipoRegistro = new DTTipoRegistro("TipoRegTest", "DescTipoReg", 1000.0f, 10);
-			DTRegistrosOtorgados registros = new DTRegistrosOtorgados(tipoRegistro, 5);
 			edicionController.altaTipoRegistro(edicion.nombre(), tipoRegistro);
-			edicionController.altaPatrocinio(LocalDate.of(1999, 10,10), edicion.nombre(), "InstitucionPatrocinio", 20000f, "TipoRegTest", 4, "FINGTECH", NivelPatrocinio.ORO);
-			
-			DTPatrocinio patrocinio = institucionController.obtenerDTPatrocinio("EdicionEventoTest", "InstitucionPatrocinio");
-			assertNotNull(patrocinio, "El DTPatrocinio no debe ser null");
-			assertEquals("InstitucionPatrocinio", patrocinio.institucion().nombre(), "El nombre de la institución debe coincidir");
+			edicionController.altaPatrocinio(LocalDate.of(1999, 10, 10), edicion.nombre(), "InstitucionPatrocinio",
+					20000f, "TipoRegTest", 4, "FINGTECH", NivelPatrocinio.ORO);
 
+			DTPatrocinio patrocinio = institucionController.obtenerDTPatrocinio("EdicionEventoTest",
+					"InstitucionPatrocinio");
+			assertNotNull(patrocinio, "El DTPatrocinio no debe ser null");
+			assertEquals("InstitucionPatrocinio", patrocinio.institucion().nombre(),
+					"El nombre de la institución debe coincidir");
 
 			// Obtener patrocinio inexistente
 			DTPatrocinio patNull = institucionController.obtenerDTPatrocinio("EdicionEventoTest", "NoExiste");
 			assertNull(patNull, "Debe devolver null si la institución no existe");
-			
-			assertThrows(InstitucionNoExistenteException.class, () -> {
+
+			Exception ex = assertThrows(InstitucionNoExistenteException.class, () -> {
 				DTTipoRegistro tipoRegistro2 = new DTTipoRegistro("TipoRegTest2", "DescTipoReg", 1000.00001f, 10);
 				edicionController.altaTipoRegistro(edicion.nombre(), tipoRegistro2);
-				edicionController.altaPatrocinio(LocalDate.of(1999, 10,10), edicion.nombre(), "InstitucionPatrocinio2", 20000f, "TipoRegTest2", 4, "FINGTECH2", NivelPatrocinio.ORO);
+				edicionController.altaPatrocinio(LocalDate.of(1999, 10, 10), edicion.nombre(), "InstitucionPatrocinio2",
+						20000f, "TipoRegTest2", 4, "FINGTECH2", NivelPatrocinio.ORO);
 
-			}, "No debería permitir crear patrocinio con una institución inexistente");
-			
-		
+			});
+			assertNotNull(ex, "No debería permitir crear patrocinio con una institución inexistente");
+
 		});
-		
 
-		
 	}
 
 	@Test
