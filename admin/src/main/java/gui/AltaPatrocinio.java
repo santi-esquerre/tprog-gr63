@@ -21,6 +21,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
 import interfaces.Factory;
+import interfaces.IReloadable;
 
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
@@ -44,7 +45,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.awt.Dimension;
 
-public class AltaPatrocinio extends JInternalFrame {
+public class AltaPatrocinio extends JInternalFrame implements IReloadable{
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private JTextField textAporte;
@@ -64,8 +65,10 @@ public class AltaPatrocinio extends JInternalFrame {
 	private Integer[] dias;
 	private String[] meses;
 	private Integer[] anio;
+	private Principal parent;
 	
-	public AltaPatrocinio() {
+	public AltaPatrocinio(Principal parent) {
+		this.parent = parent;
 		setBounds(100, 100, 687, 414);
 		setResizable(true);
 		setClosable(true);
@@ -430,7 +433,7 @@ public class AltaPatrocinio extends JInternalFrame {
 			catch (Exception ep) {
 				util.ExceptionHandler.manageException(ep);
 			}		
-			limpiarCampos();
+			parent.reload();
 			setVisible(false);
 		}
 		
@@ -473,5 +476,11 @@ public class AltaPatrocinio extends JInternalFrame {
 			    new Object[][] {}, 
 			    new String[] { "Nombre", "Sigla", "Fecha Inicio", "Fecha Fin" }
 			));
+	}
+
+	@Override
+	public void reload() {
+		limpiarCampos();
+		cargarDatos();
 	}
 }

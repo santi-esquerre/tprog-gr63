@@ -34,10 +34,11 @@ import datatypes.DTRegistro;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
 import interfaces.IEdicionController;
+import interfaces.IReloadable;
 import interfaces.IUsuarioController;
 import util.ExceptionHandler;
 
-public class ConsultaUsuario extends JInternalFrame {
+public class ConsultaUsuario extends JInternalFrame implements IReloadable {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtNombreOrganizador;
@@ -544,11 +545,12 @@ public class ConsultaUsuario extends JInternalFrame {
 		panel_1.add(new Panel());
 
 		// Carga inicial
-		loadData();
+		reload();
 
 	}
-
-	public void loadData() {
+	
+	@Override
+	public void reload() {
 		System.out.println("Cargando datos...");
 		modelUsuarios.setRowCount(0);
 		modelEdiciones.setRowCount(0);
@@ -569,6 +571,12 @@ public class ConsultaUsuario extends JInternalFrame {
 		}
 		pnlOrganizadores.setVisible(false);
 		pnlAsistentes.setVisible(false);
+		txtNicknameOrganizador.setText("");
+		txtNombreOrganizador.setText("");
+		txtCorreoOrganizador.setText("");
+		txtLinkOrganizador.setText("");
+		txtDescripcionOrganizador.setText("");
+		txtApellidoAsistente.setText("");
 	}
 
 }

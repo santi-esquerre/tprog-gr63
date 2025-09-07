@@ -28,7 +28,9 @@ public class AltaInstitucion extends JInternalFrame{
 	private JTextField textWeb;
 	private JTextArea textDesc;
 	private IInstitucionController institucionController;
-	public AltaInstitucion(IInstitucionController institucionController) {
+	private Principal parent;
+	public AltaInstitucion(Principal parent, IInstitucionController institucionController) {
+		this.parent = parent;
 		this.institucionController = institucionController;
 		setBounds(100, 100, 400, 283);
 		setResizable(true);
@@ -139,6 +141,7 @@ public class AltaInstitucion extends JInternalFrame{
 			}
 			limpiarCampos();
 			setVisible(false);
+			parent.reload();
 		}
 	}
 	

@@ -29,6 +29,7 @@ import datatypes.DTTipoRegistro;
 import exceptions.ValidationInputException;
 import datatypes.DTEdicion;
 import interfaces.Factory;
+import interfaces.IReloadable;
 
 import javax.swing.JScrollPane;
 import javax.swing.Box;
@@ -46,7 +47,7 @@ import java.util.Set;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class RegistroEdicionEvento extends JInternalFrame {
+public class RegistroEdicionEvento extends JInternalFrame implements IReloadable {
 	private JTable table;
 	DTTipoRegistro seleccionado = null; // Variable que se usará para tomar el valor del tipo de registro seleccionado
 	JComboBox comboBoxEvento;
@@ -59,8 +60,10 @@ public class RegistroEdicionEvento extends JInternalFrame {
 	private String[] meses;
 	private Integer[] anio;
 	Factory factory = Factory.get();
+	Principal parent;
 
-	public RegistroEdicionEvento() {
+	public RegistroEdicionEvento(Principal parent) {
+		this.parent = parent;
 		setSize(new Dimension(493, 513));
 
 		setResizable(true);
@@ -403,6 +406,13 @@ public class RegistroEdicionEvento extends JInternalFrame {
 		seleccionado = null;
 		var e = factory.getIEdicionController();
 		e.cancelarRegistroEdicionEvento();
+	}
+
+	@Override
+	public void reload() {
+		limpiarCampos();
+		cargarDatos();
+		
 	}
 
 }

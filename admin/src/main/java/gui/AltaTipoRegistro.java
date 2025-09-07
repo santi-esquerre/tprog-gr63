@@ -22,6 +22,7 @@ import exceptions.ValidationInputException;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
 import interfaces.IReceiver;
+import interfaces.IReloadable;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import net.miginfocom.swing.MigLayout;
@@ -35,7 +36,7 @@ import util.Dialog;
  * 4.b)IEdicionController consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro);
  * */
 
-public class AltaTipoRegistro extends JInternalFrame implements IReceiver {
+public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IReloadable {
 
 	private static final int TAMANIO_ICONO = 10;
 	private static final long serialVersionUID = 1L;
@@ -48,6 +49,7 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver {
 	private JSpinner spnCosto;
 	private JSpinner spnCupo;
 	private JTextArea txtDescripcion;
+	private Principal parent;
 
 	/**
 	 * Launch the application.
@@ -56,7 +58,8 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver {
 	/**
 	 * Create the frame.
 	 */
-	public AltaTipoRegistro(IEventoController eventoController, IEdicionController edicionController) {
+	public AltaTipoRegistro(Principal parent, IEventoController eventoController, IEdicionController edicionController) {
+		this.parent = parent;
 		IconFontSwing.register(FontAwesome.getIconFont());
 
 		this.listarEventosDialog = new ListarEventos(this, eventoController);
@@ -199,10 +202,27 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver {
 			edicionController.altaTipoRegistro(nombreEdicion, datosTipoRegistro);
 
 			Dialog.showInfo("Tipo de registro creado exitosamente");
+			parent.reload();
 			this.dispose();
 		} catch (Exception ex) {
 			util.ExceptionHandler.manageException(ex);
 		}
+	}
+
+	@Override
+	public void reload() {
+		
+		txtEvento.setText("");
+		cbxEdicion.removeAllItems();
+		cbxEdicion.setEnabled(false);
+		txtNombre.setText("");
+		txtNombre.setEditable(false);
+		spnCosto.setValue(0);
+		spnCosto.setEnabled(false);
+		spnCupo.setValue(0);
+		spnCupo.setEnabled(false);
+		txtDescripcion.setText("");
+		txtDescripcion.setEditable(false);
 	}
 
 }

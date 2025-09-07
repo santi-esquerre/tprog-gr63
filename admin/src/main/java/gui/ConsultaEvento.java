@@ -33,8 +33,9 @@ import datatypes.DTEvento;
 import datatypes.DTEventoDetallado;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
+import interfaces.IReloadable;
 
-public class ConsultaEvento extends JInternalFrame {
+public class ConsultaEvento extends JInternalFrame implements IReloadable{
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtNombre;
@@ -131,9 +132,8 @@ public class ConsultaEvento extends JInternalFrame {
 		setupEventHandlers();
 		loadEventos();
 	}
-
-	public void loadForm() {
-		System.out.println("Cargando datos...");
+	@Override
+	public void reload() {
 		loadEventos();
 	}
 

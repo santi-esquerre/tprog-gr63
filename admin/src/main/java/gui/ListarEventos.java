@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import interfaces.IEventoController;
 import interfaces.IReceiver;
+import interfaces.IReloadable;
 import util.Dialog;
 
 import javax.swing.JTable;
@@ -22,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import java.awt.Dialog.ModalityType;
 
-public class ListarEventos extends JDialog {
+public class ListarEventos extends JDialog implements IReloadable {
 
 	private static final long serialVersionUID = 1L;
 	private IReceiver parentReceiver;
@@ -93,8 +94,9 @@ public class ListarEventos extends JDialog {
 		    }
 		});
 	}
-	
-	public void resetData() {
+
+	@Override
+	public void reload() {
 		//TO DO: actualizar datos
 		model.fireTableDataChanged();
 		if(model.getRowCount() == 0) {

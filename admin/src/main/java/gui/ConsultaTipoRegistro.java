@@ -7,6 +7,7 @@ import javax.swing.JInternalFrame;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
 import interfaces.IReceiver;
+import interfaces.IReloadable;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -46,7 +47,7 @@ import javax.swing.JScrollPane;
  * 4.b)IEdicionController consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro);
  * */
 
-public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
+public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver, IReloadable {
 	
 	private static final int TAMANIO_ICONO = 10;
 	private static final long serialVersionUID = 1L;
@@ -175,7 +176,6 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 				
 			}
 		} catch (Exception e) {
-			JFrame parent = (JFrame)this.getTopLevelAncestor();
 			util.ExceptionHandler.manageException(e);
 		}
 		
@@ -219,6 +219,19 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 		listarEventosDialog.pack();
 		listarEventosDialog.setLocationRelativeTo(this);
 		listarEventosDialog.setVisible(true);
+	}
+	
+	@Override
+	public void reload() {
+		txtEvento.setText("");
+		cbxEdicion.removeAllItems();
+		cbxEdicion.setEnabled(false);
+		cbxTipoRegistro.removeAllItems();
+		cbxTipoRegistro.setEnabled(false);
+		txtNombre.setText("");
+		txtCosto.setText("");
+		txtCupo.setText("");
+		txtDescripcion.setText("");
 	}
 	
 }

@@ -25,10 +25,11 @@ import com.github.lgooddatepicker.components.DatePicker;
 
 import datatypes.DTEventoAlta;
 import interfaces.IEventoController;
+import interfaces.IReloadable;
 import util.Dialog;
 import util.ExceptionHandler;
 
-public class AltaEvento extends JInternalFrame {
+public class AltaEvento extends JInternalFrame implements IReloadable {
 
     private static final long serialVersionUID = 1L;
     private JTextField txtNombre;
@@ -38,9 +39,9 @@ public class AltaEvento extends JInternalFrame {
     private JList<String> listCategorias;
     IEventoController controller;
     DefaultListModel<String> categoriaslistModel;
-    private JFrame parent;
+    private Principal parent;
 
-    public AltaEvento(JFrame parent, IEventoController controller) {
+    public AltaEvento(Principal parent, IEventoController controller) {
         this.parent = parent;
         this.controller = controller;
         java.util.Set<String> categorias;
@@ -181,8 +182,9 @@ public class AltaEvento extends JInternalFrame {
 
         btnCancel.addActionListener(e -> dispose());
     }
-
-    public void loadForm() {
+    
+    @Override
+    public void reload() {
         txtNombre.setText("");
         txtDescripcion.setText("");
         txtSigla.setText("");
@@ -190,7 +192,7 @@ public class AltaEvento extends JInternalFrame {
         System.out.println("Cargando datos...");
         categoriaslistModel.addAll(controller.obtenerCategorias());
         listCategorias.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    }
+	}
 
     // Actions
     private void saveAction(ActionEvent e) {
@@ -212,11 +214,12 @@ public class AltaEvento extends JInternalFrame {
                             : new HashSet<>());
             if (controller.altaEvento(eventoData)) {
                 Dialog.showSuccess("El evento se ha dado de alta correctamente.");
+                parent.reload();	
                 dispose();
             }
 
         } catch (Exception ex) {
-            ExceptionHandler.manageException(parent, ex);
+            ExceptionHandler.manageException(parent.getFrame(), ex);
         } finally {
 
         }

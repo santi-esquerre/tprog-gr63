@@ -40,6 +40,7 @@ import datatypes.DTTipoRegistro;
 import exceptions.ValidationInputException;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
+import interfaces.IReloadable;
 
 /**
  * Consulta de Edición de Evento
@@ -50,7 +51,7 @@ import interfaces.IEventoController;
  * tabs
  * - Botones Ver... abren JDialog con el DT correspondiente
  */
-public class ConsultaEdicionEvento extends JInternalFrame {
+public class ConsultaEdicionEvento extends JInternalFrame implements IReloadable{
 
   // ==== Controllers ====
   private final IEventoController eventoController;
@@ -320,13 +321,14 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     loadEventos();
   }
 
-  public void loadForm() {
-    System.out.println("Cargando datos...");
+
+  @Override
+  public void reload() {
     // reset
-    // txtBuscarEvento.setText("");
-    // tblEventos.clearSelection();
-    // clearEdicionesPanel();
-    // clearDetallePanel();
+    txtBuscarEvento.setText("");
+    tblEventos.clearSelection();
+    clearEdicionesPanel();
+    clearDetallePanel();
     // recargar
     loadEventos();
   }
