@@ -38,7 +38,7 @@ import util.Dialog;
  * 4.b)IEdicionController consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro);
  * */
 
-public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IReloadable {
+public class AltaTipoRegistro extends JInternalFrame implements IReloadable {
 
 	private static final int TAMANIO_ICONO = 10;
 	private static final long serialVersionUID = 1L;

@@ -47,7 +47,7 @@ import javax.swing.JScrollPane;
  * 4.b)IEdicionController consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro);
  * */
 
-public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver, IReloadable {
+public class ConsultaTipoRegistro extends JInternalFrame implements IReloadable {
 	
 	private static final int TAMANIO_ICONO = 10;
 	private static final long serialVersionUID = 1L;
@@ -158,7 +158,7 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver, I
 	}
 	
     @Override
-	private void reload() {
+	public void reload() {
 		try {
 			cbxEvento.removeAllItems();
 			clearEdicion();
