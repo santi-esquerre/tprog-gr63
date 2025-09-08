@@ -104,6 +104,7 @@ public class ConsultaEdicionEvento extends JInternalFrame implements IReloadable
     setDefaultCloseOperation(HIDE_ON_CLOSE);
     setSize(1100, 640);
     getContentPane().setLayout(new BorderLayout());
+    setIconifiable(false);
 
     // ===== layout principal =====
     JSplitPane spEventosEdiciones = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);

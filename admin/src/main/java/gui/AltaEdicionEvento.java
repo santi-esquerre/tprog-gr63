@@ -69,7 +69,8 @@ public class AltaEdicionEvento extends JInternalFrame implements IReloadable {
         this.parent=parent;
         this.eventoController = Objects.requireNonNull(eventoController);
         this.usuarioController = Objects.requireNonNull(usuarioController);
-
+        
+        setIconifiable(false);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setSize(720, 520);
         setLayout(new BorderLayout());

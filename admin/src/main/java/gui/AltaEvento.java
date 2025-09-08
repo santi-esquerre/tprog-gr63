@@ -50,7 +50,7 @@ public class AltaEvento extends JInternalFrame implements IReloadable {
         setMaximizable(true);
         setClosable(true);
         setTitle("Alta de Evento");
-        setBounds(100, 100, 500, 320);
+        setBounds(100, 100, 500, 600);
         getContentPane().setLayout(new BorderLayout(0, 0));
 
         JPanel panel = new JPanel();

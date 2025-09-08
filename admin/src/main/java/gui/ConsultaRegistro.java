@@ -69,9 +69,9 @@ public class ConsultaRegistro extends JInternalFrame implements IReloadable {
 		setClosable(true);
 		setResizable(true);
 		setMaximizable(true);
+		setIconifiable(false);
 		this.usuarioController = usuarioController;
 
-		setBounds(100, 100, 800, 600);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JPanel searchPanel = new JPanel();
@@ -82,10 +82,6 @@ public class ConsultaRegistro extends JInternalFrame implements IReloadable {
 		searchPanel.add(lblUsuario);
 
 		setBounds(100, 100, 687, 414);
-		setResizable(true);
-		setClosable(true);
-		setMaximizable(true);
-		setIconifiable(true);
 		setTitle("Consulta de Registro");
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

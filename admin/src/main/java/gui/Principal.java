@@ -211,6 +211,7 @@ public class Principal {
 		menuUsuarios.setIcon(iconUsuarios);
 		menuUsuarios.getPopupMenu().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		menuBar.add(menuUsuarios);
+		internalFramealtaUsuario.setIconifiable(false);
 
 		// ======================= Alta de Usuario =======================
 
@@ -370,6 +371,7 @@ public class Principal {
 				}
 			}
 		});
+		internalFrameRegistroEdicion.setIconifiable(false);
 
 		// ======================= Registro a Edición de Evento =======================
 
@@ -422,6 +424,7 @@ public class Principal {
 		JMenu menuPatrociniosBar = new JMenu("Patrocinios");
 		menuPatrociniosBar.setIcon(iconPatrocinios);
 		menuEventos.add(menuPatrociniosBar);
+		  internalFrameAltaPatrocinio.setIconifiable(false);
 
 		
 		  internalFrameAltaPatrocinio.setVisible(false);
@@ -505,6 +508,7 @@ public class Principal {
 		  JMenuItem menuItemInstitucionesAlta = new JMenuItem("Alta de institución");
 		  menuItemInstitucionesAlta.setIcon(iconAlta);
 		  menuInstituciones.add(menuItemInstitucionesAlta);
+		  internalFramealtaInstitucion.setIconifiable(false);
 		  
 		  
 		  internalFramealtaInstitucion.setVisible(false);
@@ -550,5 +554,4 @@ public class Principal {
 		}
 		
 	}
-
 }
