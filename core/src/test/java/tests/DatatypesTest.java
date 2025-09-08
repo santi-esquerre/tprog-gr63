@@ -226,7 +226,7 @@ class DatatypesTest extends BaseTest {
 
         assertEquals(fecha, patrocinio.fechaRealizacion());
         assertEquals(1000.0f, patrocinio.monto());
-        assertEquals(123, patrocinio.codigo());
+        assertEquals("123", patrocinio.codigo());
         assertEquals(NivelPatrocinio.ORO, patrocinio.nivel());
         assertEquals(institucion, patrocinio.institucion());
     }
