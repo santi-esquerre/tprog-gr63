@@ -80,7 +80,7 @@ class DatatypesTest extends BaseTest {
 
         // Test with patrocinio present
         DTInstitucion institucion = new DTInstitucion("InstTest", "desc", "web");
-        DTPatrocinio dtPatrocinio = new DTPatrocinio(new Date(), 1000.0f, 123, NivelPatrocinio.ORO, institucion);
+        DTPatrocinio dtPatrocinio = new DTPatrocinio(new Date(), 1000.0f, "123", NivelPatrocinio.ORO, institucion);
         Optional<DTPatrocinio> optPatrocinio = Optional.of(dtPatrocinio);
 
         detallado = new DTRegistroDetallado(
@@ -222,11 +222,11 @@ class DatatypesTest extends BaseTest {
     void testDTPatrocinio() {
         DTInstitucion institucion = new DTInstitucion("inst", "desc", "web");
         Date fecha = new Date();
-        DTPatrocinio patrocinio = new DTPatrocinio(fecha, 1000.0f, 123, NivelPatrocinio.ORO, institucion);
+        DTPatrocinio patrocinio = new DTPatrocinio(fecha, 1000.0f, "123", NivelPatrocinio.ORO, institucion);
 
         assertEquals(fecha, patrocinio.fechaRealizacion());
         assertEquals(1000.0f, patrocinio.monto());
-        assertEquals(123, patrocinio.codigo());
+        assertEquals("123", patrocinio.codigo());
         assertEquals(NivelPatrocinio.ORO, patrocinio.nivel());
         assertEquals(institucion, patrocinio.institucion());
     }

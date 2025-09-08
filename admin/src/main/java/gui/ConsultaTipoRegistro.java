@@ -46,12 +46,10 @@ import javax.swing.JScrollPane;
  * 4.b)IEdicionController consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro);
  * */
 
-public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
+public class ConsultaTipoRegistro extends JInternalFrame {
 	
 	private static final int TAMANIO_ICONO = 10;
 	private static final long serialVersionUID = 1L;
-	private JTextField txtEvento;
-	private ListarEventos listarEventosDialog;
 	private JComboBox<String> cbxEdicion;
 	private JComboBox<String> cbxTipoRegistro;
 	private IEventoController eventoController;
@@ -60,6 +58,7 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 	private JTextField txtCosto;
 	private JTextField txtCupo;
 	private JTextArea txtDescripcion;
+	private JComboBox<String> cbxEvento;
 	
 	
 	
@@ -72,14 +71,12 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 	 * Create the frame.
 	 */
 	public ConsultaTipoRegistro(IEventoController eventoController, IEdicionController edicionController) {
-		this.listarEventosDialog = new ListarEventos(this, eventoController);
 		this.eventoController = eventoController;
 		this.edicionController = edicionController;
-		listarEventosDialog.setVisible(false);
 		setTitle("Consulta de tipo de registro");
 		// Íconos
 		final Icon iconSearch = IconFontSwing.buildIcon(FontAwesome.SEARCH_PLUS, TAMANIO_ICONO);
-		setBounds(100, 100, 503, 277);
+		setBounds(100, 100, 503, 385);
         setResizable(true);
         setMaximizable(true);
         setClosable(true);
@@ -94,15 +91,13 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_1.add(lblNewLabel, "cell 0 0,alignx left");
 		
-		JButton btnSeleccionarEvento = new JButton("");
-		btnSeleccionarEvento.addActionListener((ActionEvent e) -> selectEventoAction(e));
-		
-		txtEvento = new JTextField();
-		txtEvento.setEditable(false);
-		panel_1.add(txtEvento, "cell 1 0 2 1,growx");
-		txtEvento.setColumns(10);
-		btnSeleccionarEvento.setIcon(iconSearch);
-		panel_1.add(btnSeleccionarEvento, "cell 3 0");
+		cbxEvento = new JComboBox();
+		cbxEvento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectEventoAction(e);
+			}
+		});
+		panel_1.add(cbxEvento, "cell 1 0 3 1,growx");
 		
 		JLabel lblEdicinDeEvento = new JLabel("Edición de evento:");
 		panel_1.add(lblEdicinDeEvento, "cell 0 1,alignx left");
@@ -134,7 +129,7 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 		txtNombre.setColumns(10);
 		
 		JLabel lblCupo_1 = new JLabel("Costo:");
-		panel_1.add(lblCupo_1, "cell 0 5,alignx right");
+		panel_1.add(lblCupo_1, "cell 0 5,alignx left");
 		
 		txtCosto = new JTextField();
 		panel_1.add(txtCosto, "cell 1 5,growx");
@@ -161,38 +156,35 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 
 	}
 	
-	public void receive(Object... params) {
+	private void reload() {
 		try {
-			cbxEdicion.removeAllItems();
-			eventoController.mostrarEdiciones((String)params[0]).forEach(ed -> cbxEdicion.addItem(ed.nombre()));
-			if(cbxEdicion.getItemCount() == 0) {
-				util.Dialog.showWarning("El evento seleccionado no tiene ediciones disponibles para agregar tipos de registro");
-				txtEvento.setText("");
-				return;
-			}else {
-				txtEvento.setText((String)params[0]);
-				cbxEdicion.setEnabled(true);
-				
-			}
-		} catch (Exception e) {
+			cbxEvento.removeAllItems();
+			clearEdicion();
+			eventoController.listarEventos().forEach(ev -> cbxEvento.addItem(ev.nombre()));
+		} catch (Exception ex) {
+			util.ExceptionHandler.manageException(ex);
+		}
+	}
+	
+	public void selectEventoAction(ActionEvent e) {
+		try {
+			clearEdicion();
+			if(cbxEvento.getSelectedItem() == null) return;
+			eventoController.mostrarEdiciones((String)cbxEvento.getSelectedItem()).forEach(ed -> cbxEdicion.addItem(ed.nombre()));
+			if(cbxEdicion.getItemCount() > 0)cbxEdicion.setEnabled(true);
+		} catch (Exception ex) {
 			JFrame parent = (JFrame)this.getTopLevelAncestor();
-			util.ExceptionHandler.manageException(e);
+			util.ExceptionHandler.manageException(ex);
 		}
 		
 	}
 	
 	private void selectEdicionAction(ActionEvent e) {
 		try {
-			cbxTipoRegistro.removeAllItems();
-			//System.out.println("Seleccionando edicion: " + cbxEdicion.getSelectedItem().toString());
+			clearTipoRegistro();
+			if(cbxEdicion.getSelectedItem() == null) return;
 			edicionController.mostrarTiposDeRegistro(cbxEdicion.getSelectedItem().toString()).forEach(tr -> cbxTipoRegistro.addItem(tr.nombre()));
-			if(cbxEdicion.getItemCount() == 0) {
-				Dialog.showWarning("La edición seleccionada no tiene tipos de registro disponibles");
-				cbxTipoRegistro.setEnabled(false);
-				return;
-			}else {
-				cbxTipoRegistro.setEnabled(true);
-			}
+			if(cbxTipoRegistro.getItemCount() > 0) cbxTipoRegistro.setEnabled(true);
 		} catch (Exception ex) {
 			JFrame parent = (JFrame)this.getTopLevelAncestor();
 			util.ExceptionHandler.manageException(ex);
@@ -200,6 +192,7 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 	}
 	
 	private void selectTipoRegistroAction(ActionEvent e) {
+		clearDatos();
 		if(cbxTipoRegistro.getSelectedItem() == null) return;
 		try {
 			var tr = edicionController.consultaTipoRegistro(cbxEdicion.getSelectedItem().toString(), cbxTipoRegistro.getSelectedItem().toString());
@@ -215,10 +208,24 @@ public class ConsultaTipoRegistro extends JInternalFrame implements IReceiver {
 			util.ExceptionHandler.manageException(ex);
 		}
 	}
-	private void selectEventoAction(ActionEvent e) {
-		listarEventosDialog.pack();
-		listarEventosDialog.setLocationRelativeTo(this);
-		listarEventosDialog.setVisible(true);
+	
+	private void clearEdicion() {
+		cbxEdicion.setEnabled(false);
+		cbxEdicion.removeAllItems();
+		clearTipoRegistro();
+	}
+	
+	private void clearTipoRegistro() {
+		cbxTipoRegistro.setEnabled(false);
+		cbxTipoRegistro.removeAllItems();
+		clearDatos();
+	}
+	
+	private void clearDatos() {
+		txtNombre.setText("");
+		txtCosto.setText("");
+		txtCupo.setText("");
+		txtDescripcion.setText("");
 	}
 	
 }

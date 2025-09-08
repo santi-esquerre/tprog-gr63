@@ -551,7 +551,7 @@ public class ConsultaEdicionEvento extends JInternalFrame {
     addDlgRow(d, g, 0, y++, "Institución:", p.institucion() != null ? p.institucion().nombre() : "(s/i)");
     addDlgRow(d, g, 0, y++, "Nivel:", String.valueOf(p.nivel()));
     addDlgRow(d, g, 0, y++, "Monto:", String.format("%.2f", p.monto()));
-    addDlgRow(d, g, 0, y++, "Código:", Integer.toString(p.codigo()));
+    addDlgRow(d, g, 0, y++, "Código:", String.valueOf(p.codigo()));
     d.pack();
     d.setLocationRelativeTo(this);
     d.setVisible(true);
