@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import exceptions.ValidationInputException;
 import interfaces.IEdicionController;
@@ -40,15 +42,15 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IRelo
 
 	private static final int TAMANIO_ICONO = 10;
 	private static final long serialVersionUID = 1L;
-	private JTextField txtEvento;
 	private JTextField txtNombre;
-	private ListarEventos listarEventosDialog;
 	private JComboBox<String> cbxEdicion;
+	private JComboBox<String> cbxEvento;
 	private IEventoController eventoController;
 	private IEdicionController edicionController;
 	private JSpinner spnCosto;
 	private JSpinner spnCupo;
 	private JTextArea txtDescripcion;
+	private ComboBoxModel<String> eventosTableModel;
 	private Principal parent;
 
 	/**
@@ -61,15 +63,12 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IRelo
 	public AltaTipoRegistro(Principal parent, IEventoController eventoController, IEdicionController edicionController) {
 		this.parent = parent;
 		IconFontSwing.register(FontAwesome.getIconFont());
-
-		this.listarEventosDialog = new ListarEventos(this, eventoController);
 		this.eventoController = eventoController;
 		this.edicionController = edicionController;
-		listarEventosDialog.setVisible(false);
 		setTitle("Alta de tipo de registro");
 		// Íconos
 		final Icon iconSearch = IconFontSwing.buildIcon(FontAwesome.SEARCH_PLUS, TAMANIO_ICONO);
-		setBounds(100, 100, 460, 283);
+		setBounds(100, 100, 460, 346);
 		setResizable(true);
 		setMaximizable(true);
 		setClosable(true);
@@ -97,21 +96,19 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IRelo
 
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.CENTER);
-		panel_1.setLayout(new MigLayout("", "[grow][grow][][grow][]", "[][][][][][grow]"));
+		panel_1.setLayout(new MigLayout("", "[][grow][][grow]", "[][][][][][100px,grow]"));
 
 		JLabel lblNewLabel = new JLabel("Evento:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_1.add(lblNewLabel, "cell 0 0,alignx left");
-
-		txtEvento = new JTextField();
-		txtEvento.setEditable(false);
-		panel_1.add(txtEvento, "cell 1 0 3 1,growx");
-		txtEvento.setColumns(10);
-
-		JButton btnSeleccionarEvento = new JButton("");
-		btnSeleccionarEvento.addActionListener((ActionEvent e) -> selectEventoAction(e));
-		btnSeleccionarEvento.setIcon(iconSearch);
-		panel_1.add(btnSeleccionarEvento, "cell 4 0");
+		
+		cbxEvento = new JComboBox();
+		cbxEvento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				onSelectEventoAction(e);
+			}
+		});
+		panel_1.add(cbxEvento, "cell 1 0 3 1,growx");
 
 		JLabel lblEdicinDeEvento = new JLabel("Edición de evento:");
 		panel_1.add(lblEdicinDeEvento, "cell 0 1,alignx left");
@@ -119,7 +116,7 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IRelo
 		cbxEdicion = new JComboBox();
 		cbxEdicion.setEnabled(false);
 		cbxEdicion.setEditable(true);
-		panel_1.add(cbxEdicion, "cell 1 1 4 1,growx");
+		panel_1.add(cbxEdicion, "cell 1 1 3 1,growx");
 
 		JLabel lblNombre = new JLabel("Nombre");
 		panel_1.add(lblNombre, "cell 0 2,alignx left");
@@ -127,7 +124,7 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IRelo
 		txtNombre = new JTextField();
 		txtNombre.setEditable(false);
 		txtNombre.setColumns(10);
-		panel_1.add(txtNombre, "cell 1 2 4 1,growx");
+		panel_1.add(txtNombre, "cell 1 2 3 1,growx");
 
 		JLabel lblCupo = new JLabel("Costo:");
 		panel_1.add(lblCupo, "flowx,cell 0 3,alignx left,aligny top");
@@ -149,42 +146,31 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IRelo
 		panel_1.add(lblDescripcin, "cell 0 4");
 
 		txtDescripcion = new JTextArea();
-		panel_1.add(txtDescripcion, "cell 0 5 5 1,grow");
+		panel_1.add(txtDescripcion, "cell 0 5 4 1,grow");
 
 	}
 
-	public void receive(Object... params) {
+	public void onSelectEventoAction(ActionEvent e) {
 		try {
 			cbxEdicion.removeAllItems();
-			eventoController.mostrarEdiciones((String) params[0]).forEach(ed -> cbxEdicion.addItem(ed.nombre()));
-			if (cbxEdicion.getItemCount() == 0) {
-				util.Dialog.showWarning(
-						"El evento seleccionado no tiene ediciones disponibles para agregar tipos de registro");
-				txtEvento.setText("");
-				return;
-			} else {
-				txtEvento.setText((String) params[0]);
-				cbxEdicion.setEnabled(true);
-				txtNombre.setEditable(true);
-				spnCosto.setEnabled(true);
-				spnCupo.setEnabled(true);
-				txtDescripcion.setEditable(true);
-			}
-		} catch (Exception e) {
+			if(cbxEvento.getSelectedItem() == null) return;
+			eventoController.mostrarEdiciones((String)cbxEvento.getSelectedItem()).forEach(ed -> cbxEdicion.addItem(ed.nombre()));
+			cbxEdicion.setEnabled(true);
+			txtNombre.setEditable(true);
+			spnCosto.setEnabled(true);
+			spnCupo.setEnabled(true);
+			txtDescripcion.setEditable(true);
+		} catch (Exception ex) {
 			JFrame parent = (JFrame) this.getTopLevelAncestor();
-			util.ExceptionHandler.manageException(e);
+			util.ExceptionHandler.manageException(ex);
 		}
 
 	}
 
-	private void selectEventoAction(ActionEvent e) {
-		listarEventosDialog.pack();
-		listarEventosDialog.setLocationRelativeTo(this);
-		listarEventosDialog.setVisible(true);
-	}
-
 	private void saveAction(ActionEvent e) {
 		try {
+			if (cbxEvento.getSelectedItem() == null)
+				throw new ValidationInputException("Debe seleccionar un evento");
 			if (cbxEdicion.getSelectedItem() == null)
 				throw new ValidationInputException("Debe seleccionar una edición");
 			String nombreEdicion = cbxEdicion.getSelectedItem().toString();
@@ -212,17 +198,17 @@ public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IRelo
 	@Override
 	public void reload() {
 		
-		txtEvento.setText("");
+		cbxEvento.removeAllItems();
 		cbxEdicion.removeAllItems();
-		cbxEdicion.setEnabled(false);
 		txtNombre.setText("");
-		txtNombre.setEditable(false);
 		spnCosto.setValue(0);
-		spnCosto.setEnabled(false);
 		spnCupo.setValue(0);
-		spnCupo.setEnabled(false);
 		txtDescripcion.setText("");
-		txtDescripcion.setEditable(false);
+		cbxEdicion.setEnabled(false);
+		txtNombre.setEditable(false);
+		spnCosto.setEnabled(false);
+		spnCupo.setEnabled(false);
+		eventoController.listarEventos().forEach(ev -> cbxEvento.addItem(ev.nombre()));
 	}
 
 }

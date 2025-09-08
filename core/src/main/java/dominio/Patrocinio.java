@@ -79,15 +79,9 @@ public class Patrocinio extends BaseEntity {
 	}
 
 	public DTPatrocinio toDTPatrocinio(DTInstitucion dtInstitucion) {
-
-        int codInt;
-        try { 
-            codInt = Integer.parseInt(codigo); 
-        } catch (NumberFormatException e) { 
-            codInt = 0; 
-        }
+        String cod = codigo;
         Date date = Date.from(fechaRealizacion.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        DTPatrocinio dtPatrocinio = new DTPatrocinio(date, monto, codInt, nivel, dtInstitucion);
+        DTPatrocinio dtPatrocinio = new DTPatrocinio(date, monto, cod, nivel, dtInstitucion);
         return dtPatrocinio; 
 	}
 	

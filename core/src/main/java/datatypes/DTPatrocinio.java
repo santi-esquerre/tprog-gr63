@@ -7,7 +7,7 @@ import java.util.Date;
 public record DTPatrocinio(
     Date fechaRealizacion,
     float monto,
-    int codigo,
+    String codigo,
     NivelPatrocinio nivel,
     DTInstitucion institucion
     
