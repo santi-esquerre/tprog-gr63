@@ -43,8 +43,9 @@ import exceptions.ExistePatrocinioException;
 import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioNicknameRepetidoException;
 import interfaces.Factory;
+import interfaces.IReloadable;
 
-public class AltaUsuario extends JInternalFrame {
+public class AltaUsuario extends JInternalFrame implements IReloadable {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtCorreo;
 	private JTextField txtNombre;
@@ -66,8 +67,10 @@ public class AltaUsuario extends JInternalFrame {
 	private String[] meses;
 	private Integer[] anio;
 	private Factory factory = Factory.get();
+	private Principal parent;
 
-	public AltaUsuario() {
+	public AltaUsuario(Principal parent) {
+		this.parent = parent;
 		setResizable(true);
 		setIconifiable(true);
 		setMaximizable(true);
@@ -422,7 +425,7 @@ public class AltaUsuario extends JInternalFrame {
 			}
 			JOptionPane.showMessageDialog(this, "Usuario registrado correctamente", "Registro de Usuario",
 					JOptionPane.INFORMATION_MESSAGE);
-			limpiarCampos();
+			parent.reload();
 			setVisible(false);
 		}
 
@@ -450,7 +453,7 @@ public class AltaUsuario extends JInternalFrame {
 		return true;
 	}
 
-	public void limpiarCampos() {
+	protected void limpiarCampos() {
 		txtNickname.setText("");
 		txtNombre.setText("");
 		txtCorreo.setText("");
@@ -465,6 +468,11 @@ public class AltaUsuario extends JInternalFrame {
 		comboBoxAnio.setSelectedIndex(0);
 		seleccionRol.clearSelection();
 		cl.show(cardPanel, "Vacio");
+	}
+	
+	public void reload() {
+		limpiarCampos();
+		cargarDatos();
 	}
 
 }

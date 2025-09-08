@@ -25,9 +25,10 @@ import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
+import interfaces.IReloadable;
 import interfaces.IUsuarioController;
 
-public class ConsultaRegistro extends JInternalFrame {
+public class ConsultaRegistro extends JInternalFrame implements IReloadable {
 
 	private static final long serialVersionUID = 1L;
 	private final JComboBox<DTUsuarioItemListado> cmbUsuarios;
@@ -264,8 +265,8 @@ public class ConsultaRegistro extends JInternalFrame {
 		// Initially disable the details panel
 		enableDetailsPanel(false);
 	}
-
-	public void loadForm() {
+	@Override
+	public void reload() {
 		System.out.println("Cargando datos...");
 		loadAssistants();
 		clearTable();

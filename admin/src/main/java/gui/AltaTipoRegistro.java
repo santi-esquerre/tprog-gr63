@@ -24,6 +24,7 @@ import exceptions.ValidationInputException;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
 import interfaces.IReceiver;
+import interfaces.IReloadable;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import net.miginfocom.swing.MigLayout;
@@ -37,7 +38,7 @@ import util.Dialog;
  * 4.b)IEdicionController consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro);
  * */
 
-public class AltaTipoRegistro extends JInternalFrame {
+public class AltaTipoRegistro extends JInternalFrame implements IReceiver, IReloadable {
 
 	private static final int TAMANIO_ICONO = 10;
 	private static final long serialVersionUID = 1L;
@@ -50,6 +51,7 @@ public class AltaTipoRegistro extends JInternalFrame {
 	private JSpinner spnCupo;
 	private JTextArea txtDescripcion;
 	private ComboBoxModel<String> eventosTableModel;
+	private Principal parent;
 
 	/**
 	 * Launch the application.
@@ -58,7 +60,8 @@ public class AltaTipoRegistro extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AltaTipoRegistro(IEventoController eventoController, IEdicionController edicionController) {
+	public AltaTipoRegistro(Principal parent, IEventoController eventoController, IEdicionController edicionController) {
+		this.parent = parent;
 		IconFontSwing.register(FontAwesome.getIconFont());
 		this.eventoController = eventoController;
 		this.edicionController = edicionController;
@@ -144,7 +147,6 @@ public class AltaTipoRegistro extends JInternalFrame {
 
 		txtDescripcion = new JTextArea();
 		panel_1.add(txtDescripcion, "cell 0 5 4 1,grow");
-		reload();
 
 	}
 
@@ -163,21 +165,6 @@ public class AltaTipoRegistro extends JInternalFrame {
 			util.ExceptionHandler.manageException(ex);
 		}
 
-	}
-
-	public void reload() {
-		cbxEvento.removeAllItems();
-		cbxEdicion.removeAllItems();
-		txtNombre.setText("");
-		spnCosto.setValue(0);
-		spnCupo.setValue(0);
-		txtDescripcion.setText("");
-		cbxEdicion.setEnabled(false);
-		txtNombre.setEditable(false);
-		spnCosto.setEnabled(false);
-		spnCupo.setEnabled(false);
-		eventoController.listarEventos().forEach(ev -> cbxEvento.addItem(ev.nombre()));
-		
 	}
 
 	private void saveAction(ActionEvent e) {
@@ -201,10 +188,27 @@ public class AltaTipoRegistro extends JInternalFrame {
 			edicionController.altaTipoRegistro(nombreEdicion, datosTipoRegistro);
 
 			Dialog.showInfo("Tipo de registro creado exitosamente");
+			parent.reload();
 			this.dispose();
 		} catch (Exception ex) {
 			util.ExceptionHandler.manageException(ex);
 		}
+	}
+
+	@Override
+	public void reload() {
+		
+		cbxEvento.removeAllItems();
+		cbxEdicion.removeAllItems();
+		txtNombre.setText("");
+		spnCosto.setValue(0);
+		spnCupo.setValue(0);
+		txtDescripcion.setText("");
+		cbxEdicion.setEnabled(false);
+		txtNombre.setEditable(false);
+		spnCosto.setEnabled(false);
+		spnCupo.setEnabled(false);
+		eventoController.listarEventos().forEach(ev -> cbxEvento.addItem(ev.nombre()));
 	}
 
 }

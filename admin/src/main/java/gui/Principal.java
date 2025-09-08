@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -51,28 +52,37 @@ public class Principal {
 	IEdicionController edicionController = factory.getIEdicionController();
 	IUsuarioController usuarioController = factory.getIUsuarioController();
 	IEventoController eventoController = factory.getIEventoController();
+	IInstitucionController institucionController = factory.getIInstitucionController();
 
-	AltaUsuario internalFramealtaUsuario = new AltaUsuario();
+	AltaUsuario internalFramealtaUsuario = new AltaUsuario(this);
 
 	ConsultaUsuario internalFrameconsultaUsuario = new ConsultaUsuario(usuarioController,
 			edicionController);
 
-	AltaEvento internalFramealtAltaEvento = new AltaEvento(null, eventoController);
+	AltaEvento internalFramealtAltaEvento = new AltaEvento(this, eventoController);
 
 	ConsultaEvento internalFrameconsultaEvento = new ConsultaEvento(eventoController, edicionController);
 
-	AltaEdicionEvento internalFrameAltaEdicion = new AltaEdicionEvento(eventoController, usuarioController);
+	AltaEdicionEvento internalFrameAltaEdicion = new AltaEdicionEvento(this, eventoController, usuarioController);
 
 	ConsultaEdicionEvento internalFrameConsultaEdicion = new ConsultaEdicionEvento(eventoController, edicionController);
 
-	RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento();
+	RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento(this);
 
 	ConsultaRegistro internalFrameConsultaRegistro = new ConsultaRegistro(usuarioController);
 
-	AltaTipoRegistro internalFramealtaAltaTipoRegistro = new AltaTipoRegistro(eventoController, edicionController);
+	AltaTipoRegistro internalFramealtaAltaTipoRegistro = new AltaTipoRegistro(this, eventoController, edicionController);
 
 	ConsultaTipoRegistro internalFrameConsultaTipoRegistro = new ConsultaTipoRegistro(eventoController,
 			edicionController);
+	
+	AltaInstitucion internalFramealtaInstitucion = new AltaInstitucion(this, institucionController);
+	
+
+	AltaPatrocinio internalFrameAltaPatrocinio = new AltaPatrocinio(this);
+	  
+	List<IReloadable> reloadables = List.of(internalFrameconsultaUsuario, internalFramealtAltaEvento, internalFrameconsultaEvento, internalFrameAltaEdicion, internalFrameConsultaEdicion,
+			internalFrameRegistroEdicion, internalFrameConsultaRegistro, internalFramealtaAltaTipoRegistro, internalFrameConsultaTipoRegistro, internalFrameAltaPatrocinio, internalFramealtaUsuario);
 
 	/**
 	 * Launch the application.
@@ -81,7 +91,7 @@ public class Principal {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Principal window = new Principal();
-				window.frame.setVisible(true);
+				window.getFrame().setVisible(true);
 			}
 		});
 	}
@@ -124,24 +134,24 @@ public class Principal {
 
 		// Ventana
 		frame = new JFrame("Eventos UY");
-		frame.setIconImage(IconFontSwing.buildImage(FontAwesome.CALENDAR, 50));
-		frame.setUndecorated(false);
+		getFrame().setIconImage(IconFontSwing.buildImage(FontAwesome.CALENDAR, 50));
+		getFrame().setUndecorated(false);
 		// Center and double size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int width = 900;
 		int height = 600;
 		int x = (screenSize.width - width) / 2;
 		int y = (screenSize.height - height) / 2;
-		frame.setBounds(x, y, width, height);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		getFrame().setBounds(x, y, width, height);
+		getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getFrame().getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		getFrame().setJMenuBar(menuBar);
 
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		panel.setBackground(new Color(240, 240, 240));
-		frame.getContentPane().add(panel, BorderLayout.WEST);
+		getFrame().getContentPane().add(panel, BorderLayout.WEST);
 
 		// JMenuBar menuBar1 = new JMenuBar();
 		// menuBar.setBorderPainted(false);
@@ -176,10 +186,11 @@ public class Principal {
 					}
 					System.out.println("Ruta de carga de pruebas: " + folderPath);
 					testLoader.loadAll(folderPath);
+					reload();
 					
-					util.Dialog.showSuccess(frame);
+					util.Dialog.showSuccess(getFrame());
 				} catch (Exception ex) {
-					ExceptionHandler.manageException(frame, ex);
+					ExceptionHandler.manageException(getFrame(), ex);
 				}
 			}
 		});
@@ -204,7 +215,7 @@ public class Principal {
 		// ======================= Alta de Usuario =======================
 
 		internalFramealtaUsuario.setVisible(false);
-		frame.getContentPane().add(internalFramealtaUsuario);
+		getFrame().getContentPane().add(internalFramealtaUsuario);
 
 		JMenuItem menuItemUsuariosAlta = new JMenuItem("Alta de usuario");
 		menuItemUsuariosAlta.setIcon(iconAlta);
@@ -212,7 +223,6 @@ public class Principal {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Abriendo alta de usuario...");
 				try {
-					internalFramealtaUsuario.cargarDatos();
 					internalFramealtaUsuario.setVisible(true);
 					internalFramealtaUsuario.moveToFront();
 					internalFramealtaUsuario.setMaximum(false);
@@ -227,7 +237,7 @@ public class Principal {
 		// ======================= Consulta de Usuario =======================
 
 		internalFrameconsultaUsuario.setVisible(false);
-		frame.getContentPane().add(internalFrameconsultaUsuario);
+		getFrame().getContentPane().add(internalFrameconsultaUsuario);
 
 		JMenuItem menuItemUsuariosConsulta = new JMenuItem("Consulta de usuario");
 		menuItemUsuariosConsulta.setIcon(iconConsulta);
@@ -235,13 +245,12 @@ public class Principal {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Abriendo consulta de usuario...");
 				try {
-					internalFrameconsultaUsuario.loadData();
 					internalFrameconsultaUsuario.setVisible(true);
 					internalFrameconsultaUsuario.moveToFront();
 					internalFrameconsultaUsuario.setMaximum(false);
 					internalFrameconsultaUsuario.setSelected(true);
 				} catch (Exception e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
@@ -265,7 +274,7 @@ public class Principal {
 		// ======================= Alta de Evento =======================
 
 		internalFramealtAltaEvento.setVisible(false);
-		frame.getContentPane().add(internalFramealtAltaEvento);
+		getFrame().getContentPane().add(internalFramealtAltaEvento);
 		JMenuItem menuItemEventosAlta = new JMenuItem("Alta de evento");
 		menuItemEventosAlta.setIcon(iconAlta);
 		menuEventos.add(menuItemEventosAlta);
@@ -274,20 +283,19 @@ public class Principal {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Abriendo alta de evento...");
 				try {
-					internalFramealtAltaEvento.loadForm();
 					internalFramealtAltaEvento.setVisible(true);
 					internalFramealtAltaEvento.moveToFront();
 					internalFramealtAltaEvento.setMaximum(false);
 					internalFramealtAltaEvento.setSelected(true);
 				} catch (Exception e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
 
 		// ======================= Consulta de Evento =======================
 		internalFrameconsultaEvento.setVisible(false);
-		frame.getContentPane().add(internalFrameconsultaEvento);
+		getFrame().getContentPane().add(internalFrameconsultaEvento);
 
 		JMenuItem menuItemEventosConsulta = new JMenuItem("Consulta de evento");
 		menuItemEventosConsulta.setIcon(iconConsulta);
@@ -297,13 +305,12 @@ public class Principal {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Abriendo consulta de evento...");
 				try {
-					internalFrameconsultaEvento.loadForm();
 					internalFrameconsultaEvento.setVisible(true);
 					internalFrameconsultaEvento.moveToFront();
 					internalFrameconsultaEvento.setMaximum(false);
 					internalFrameconsultaEvento.setSelected(true);
 				} catch (PropertyVetoException e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
@@ -324,7 +331,7 @@ public class Principal {
 		menuEdicionesBar.add(menuItemEdicionesAlta);
 
 		internalFrameAltaEdicion.setVisible(false);
-		frame.getContentPane().add(internalFrameAltaEdicion);
+		getFrame().getContentPane().add(internalFrameAltaEdicion);
 
 		menuItemEdicionesAlta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -336,7 +343,7 @@ public class Principal {
 					internalFrameAltaEdicion.setMaximum(false);
 					internalFrameAltaEdicion.setSelected(true);
 				} catch (Exception e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
@@ -348,19 +355,18 @@ public class Principal {
 		menuEdicionesBar.add(menuItemEdicionesConsulta);
 
 		internalFrameConsultaEdicion.setVisible(false);
-		frame.getContentPane().add(internalFrameConsultaEdicion);
+		getFrame().getContentPane().add(internalFrameConsultaEdicion);
 
 		menuItemEdicionesConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Abriendo consulta de edición...");
 				try {
-					internalFrameConsultaEdicion.loadForm();
 					internalFrameConsultaEdicion.setVisible(true);
 					internalFrameConsultaEdicion.setMaximum(false);
 					internalFrameConsultaEdicion.moveToFront();
 					internalFrameConsultaEdicion.setSelected(true);
 				} catch (Exception e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
@@ -368,7 +374,7 @@ public class Principal {
 		// ======================= Registro a Edición de Evento =======================
 
 		internalFrameRegistroEdicion.setVisible(false);
-		frame.getContentPane().add(internalFrameRegistroEdicion);
+		getFrame().getContentPane().add(internalFrameRegistroEdicion);
 
 		JMenuItem menuItemEdicionesRegistro = new JMenuItem("Registro a edición");
 		menuItemEdicionesRegistro.setIcon(iconRegistros);
@@ -383,7 +389,7 @@ public class Principal {
 					internalFrameRegistroEdicion.setMaximum(false);
 					internalFrameRegistroEdicion.setSelected(true);
 				} catch (Exception e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
@@ -397,18 +403,17 @@ public class Principal {
 		// =======================
 
 		internalFrameConsultaRegistro.setVisible(false);
-		frame.getContentPane().add(internalFrameConsultaRegistro);
+		getFrame().getContentPane().add(internalFrameConsultaRegistro);
 		menuItemEdicionesEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Abriendo consulta de registro...");
 				try {
-					internalFrameConsultaRegistro.loadForm();
 					internalFrameConsultaRegistro.setVisible(true);
 					internalFrameConsultaRegistro.moveToFront();
 					internalFrameConsultaRegistro.setMaximum(false);
 					internalFrameConsultaRegistro.setSelected(true);
 				} catch (Exception e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
@@ -419,9 +424,8 @@ public class Principal {
 		menuEventos.add(menuPatrociniosBar);
 
 		
-		  AltaPatrocinio internalFrameAltaPatrocinio = new AltaPatrocinio();
 		  internalFrameAltaPatrocinio.setVisible(false);
-		  frame.getContentPane().add(internalFrameAltaPatrocinio);
+		  getFrame().getContentPane().add(internalFrameAltaPatrocinio);
 		  
 		  JMenuItem menuItemPatrociniosAlta = new JMenuItem("Alta de patrocinio");
 		  menuItemPatrociniosAlta.setIcon(iconAlta);
@@ -456,7 +460,7 @@ public class Principal {
 		menuItemRegistrosAlta.setIcon(iconAlta);
 		menuRegistrosBar.add(menuItemRegistrosAlta);
 
-		frame.getContentPane().add(internalFramealtaAltaTipoRegistro);
+		getFrame().getContentPane().add(internalFramealtaAltaTipoRegistro);
 		menuItemRegistrosAlta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Abriendo alta de tipo de registro...");
@@ -466,14 +470,14 @@ public class Principal {
 					internalFramealtaAltaTipoRegistro.setMaximum(false);
 					internalFramealtaAltaTipoRegistro.setSelected(true);
 				} catch (Exception e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
 
 		// ======================= Consulta de Tipo de Registro =======================
 
-		frame.getContentPane().add(internalFrameConsultaTipoRegistro);
+		getFrame().getContentPane().add(internalFrameConsultaTipoRegistro);
 		JMenuItem menuItemRegistrosConsulta = new JMenuItem("Consulta de tipo de registro");
 		menuItemRegistrosConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -484,7 +488,7 @@ public class Principal {
 					internalFrameConsultaTipoRegistro.setMaximum(false);
 					internalFrameConsultaTipoRegistro.setSelected(true);
 				} catch (PropertyVetoException e1) {
-					ExceptionHandler.manageException(frame, e1);
+					ExceptionHandler.manageException(getFrame(), e1);
 				}
 			}
 		});
@@ -502,12 +506,9 @@ public class Principal {
 		  menuItemInstitucionesAlta.setIcon(iconAlta);
 		  menuInstituciones.add(menuItemInstitucionesAlta);
 		  
-		  IInstitucionController institucionController =
-		  factory.getIInstitucionController();
-		  AltaInstitucion internalFramealtaInstitucion = new
-		  AltaInstitucion(institucionController);
+		  
 		  internalFramealtaInstitucion.setVisible(false);
-		  frame.getContentPane().add(internalFramealtaInstitucion);
+		  getFrame().getContentPane().add(internalFramealtaInstitucion);
 		  
 		  menuItemInstitucionesAlta.addActionListener(
 		  new ActionListener() {
@@ -527,14 +528,27 @@ public class Principal {
 		JDesktopPane desktopPane = new JDesktopPane();
 		desktopPane.setForeground(new Color(0, 0, 0));
 		desktopPane.setBackground(new Color(238, 238, 238));
-		frame.getContentPane().add(desktopPane, BorderLayout.CENTER);
+		getFrame().getContentPane().add(desktopPane, BorderLayout.CENTER);
 
 		// JLabel lblNewLabel = new JLabel("Versión " + CODIGO_VERSION + " ");
 		// lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		// lblNewLabel.setBounds(271, 250, 64, 13);
 		// desktopPane.add(lblNewLabel);
 		// lblNewLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+		
+		reload();
 
+	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void reload() {
+		for (IReloadable r : reloadables) {
+			r.reload();
+		}
+		
 	}
 
 }

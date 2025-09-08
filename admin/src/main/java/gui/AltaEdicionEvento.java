@@ -34,9 +34,10 @@ import datatypes.DTUsuario;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
 import interfaces.IEventoController;
+import interfaces.IReloadable;
 import interfaces.IUsuarioController;
 
-public class AltaEdicionEvento extends JInternalFrame {
+public class AltaEdicionEvento extends JInternalFrame implements IReloadable {
 
     // Controllers
     private final IEventoController eventoController;
@@ -60,9 +61,12 @@ public class AltaEdicionEvento extends JInternalFrame {
 
     private final JButton btnAceptar = new JButton("Aceptar");
     private final JButton btnCancelar = new JButton("Cancelar");
+    
+    private Principal parent;
 
-    public AltaEdicionEvento(IEventoController eventoController, IUsuarioController usuarioController) {
+    public AltaEdicionEvento(Principal parent,IEventoController eventoController, IUsuarioController usuarioController) {
         super("Alta de Edición de Evento", true, true, true, true);
+        this.parent=parent;
         this.eventoController = Objects.requireNonNull(eventoController);
         this.usuarioController = Objects.requireNonNull(usuarioController);
 
@@ -240,7 +244,7 @@ public class AltaEdicionEvento extends JInternalFrame {
             if (ok) {
                 JOptionPane.showMessageDialog(this, "Edición creada correctamente.", "Éxito",
                         JOptionPane.INFORMATION_MESSAGE);
-                clearForm();
+                parent.reload();
             } else {
                 // Por contrato, la lógica lanza excepción si hay duplicado; este else es
                 // defensivo.
@@ -273,4 +277,11 @@ public class AltaEdicionEvento extends JInternalFrame {
     private void msg(String m) {
         JOptionPane.showMessageDialog(this, m, "Validación", JOptionPane.WARNING_MESSAGE);
     }
+
+	@Override
+	public void reload() {
+		clearForm();
+		loadEventos();
+		
+	}
 }
