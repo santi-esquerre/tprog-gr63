@@ -1,0 +1,63 @@
+<!--<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">-->
+<!--  <modelVersion>4.0.0</modelVersion>-->
+<!--  <groupId>uy.edu.tpgr63</groupId>-->
+<!--  <artifactId>eventos-parent</artifactId>-->
+<!--  <version>0.0.1-SNAPSHOT</version>-->
+<!--  <packaging>pom</packaging>-->
+<!--  <modules>-->
+<!--  	<module>core</module>-->
+<!--  	<module>admin</module>-->
+<!--  </modules>-->
+<!--</project>-->
+
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>uy.edu.tpgr63</groupId>
+  <artifactId>eventos-parent</artifactId>
+  <version>0.1.0</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>core</module>
+    <module>admin</module>
+  </modules>
+
+  <properties>
+    <java.release>17</java.release>
+    <hibernate.version>6.5.2.Final</hibernate.version>
+    <slf4j.version>2.0.13</slf4j.version>
+    <junit.version>5.10.2</junit.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.hibernate.orm</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.11.0</version>
+          <configuration>
+            <release>${java.release}</release>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.2.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
