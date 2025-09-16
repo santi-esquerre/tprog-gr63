@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Perfil Organizador • Eventos.uy</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+    <!-- Bootstrap icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Core theme CSS (incluye Bootstrap si ya lo usás local) -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+
+    <style>
+      /* Ajustes finos opcionales */
+      .profile-card img {
+        object-fit: cover;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      .tab-toolbar {
+        gap: 0.5rem;
+      }
+      .cursor-pointer {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="d-flex flex-column">
+    <main class="flex-shrink-0">
+      <!-- Nav -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-3">
+          <a class="navbar-brand fw-semibold" href="index.html">Eventos.uy</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">Eventos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contact.html">Usuarios</a>
+              </li>
+              <li class="nav-item d-none">
+                <a class="nav-link" href="pricing.html">Mi perfil</a>
+              </li>
+              <li class="nav-item p-0">
+                <a
+                  class="btn btn-primary py-0 mt-2"
+                  id="login/logout"
+                  href="login.html"
+                  >Iniciar sesión</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Perfil Organizador -->
+      <section class="py-5">
+        <div class="container px-2">
+          <div class="row g-4">
+            <!-- Col izquierda: tarjeta de perfil -->
+            <aside class="col-12 col-lg-4">
+              <div class="card profile-card shadow-sm">
+                <div class="position-relative">
+                  <img
+                    src="assets/img/user.jpg"
+                    class="card-img-top"
+                    alt="Foto del organizador"
+                    height="220"
+                  />
+                  <span
+                    class="badge text-bg-danger position-absolute top-0 start-0 m-3 rounded-pill px-3"
+                    >Organizador</span
+                  >
+                </div>
+                <div class="card-body">
+                  <div
+                    class="d-flex align-items-start justify-content-between flex-wrap"
+                  >
+                    <div>
+                      <h4 class="card-title mb-1" id="orgNombre">
+                        Intendencia de Montevideo
+                      </h4>
+                      <a href="#" class="text-muted text-decoration-none"
+                        >@imm</a
+                      >
+                    </div>
+                    <button
+                      class="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editOrganizerModal"
+                    >
+                      <i class="bi bi-pencil-square me-1"></i> Editar
+                    </button>
+                  </div>
+
+                  <p class="mt-3 mb-2" id="orgDescripcion">
+                    Gobierno departamental de Montevideo.
+                  </p>
+
+                  <p class="mb-2">
+                    <i class="bi bi-link-45deg me-1"></i>
+                    <a
+                      id="orgLink"
+                      href="https://montevideo.gub.uy"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      https://montevideo.gub.uy
+                    </a>
+                  </p>
+
+                  <p class="mb-1">
+                    <i class="bi bi-envelope-fill me-1"></i>
+                    <span id="orgEmail">contacto@imm.gub.uy</span>
+                  </p>
+
+                  <p class="text-muted fst-italic mb-0">
+                    Miembro desde 1/1/2023
+                  </p>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Col derecha: pestañas -->
+            <section class="col-12 col-lg-8">
+              <header
+                class="d-flex align-items-center justify-content-between flex-wrap mb-3"
+              >
+                <h3 class="fw-bold m-0">Perfil de Organizador</h3>
+                <div class="btn-group">
+                  <!-- Acciones rápidas opcionales -->
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addEventModal"
+                  >
+                    <i class="bi bi-plus-lg me-1"></i> Nuevo Evento
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addEditionModal"
+                  >
+                    <i class="bi bi-plus-lg me-1"></i> Nueva Edición
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addInstitutionModal"
+                  >
+                    <i class="bi bi-building-add me-1"></i> Nueva Institución
+                  </button>
+                  <!-- <button
+                    class="btn btn-outline-secondary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addSponsorshipModal"
+                  >
+                    <i class="bi bi-patch-plus me-1"></i> Nuevo Patrocinio
+                  </button> -->
+                </div>
+              </header>
+
+              <!-- Tabs -->
+              <ul class="nav nav-tabs" id="orgTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="events-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#events-pane"
+                    type="button"
+                    role="tab"
+                    aria-controls="events-pane"
+                    aria-selected="true"
+                  >
+                    Eventos
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="editions-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#editions-pane"
+                    type="button"
+                    role="tab"
+                    aria-controls="editions-pane"
+                    aria-selected="false"
+                  >
+                    Ediciones
+                  </button>
+                </li>
+              </ul>
+
+              <div class="tab-content pt-3">
+                <!-- TAB EVENTOS -->
+                <div
+                  class="tab-pane fade show active"
+                  id="events-pane"
+                  role="tabpanel"
+                  aria-labelledby="events-tab"
+                >
+                  <div
+                    class="d-flex flex-wrap justify-content-between align-items-center mb-3 tab-toolbar"
+                  >
+                    <h5 class="m-0">Eventos relacionados</h5>
+                    <button
+                      class="btn btn-primary btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addEventModal"
+                    >
+                      <i class="bi bi-plus-circle me-1"></i> Agregar Evento
+                    </button>
+                  </div>
+
+                  <div class="row g-3">
+                    <!-- Card de ejemplo -->
+                    <div class="col-12 col-sm-6">
+                      <div class="card h-100 shadow-sm border-0">
+                        <img
+                          class="card-img-top"
+                          src="https://dummyimage.com/600x350/ced4da/6c757d"
+                          alt="Banner evento"
+                        />
+                        <div class="card-body">
+                          <a
+                            class="text-muted text-decoration-none"
+                            href="consulta-evento.html"
+                            >Feria del libro</a
+                          >
+                          <p class="mb-0 small text-muted">
+                            Categorías: Cultura, Literatura
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Duplicá / renderizá dinámicamente más cards de eventos acá -->
+                  </div>
+                </div>
+
+                <!-- TAB EDICIONES -->
+                <div
+                  class="tab-pane fade"
+                  id="editions-pane"
+                  role="tabpanel"
+                  aria-labelledby="editions-tab"
+                >
+                  <div
+                    class="d-flex flex-wrap justify-content-between align-items-center mb-3 tab-toolbar"
+                  >
+                    <h5 class="m-0">Ediciones del organizador</h5>
+                    <button
+                      class="btn btn-primary btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addEditionModal"
+                    >
+                      <i class="bi bi-plus-circle me-1"></i> Agregar Edición
+                    </button>
+                  </div>
+
+                  <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                      <div
+                        class="card h-100 shadow-sm border-0"
+                        data-ev-id="ev-feria"
+                        data-ev-nombre="Feria del libro"
+                        data-ed-id="ed-feria-2024"
+                        data-ed-nombre="Feria del libro 2024"
+                      >
+                        <img
+                          class="card-img-top"
+                          src="https://dummyimage.com/600x350/ced4da/6c757d"
+                          alt="Banner edición"
+                        />
+                        <div class="card-body">
+                          <div
+                            class="d-flex align-items-center justify-content-between mb-2 flex-wrap"
+                          >
+                            <a
+                              class="text-muted text-decoration-none"
+                              href="consulta-evento.html"
+                              >Feria del libro</a
+                            >
+                            <span class="badge bg-success">Confirmada</span>
+                          </div>
+                          <div class="h5 card-title mb-1">
+                            Feria del libro 2024
+                          </div>
+                          <div class="mb-1">
+                            <i class="bi bi-calendar-fill"></i> 12/12/2024 -
+                            12/12/2024
+                          </div>
+                          <div class="fw-semibold">
+                            <i class="bi bi-geo-fill"></i> Montevideo, Uruguay
+                          </div>
+                        </div>
+
+                        <!-- NUEVO: acciones contextuales -->
+                        <div class="card-footer bg-transparent border-0 pt-0">
+                          <div class="d-flex gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addSponsorshipModal"
+                              onclick="openSponsorshipForEdition(this)"
+                            >
+                              <i class="bi bi-patch-plus me-1"></i> Patrocinio
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addTipoRegModal"
+                              onclick="openTipoRegForEdition(this)"
+                            >
+                              <i class="bi bi-card-checklist me-1"></i> Tipo de
+                              registro
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Renderizá más ediciones acá -->
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark py-4 mt-auto">
+      <div class="container px-3">
+        <div
+          class="row align-items-center justify-content-between flex-column flex-sm-row"
+        >
+          <div class="col-auto">
+            <div class="small m-0 text-white">
+              Copyright &copy; Eventos.uy 2025
+            </div>
+          </div>
+          <div class="col-auto">
+            <a class="link-light small" href="#!">Privacy</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Terms</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Contact</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- =======================
+         MODALS
+    ======================== -->
+
+    <!-- Alta de tipo de registro -->
+    <div
+      class="modal fade"
+      id="addTipoRegModal"
+      tabindex="-1"
+      aria-labelledby="addTipoRegLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formAddTipoReg"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="addTipoRegLabel">
+              <i class="bi bi-card-checklist me-2"></i>Alta de Tipo de Registro
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Contexto edición -->
+            <div id="trContext" class="alert alert-light border">
+              <div class="d-flex flex-wrap align-items-center gap-3">
+                <div>
+                  <span class="text-muted">Evento:</span>
+                  <strong id="trCtxEv"></strong>
+                </div>
+                <div>
+                  <span class="text-muted">Edición:</span>
+                  <strong id="trCtxEd"></strong>
+                </div>
+              </div>
+              <input type="hidden" id="trEdicionId" />
+            </div>
+
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Nombre (único en la edición)</label>
+                <input
+                  id="trNombre"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">El nombre es obligatorio.</div>
+                <div id="trDupWarn" class="form-text text-danger d-none">
+                  Ya existe un tipo de registro con ese nombre en esta edición.
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Descripción</label>
+                <textarea
+                  id="trDescripcion"
+                  class="form-control"
+                  rows="3"
+                  required
+                ></textarea>
+                <div class="invalid-feedback">
+                  La descripción es obligatoria.
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Costo</label>
+                <div class="input-group">
+                  <span class="input-group-text">UYU</span>
+                  <input
+                    id="trCosto"
+                    type="number"
+                    class="form-control"
+                    min="0"
+                    step="0.01"
+                    required
+                  />
+                </div>
+                <div class="invalid-feedback">Ingresa el costo.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Cupo</label>
+                <input
+                  id="trCupo"
+                  type="number"
+                  class="form-control"
+                  min="0"
+                  step="1"
+                  required
+                />
+                <div class="invalid-feedback">Ingresa el cupo.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-check2-circle me-1"></i>Crear tipo
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Alta de Institución -->
+    <div
+      class="modal fade"
+      id="addInstitutionModal"
+      tabindex="-1"
+      aria-labelledby="addInstitutionLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formAddInstitution"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="addInstitutionLabel">
+              <i class="bi bi-building-add me-2"></i>Alta de Institución
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Nombre (único)</label>
+                <input
+                  id="insNombre"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">El nombre es obligatorio.</div>
+                <div id="insDupWarn" class="form-text text-danger d-none">
+                  Ya existe una institución con ese nombre.
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Descripción</label>
+                <textarea
+                  id="insDescripcion"
+                  class="form-control"
+                  rows="3"
+                  required
+                ></textarea>
+                <div class="invalid-feedback">
+                  La descripción es obligatoria.
+                </div>
+              </div>
+              <div class="col-12 col-md-8">
+                <label class="form-label">Sitio web (opcional)</label>
+                <input
+                  id="insWeb"
+                  type="url"
+                  class="form-control"
+                  placeholder="https://..."
+                  pattern="https?://.+"
+                />
+                <div class="invalid-feedback">URL inválida (https://...)</div>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label">Logo (opcional)</label>
+                <input
+                  id="insLogo"
+                  type="file"
+                  class="form-control"
+                  accept="image/*"
+                />
+              </div>
+              <div class="col-12">
+                <img
+                  id="insPreview"
+                  class="img-fluid rounded d-none"
+                  alt="Vista previa"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-check2-circle me-1"></i>Crear institución
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Alta de Patrocinio -->
+    <div
+      class="modal fade"
+      id="addSponsorshipModal"
+      tabindex="-1"
+      aria-labelledby="addSponsorshipLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formAddSponsorship"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="addSponsorshipLabel">
+              <i class="bi bi-patch-plus me-2"></i>Alta de Patrocinio
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <!-- CONTEXTO (solo lectura) -->
+            <div id="spContext" class="alert alert-light border">
+              <div class="d-flex flex-wrap align-items-center gap-3">
+                <div>
+                  <span class="text-muted">Evento:</span>
+                  <strong id="spCtxEv">—</strong>
+                </div>
+                <div>
+                  <span class="text-muted">Edición:</span>
+                  <strong id="spCtxEd">—</strong>
+                </div>
+              </div>
+              <!-- ID de edición para el backend -->
+              <input type="hidden" id="spEdicionId" />
+            </div>
+
+            <!-- Formulario -->
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Institución</label>
+                <select id="spInstitucion" class="form-select" required>
+                  <option value="" selected disabled>
+                    Selecciona una institución…
+                  </option>
+                  <!-- TODO: poblar desde API -->
+                  <option>IMM</option>
+                  <option>UdelaR</option>
+                  <option>UTE</option>
+                </select>
+                <div class="invalid-feedback">Selecciona una institución.</div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Nivel de patrocinio</label>
+                <select id="spNivel" class="form-select" required>
+                  <option value="" selected disabled>Selecciona nivel…</option>
+                  <option>Platino</option>
+                  <option>Oro</option>
+                  <option>Plata</option>
+                  <option>Bronce</option>
+                </select>
+                <div class="invalid-feedback">Selecciona un nivel.</div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Aporte económico</label>
+                <div class="input-group">
+                  <span class="input-group-text">UYU</span>
+                  <input
+                    id="spAporte"
+                    type="number"
+                    class="form-control"
+                    min="0"
+                    step="0.01"
+                    required
+                  />
+                </div>
+                <div class="invalid-feedback">Ingresa el aporte económico.</div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Código de patrocinio</label>
+                <input
+                  id="spCodigo"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">Ingresa un código.</div>
+              </div>
+
+              <div class="col-12">
+                <label
+                  class="form-label d-flex justify-content-between align-items-center"
+                >
+                  Registros gratuitos a otorgar
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-primary"
+                    id="spAddRow"
+                  >
+                    <i class="bi bi-plus-circle me-1"></i>Agregar registro
+                  </button>
+                </label>
+
+                <div class="table-responsive">
+                  <table class="table table-sm align-middle">
+                    <thead>
+                      <tr>
+                        <th style="width: 38%">Tipo de registro</th>
+                        <th style="width: 22%">Costo unitario (UYU)</th>
+                        <th style="width: 22%">Cantidad</th>
+                        <th style="width: 18%"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="spRows">
+                      <!-- filas dinámicas -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                  <div>
+                    <strong>Total costo registros gratuitos:</strong>
+                    <span id="spTotal" class="badge bg-secondary"
+                      >UYU 0.00</span
+                    >
+                  </div>
+                  <div>
+                    <strong>Porcentaje sobre aporte:</strong>
+                    <span id="spPct" class="badge bg-secondary">0%</span>
+                  </div>
+                  <div
+                    id="spWarn"
+                    class="alert alert-danger py-1 px-2 m-0 d-none"
+                  >
+                    El costo supera el 20% del aporte económico. Podés editar
+                    los valores o cancelar.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Fecha de alta</label>
+                <input id="spFecha" type="date" class="form-control" readonly />
+              </div>
+
+              <div class="col-12">
+                <div id="spDup" class="alert alert-warning d-none">
+                  Ya existe un patrocinio de
+                  <strong class="sp-inst"></strong> para esta edición. Podés
+                  optar por <em>editar</em> ese registro o <em>cancelar</em>.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-check2-circle me-1"></i>Registrar patrocinio
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Editar Organizador -->
+    <div
+      class="modal fade"
+      id="editOrganizerModal"
+      tabindex="-1"
+      aria-labelledby="editOrganizerLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formEditOrganizer"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="editOrganizerLabel">
+              <i class="bi bi-pencil-square me-2"></i>Modificar datos del
+              Organizador
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <!-- Datos no editables, solo display -->
+              <div class="col-12 col-md-6">
+                <label class="form-label">Nickname (no editable)</label>
+                <input type="text" class="form-control" value="@imm" disabled />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Correo (no editable)</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  value="contacto@imm.gub.uy"
+                  disabled
+                />
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Nombre</label>
+                <input
+                  id="inpNombre"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">Ingresa un nombre válido.</div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Descripción</label>
+                <textarea
+                  id="inpDescripcion"
+                  class="form-control"
+                  rows="3"
+                  maxlength="500"
+                  required
+                ></textarea>
+                <div class="form-text">Máx. 500 caracteres.</div>
+                <div class="invalid-feedback">Ingresa una descripción.</div>
+              </div>
+
+              <div class="col-12 col-md-8">
+                <label class="form-label">Link sitio web (opcional)</label>
+                <input
+                  id="inpLink"
+                  type="url"
+                  class="form-control"
+                  placeholder="https://ejemplo.com"
+                  pattern="https?://.+"
+                />
+                <div class="invalid-feedback">
+                  Ingresa una URL válida (https://...)
+                </div>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <label class="form-label">Imagen (opcional)</label>
+                <input
+                  id="inpImg"
+                  type="file"
+                  class="form-control"
+                  accept="image/*"
+                />
+              </div>
+
+              <div class="col-12">
+                <img
+                  id="previewImg"
+                  class="img-fluid rounded d-none"
+                  alt="Vista previa"
+                />
+              </div>
+
+              <hr class="my-2" />
+
+              <details class="col-12">
+                <summary class="mb-2 cursor-pointer">
+                  <i class="bi bi-shield-lock me-1"></i> Cambiar contraseña
+                  (opcional)
+                </summary>
+                <div class="row g-3 mt-0">
+                  <div class="col-12 col-md-6">
+                    <label class="form-label">Nueva contraseña</label>
+                    <input
+                      id="inpPass"
+                      type="password"
+                      class="form-control"
+                      minlength="6"
+                    />
+                    <div class="form-text">Mínimo 6 caracteres.</div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label">Confirmar contraseña</label>
+                    <input
+                      id="inpPass2"
+                      type="password"
+                      class="form-control"
+                      minlength="6"
+                    />
+                    <div class="invalid-feedback">
+                      Las contraseñas no coinciden.
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-save me-1"></i>Guardar cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Alta de Evento -->
+    <div
+      class="modal fade"
+      id="addEventModal"
+      tabindex="-1"
+      aria-labelledby="addEventLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formAddEvent"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="addEventLabel">
+              <i class="bi bi-calendar2-plus me-2"></i>Alta de Evento
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Nombre (único)</label>
+                <input
+                  id="evNombre"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">El nombre es obligatorio.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Sigla</label>
+                <input id="evSigla" type="text" class="form-control" required />
+                <div class="invalid-feedback">La sigla es obligatoria.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Descripción</label>
+                <textarea
+                  id="evDescripcion"
+                  class="form-control"
+                  rows="3"
+                  required
+                ></textarea>
+                <div class="invalid-feedback">
+                  La descripción es obligatoria.
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Categorías (al menos una)</label>
+                <select id="evCategorias" class="form-select" multiple required>
+                  <option>Cultura</option>
+                  <option>Tecnología</option>
+                  <option>Deportes</option>
+                  <option>Educación</option>
+                </select>
+                <div class="form-text">
+                  Ctrl/Cmd para seleccionar múltiples.
+                </div>
+                <div class="invalid-feedback">
+                  Selecciona al menos una categoría.
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Imagen (opcional)</label>
+                <input
+                  id="evImagen"
+                  type="file"
+                  class="form-control"
+                  accept="image/*"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-check2-circle me-1"></i>Crear evento
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Alta de Edición -->
+    <div
+      class="modal fade"
+      id="addEditionModal"
+      tabindex="-1"
+      aria-labelledby="addEditionLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formAddEdition"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="addEditionLabel">
+              <i class="bi bi-journal-plus me-2"></i>Alta de Edición de Evento
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Evento</label>
+                <select id="edEvento" class="form-select" required>
+                  <option value="" selected disabled>
+                    Selecciona un evento…
+                  </option>
+                  <option value="feria-libro">Feria del libro</option>
+                  <option value="expointer">Expointer Uruguay</option>
+                </select>
+                <div class="invalid-feedback">Selecciona un evento.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Nombre (único)</label>
+                <input
+                  id="edNombre"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">El nombre es obligatorio.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Sigla</label>
+                <input id="edSigla" type="text" class="form-control" required />
+                <div class="invalid-feedback">La sigla es obligatoria.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Ciudad</label>
+                <input
+                  id="edCiudad"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">La ciudad es obligatoria.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">País</label>
+                <input id="edPais" type="text" class="form-control" required />
+                <div class="invalid-feedback">El país es obligatorio.</div>
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label">Fecha inicio</label>
+                <input
+                  id="edInicio"
+                  type="date"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">Ingresa fecha de inicio.</div>
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label">Fecha fin</label>
+                <input id="edFin" type="date" class="form-control" required />
+                <div class="invalid-feedback">Ingresa fecha de fin.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Imagen (opcional)</label>
+                <input
+                  id="edImagen"
+                  type="file"
+                  class="form-control"
+                  accept="image/*"
+                />
+              </div>
+              <div class="col-12">
+                <div class="form-text">
+                  La edición se crea en estado <strong>Ingresada</strong> y
+                  luego el administrador la confirmará/rechazará.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-check2-circle me-1"></i>Crear edición
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js\pages\perfil-organizador.js"></script>
+  </body>
+</html>

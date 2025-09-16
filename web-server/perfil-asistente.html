@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perfil Asistente • Eventos.uy</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+
+    <style>
+      .profile-card img {
+        object-fit: cover;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      .cursor-pointer {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="d-flex flex-column">
+    <main class="flex-shrink-0">
+      <!-- NAV -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-3">
+          <a class="navbar-brand fw-semibold" href="index.html">Eventos.uy</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#nav"
+            aria-controls="nav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="nav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">Eventos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contact.html">Usuarios</a>
+              </li>
+              <li class="nav-item p-0">
+                <a
+                  class="btn btn-primary py-0 mt-2"
+                  id="login/logout"
+                  href="login.html"
+                  >Iniciar sesión</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- PERFIL ASISTENTE -->
+      <section class="py-5">
+        <div class="container px-2">
+          <div class="row g-4">
+            <!-- Col izquierda: tarjeta -->
+            <aside class="col-12 col-lg-4">
+              <div class="card profile-card shadow-sm">
+                <div class="position-relative">
+                  <img
+                    src="assets/img/user.jpg"
+                    class="card-img-top"
+                    alt="Foto del asistente"
+                    height="220"
+                  />
+                  <span
+                    class="badge text-bg-primary position-absolute top-0 start-0 m-3 rounded-pill px-3"
+                    >Asistente</span
+                  >
+                </div>
+                <div class="card-body">
+                  <div
+                    class="d-flex align-items-start justify-content-between flex-wrap"
+                  >
+                    <div>
+                      <h4 class="card-title mb-1" id="asNombre">
+                        Ana Gabriela
+                      </h4>
+                      <a
+                        href="#"
+                        class="text-muted text-decoration-none"
+                        id="asNick"
+                        >@anag</a
+                      >
+                    </div>
+                    <button
+                      class="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editAssistantModal"
+                    >
+                      <i class="bi bi-pencil-square me-1"></i> Editar
+                    </button>
+                  </div>
+
+                  <div class="mt-3">
+                    <p class="mb-1">
+                      <i class="bi bi-envelope-fill me-1"></i>
+                      <span id="asEmail">anag.gomez@hotmail.com</span>
+                    </p>
+                    <p class="mb-1">
+                      <i class="bi bi-cake2-fill me-1"></i>
+                      <span id="asNacimiento">2000-01-20</span>
+                    </p>
+                    <p class="text-muted fst-italic mb-0">
+                      Miembro desde 2023-01-01
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Col derecha: Registros -->
+            <section class="col-12 col-lg-8">
+              <header
+                class="d-flex align-items-center justify-content-between flex-wrap mb-3"
+              >
+                <h3 class="fw-bold m-0">Mis registros</h3>
+                <div class="btn-group">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addRegistroModal"
+                  >
+                    <i class="bi bi-plus-circle me-1"></i> Nuevo registro
+                  </button>
+                </div>
+              </header>
+
+              <div class="card shadow-sm">
+                <div class="card-body table-wrap">
+                  <table
+                    class="table table-hover align-middle"
+                    id="tablaRegistros"
+                  >
+                    <thead class="table-light">
+                      <tr>
+                        <th>Evento</th>
+                        <th>Edición</th>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Costo</th>
+                        <th class="text-end">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Ejemplos de filas; serán gestionadas por JS -->
+                      <tr>
+                        <td>Feria del libro</td>
+                        <td>Feria del libro 2024</td>
+                        <td>General</td>
+                        <td>2024-03-20</td>
+                        <td>0</td>
+                        <td class="text-end">
+                          <button
+                            class="btn btn-sm btn-outline-secondary me-1 btn-edit"
+                            data-index="0"
+                          >
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <button
+                            class="btn btn-sm btn-outline-danger btn-del"
+                            data-index="0"
+                          >
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="card-footer">
+                  <nav class="d-flex justify-content-center">
+                    <ul class="pagination m-0">
+                      <li class="page-item disabled">
+                        <span class="page-link"
+                          ><i class="bi bi-caret-left-fill"></i
+                        ></span>
+                      </li>
+                      <li class="page-item active">
+                        <span class="page-link">1</span>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#"
+                          ><i class="bi bi-caret-right-fill"></i
+                        ></a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark py-4 mt-auto">
+      <div class="container px-3">
+        <div
+          class="row align-items-center justify-content-between flex-column flex-sm-row"
+        >
+          <div class="col-auto">
+            <div class="small m-0 text-white">
+              Copyright &copy; Eventos.uy 2025
+            </div>
+          </div>
+          <div class="col-auto">
+            <a class="link-light small" href="#!">Privacy</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Terms</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Contact</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- =======================
+         MODALS
+    ======================== -->
+
+    <!-- Editar Asistente -->
+    <div
+      class="modal fade"
+      id="editAssistantModal"
+      tabindex="-1"
+      aria-labelledby="editAssistantLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formEditAssistant"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="editAssistantLabel">
+              <i class="bi bi-pencil-square me-2"></i>Modificar datos del
+              Asistente
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <!-- Base Usuario (no editables: nickname, correo) -->
+              <div class="col-12 col-md-6">
+                <label class="form-label">Nickname (no editable)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  value="@anag"
+                  disabled
+                />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Correo (no editable)</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  value="anag.gomez@hotmail.com"
+                  disabled
+                />
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Nombre</label>
+                <input
+                  id="asInpNombre"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">Ingresa tu nombre.</div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Apellido</label>
+                <input
+                  id="asInpApellido"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">Ingresa tu apellido.</div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Fecha de nacimiento</label>
+                <input
+                  id="asInpNacimiento"
+                  type="date"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Ingresa tu fecha de nacimiento.
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Foto (opcional)</label>
+                <input
+                  id="asInpImg"
+                  type="file"
+                  class="form-control"
+                  accept="image/*"
+                />
+              </div>
+
+              <div class="col-12">
+                <img
+                  id="asPreviewImg"
+                  class="img-fluid rounded d-none"
+                  alt="Vista previa"
+                />
+              </div>
+
+              <hr class="my-2" />
+
+              <details class="col-12">
+                <summary class="mb-2 cursor-pointer">
+                  <i class="bi bi-shield-lock me-1"></i> Cambiar contraseña
+                  (opcional)
+                </summary>
+                <div class="row g-3 mt-0">
+                  <div class="col-12 col-md-6">
+                    <label class="form-label">Nueva contraseña</label>
+                    <input
+                      id="asInpPass"
+                      type="password"
+                      class="form-control"
+                      minlength="6"
+                    />
+                    <div class="form-text">Mínimo 6 caracteres.</div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label">Confirmar contraseña</label>
+                    <input
+                      id="asInpPass2"
+                      type="password"
+                      class="form-control"
+                      minlength="6"
+                    />
+                    <div class="invalid-feedback">
+                      Las contraseñas no coinciden.
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-save me-1"></i>Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Nuevo Registro -->
+    <div
+      class="modal fade"
+      id="addRegistroModal"
+      tabindex="-1"
+      aria-labelledby="addRegistroLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formAddRegistro"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="addRegistroLabel">
+              <i class="bi bi-clipboard2-plus me-2"></i>Nuevo registro a edición
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Edición</label>
+                <select id="regEdicion" class="form-select" required>
+                  <option value="" disabled selected>
+                    Selecciona una edición…
+                  </option>
+                </select>
+                <div class="invalid-feedback">Selecciona una edición.</div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Tipo de registro</label>
+                <select id="regTipo" class="form-select" required disabled>
+                  <option value="" disabled selected>
+                    Selecciona un tipo…
+                  </option>
+                </select>
+                <div class="form-text" id="regCupoInfo"></div>
+                <div class="invalid-feedback">Selecciona un tipo.</div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Fecha</label>
+                <input
+                  id="regFecha"
+                  type="date"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Ingresa la fecha del registro.
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Costo</label>
+                <input
+                  id="regCosto"
+                  type="number"
+                  class="form-control"
+                  step="0.01"
+                  min="0"
+                  readonly
+                />
+                <div class="form-text">
+                  Se completa desde el tipo de registro.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-check2-circle me-1"></i>Crear registro
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Editar Registro -->
+    <div
+      class="modal fade"
+      id="editRegistroModal"
+      tabindex="-1"
+      aria-labelledby="editRegistroLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form
+          class="modal-content needs-validation"
+          novalidate
+          id="formEditRegistro"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="editRegistroLabel">
+              <i class="bi bi-pencil-square me-2"></i>Editar registro
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editIndex" />
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Edición</label>
+                <select
+                  id="editRegEdicion"
+                  class="form-select"
+                  required
+                ></select>
+                <div class="invalid-feedback">Selecciona una edición.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Tipo de registro</label>
+                <select id="editRegTipo" class="form-select" required></select>
+                <div class="form-text" id="editRegCupoInfo"></div>
+                <div class="invalid-feedback">Selecciona un tipo.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Fecha</label>
+                <input
+                  id="editRegFecha"
+                  type="date"
+                  class="form-control"
+                  required
+                />
+                <div class="invalid-feedback">Ingresa la fecha.</div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Costo</label>
+                <input
+                  id="editRegCosto"
+                  type="number"
+                  class="form-control"
+                  step="0.01"
+                  min="0"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-save me-1"></i>Guardar cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Confirmación Eliminar -->
+    <div
+      class="modal fade"
+      id="confirmDeleteModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="bi bi-exclamation-triangle me-2 text-danger"></i
+              >Eliminar registro
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            ¿Seguro que querés eliminar este registro? Esta acción no se puede
+            deshacer.
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button class="btn btn-danger" id="btnConfirmDelete">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="js\pages\perfil-asistente.js"></script>
+  </body>
+</html>
