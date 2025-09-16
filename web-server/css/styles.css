@@ -91,6 +91,7 @@
   }
 }
 
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
@@ -7318,6 +7319,10 @@ textarea.form-control-lg {
 
 .min-vh-100 {
   min-height: 100vh !important;
+}
+
+.min-vh-50 {
+  min-height: 50vh !important;
 }
 
 .flex-fill {

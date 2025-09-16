@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Detallada de Edición</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<body class="d-flex flex-column h-100 bg-light">
+    <section class="position-relative" style="min-height: 500px; background-image: url('https://dummyimage.com/140x40/adb5bd/ffffff.png&text=IMM'); background-size: cover; background-position: center;">
+        <div class="position-absolute bottom-0 start-0 w-100" style="height: 40%;background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+            
+            <div class="container h-100 d-flex flex-column justify-content-end pb-4">
+
+                <h1 class="fw-bold text-white fs-2 fs-md-1">Los Fabulosos Candillacs</h1>
+
+                <div class="row g-2 g-md-3 mt-2 align-items-center">
+                    <div class="col-auto d-flex align-items-center">
+                        <i class="bi bi-calendar-event-fill text-white me-2"></i>
+                        <p class="fs-5 fs-md-5 text-white mb-0">Desde el jueves 2 de octubre hasta el sábado 4 de octubre</p>
+                    </div>
+                    <div class="col-auto d-flex align-items-center">
+                        <i class="bi bi-geo-alt-fill text-white me-2"></i>
+                        <p class="fs-5 fs-md-5 text-white mb-0">Montevideo, Uruguay</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <main class="flex-shrink-0 mt-5 mb-5">
+        <div class="container p-5 rounded-4 border bg-white shadow-sm">
+            <section class>
+                <h3>Descripción </h3>
+                <p class="fs-5 fs-md-5">Los Fabulosos Cadillacs festejan 40 años de historia con un  show imperdible en el Antel Arena de Montevideo.
+
+Un noche única para revivir una carrera legendaria que los consagró como iconos del rock latinoamericano. 
+
+Con espíritu pionero, colaboraciones inolvidables y una trayectoria que los llevó de Obras y River al Quilmes Rock, de Coachella al Zócalo de México, el Hollywood Bowl, la Sala Bataclán de Paris y el Madison Square Garden, Los Fabulosos Cadillacs siguen encendiendo escenarios de todo el mundo con la misma fuerza, energía y magnetismo de siempre.
+
+La celebración de una historia que no para de crecer.</p>
+            </section> 
+        </div>
+
+        <div class="container p-5 mt-4">
+                    <div class="row gx-5 justify-content-center align-items-center align-items-stretch">
+                        <!-- Pricing card free-->
+                        <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
+                            <div class="card mb-5 mb-xl-0 h-100 borderh-100">
+                                <div class="card-body p-5 d-flex flex-column min-vh-50">
+                                    <button type="button" class="btn p-0 m-0 align-self-start" data-bs-toggle="modal" data-bs-target="#tipoRegistroModal">
+                                        <i class="bi bi-question-circle-fill fs-4"></i>
+                                    </button>
+                                    <div class="small text-uppercase fw-bold text-muted">Estudiante</div>
+                                    <div class="mb-3">
+                                        <span class="display-4 fw-bold">$250</span>
+                                    </div>
+                                    <p>Acceso para estudiantes</p>
+                                    <div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#registroModal" href="#!">Elegir</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pricing card pro-->
+                        <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
+                            <div class="card mb-5 mb-xl-0 h-100">
+                                <div class="card-body p-5 d-flex flex-column min-vh-50">
+                                    <button type="button" class="btn p-0 m-0 align-self-start" data-bs-toggle="modal" data-bs-target="#tipoRegistroModal">
+                                        <i class="bi bi-question-circle-fill fs-4"></i>
+                                    </button>
+                                    <div class="small text-uppercase fw-bold text-muted">
+                                        VIP
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="display-4 fw-bold">$4000</span>
+                                    </div>
+                                    <p>Incluye backstage + acceso preferencial</p>
+                                    <div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#registroModal" href="#!">Elegir</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pricing card enterprise-->
+                        <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body bg-dark-subtle p-5 d-flex flex-column min-vh-50">
+                                    <button type="button" class="btn p-0 m-0 align-self-start" data-bs-toggle="modal" data-bs-target="#tipoRegistroModal">
+                                        <i class="bi bi-question-circle-fill fs-4"></i>
+                                    </button>
+                                    <div class="small text-uppercase fw-bold text-muted">General</div>
+                                    <div class="mb-3">
+                                        <span class="display-4 fw-bold">$1500</span>
+                                    </div>
+                                    <p>Acceso general</p>
+                                    <div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#registroModal" href="#!">Elegir</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>      
+    </main>
+    <footer class="mt-5">
+        <div class="container-fluid bg-dark text-white py-4">
+            <div class="container text-center">
+                <h5 class="mb-0">PATROCINADORES DE LA EDICIÓN</h5>
+                <div class ="d-flex flex-wrap justify-content-center align-items-end mt-4">
+                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
+                        <p>Antel</p>
+                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo Antel">
+                    </div>
+                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
+                        <p>Facultad de Ingeniería</p>
+                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo Facultad de Ingenieria">
+                    </div>
+                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
+                        <p>ORT Uruguay</p>
+                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo ORT Uruguay">
+                    </div>
+                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
+                        <p>Universidad Católica del Uruguay</p>
+                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo Universidad Católica del Uruguay">
+                    </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Modal -->
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registroModalLabel">Registro a Edición de Evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex justify-content-start mb-3" style="background-image: url('https://placehold.co/400'); height: 75px; background-size: cover; background-position:center;">
+                        <h4 class="ms-3 fs-5" style="line-height: 75px;">Los Fabulosos Candillacs</h4>
+                    </div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="nombre" class="col-form-label">Nombre:</label>
+                            <input type="text" class="form-control" id="nombre" value="Ana" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellido" class="col-form-label">Apellido:</label>
+                            <input type="text" class="form-control" id="apellido" value="Torres" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="col-form-label">Correo electrónico:</label>
+                            <input type="email" class="form-control" id="correo" placeholder="atorres@gmail.com" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tipoEntrada" class="col-form-label">Tipo de Entrada:</label>
+                            <select class="form-select" id="tipoEntrada">
+                            <option value="estudiante">Estudiante - $250</option>
+                            <option value="general">General - $1500</option>
+                            <option value="vip">VIP - $4000</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="codigoPatrocinio" class="col-form-label">Código de Patrocinio:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="codigoPatrocinio">
+                                <button class="btn btn-outline-primary ms-2" type="button" id="validarCodigo">Validar</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h4 class="mt-4 text-end">Total a Pagar: $250</h4>
+                    <div class="input-group d-flex justify-content-end mt-4 mb-4">
+                        <button class="btn btn-primary text-end" type="button" id="confirmarRegistro">Confirmar Registro</button>
+                        <button class="btn btn-outline-secondary ms-2" data-bs-dismiss="modal" type="button" id="cancelarRegistro">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="tipoRegistroModal" tabindex="-1" aria-labelledby="tipoRegistroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tipoRegistroModalLabel">Información sobre el Tipo de Registro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>Nombre:  Estudiante</p>
+                    <p>Precio: $250</p>
+                    <p>Descripción: Acceso general a todas las actividades.</p>
+                    <p>Cupos disponibles: 100</p>
+                    <div class = "mt-4">
+                        <h4 class="mb-3">Patrocinadores:</h4> 
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Facultad de Ingeniería</div>
+                                    $20000 - 21/08/2025
+                                </div>
+                                <span class="badge bg-warning rounded-pill">Oro</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="modal-footer p-4">
+                    <button class="btn btn-primary w-100 fs-5 rounded-4" data-bs-dismiss="modal" type="button">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+</body>
+</html>
