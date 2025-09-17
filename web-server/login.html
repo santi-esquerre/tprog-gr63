@@ -43,15 +43,15 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Bienvenido</h1>
                                     </div>
-                                    <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                    <form id="loginForm" action="./index.html" method="post">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="usuario" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-                                        <label for="name">Nickname o correo electrónico</label>
+                                        <input class="form-control" id="usuario" type="text" placeholder="Enter your name..." required/>
+                                        <label for="usuario">Nickname o correo electrónico</label>
                                         <div class="invalid-feedback" data-sb-feedback="usuario:required">Debe ingresar un nickname o correo electrónico</div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="clave" type="password" placeholder="name@example.com" data-sb-validations="required,email" />
-                                        <label for="email">Contraseña</label>
+                                        <input class="form-control" id="clave" type="password" placeholder="name@example.com" minlength="8" required/>
+                                        <label for="clave">Contraseña</label>
                                         <div class="invalid-feedback" data-sb-feedback="clave:required">Debe ingresar su contraseña</div>
                                     </div>
                                     <!-- Submit success message-->
@@ -72,7 +72,7 @@
                                     <!-- an error submitting the form-->
                                     <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                                     <!-- Submit Button-->
-                                    <div class="d-grid"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
+                                    <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" type="submit" form="loginForm">Iniciar Sesión</button></div>
                                 </form>
                                     <hr>
                                     <div class="text-center">
@@ -96,9 +96,6 @@
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     
 
     
