@@ -288,6 +288,216 @@ $("formAddTipoReg")?.addEventListener("submit", async (ev) => {
   bootstrap.Modal.getInstance(form.closest(".modal")).hide();
 });
 
+/* ===========================
+   CONSULTA DE REGISTRO (contextual por edición)
+=========================== */
+
+/* ====== STATE de Consulta de Registro ====== */
+const CR_STATE = {
+  edicionId: "",
+  dataCache: {}, // edicionId -> array de registros
+  search: "",
+  page: 1,
+  pageSize: 5,
+};
+
+/* Mock (reemplazar por fetch) */
+const registrosDemo = {
+  "ed-feria-2024": [
+    {
+      id: "r1",
+      usuario: "Ana Gabriela",
+      nick: "@anag",
+      correo: "anag.gomez@hotmail.com",
+      fecha: "2024-03-20",
+      tipo: "General",
+      codigo: "SP-IMM-2024",
+    },
+    {
+      id: "r2",
+      usuario: "Luis Pérez",
+      nick: "@lperez",
+      correo: "luisp@gmail.com",
+      fecha: "2024-03-22",
+      tipo: "Estudiante",
+      codigo: "",
+    },
+    {
+      id: "r3",
+      usuario: "Sofía Díaz",
+      nick: "@sdiaz",
+      correo: "sofiadiaz@mail.com",
+      fecha: "2024-03-23",
+      tipo: "VIP",
+      codigo: "SP-ORO-24",
+    },
+    {
+      id: "r4",
+      usuario: "Juan Ríos",
+      nick: "@jrios",
+      correo: "jrios@mail.com",
+      fecha: "2024-03-24",
+      tipo: "General",
+      codigo: "",
+    },
+    {
+      id: "r5",
+      usuario: "Paula Rey",
+      nick: "@prey",
+      correo: "paula@mail.com",
+      fecha: "2024-03-25",
+      tipo: "General",
+      codigo: "",
+    },
+    {
+      id: "r6",
+      usuario: "Diego Acuña",
+      nick: "@dacu",
+      correo: "dacuna@mail.com",
+      fecha: "2024-03-26",
+      tipo: "Estudiante",
+      codigo: "SP-UTE-24",
+    },
+  ],
+  "ed-feria-2025": [
+    {
+      id: "r7",
+      usuario: "María López",
+      nick: "@mlopez",
+      correo: "maria@gmail.com",
+      fecha: "2025-04-05",
+      tipo: "General",
+      codigo: "SP-UTE-25",
+    },
+  ],
+};
+
+/* ----- Abre el modal desde la card de la edición (FIX sin '#') ----- */
+function openConsultaRegForEdition(btn) {
+  const card = btn.closest(".card");
+  const evNombre = card?.dataset.evNombre || "";
+  const edNombre = card?.dataset.edNombre || "";
+  const edId = card?.dataset.edId || "";
+
+  // <<< Aca estaba tu error: usa id sin '#'
+  $("crCtxEv").textContent = evNombre || "—";
+  $("crCtxEd").textContent = edNombre || "—";
+  $("crEdicionId").value = edId || "";
+
+  // Inicializar state
+  CR_STATE.edicionId = edId;
+  CR_STATE.search = "";
+  CR_STATE.page = 1;
+  CR_STATE.pageSize = parseInt($("crPageSize")?.value || 5, 10);
+  $("crSearch").value = "";
+  $("crDetail").classList.add("d-none");
+
+  loadRegistrosForEdition(edId);
+}
+
+/* ----- Cargar registros (usa cache; reemplazá por fetch) ----- */
+async function loadRegistrosForEdition(edId) {
+  if (!CR_STATE.dataCache[edId]) {
+    // TODO: const data = await fetch(`/registros?edicionId=${encodeURIComponent(edId)}`).then(r=>r.json());
+    const data = registrosDemo[edId] || [];
+    CR_STATE.dataCache[edId] = data;
+  }
+  renderRegistrosTable();
+}
+
+/* ----- Render con filtro + paginación ----- */
+function renderRegistrosTable() {
+  const tbody = $("crTbody");
+  tbody.innerHTML = "";
+
+  const all = CR_STATE.dataCache[CR_STATE.edicionId] || [];
+  const q = (CR_STATE.search || "").toLowerCase().trim();
+
+  const filtered = all.filter((r) =>
+    [r.usuario, r.nick, r.correo].some((v) =>
+      (v || "").toLowerCase().includes(q)
+    )
+  );
+
+  // Paginación
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / CR_STATE.pageSize));
+  if (CR_STATE.page > totalPages) CR_STATE.page = totalPages;
+  if (CR_STATE.page < 1) CR_STATE.page = 1;
+
+  const start = (CR_STATE.page - 1) * CR_STATE.pageSize;
+  const end = start + CR_STATE.pageSize;
+  const pageItems = filtered.slice(start, end);
+
+  // Pintar filas
+  pageItems.forEach((r) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="fw-semibold">${r.usuario}</span></td>
+      <td><span class="text-muted">${r.nick}</span></td>
+      <td>${r.correo}</td>
+      <td class="text-end">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-regid="${r.id}">
+          <i class="bi bi-eye me-1"></i> Ver detalle
+        </button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  // Contadores e info
+  $("crCount").textContent = `${total} resultado${total !== 1 ? "s" : ""}`;
+  $("crPageInfo").textContent = `Página ${CR_STATE.page} de ${totalPages}`;
+  $("crPrev").disabled = CR_STATE.page <= 1;
+  $("crNext").disabled = CR_STATE.page >= totalPages;
+
+  // Eventos "Ver detalle"
+  tbody.querySelectorAll("button[data-regid]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const reg = (CR_STATE.dataCache[CR_STATE.edicionId] || []).find(
+        (x) => x.id === btn.dataset.regid
+      );
+      if (reg) showRegistroDetail(reg);
+    });
+  });
+}
+
+/* ----- Detalle ----- */
+function showRegistroDetail(reg) {
+  $("crDetUser").textContent = `${reg.usuario}${
+    reg.nick ? ` (${reg.nick})` : ""
+  }`;
+  $("crDetFecha").textContent = reg.fecha || "—";
+  $("crDetTipo").textContent = reg.tipo || "—";
+  $("crDetCodigo").textContent = reg.codigo ? reg.codigo : "No utilizó código";
+  $("crDetail").classList.remove("d-none");
+}
+
+/* ----- Listeners de búsqueda + paginación ----- */
+$("crSearch")?.addEventListener("input", () => {
+  CR_STATE.search = $("crSearch").value;
+  CR_STATE.page = 1; // reset al buscar
+  renderRegistrosTable();
+});
+
+$("crPageSize")?.addEventListener("change", () => {
+  CR_STATE.pageSize = parseInt($("crPageSize").value, 10) || 5;
+  CR_STATE.page = 1;
+  renderRegistrosTable();
+});
+
+$("crPrev")?.addEventListener("click", () => {
+  if (CR_STATE.page > 1) {
+    CR_STATE.page--;
+    renderRegistrosTable();
+  }
+});
+
+$("crNext")?.addEventListener("click", () => {
+  CR_STATE.page++;
+  renderRegistrosTable();
+});
+
 /* Exponer funciones para botones de las cards */
 window.openSponsorshipForEdition = openSponsorshipForEdition;
 window.openTipoRegForEdition = openTipoRegForEdition;
+window.openConsultaRegForEdition = openConsultaRegForEdition;
