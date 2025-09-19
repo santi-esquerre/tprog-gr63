@@ -1,4 +1,185 @@
 /* ===========================
+   DATOS DE EJEMPLO (basados en datos de prueba)
+=========================== */
+
+// Registros
+
+
+// Patrocinios
+const patrocinios = [
+  {
+    id: "PAT1",
+    edicionId: "EDEV08",
+    institucionId: "INS01",
+    nivel: "Oro",
+    tipoRegistroId: "TR19", 
+    aporte: 20000,
+    fecha: "21/08/2025",
+    cantidad: 4,
+    codigo: "TECHUDELAR"
+  }
+];
+
+// Instituciones
+const instituciones = [
+  {
+    id: "INS01",
+    nombre: "Facultad de Ingeniería",
+    descripcion: "Facultad de Ingeniería de la Universidad de la República",
+    web: "https://www.fing.edu.uy"
+  }
+];
+
+// Tipos de Registro
+const tiposRegistro = [
+  {
+    id: "TR07",
+    edicionId: "EDEV03",
+    nombre: "Corredor 21K",
+    descripcion: "Inscripción a la media maratón",
+    costo: 500,
+    cupo: 500
+  },
+  {
+    id: "TR19", 
+    edicionId: "EDEV08",
+    nombre: "Estudiante",
+    descripcion: "Acceso para estudiantes",
+    costo: 1000,
+    cupo: 50
+  },
+  {
+    id: "TR20",
+    edicionId: "EDEV09", 
+    nombre: "Full",
+    descripcion: "Acceso ilimitado + Cena de gala",
+    costo: 750,
+    cupo: 550
+  },
+  {
+    id: "TR25",
+    edicionId: "EDEV10",
+    nombre: "Estudiante", 
+    descripcion: "Acceso para estudiantes",
+    costo: 300,
+    cupo: 1
+  }
+];
+
+// Ediciones
+const ediciones = [
+  {
+    id: "EDEV03",
+    eventoId: "EV04",
+    usuarioId: "US06",
+    nombre: "Maratón de Montevideo 2024",
+    sigla: "MARATON24",
+    ciudad: "Montevideo",
+    pais: "Uruguay",
+    fechaInicio: "14/09/2024",
+    fechaFin: "14/09/2024", 
+    fechaAlta: "21/04/2024",
+    estado: "Aceptada",
+    imagen: "IMG-EDEV03.jpeg"
+  },
+  {
+    id: "EDEV04",
+    eventoId: "EV04",
+    usuarioId: "US06", 
+    nombre: "Maratón de Montevideo 2022",
+    sigla: "MARATON22",
+    ciudad: "Montevideo",
+    pais: "Uruguay",
+    fechaInicio: "14/09/2022",
+    fechaFin: "14/09/2022",
+    fechaAlta: "21/05/2022", 
+    estado: "Rechazada",
+    imagen: "IMG-EDEV04.jpeg"
+  },
+  {
+    id: "EDEV08",
+    eventoId: "EV01",
+    usuarioId: "US10",
+    nombre: "Tecnología Punta del Este 2026", 
+    sigla: "CONFTECH26",
+    ciudad: "Punta del Este",
+    pais: "Uruguay",
+    fechaInicio: "06/04/2026",
+    fechaFin: "10/04/2026",
+    fechaAlta: "01/08/2025",
+    estado: "Aceptada",
+    imagen: null
+  },
+  {
+    id: "EDEV09",
+    eventoId: "EV01",
+    usuarioId: "US05",
+    nombre: "Mobile World Congress 2025",
+    sigla: "MWC", 
+    ciudad: "Barcelona",
+    pais: "España",
+    fechaInicio: "12/12/2025",
+    fechaFin: "15/12/2025",
+    fechaAlta: "21/08/2025",
+    estado: "Ingresada",
+    imagen: "IMG-EDEV09.png"
+  },
+  {
+    id: "EDEV10",
+    eventoId: "EV01",
+    usuarioId: "US05",
+    nombre: "Web Summit 2026",
+    sigla: "WS26",
+    ciudad: "Lisboa", 
+    pais: "Portugal",
+    fechaInicio: "13/01/2026",
+    fechaFin: "01/02/2026",
+    fechaAlta: "04/06/2025",
+    estado: "Aceptada",
+    imagen: null
+  }
+];
+
+// Eventos
+const eventos = [
+  {
+    id: "EV01",
+    nombre: "Conferencia de Tecnología",
+    descripcion: "Evento sobre innovación tecnológica", 
+    sigla: "CONFTEC",
+    fechaAlta: "10/01/2025",
+    categorias: ["CA01", "CA02"],
+    imagen: null
+  },
+  {
+    id: "EV04",
+    nombre: "Maratón de Montevideo",
+    descripcion: "Competencia deportiva anual en la capital",
+    sigla: "MARATON",
+    fechaAlta: "01/01/2022", 
+    categorias: ["CA06", "CA07"],
+    imagen: "IMG-EV04.png"
+  }
+];
+
+// Categorías
+const categorias = [
+  { id: "CA01", nombre: "Tecnología" },
+  { id: "CA02", nombre: "Innovación" },
+  { id: "CA06", nombre: "Deporte" },
+  { id: "CA07", nombre: "Salud" }
+];
+
+// Usuario organizador actual
+const organizadorActual = {
+  id: "US04",
+  tipo: "O",
+  nickname: "miseventos", 
+  nombre: "MisEventos",
+  email: "contacto@miseventos.com"
+};
+
+/* ===========================
    UTILIDADES GENERALES
 =========================== */
 const $ = (id) => document.getElementById(id);
@@ -301,6 +482,31 @@ const CR_STATE = {
   pageSize: 5,
 };
 
+const registros = [
+   {
+    id: "RE02",
+    usuario: "Ana Torres",
+    nick: "@atorres",
+    correo: "atorres@mail.com",
+    edicionId: "EDEV03",
+    tipoRegistroId: "TR07",
+    fecha: "30/07/2024",
+    costo: 500,
+    tipo: "Corredor 2K"
+  },
+  {
+    id: "RE03",
+    usuario: "Ana Torres",
+    nick: "@atorres",
+    correo: "atorres@mail.com",
+    edicionId: "EDEV10",
+    tipoRegistroId: "TR25",
+    fecha: "21/08/2025",
+    costo: 300,
+    tipo: "Estudiante"
+  }
+];
+
 /* Mock (reemplazar por fetch) */
 const registrosDemo = {
   "ed-feria-2024": [
@@ -398,8 +604,7 @@ function openConsultaRegForEdition(btn) {
 /* ----- Cargar registros (usa cache; reemplazá por fetch) ----- */
 async function loadRegistrosForEdition(edId) {
   if (!CR_STATE.dataCache[edId]) {
-    // TODO: const data = await fetch(`/registros?edicionId=${encodeURIComponent(edId)}`).then(r=>r.json());
-    const data = registrosDemo[edId] || [];
+    const data = registros.filter(r => r.edicionId === edId) || [];
     CR_STATE.dataCache[edId] = data;
   }
   renderRegistrosTable();
