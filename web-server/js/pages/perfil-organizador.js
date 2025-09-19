@@ -1,4 +1,185 @@
 /* ===========================
+   DATOS DE EJEMPLO (basados en datos de prueba)
+=========================== */
+
+// Registros
+
+
+// Patrocinios
+const patrocinios = [
+  {
+    id: "PAT1",
+    edicionId: "EDEV08",
+    institucionId: "INS01",
+    nivel: "Oro",
+    tipoRegistroId: "TR19", 
+    aporte: 20000,
+    fecha: "21/08/2025",
+    cantidad: 4,
+    codigo: "TECHUDELAR"
+  }
+];
+
+// Instituciones
+const instituciones = [
+  {
+    id: "INS01",
+    nombre: "Facultad de Ingeniería",
+    descripcion: "Facultad de Ingeniería de la Universidad de la República",
+    web: "https://www.fing.edu.uy"
+  }
+];
+
+// Tipos de Registro
+const tiposRegistro = [
+  {
+    id: "TR07",
+    edicionId: "EDEV03",
+    nombre: "Corredor 21K",
+    descripcion: "Inscripción a la media maratón",
+    costo: 500,
+    cupo: 500
+  },
+  {
+    id: "TR19", 
+    edicionId: "EDEV08",
+    nombre: "Estudiante",
+    descripcion: "Acceso para estudiantes",
+    costo: 1000,
+    cupo: 50
+  },
+  {
+    id: "TR20",
+    edicionId: "EDEV09", 
+    nombre: "Full",
+    descripcion: "Acceso ilimitado + Cena de gala",
+    costo: 750,
+    cupo: 550
+  },
+  {
+    id: "TR25",
+    edicionId: "EDEV10",
+    nombre: "Estudiante", 
+    descripcion: "Acceso para estudiantes",
+    costo: 300,
+    cupo: 1
+  }
+];
+
+// Ediciones
+const ediciones = [
+  {
+    id: "EDEV03",
+    eventoId: "EV04",
+    usuarioId: "US06",
+    nombre: "Maratón de Montevideo 2024",
+    sigla: "MARATON24",
+    ciudad: "Montevideo",
+    pais: "Uruguay",
+    fechaInicio: "14/09/2024",
+    fechaFin: "14/09/2024", 
+    fechaAlta: "21/04/2024",
+    estado: "Aceptada",
+    imagen: "IMG-EDEV03.jpeg"
+  },
+  {
+    id: "EDEV04",
+    eventoId: "EV04",
+    usuarioId: "US06", 
+    nombre: "Maratón de Montevideo 2022",
+    sigla: "MARATON22",
+    ciudad: "Montevideo",
+    pais: "Uruguay",
+    fechaInicio: "14/09/2022",
+    fechaFin: "14/09/2022",
+    fechaAlta: "21/05/2022", 
+    estado: "Rechazada",
+    imagen: "IMG-EDEV04.jpeg"
+  },
+  {
+    id: "EDEV08",
+    eventoId: "EV01",
+    usuarioId: "US10",
+    nombre: "Tecnología Punta del Este 2026", 
+    sigla: "CONFTECH26",
+    ciudad: "Punta del Este",
+    pais: "Uruguay",
+    fechaInicio: "06/04/2026",
+    fechaFin: "10/04/2026",
+    fechaAlta: "01/08/2025",
+    estado: "Aceptada",
+    imagen: null
+  },
+  {
+    id: "EDEV09",
+    eventoId: "EV01",
+    usuarioId: "US05",
+    nombre: "Mobile World Congress 2025",
+    sigla: "MWC", 
+    ciudad: "Barcelona",
+    pais: "España",
+    fechaInicio: "12/12/2025",
+    fechaFin: "15/12/2025",
+    fechaAlta: "21/08/2025",
+    estado: "Ingresada",
+    imagen: "IMG-EDEV09.png"
+  },
+  {
+    id: "EDEV10",
+    eventoId: "EV01",
+    usuarioId: "US05",
+    nombre: "Web Summit 2026",
+    sigla: "WS26",
+    ciudad: "Lisboa", 
+    pais: "Portugal",
+    fechaInicio: "13/01/2026",
+    fechaFin: "01/02/2026",
+    fechaAlta: "04/06/2025",
+    estado: "Aceptada",
+    imagen: null
+  }
+];
+
+// Eventos
+const eventos = [
+  {
+    id: "EV01",
+    nombre: "Conferencia de Tecnología",
+    descripcion: "Evento sobre innovación tecnológica", 
+    sigla: "CONFTEC",
+    fechaAlta: "10/01/2025",
+    categorias: ["CA01", "CA02"],
+    imagen: null
+  },
+  {
+    id: "EV04",
+    nombre: "Maratón de Montevideo",
+    descripcion: "Competencia deportiva anual en la capital",
+    sigla: "MARATON",
+    fechaAlta: "01/01/2022", 
+    categorias: ["CA06", "CA07"],
+    imagen: "IMG-EV04.png"
+  }
+];
+
+// Categorías
+const categorias = [
+  { id: "CA01", nombre: "Tecnología" },
+  { id: "CA02", nombre: "Innovación" },
+  { id: "CA06", nombre: "Deporte" },
+  { id: "CA07", nombre: "Salud" }
+];
+
+// Usuario organizador actual
+const organizadorActual = {
+  id: "US04",
+  tipo: "O",
+  nickname: "miseventos", 
+  nombre: "MisEventos",
+  email: "contacto@miseventos.com"
+};
+
+/* ===========================
    UTILIDADES GENERALES
 =========================== */
 const $ = (id) => document.getElementById(id);
@@ -288,6 +469,240 @@ $("formAddTipoReg")?.addEventListener("submit", async (ev) => {
   bootstrap.Modal.getInstance(form.closest(".modal")).hide();
 });
 
+/* ===========================
+   CONSULTA DE REGISTRO (contextual por edición)
+=========================== */
+
+/* ====== STATE de Consulta de Registro ====== */
+const CR_STATE = {
+  edicionId: "",
+  dataCache: {}, // edicionId -> array de registros
+  search: "",
+  page: 1,
+  pageSize: 5,
+};
+
+const registros = [
+   {
+    id: "RE02",
+    usuario: "Ana Torres",
+    nick: "@atorres",
+    correo: "atorres@mail.com",
+    edicionId: "EDEV03",
+    tipoRegistroId: "TR07",
+    fecha: "30/07/2024",
+    costo: 500,
+    tipo: "Corredor 2K"
+  },
+  {
+    id: "RE03",
+    usuario: "Ana Torres",
+    nick: "@atorres",
+    correo: "atorres@mail.com",
+    edicionId: "EDEV10",
+    tipoRegistroId: "TR25",
+    fecha: "21/08/2025",
+    costo: 300,
+    tipo: "Estudiante"
+  }
+];
+
+/* Mock (reemplazar por fetch) */
+const registrosDemo = {
+  "ed-feria-2024": [
+    {
+      id: "r1",
+      usuario: "Ana Gabriela",
+      nick: "@anag",
+      correo: "anag.gomez@hotmail.com",
+      fecha: "2024-03-20",
+      tipo: "General",
+      codigo: "SP-IMM-2024",
+    },
+    {
+      id: "r2",
+      usuario: "Luis Pérez",
+      nick: "@lperez",
+      correo: "luisp@gmail.com",
+      fecha: "2024-03-22",
+      tipo: "Estudiante",
+      codigo: "",
+    },
+    {
+      id: "r3",
+      usuario: "Sofía Díaz",
+      nick: "@sdiaz",
+      correo: "sofiadiaz@mail.com",
+      fecha: "2024-03-23",
+      tipo: "VIP",
+      codigo: "SP-ORO-24",
+    },
+    {
+      id: "r4",
+      usuario: "Juan Ríos",
+      nick: "@jrios",
+      correo: "jrios@mail.com",
+      fecha: "2024-03-24",
+      tipo: "General",
+      codigo: "",
+    },
+    {
+      id: "r5",
+      usuario: "Paula Rey",
+      nick: "@prey",
+      correo: "paula@mail.com",
+      fecha: "2024-03-25",
+      tipo: "General",
+      codigo: "",
+    },
+    {
+      id: "r6",
+      usuario: "Diego Acuña",
+      nick: "@dacu",
+      correo: "dacuna@mail.com",
+      fecha: "2024-03-26",
+      tipo: "Estudiante",
+      codigo: "SP-UTE-24",
+    },
+  ],
+  "ed-feria-2025": [
+    {
+      id: "r7",
+      usuario: "María López",
+      nick: "@mlopez",
+      correo: "maria@gmail.com",
+      fecha: "2025-04-05",
+      tipo: "General",
+      codigo: "SP-UTE-25",
+    },
+  ],
+};
+
+/* ----- Abre el modal desde la card de la edición (FIX sin '#') ----- */
+function openConsultaRegForEdition(btn) {
+  const card = btn.closest(".card");
+  const evNombre = card?.dataset.evNombre || "";
+  const edNombre = card?.dataset.edNombre || "";
+  const edId = card?.dataset.edId || "";
+
+  // <<< Aca estaba tu error: usa id sin '#'
+  $("crCtxEv").textContent = evNombre || "—";
+  $("crCtxEd").textContent = edNombre || "—";
+  $("crEdicionId").value = edId || "";
+
+  // Inicializar state
+  CR_STATE.edicionId = edId;
+  CR_STATE.search = "";
+  CR_STATE.page = 1;
+  CR_STATE.pageSize = parseInt($("crPageSize")?.value || 5, 10);
+  $("crSearch").value = "";
+  $("crDetail").classList.add("d-none");
+
+  loadRegistrosForEdition(edId);
+}
+
+/* ----- Cargar registros (usa cache; reemplazá por fetch) ----- */
+async function loadRegistrosForEdition(edId) {
+  if (!CR_STATE.dataCache[edId]) {
+    const data = registros.filter(r => r.edicionId === edId) || [];
+    CR_STATE.dataCache[edId] = data;
+  }
+  renderRegistrosTable();
+}
+
+/* ----- Render con filtro + paginación ----- */
+function renderRegistrosTable() {
+  const tbody = $("crTbody");
+  tbody.innerHTML = "";
+
+  const all = CR_STATE.dataCache[CR_STATE.edicionId] || [];
+  const q = (CR_STATE.search || "").toLowerCase().trim();
+
+  const filtered = all.filter((r) =>
+    [r.usuario, r.nick, r.correo].some((v) =>
+      (v || "").toLowerCase().includes(q)
+    )
+  );
+
+  // Paginación
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / CR_STATE.pageSize));
+  if (CR_STATE.page > totalPages) CR_STATE.page = totalPages;
+  if (CR_STATE.page < 1) CR_STATE.page = 1;
+
+  const start = (CR_STATE.page - 1) * CR_STATE.pageSize;
+  const end = start + CR_STATE.pageSize;
+  const pageItems = filtered.slice(start, end);
+
+  // Pintar filas
+  pageItems.forEach((r) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="fw-semibold">${r.usuario}</span></td>
+      <td><span class="text-muted">${r.nick}</span></td>
+      <td>${r.correo}</td>
+      <td class="text-end">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-regid="${r.id}">
+          <i class="bi bi-eye me-1"></i> Ver detalle
+        </button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  // Contadores e info
+  $("crCount").textContent = `${total} resultado${total !== 1 ? "s" : ""}`;
+  $("crPageInfo").textContent = `Página ${CR_STATE.page} de ${totalPages}`;
+  $("crPrev").disabled = CR_STATE.page <= 1;
+  $("crNext").disabled = CR_STATE.page >= totalPages;
+
+  // Eventos "Ver detalle"
+  tbody.querySelectorAll("button[data-regid]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const reg = (CR_STATE.dataCache[CR_STATE.edicionId] || []).find(
+        (x) => x.id === btn.dataset.regid
+      );
+      if (reg) showRegistroDetail(reg);
+    });
+  });
+}
+
+/* ----- Detalle ----- */
+function showRegistroDetail(reg) {
+  $("crDetUser").textContent = `${reg.usuario}${
+    reg.nick ? ` (${reg.nick})` : ""
+  }`;
+  $("crDetFecha").textContent = reg.fecha || "—";
+  $("crDetTipo").textContent = reg.tipo || "—";
+  $("crDetCodigo").textContent = reg.codigo ? reg.codigo : "No utilizó código";
+  $("crDetail").classList.remove("d-none");
+}
+
+/* ----- Listeners de búsqueda + paginación ----- */
+$("crSearch")?.addEventListener("input", () => {
+  CR_STATE.search = $("crSearch").value;
+  CR_STATE.page = 1; // reset al buscar
+  renderRegistrosTable();
+});
+
+$("crPageSize")?.addEventListener("change", () => {
+  CR_STATE.pageSize = parseInt($("crPageSize").value, 10) || 5;
+  CR_STATE.page = 1;
+  renderRegistrosTable();
+});
+
+$("crPrev")?.addEventListener("click", () => {
+  if (CR_STATE.page > 1) {
+    CR_STATE.page--;
+    renderRegistrosTable();
+  }
+});
+
+$("crNext")?.addEventListener("click", () => {
+  CR_STATE.page++;
+  renderRegistrosTable();
+});
+
 /* Exponer funciones para botones de las cards */
 window.openSponsorshipForEdition = openSponsorshipForEdition;
 window.openTipoRegForEdition = openTipoRegForEdition;
+window.openConsultaRegForEdition = openConsultaRegForEdition;

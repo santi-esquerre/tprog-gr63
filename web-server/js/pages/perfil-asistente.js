@@ -22,12 +22,19 @@ const ediciones = [
 
 let registros = [
   {
-    evento: "Feria del libro",
-    edicion: "Feria del libro 2024",
-    tipo: "General",
-    fecha: "2024-03-20",
-    costo: 0,
+    evento: "Maratón de Montevideo",
+    edicion: "Maratón de Montevideo 2024",
+    tipo: "Corredor 21K",
+    fecha: "30/07/2024",
+    costo: 500
   },
+  {
+    evento: "Conferencia de Tecnología",
+    edicion: "Web Summit 2026",
+    tipo: "Estudiante",
+    fecha: "21/08/2025",
+    costo: 300
+  }
 ];
 let pendingDeleteIndex = null;
 
