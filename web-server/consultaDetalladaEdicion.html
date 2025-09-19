@@ -10,43 +10,156 @@
 </head>
 <body class="d-flex flex-column h-100 bg-light">
 
-         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container px-3">
-          <a class="navbar-brand fw-semibold" href="index.html">Eventos.uy</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#nav"
-            aria-controls="nav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+         <style>
+      :root {
+        --brand: #6f42c1;
+        --brand-2: #0d6efd;
+      }
+      .navbar-blur {
+        backdrop-filter: blur(8px);
+        background: rgba(33, 37, 41, 0.8) !important;
+      }
+      .hero {
+        position: relative;
+        min-height: 75vh;
+        display: grid;
+        place-items: center;
+        overflow: clip;
+        color: #fff;
+      }
+      .hero video,
+      .hero .hero-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.55);
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+            1200px 600px at 20% 20%,
+            rgba(111, 66, 193, 0.35),
+            transparent 50%
+          ),
+          linear-gradient(180deg, rgba(13, 110, 253, 0.25), transparent 60%),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+        pointer-events: none;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .chip {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+      .chip:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-1px);
+      }
+      .search-wrap {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 1rem;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+          0 8px 30px rgba(0, 0, 0, 0.2);
+      }
+      .stat {
+        border-radius: 1rem;
+        background: linear-gradient(
+          145deg,
+          rgba(13, 110, 253, 0.1),
+          rgba(111, 66, 193, 0.1)
+        );
+        border: 1px solid rgba(13, 110, 253, 0.15);
+      }
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+      }
+      .logo-cloud img {
+        opacity: 0.6;
+        transition: opacity 0.2s;
+        filter: grayscale(1);
+      }
+      .logo-cloud img:hover {
+        opacity: 1;
+        filter: none;
+      }
+
+      /* Pequeñas animaciones */
+      @keyframes float {
+        from {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+      .float {
+        animation: float 5s ease-in-out infinite;
+      }
+
+      [data-bs-theme="dark"] .search-wrap {
+        background: rgba(33, 37, 41, 0.9);
+        color: #fff;
+      }
+      [data-bs-theme="dark"] .chip {
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+    </style>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-blur">
+      <div class="container">
+        <a class="navbar-brand fw-semibold" href="index.html">
+          <i class="bi bi-stars me-2 text-warning"></i>Eventos<span
+            class="text-primary"
+            >.uy</span
           >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="nav">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Inicio</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">Eventos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="contact.html">Usuarios</a>
-              </li>
-              <li class="nav-item p-0">
-                <a
-                  class="btn btn-primary py-0 mt-2"
-                  id="login/logout"
-                  href="login.html"
-                  >Iniciar sesión</a
-                >
-              </li>
-            </ul>
-          </div>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#nav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="eventos.html">Eventos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="usuarios.html">Usuarios</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="perfil-organizador.html">Mi perfil</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-primary" id="login/logout" href="login.html"
+                ><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión</a
+              >
+            </li>
+          </ul>
         </div>
-      </nav>
+      </div>
+    </nav>
 
 
     <section class="position-relative" id="imagenEd" style="min-height: 500px; background-image: url('https://dummyimage.com/140x40/adb5bd/ffffff.png&text=IMM'); background-size: cover; background-position: center;">
@@ -84,7 +197,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <h4 class="mb-0" id="organizadorEdicion">Corporación Tecnológica</h4>
+                        <h4><a href="perfil-organizador.html" class="text-decoration-none text-body" id="organizadorEdicion">Corporación Tecnológica</a></h4>
                         <p class="mb-0" id="correoOrganizadorEdicion">info@techcorp.com</p>
                         <p class="mb-0" id="descOrganizadorEdicion">Empresa líder en tecnologías de la información.</p>
                     </div>
@@ -114,29 +227,25 @@
         </div>
      
     </main>
-    <footer class="mt-5">
-        <div class="container-fluid bg-dark text-white py-4">
-            <div class="container text-center">
-                <h5 class="mb-0">PATROCINADORES DE LA EDICIÓN</h5>
-                <div class ="d-flex flex-wrap justify-content-center align-items-end mt-4" id = "patrocinadores">
-                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
-                        <p>Antel</p>
-                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo Antel">
-                    </div>
-                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
-                        <p>Facultad de Ingeniería</p>
-                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo Facultad de Ingenieria">
-                    </div>
-                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
-                        <p>ORT Uruguay</p>
-                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo ORT Uruguay">
-                    </div>
-                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100">
-                        <p>Universidad Católica del Uruguay</p>
-                        <img class="img-fluid" src="assets/img/sponsor.png" style="max-height: 100px" alt="Logo Universidad Católica del Uruguay">
-                    </div>
+    <footer class="bg-dark py-4 mt-auto">
+      <div class="container px-3">
+        <div
+          class="row align-items-center justify-content-between flex-column flex-sm-row"
+        >
+          <div class="col-auto">
+            <div class="small m-0 text-white">
+              Copyright &copy; Eventos.uy 2025
             </div>
+          </div>
+          <div class="col-auto">
+            <a class="link-light small" href="#!">Privacy</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Terms</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Contact</a>
+          </div>
         </div>
+      </div>
     </footer>
     <!-- Modal -->
     <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
@@ -148,7 +257,7 @@
                 </div>
                 <div class="modal-body p-4">
                     <div class="d-flex justify-content-start mb-3" style="background-image: url('https://placehold.co/400'); height: 75px; background-size: cover; background-position:center;">
-                        <h4 class="ms-3 fs-5" style="line-height: 75px;">Los Fabulosos Candillacs</h4>
+                        <h4 class="ms-3 fs-5" style="line-height: 75px;" id="nombreEvento">Los Fabulosos Candillacs</h4>
                     </div>
                     <form>
                         <div class="mb-3">

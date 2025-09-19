@@ -16,62 +16,157 @@
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
-            <!-- Navigation-->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container px-5">
-          <a class="navbar-brand" href="index.html">Eventos.uy</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+            <!-- NAV -->
+    <style>
+      :root {
+        --brand: #6f42c1;
+        --brand-2: #0d6efd;
+      }
+      .navbar-blur {
+        backdrop-filter: blur(8px);
+        background: rgba(33, 37, 41, 0.8) !important;
+      }
+      .hero {
+        position: relative;
+        min-height: 75vh;
+        display: grid;
+        place-items: center;
+        overflow: clip;
+        color: #fff;
+      }
+      .hero video,
+      .hero .hero-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.55);
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+            1200px 600px at 20% 20%,
+            rgba(111, 66, 193, 0.35),
+            transparent 50%
+          ),
+          linear-gradient(180deg, rgba(13, 110, 253, 0.25), transparent 60%),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+        pointer-events: none;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .chip {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+      .chip:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-1px);
+      }
+      .search-wrap {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 1rem;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+          0 8px 30px rgba(0, 0, 0, 0.2);
+      }
+      .stat {
+        border-radius: 1rem;
+        background: linear-gradient(
+          145deg,
+          rgba(13, 110, 253, 0.1),
+          rgba(111, 66, 193, 0.1)
+        );
+        border: 1px solid rgba(13, 110, 253, 0.15);
+      }
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+      }
+      .logo-cloud img {
+        opacity: 0.6;
+        transition: opacity 0.2s;
+        filter: grayscale(1);
+      }
+      .logo-cloud img:hover {
+        opacity: 1;
+        filter: none;
+      }
+
+      /* Pequeñas animaciones */
+      @keyframes float {
+        from {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+      .float {
+        animation: float 5s ease-in-out infinite;
+      }
+
+      [data-bs-theme="dark"] .search-wrap {
+        background: rgba(33, 37, 41, 0.9);
+        color: #fff;
+      }
+      [data-bs-theme="dark"] .chip {
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+    </style>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-blur">
+      <div class="container">
+        <a class="navbar-brand fw-semibold" href="index.html">
+          <i class="bi bi-stars me-2 text-warning"></i>Eventos<span
+            class="text-primary"
+            >.uy</span
           >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Inicio</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">Eventos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="contact.html">Usuarios</a>
-              </li>
-              <li class="nav-item d-none">
-                <a class="nav-link" href="pricing.html">Mi perfil</a>
-              </li>
-              <li class="nav-item p-0">
-                <a
-                  class="btn btn-primary py-0 mt-2"
-                  id="login/logout"
-                  href="login.html"
-                >
-                  Iniciar sesión
-                </a>
-              </li>
-              <!-- <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
-                                    <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                    <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
-                                    <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
-                                </ul>
-                            </li> -->
-            </ul>
-          </div>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#nav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="eventos.html">Eventos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="usuarios.html">Usuarios</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="perfil-organizador.html">Mi perfil</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-primary" id="login/logout" href="login.html"
+                ><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión</a
+              >
+            </li>
+          </ul>
         </div>
-      </nav>
+      </div>
+    </nav>
             <!-- Main section-->
             <section class="p-5" id="main">
                 <div class="container">
@@ -90,13 +185,13 @@
                                         style="aspect-ratio: 600/350;"
                                     />
                                     <div class="card-body">
-                                        <span class="text-muted text-decoration-none">Conferencia de Tecnología</span>
+                                        <span class="text-muted text-deco:ration-none">Conferencia de Tecnología</span>
                                         <p class="mb-0 small text-muted">
                                             Categorías: Tecnología, Innovación
                                         </p>
                                     </div>
                                     <div class="evento-descripcion position-absolute top-0 start-0 w-100 h-100 bg-white p-3 d-flex align-items-center justify-content-center text-center" style="opacity:0; pointer-events:none; transition: opacity 0.3s;">
-                                        <span class="text-muted">Una conferencia sobre los últimos avances en tecnología e innovación. Participa y conoce las tendencias del sector.</span>
+                                        <span class="text-muted">Evento sobre innovación tecnológica</span>
                                     </div>
                                 </div>
                             </a>
@@ -106,7 +201,7 @@
                                 <div class="card h-100 shadow-sm border-0 text-start evento-card position-relative overflow-hidden" style="transition: box-shadow 0.3s;">
                                     <img
                                         class="card-img-top"
-                                        src="assets/img/IMG-EDEV04.jpeg" style="aspect-ratio: 600/350;"
+                                        src="assets/img/IMG-EV04.png" style="aspect-ratio: 600/350;"
                                     />
                                     <div class="card-body">
                                         <span class="text-muted text-decoration-none">Maratón de Montevideo</span>
@@ -115,7 +210,9 @@
                                         </p>
                                     </div>
                                     <div class="evento-descripcion position-absolute top-0 start-0 w-100 h-100 bg-white p-3 d-flex align-items-center justify-content-center text-center" style="opacity:0; pointer-events:none; transition: opacity 0.3s;">
-                                        <span class="text-muted">Únete a la maratón más importante de la ciudad. Evento deportivo para todas las edades y niveles.</span>
+                                        <span class="text-muted">Competencia deportiva anual en
+la capital
+</span>
                                     </div>
                                 </div>
                             </a>
@@ -161,19 +258,25 @@
         
         <!-- Footer-->
         <footer class="bg-dark py-4 mt-auto">
-            <div class="container px-5">
-                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; Your Website 2023</div></div>
-                    <div class="col-auto">
-                        <a class="link-light small" href="#!">Privacy</a>
-                        <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Terms</a>
-                        <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Contact</a>
-                    </div>
-                </div>
+      <div class="container px-3">
+        <div
+          class="row align-items-center justify-content-between flex-column flex-sm-row"
+        >
+          <div class="col-auto">
+            <div class="small m-0 text-white">
+              Copyright &copy; Eventos.uy 2025
             </div>
-        </footer>
+          </div>
+          <div class="col-auto">
+            <a class="link-light small" href="#!">Privacy</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Terms</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Contact</a>
+          </div>
+        </div>
+      </div>
+    </footer>
         <!-- Bootstrap core JS-->
         <script src="js/bootstrap.min.js"></script>
         <!-- Core theme JS-->

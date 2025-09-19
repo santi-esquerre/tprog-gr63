@@ -18,11 +18,11 @@
       rel="stylesheet"
     />
 
-    <!-- Tu CSS -->
     <link href="css/styles.css" rel="stylesheet" />
-
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- NAV -->
     <style>
-      /* ======= Estilos "cra" ======= */
       :root {
         --brand: #6f42c1;
         --brand-2: #0d6efd;
@@ -125,7 +125,6 @@
         animation: float 5s ease-in-out infinite;
       }
 
-      /* Dark-mode helpers si activás data-bs-theme="dark" */
       [data-bs-theme="dark"] .search-wrap {
         background: rgba(33, 37, 41, 0.9);
         color: #fff;
@@ -134,9 +133,6 @@
         border-color: rgba(255, 255, 255, 0.25);
       }
     </style>
-  </head>
-  <body class="d-flex flex-column min-vh-100">
-    <!-- NAV -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-blur">
       <div class="container">
         <a class="navbar-brand fw-semibold" href="index.html">
@@ -159,13 +155,13 @@
               <a class="nav-link" href="index.html">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about.html">Eventos</a>
+              <a class="nav-link" href="eventos.html">Eventos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="contact.html">Usuarios</a>
+              <a class="nav-link" href="usuarios.html">Usuarios</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="perfil.html">Mi perfil</a>
+              <a class="nav-link" href="perfil-organizador.html">Mi perfil</a>
             </li>
             <li class="nav-item ms-lg-2">
               <a class="btn btn-primary" id="login/logout" href="login.html"
@@ -180,15 +176,6 @@
     <main class="flex-grow-1">
       <!-- HERO -->
       <header class="hero py-5">
-        <!-- Si no querés video, comentá el <video> y dejá la imagen -->
-        <!-- <video autoplay muted loop playsinline poster="assets/hero.jpg">
-          <source src="assets/hero.mp4" type="video/mp4" />
-        </video>
-        <img
-          class="hero-img d-none"
-          src="assets/hero.jpg"
-          alt="Eventos en vivo"
-        /> -->
 
         <div class="container hero-content pt-5">
           <div class="row align-items-center">
@@ -226,7 +213,7 @@
                     />
                   </div>
                   <div class="col-6 col-md-3 d-grid">
-                    <a class="btn btn-primary" href="about.html"
+                    <a class="btn btn-primary" href="eventos.html"
                       ><i class="bi bi-magic me-1"></i> Ver eventos</a
                     >
                   </div>
@@ -235,20 +222,17 @@
 
               <!-- Chips categorías -->
               <div class="d-flex flex-wrap gap-2">
-                <a href="about.html" class="chip"
-                  ><i class="bi bi-music-note-beamed"></i> Música</a
+                <a href="eventos.html?categoria=tecnologia" class="chip text-decoration-none"
+                  ><i class="bi bi-laptop"></i> Tecnología</a
                 >
-                <a href="about.html" class="chip"
-                  ><i class="bi bi-cpu"></i> Tecnología</a
+                <a href="eventos.html?categoria=innovacion" class="chip text-decoration-none"
+                  ><i class="bi bi-cpu"></i> Innovación</a
                 >
-                <a href="about.html" class="chip"
-                  ><i class="bi bi-book"></i> Cultura</a
+                <a href="eventos.html?categoria=salud" class="chip text-decoration-none"
+                  ><i class="bi bi-heart"></i> Salud</a
                 >
-                <a href="about.html" class="chip"
-                  ><i class="bi bi-bicycle"></i> Deportes</a
-                >
-                <a href="about.html" class="chip"
-                  ><i class="bi bi-people"></i> Conferencias</a
+                <a href="eventos.html?categoria=deporte" class="chip text-decoration-none"
+                  ><i class="bi bi-bicycle"></i> Deporte</a
                 >
               </div>
 
@@ -381,49 +365,6 @@
         </div>
       </header>
 
-      <!-- Logo cloud -->
-      <section class="py-4">
-        <div class="container text-center logo-cloud">
-          <div class="row g-4 align-items-center justify-content-center">
-            <div class="col-4 col-md-2">
-              <img
-                class="img-fluid"
-                src="https://dummyimage.com/140x40/adb5bd/ffffff.png&text=IMM"
-                alt="IMM"
-              />
-            </div>
-            <div class="col-4 col-md-2">
-              <img
-                class="img-fluid"
-                src="https://dummyimage.com/140x40/adb5bd/ffffff.png&text=Fing"
-                alt="FIng"
-              />
-            </div>
-            <div class="col-4 col-md-2">
-              <img
-                class="img-fluid"
-                src="https://dummyimage.com/140x40/adb5bd/ffffff.png&text=Expo"
-                alt="Expo"
-              />
-            </div>
-            <div class="col-4 col-md-2">
-              <img
-                class="img-fluid"
-                src="https://dummyimage.com/140x40/adb5bd/ffffff.png&text=Ferias"
-                alt="Ferias"
-              />
-            </div>
-            <div class="col-4 col-md-2">
-              <img
-                class="img-fluid"
-                src="https://dummyimage.com/140x40/adb5bd/ffffff.png&text=Uruguay"
-                alt="Uruguay"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- Destacados -->
       <section id="destacados" class="py-5">
         <div class="container">
@@ -433,72 +374,30 @@
               Seleccionados por el equipo de Eventos.uy
             </p>
           </div>
-          <div class="row g-4">
+          <div class="row g-4 justify-content-center">
             <!-- Card -->
             <div class="col-12 col-md-6 col-lg-4">
               <div class="card h-100 shadow border-0 card-hover">
                 <img
                   class="card-img-top"
-                  src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop"
+                  src="https://dummyimage.com/600x350/adb5bd/ffffff.png&text=Evento+1"
                   alt="Festival"
                 />
                 <div class="card-body">
                   <div
-                    class="d-flex justify-content-between align-items-center mb-1"
+                    class="d-flex justify-content-start gap-2 align-items-center mb-1"
                   >
-                    <span class="badge bg-primary">Música</span>
-                    <small class="text-muted"
-                      ><i class="bi bi-geo-alt me-1"></i>Montevideo</small
-                    >
+                    <span class="badge bg-primary">Tecnología</span>
+                    <span class="badge bg-primary">Innovación</span>
                   </div>
-                  <h5 class="card-title mb-1">Montevideo Sound Fest</h5>
-                  <div class="small text-muted mb-2">
-                    <i class="bi bi-calendar-event me-1"></i>12–14 Oct
-                  </div>
+                  <h5 class="card-title mb-1">Conferencia de Tecnología</h5>
                   <p class="card-text small">
-                    Tres días de bandas locales e internacionales, food trucks y
-                    sorpresas.
+                    Evento sobre innovación tecnológica
                   </p>
-                </div>
-                <div class="card-footer bg-transparent border-0">
+                  
                   <a
                     class="btn btn-outline-primary w-100"
-                    href="consulta-evento.html"
-                    >Ver más</a
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- Más cards ejemplo -->
-            <div class="col-12 col-md-6 col-lg-4">
-              <div class="card h-100 shadow border-0 card-hover">
-                <img
-                  class="card-img-top"
-                  src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1200&auto=format&fit=crop"
-                  alt="Tech"
-                />
-                <div class="card-body">
-                  <div
-                    class="d-flex justify-content-between align-items-center mb-1"
-                  >
-                    <span class="badge bg-success">Tecnología</span>
-                    <small class="text-muted"
-                      ><i class="bi bi-geo-alt me-1"></i>Salto</small
-                    >
-                  </div>
-                  <h5 class="card-title mb-1">Dev Summit Litoral</h5>
-                  <div class="small text-muted mb-2">
-                    <i class="bi bi-calendar-event me-1"></i>22 Nov
-                  </div>
-                  <p class="card-text small">
-                    Charlas, workshops y feria de empleo IT.
-                  </p>
-                </div>
-                <div class="card-footer bg-transparent border-0">
-                  <a
-                    class="btn btn-outline-primary w-100"
-                    href="consulta-evento.html"
+                    href="consultaDetalladaEvento.html?id=1"
                     >Ver más</a
                   >
                 </div>
@@ -509,35 +408,31 @@
               <div class="card h-100 shadow border-0 card-hover">
                 <img
                   class="card-img-top"
-                  src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop"
-                  alt="Feria"
+                  src="assets/img/IMG-EV04.png"
+                  alt="Festival"
+                  style="aspect-ratio: 600/350;"
                 />
                 <div class="card-body">
                   <div
-                    class="d-flex justify-content-between align-items-center mb-1"
+                    class="d-flex justify-content-start gap-2 align-items-center mb-1"
                   >
-                    <span class="badge bg-warning text-dark">Cultura</span>
-                    <small class="text-muted"
-                      ><i class="bi bi-geo-alt me-1"></i>Colonia</small
-                    >
+                    <span class="badge bg-primary">Deporte</span>
+                    <span class="badge bg-primary">Salud</span>
                   </div>
-                  <h5 class="card-title mb-1">Feria del Libro 2025</h5>
-                  <div class="small text-muted mb-2">
-                    <i class="bi bi-calendar-event me-1"></i>3–5 Dic
-                  </div>
+                  <h5 class="card-title mb-1">Maratón de Montevideo</h5>
                   <p class="card-text small">
-                    Autores invitados, firmas, charlas y actividades infantiles.
+                    Competencia deportiva anual en la capital
                   </p>
-                </div>
-                <div class="card-footer bg-transparent border-0">
+                  
                   <a
                     class="btn btn-outline-primary w-100"
-                    href="consulta-evento.html"
+                    href="consultaDetalladaEvento.html?id=1"
                     >Ver más</a
                   >
                 </div>
               </div>
             </div>
+
           </div>
 
           <!-- CTA organizadores -->
@@ -563,7 +458,7 @@
                 </p>
               </div>
               <div class="col-12 col-md-auto d-grid d-sm-flex gap-2">
-                <a class="btn btn-primary" href="about.html"
+                <a class="btn btn-primary"
                   ><i class="bi bi-rocket-takeoff me-1"></i> Empezar ahora</a
                 >
                 <a class="btn btn-outline-secondary" href="#faq"
@@ -673,16 +568,22 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-dark text-white py-4 mt-auto">
-      <div class="container">
-        <div class="row gy-3 align-items-center">
-          <div class="col-12 col-md">
-            <div class="small mb-0">Copyright &copy; Eventos.uy 2025</div>
+    <footer class="bg-dark py-4 mt-auto">
+      <div class="container px-3">
+        <div
+          class="row align-items-center justify-content-between flex-column flex-sm-row"
+        >
+          <div class="col-auto">
+            <div class="small m-0 text-white">
+              Copyright &copy; Eventos.uy 2025
+            </div>
           </div>
-          <div class="col-12 col-md-auto">
-            <a class="link-light me-3 small" href="#faq">FAQ</a>
-            <a class="link-light me-3 small" href="#!">Privacidad</a>
-            <a class="link-light small" href="#!">Términos</a>
+          <div class="col-auto">
+            <a class="link-light small" href="#!">Privacy</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Terms</a>
+            <span class="text-white mx-1">&middot;</span>
+            <a class="link-light small" href="#!">Contact</a>
           </div>
         </div>
       </div>
