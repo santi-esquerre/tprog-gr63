@@ -40,47 +40,156 @@
   <body class="d-flex flex-column">
     <main class="flex-shrink-0">
       <!-- Nav -->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container px-3">
-          <a class="navbar-brand fw-semibold" href="index.html">Eventos.uy</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
+      <style>
+      :root {
+        --brand: #6f42c1;
+        --brand-2: #0d6efd;
+      }
+      .navbar-blur {
+        backdrop-filter: blur(8px);
+        background: rgba(33, 37, 41, 0.8) !important;
+      }
+      .hero {
+        position: relative;
+        min-height: 75vh;
+        display: grid;
+        place-items: center;
+        overflow: clip;
+        color: #fff;
+      }
+      .hero video,
+      .hero .hero-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.55);
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+            1200px 600px at 20% 20%,
+            rgba(111, 66, 193, 0.35),
+            transparent 50%
+          ),
+          linear-gradient(180deg, rgba(13, 110, 253, 0.25), transparent 60%),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+        pointer-events: none;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .chip {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+      .chip:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-1px);
+      }
+      .search-wrap {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 1rem;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+          0 8px 30px rgba(0, 0, 0, 0.2);
+      }
+      .stat {
+        border-radius: 1rem;
+        background: linear-gradient(
+          145deg,
+          rgba(13, 110, 253, 0.1),
+          rgba(111, 66, 193, 0.1)
+        );
+        border: 1px solid rgba(13, 110, 253, 0.15);
+      }
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+      }
+      .logo-cloud img {
+        opacity: 0.6;
+        transition: opacity 0.2s;
+        filter: grayscale(1);
+      }
+      .logo-cloud img:hover {
+        opacity: 1;
+        filter: none;
+      }
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Inicio</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">Eventos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="contact.html">Usuarios</a>
-              </li>
-              <li class="nav-item d-none">
-                <a class="nav-link" href="pricing.html">Mi perfil</a>
-              </li>
-              <li class="nav-item p-0">
-                <a
-                  class="btn btn-primary py-0 mt-2"
-                  id="login/logout"
-                  href="login.html"
-                  >Iniciar sesión</a
-                >
-              </li>
-            </ul>
-          </div>
+      /* Pequeñas animaciones */
+      @keyframes float {
+        from {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+      .float {
+        animation: float 5s ease-in-out infinite;
+      }
+
+      [data-bs-theme="dark"] .search-wrap {
+        background: rgba(33, 37, 41, 0.9);
+        color: #fff;
+      }
+      [data-bs-theme="dark"] .chip {
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+    </style>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-blur">
+      <div class="container">
+        <a class="navbar-brand fw-semibold" href="index.html">
+          <i class="bi bi-stars me-2 text-warning"></i>Eventos<span
+            class="text-primary"
+            >.uy</span
+          >
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#nav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="eventos.html">Eventos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="usuarios.html">Usuarios</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="perfil-organizador.html">Mi perfil</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-primary" id="login/logout" href="login.html"
+                ><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión</a
+              >
+            </li>
+          </ul>
         </div>
-      </nav>
+      </div>
+    </nav>
 
       <!-- Perfil Organizador -->
       <section class="py-5">
@@ -91,10 +200,9 @@
               <div class="card profile-card shadow-sm">
                 <div class="position-relative">
                   <img
-                    src="assets/img/user.jpg"
+                    src="assets/img/IMG-US04.jpeg"
                     class="card-img-top"
                     alt="Foto del organizador"
-                    height="220"
                   />
                   <span
                     class="badge text-bg-danger position-absolute top-0 start-0 m-3 rounded-pill px-3"
@@ -107,10 +215,10 @@
                   >
                     <div>
                       <h4 class="card-title mb-1" id="orgNombre">
-                        Intendencia de Montevideo
+                        MisEventos
                       </h4>
                       <a href="#" class="text-muted text-decoration-none"
-                        >@imm</a
+                        >@miseventos</a
                       >
                     </div>
                     <button
@@ -123,7 +231,7 @@
                   </div>
 
                   <p class="mt-3 mb-2" id="orgDescripcion">
-                    Gobierno departamental de Montevideo.
+                    Empresa de organización de eventos.
                   </p>
 
                   <p class="mb-2">
@@ -134,13 +242,13 @@
                       target="_blank"
                       rel="noopener"
                     >
-                      https://montevideo.gub.uy
+                      https://miseventos.com
                     </a>
                   </p>
 
                   <p class="mb-1">
                     <i class="bi bi-envelope-fill me-1"></i>
-                    <span id="orgEmail">contacto@imm.gub.uy</span>
+                    <span id="orgEmail">contacto@miseventos.com</span>
                   </p>
 
                   <p class="text-muted fst-italic mb-0">
@@ -241,9 +349,8 @@
                       <i class="bi bi-plus-circle me-1"></i> Agregar Evento
                     </button>
                   </div>
-
+                  <!--  
                   <div class="row g-3">
-                    <!-- Card de ejemplo -->
                     <div class="col-12 col-sm-6">
                       <div class="card h-100 shadow-sm border-0">
                         <img
@@ -264,8 +371,7 @@
                       </div>
                     </div>
 
-                    <!-- Duplicá / renderizá dinámicamente más cards de eventos acá -->
-                  </div>
+                  </div> -->
                 </div>
 
                 <!-- TAB EDICIONES -->
@@ -291,16 +397,17 @@
                   <div class="row g-3">
                     <div class="col-12 col-md-6">
                       <div
-                        class="card h-100 shadow-sm border-0"
-                        data-ev-id="ev-feria"
-                        data-ev-nombre="Feria del libro"
-                        data-ed-id="ed-feria-2024"
-                        data-ed-nombre="Feria del libro 2024"
+                        class="card h-100 shadow-sm border-0 card-hover"
+                        data-ev-id="EV04"
+                        data-ev-nombre="Maratón de Montevideo"
+                        data-ed-id="EDEV03"
+                        data-ed-nombre="Maratón de Montevideo 2024"
                       >
                         <img
                           class="card-img-top"
-                          src="https://dummyimage.com/600x350/ced4da/6c757d"
-                          alt="Banner edición"
+                          src="assets/img/IMG-EDEV03.jpeg"
+                          alt="Banner Maratón de Montevideo 2024"
+                          style="aspect-ratio: 600 / 350;"
                         />
                         <div class="card-body">
                           <div
@@ -308,20 +415,20 @@
                           >
                             <a
                               class="text-muted text-decoration-none"
-                              href="consulta-evento.html"
-                              >Feria del libro</a
+                              href="consultaDetalladaEdicion.html"
+                              >Maratón de Montevideo</a
                             >
-                            <span class="badge bg-success">Confirmada</span>
+                            <span class="badge bg-success">Aceptada</span>
                           </div>
                           <div class="h5 card-title mb-1">
-                            Feria del libro 2024
+                            Maratón de Montevideo 2024
                           </div>
                           <div class="mb-1">
-                            <i class="bi bi-calendar-fill"></i> 12/12/2024 -
-                            12/12/2024
+                            <i class="bi bi-calendar-fill"></i> 14/09/2024
                           </div>
                           <div class="fw-semibold">
                             <i class="bi bi-geo-fill"></i> Montevideo, Uruguay
+               
                           </div>
                         </div>
 
@@ -361,6 +468,161 @@
                         </div>
                       </div>
                     </div>
+                     <!-- EDEV04 -->
+                <div class="col-12 col-md-6">
+                  <div class="card h-100 shadow-sm border-0 card-hover" data-ev-id="EV04" data-ev-nombre="Maratón de Montevideo" data-ed-id="EDEV04" data-ed-nombre="Maratón de Montevideo 2022">
+                    <img class="card-img-top" src="assets/img/IMG-EDEV04.jpeg" alt="Banner Maratón de Montevideo 2022" 
+                          style="aspect-ratio: 600 / 350;"/>
+                    <div class="card-body">
+                      <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                        <a class="text-muted text-decoration-none" href="consultaDetalladaEdicion.html">Maratón de Montevideo</a>
+                        <span class="badge bg-danger">Rechazada</span>
+                      </div>
+                      <div class="h5 card-title mb-1">Maratón de Montevideo 2022</div>
+                      <div class="mb-1"><i class="bi bi-calendar-fill"></i> 14/09/2022</div>
+                      <div class="fw-semibold"><i class="bi bi-geo-fill"></i> Montevideo, Uruguay</div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                          <div class="d-flex gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addSponsorshipModal"
+                              onclick="openSponsorshipForEdition(this)"
+                            >
+                              <i class="bi bi-patch-plus me-1"></i> Patrocinio
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addTipoRegModal"
+                              onclick="openTipoRegForEdition(this)"
+                            >
+                              <i class="bi bi-card-checklist me-1"></i> Tipo de
+                              registro
+                            </button>
+                          </div>
+                        </div>
+                  </div>
+                </div>
+                <!-- EDEV08 -->
+                <div class="col-12 col-md-6">
+                  <div class="card h-100 shadow-sm border-0 card-hover" data-ev-id="EV01" data-ev-nombre="Tecnología Punta del Este" data-ed-id="EDEV08" data-ed-nombre="Tecnología Punta del Este 2026">
+                    <img class="card-img-top" src="https://dummyimage.com/600x350" alt="Banner Tecnología Punta del Este 2026" 
+                          style="aspect-ratio: 600 / 350;"/>
+                    <div class="card-body">
+                      <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                        <a class="text-muted text-decoration-none" href="consultaDetalladaEdicion.html">Tecnología Punta del Este</a>
+                        <span class="badge bg-success">Aceptada</span>
+                      </div>
+                      <div class="h5 card-title mb-1">Tecnología Punta del Este 2026</div>
+                      <div class="mb-1"><i class="bi bi-calendar-fill"></i> 06/04/2026 - 10/04/2026</div>
+                      <div class="fw-semibold"><i class="bi bi-geo-fill"></i> Punta del Este, Uruguay</div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                          <div class="d-flex gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addSponsorshipModal"
+                              onclick="openSponsorshipForEdition(this)"
+                            >
+                              <i class="bi bi-patch-plus me-1"></i> Patrocinio
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addTipoRegModal"
+                              onclick="openTipoRegForEdition(this)"
+                            >
+                              <i class="bi bi-card-checklist me-1"></i> Tipo de
+                              registro
+                            </button>
+                          </div>
+                        </div>
+                  </div>
+                </div>
+                <!-- EDEV09 -->
+                <div class="col-12 col-md-6">
+                  <div class="card h-100 shadow-sm border-0 card-hover" data-ev-id="EV01" data-ev-nombre="Mobile World Congress" data-ed-id="EDEV09" data-ed-nombre="Mobile World Congress 2025">
+                    <img class="card-img-top" src="assets/img/IMG-EDEV09.png" alt="Banner Mobile World Congress 2025" />
+                    <div class="card-body">
+                      <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                        <a class="text-muted text-decoration-none" href="consultaDetalladaEdicion.html">Mobile World Congress</a>
+                        <span class="badge bg-secondary">Ingresada</span>
+                      </div>
+                      <div class="h5 card-title mb-1">Mobile World Congress 2025</div>
+                      <div class="mb-1"><i class="bi bi-calendar-fill"></i> 12/12/2025 - 15/12/2025</div>
+                      <div class="fw-semibold"><i class="bi bi-geo-fill"></i> Barcelona, España</div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                          <div class="d-flex gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addSponsorshipModal"
+                              onclick="openSponsorshipForEdition(this)"
+                            >
+                              <i class="bi bi-patch-plus me-1"></i> Patrocinio
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addTipoRegModal"
+                              onclick="openTipoRegForEdition(this)"
+                            >
+                              <i class="bi bi-card-checklist me-1"></i> Tipo de
+                              registro
+                            </button>
+                          </div>
+                        </div>
+                  </div>
+                </div>
+                <!-- EDEV10 -->
+                <div class="col-12 col-md-6">
+                  <div class="card h-100 shadow-sm border-0 card-hover" data-ev-id="EV01" data-ev-nombre="Web Summit" data-ed-id="EDEV10" data-ed-nombre="Web Summit 2026">
+                    <img class="card-img-top" src="https://dummyimage.com/600x350" alt="Banner Tecnología Punta del Este 2026" 
+                          style="aspect-ratio: 600 / 350;"/>
+                    <div class="card-body">
+                      <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                        <a class="text-muted text-decoration-none" href="consultaDetalladaEdicion.html">Web Summit</a>
+                        <span class="badge bg-success">Aceptada</span>
+                      </div>
+                      <div class="h5 card-title mb-1">Web Summit 2026</div>
+                      <div class="mb-1"><i class="bi bi-calendar-fill"></i> 13/01/2026 - 01/02/2026</div>
+                      <div class="fw-semibold"><i class="bi bi-geo-fill"></i> Lisboa, Portugal</div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                          <div class="d-flex gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addSponsorshipModal"
+                              onclick="openSponsorshipForEdition(this)"
+                            >
+                              <i class="bi bi-patch-plus me-1"></i> Patrocinio
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-secondary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#addTipoRegModal"
+                              onclick="openTipoRegForEdition(this)"
+                            >
+                              <i class="bi bi-card-checklist me-1"></i> Tipo de
+                              registro
+                            </button>
+                          </div>
+                        </div>
+                  </div>
+                </div>
                     <!-- Renderizá más ediciones acá -->
                   </div>
                 </div>

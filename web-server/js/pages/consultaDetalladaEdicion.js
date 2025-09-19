@@ -2,37 +2,41 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const tipoUsuario = params.get("tipoUsuario");
 
+const eventos =[
+    "Conferencia de Tecnología",
+    "Maratón de Montevideo"
+]
+
 
 const organizadores = [
-    { nombre: "Intendencia de Montevideo", correo: "contacto@imm.gub.uy", desc: "Gobierno departamental de Montevideo."},
-    { nombre: "Universidad de la República", correo: "contacto@udelar.edu.uy", desc: "Universidad pública de Uruguay."},
-    { nombre : "Corporación Tecnológica", correo: "info@techcorp.com", desc: "Empresa líder en tecnologías de la información."}
+    { nombre: "MisEventos", correo: "contacto@miseventos.com", desc: "Empresa de organización de eventos. ", img: "assets/img/IMG-US04.jpeg" }
 ];
 
 const registros = [
     { nombre: "Ana Torres", email: "atorres@gmail.com", fecha: "30/07/2024", tipo: "Corredor 21K", img: "assets/img/IMG-US01.jpg" },
-    { nombre: "Ana Torres", email: "atorres@gmail.com", fecha: "21/08/2025", tipo: "Estudiante", img: "assets/img/IMG-US01.jpg" }
+    { nombre: "Ana Torres", email: "atorres@gmail.com", fecha: "21/08/2025", tipo: "Estudiante", img: "assets/img/IMG-US01.jpg" },
+    { nombre: "Ana Torres", email: "atorres@gmail.com", fecha: "21/05/2022", tipo: "Corredor 42K", img: "assets/img/IMG-US01.jpg" }
 
 ];
 
 const patrocinios = [
-  { nombre: "Facultad de Ingeniería", img: "assets/img/sponsor.png", nivel: "Oro", aporte: "20000", fecha: "21/08/2025"},
-  { nombre: "Agencia Nacional de Investigación e Innovación (ANII)", img: "assets/img/sponsor.png", nivel: "Plata", aporte: "10000", fecha: "20/08/2025"} 
+  { nombre: "Facultad de Ingeniería", img: "assets/img/sponsor.png", nivel: "Oro", aporte: "20000", fecha: "21/08/2025"}
 ];
 
 const datos = [
-    { nombre: "Maratón de Montevideo 2024", sigla: "MARATON24", ciudad: "Montevideo", pais: "Uruguay", fechaInicio: "14/09/2024", fechaFin: "14/09/2024", img: "assets/img/IMG-EDEV03.jpeg", organizador: organizadores[0], registrado: registros[0], tiposRegistro: [0], patrocinios: undefined},
-    { nombre: "Tecnología Punta del Este 2026", sigla: "CONFTECH26", ciudad: "Punta del Este", pais: "Uruguay", fechaInicio: "06/04/2026", fechaFin: "10/04/2026", img: "https://dummyimage.com/140x40/adb5bd/ffffff.png&text=IMM", organizador: organizadores[1], registrado: undefined, tiposRegistro: [1], patrocinios: patrocinios},
-    { nombre: "Web Summit 2026", sigla: "WS26", ciudad: "Lisboa", pais: "Portugal", fechaInicio: "13/01/2026", fechaFin: "01/02/2026", img: "https://dummyimage.com/140x40/adb5bd/ffffff.png&text=IMM", organizador: organizadores[2], registrado: registros[1], tiposRegistro: [2], patrocinios: undefined}
+    { nombre: "Maratón de Montevideo 2024", sigla: "MARATON24", ciudad: "Montevideo", pais: "Uruguay", fechaInicio: "14/09/2024", fechaFin: "14/09/2024", img: "assets/img/IMG-EDEV03.jpeg", organizador: organizadores[0], registrado: registros[0], tiposRegistro: [0], patrocinios: undefined, evento : eventos[1]},
+    { nombre: "Tecnología Punta del Este 2026", sigla: "CONFTECH26", ciudad: "Punta del Este", pais: "Uruguay", fechaInicio: "06/04/2026", fechaFin: "10/04/2026", img: "https://dummyimage.com/140x40/adb5bd/ffffff.png&text=IMM", organizador: organizadores[0], registrado: undefined, tiposRegistro: [1], patrocinios: patrocinios, evento : eventos[0]},
+    { nombre: "Web Summit 2026", sigla: "WS26", ciudad: "Lisboa", pais: "Portugal", fechaInicio: "13/01/2026", fechaFin: "01/02/2026", img: "https://dummyimage.com/140x40/adb5bd/ffffff.png&text=IMM", organizador: organizadores[0], registrado: registros[1], tiposRegistro: [2], patrocinios: undefined, evento : eventos[0]},
+    { nombre: "Maratón de Montevideo 2022", sigla: "MARATON22", ciudad: "Montevideo", pais: "Uruguay", fechaInicio: "14/09/2022", fechaFin: "14/09/2022", img: "assets/img/IMG-EDEV04.jpeg", organizador: organizadores[0], registrado: registros[2], tiposRegistro: [0], patrocinios: undefined, evento : eventos[1]},
+    { nombre: "Mobile World Congress 2025", sigla: "MWC", ciudad: "Barcelona", pais: "España", fechaInicio: "12/12/2025", fechaFin: "15/12/2025", img: "assets/img/IMG-EDEV09.png", organizador: organizadores[0], registrado: undefined, tiposRegistro: [], patrocinios: undefined, evento : eventos[0]}
 ];
-
 
 const tiposRegistro = [ [{nombre: "Corredor 42K", desc: "Inscripción a la maratón completa", costo: "1000", cupo: "300"}, {nombre: "Corredor 21K", desc: "Inscripción a la media maratón", costo: "500", cupo: "500"}],
                         [{nombre: "Full", desc: "Acceso ilimitado + Cena de gala", costo: "1800", cupo: "300"}, {nombre: "General", desc: "Acceso general", costo: "1500", cupo: "500"}, {nombre: "Estudiante", desc: "Acceso para estudiantes", costo: "1000", cupo: "50"}],
                         [{nombre: "Full", desc: "Acceso ilimitado + Cena de gala", costo: "900", cupo: "30"}, {nombre: "General", desc: "Acceso general", costo: "650", cupo: "5"}, {nombre: "Estudiante", desc: "Acceso para estudiantes", costo: "300", cupo: "1"}]
 ];
 
-const ediciones = { "03":datos[0], "08":datos[1], "10":datos[2] };
+const ediciones = { "03":datos[0], "08":datos[1], "10":datos[2], "04":datos[3], "09":datos[4] };
 
 const edicionActual = ediciones[id];
 
@@ -48,6 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const correoOrganizadorEd = document.getElementById("correoOrganizadorEdicion");
     const imagenEd = document.getElementById("imagenEd");
     const registradoEd = document.getElementById("registroUsuarios");
+    const imgOrganizador = document.getElementById("imgOrganizadorEdicion");
+    const nombreEvento = document.getElementById("nombreEvento");
 
     if (edicionActual) {
         nombreEd.textContent = edicionActual.nombre;
@@ -58,6 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
         descOrganizadorEd.textContent = edicionActual.organizador.desc;
         correoOrganizadorEd.textContent = edicionActual.organizador.correo;
         imagenEd.style.backgroundImage = `url('${edicionActual.img}')`;
+        imgOrganizador.src = edicionActual.organizador.img;
+        nombreEvento.textContent = edicionActual.evento;
         registradoEd.innerHTML = "";
 
         if (edicionActual.registrado) {
