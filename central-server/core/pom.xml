@@ -76,6 +76,36 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">-->
 
   <build>
     <plugins>
+    <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <configuration>
+      <outputDirectory>${project.basedir}/../../web-server/src/main/webapp/WEB-INF/lib</outputDirectory>
+		<appendAssemblyId>false</appendAssemblyId>
+	    <!-- opcional: cambiar el nombre del archivo generado -->
+	    <finalName>core</finalName>
+        <archive>
+          <manifest>
+            <mainClass>fully.qualified.MainClass</mainClass>
+          </manifest>
+          
+      	
+        </archive>
+        
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+      </configuration>
+      <executions>
+        <execution>
+          <id>make-assembly</id> <!-- this is used for inheritance merges -->
+          <phase>package</phase> <!-- bind to the packaging phase -->
+          <goals>
+            <goal>single</goal>
+          </goals>
+        </execution>
+      </executions>
+      
+    </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
