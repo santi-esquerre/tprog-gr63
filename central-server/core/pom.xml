@@ -70,6 +70,12 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">-->
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+        <groupId>com.password4j</groupId>
+        <artifactId>password4j</artifactId>
+        <version>1.6.1</version>
+    </dependency>
 
   </dependencies>
 

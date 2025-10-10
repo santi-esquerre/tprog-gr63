@@ -200,7 +200,7 @@ public class EventoControllerTest extends BaseTest {
 					new Date(System.currentTimeMillis() + 86400000), "SIGLA_ED1", Set.of("CategoriaEdiciones1")));
 
 			usuarioController.crearOrganizador("orgEdiciones1", "Organizador Ediciones",
-					"orgediciones@test.com", "Descripción organizador");
+					"orgediciones@test.com",  "clave1234", "foto.jpg", "Descripción organizador");
 		});
 
 		// Test con evento que existe pero sin ediciones
@@ -243,7 +243,7 @@ public class EventoControllerTest extends BaseTest {
 					new Date(System.currentTimeMillis() + 86400000), "SIGLA_AGR1", Set.of("CategoriaAgregarEd1")));
 
 			usuarioController.crearOrganizador("orgAgregar1", "Organizador Agregar",
-					"orgagregar@test.com", "Descripción organizador agregar");
+					"orgagregar@test.com",  "clave1234", "foto.jpg", "Descripción organizador agregar");
 		});
 
 		// Test de agregar edición exitoso

@@ -89,7 +89,7 @@ class InstitucionControllerTest extends BaseTest {
 			eventoController.altaCategoria("CatPatrocinio");
 			eventoController.altaEvento(new DTEventoAlta("EventoPatrocinio", "DescEvento", new java.util.Date(),
 					"SIGLA_PAT", Set.of("CatPatrocinio")));
-			usuarioController.crearOrganizador("OrgPatrocinio", "OrgPatrocinio", "org@patrocinio.com", "desc org");
+			usuarioController.crearOrganizador("OrgPatrocinio", "OrgPatrocinio", "org@patrocinio.com",  "clave1234", "foto.jpg", "desc org");
 			var edicion = new DTEdicion("EdicionEventoTest", "SIGLA_ED", new java.util.Date(), new java.util.Date(),
 					new java.util.Date(), "Montevideo", "Uruguay");
 			eventoController.agregarEdicionAEvento("EventoPatrocinio", "OrgPatrocinio", edicion);

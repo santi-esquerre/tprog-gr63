@@ -24,17 +24,17 @@ public interface IUsuarioController {
 
 	boolean verificarNoExistenciaCorreo(String correo) throws Exception;
 
-	void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento,
+	void crearAsistente(String nickname, String nombre, String correo, String clave, String foto, String apellido,  LocalDate fechaNacimiento,
 			String nombreInstitucion)
 			throws UsuarioCorreoRepetidoException, UsuarioNicknameRepetidoException, InstitucionNoExistenteException;
 
-	void crearAsistente(String nickname, String nombre, String apellido, String correo, LocalDate fechaNacimiento)
+	void crearAsistente(String nickname, String nombre, String correo, String clave, String foto, String apellido, LocalDate fechaNacimiento)
 			throws UsuarioCorreoRepetidoException, UsuarioNicknameRepetidoException;
 
-	void crearOrganizador(String nickname, String nombre, String correo, String descripcion, String linkSitioWeb)
+	void crearOrganizador(String nickname, String nombre, String correo, String clave, String foto, String descripcion, String linkSitioWeb)
 			throws UsuarioCorreoRepetidoException, UsuarioNicknameRepetidoException;
 
-	void crearOrganizador(String nickname, String nombre, String correo, String descripcion)
+	void crearOrganizador(String nickname, String nombre, String correo, String clave, String foto, String descripcion)
 			throws UsuarioCorreoRepetidoException, UsuarioNicknameRepetidoException;
 
 	Set<DTAsistente> mostrarAsistentes();

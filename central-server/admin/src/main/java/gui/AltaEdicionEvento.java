@@ -183,7 +183,7 @@ public class AltaEdicionEvento extends JInternalFrame implements IReloadable {
         // Obtener organizadores usando el método correcto de la interfaz
         List<DTUsuarioItemListado> orgs = usuarioController.obtenerUsuarios(TipoUsuario.ORGANIZADOR);
         List<DTUsuario> organizadores = orgs.stream()
-                .map(item -> new DTUsuario(item.nickname(), "", item.correo()))
+                .map(item -> new DTUsuario(item.nickname(), "", item.correo(), ""))
                 .sorted(Comparator.comparing(DTUsuario::nickname, String.CASE_INSENSITIVE_ORDER))
                 .collect(Collectors.toList());
         organizadores.forEach(cmbOrganizador::addItem);

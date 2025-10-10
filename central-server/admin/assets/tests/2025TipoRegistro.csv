@@ -24,3 +24,5 @@ TR22;EDEV09;Estudiante;Acceso para estudiantes;250;400
 TR23;EDEV10;Full;Acceso ilimitado + Cena de gala;900;30
 TR24;EDEV10;General;Acceso general;650;5
 TR25;EDEV10;Estudiante;Acceso para estudiantes;300;1
+TR26;EDEV11;Full;Acceso a todos los eventos de la semana;450;50
+TR27;EDEV11;Visitante;Acceso parcial a los eventos de la semana;150;25

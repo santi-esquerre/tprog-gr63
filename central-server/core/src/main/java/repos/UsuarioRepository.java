@@ -63,7 +63,7 @@ public final class UsuarioRepository {
 	    return em.createQuery(
 	            "select a from Asistente a order by a.nombre", Asistente.class)
 	          .getResultStream()
-	          .map(Asistente::obtenerDTAsistente)
+	          .map(Asistente::toDataType)
 	          .collect(Collectors.toCollection(LinkedHashSet::new));	  
   }
 
