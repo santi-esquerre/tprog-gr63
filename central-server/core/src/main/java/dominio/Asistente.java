@@ -40,10 +40,10 @@ public class Asistente extends Usuario {
   protected Asistente() {
   }
 
-  public Asistente(String nick, String nom, String ape, String mail, LocalDate fnac) {
-    super(nick, nom, mail);
-    this.apellido = ape;
-    this.fechaNacimiento = fnac;
+  public Asistente(String nickname, String nombre, String correo, String clave, String foto, String apellido, LocalDate fechaNacmiento) {
+    super(nickname, nombre, correo, clave, foto);
+    this.apellido = apellido;
+    this.fechaNacimiento = fechaNacmiento;
   }
   
   public String getApellido() { return apellido; }
@@ -53,19 +53,15 @@ public class Asistente extends Usuario {
   public Institucion getInstitucion() { return institucion; }
   
   public void setInstitucion(Institucion inst) { this.institucion = inst; }
-  
-  public datatypes.DTAsistente obtenerDTAsistente() {
-	    return new datatypes.DTAsistente(nickname, nombre, apellido, correo, Date.from(fechaNacimiento.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()));
-	  }
 
   @Override
   public DTAsistente toDataType() {
-	return new DTAsistente(nickname, nombre, correo, apellido, Date.from(fechaNacimiento.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	return new DTAsistente(nickname, nombre, correo, foto, apellido, Date.from(fechaNacimiento.atStartOfDay(ZoneId.systemDefault()).toInstant()));
   }
 
   @Override
   public DTUsuarioItemListado toDTUsuarioItemListado() {
-	return new DTUsuarioItemListado(nickname, correo, TipoUsuario.ASISTENTE);
+	return new DTUsuarioItemListado(nickname, correo, foto, TipoUsuario.ASISTENTE);
   }
   
   

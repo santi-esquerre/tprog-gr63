@@ -28,14 +28,14 @@ public class Organizador extends Usuario {
   protected Organizador() {
   }
 
-  public Organizador(String nick, String nom, String mail, String desc, String linkWeb) {
-    super(nick, nom, mail);
+  public Organizador(String nickname, String nombre, String correo, String clave, String foto, String desc, String linkWeb) {
+    super(nickname, nombre, correo, clave, foto);
     this.descripcion = desc;
     this.sitioWeb = linkWeb;
   }
 
-  public Organizador(String nick, String nom, String mail, String desc) {
-    super(nick, nom, mail);
+  public Organizador(String nickname, String nombre, String correo, String clave, String foto,  String desc) {
+    super(nickname, nombre, correo, clave, foto);
     this.descripcion = desc;
   }
 
@@ -49,12 +49,12 @@ public class Organizador extends Usuario {
 
   @Override
   public DTOrganizador toDataType() {
-    return new DTOrganizador(getNickname(), getNombre(), getCorreo(), sitioWeb, descripcion);
+    return new DTOrganizador(nickname, nombre, correo, foto, sitioWeb, descripcion);
   }
 
   @Override
   public DTUsuarioItemListado toDTUsuarioItemListado() {
-    return new DTUsuarioItemListado(getNickname(), getCorreo(), TipoUsuario.ORGANIZADOR);
+    return new DTUsuarioItemListado(nickname, correo, foto, TipoUsuario.ORGANIZADOR);
   }
 
 }

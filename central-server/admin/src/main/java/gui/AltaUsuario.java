@@ -46,6 +46,9 @@ import interfaces.Factory;
 import interfaces.IReloadable;
 
 public class AltaUsuario extends JInternalFrame implements IReloadable {
+	
+	private final String DEFAULT_FOTO_SOURCE = "https://placehold.co/225x225";
+	
 	private static final long serialVersionUID = 1L;
 	private JTextField txtCorreo;
 	private JTextField txtNombre;
@@ -68,6 +71,7 @@ public class AltaUsuario extends JInternalFrame implements IReloadable {
 	private Integer[] anio;
 	private Factory factory = Factory.get();
 	private Principal parent;
+	private JTextField txtClave;
 
 	public AltaUsuario(Principal parent) {
 		this.parent = parent;
@@ -115,9 +119,9 @@ public class AltaUsuario extends JInternalFrame implements IReloadable {
 		panel_1.add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 190, 434, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
 		JLabel lblNewLabel_2 = new JLabel("Nickname:");
@@ -170,13 +174,30 @@ public class AltaUsuario extends JInternalFrame implements IReloadable {
 		gbc_txtCorreo.gridy = 2;
 		panel.add(txtCorreo, gbc_txtCorreo);
 		txtCorreo.setColumns(10);
+		
+		JLabel lblContrasea = new JLabel("Contraseña:");
+		GridBagConstraints gbc_lblContrasea = new GridBagConstraints();
+		gbc_lblContrasea.insets = new Insets(0, 0, 5, 5);
+		gbc_lblContrasea.anchor = GridBagConstraints.WEST;
+		gbc_lblContrasea.gridx = 0;
+		gbc_lblContrasea.gridy = 3;
+		panel.add(lblContrasea, gbc_lblContrasea);
+		
+		txtClave = new JTextField();
+		txtClave.setColumns(10);
+		GridBagConstraints gbc_txtClave = new GridBagConstraints();
+		gbc_txtClave.insets = new Insets(0, 0, 5, 0);
+		gbc_txtClave.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtClave.gridx = 1;
+		gbc_txtClave.gridy = 3;
+		panel.add(txtClave, gbc_txtClave);
 
 		JLabel lblNewLabel_3 = new JLabel("Rol:");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
 		gbc_lblNewLabel_3.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.gridx = 0;
-		gbc_lblNewLabel_3.gridy = 3;
+		gbc_lblNewLabel_3.gridy = 4;
 		panel.add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		JPanel panel_2 = new JPanel();
@@ -184,7 +205,7 @@ public class AltaUsuario extends JInternalFrame implements IReloadable {
 		gbc_panel_2.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_2.fill = GridBagConstraints.BOTH;
 		gbc_panel_2.gridx = 0;
-		gbc_panel_2.gridy = 4;
+		gbc_panel_2.gridy = 5;
 		panel.add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
 
@@ -394,23 +415,24 @@ public class AltaUsuario extends JInternalFrame implements IReloadable {
 				String nickname = txtNickname.getText();
 				String nombre = txtNombre.getText();
 				String correo = txtCorreo.getText();
+				String clave = txtClave.getText();
 				if (rbtnAsistente.isSelected()) {
 					String apellido = txtApellido.getText();
 					LocalDate fecha = LocalDate.of((Integer) comboBoxAnio.getSelectedItem(),
 							comboBoxMes.getSelectedIndex() + 1, (Integer) comboBoxDia.getSelectedItem());
 					if (comboBoxInstitucion.getSelectedIndex() == 0) {
-						usuario.crearAsistente(nickname, nombre, apellido, correo, fecha);
+						usuario.crearAsistente(nickname, nombre, correo, clave, DEFAULT_FOTO_SOURCE, apellido, fecha);
 					} else {
 						String institucion = (String) comboBoxInstitucion.getSelectedItem();
-						usuario.crearAsistente(nickname, nombre, apellido, correo, fecha, institucion);
+						usuario.crearAsistente(nickname, nombre, correo, clave, DEFAULT_FOTO_SOURCE, apellido, fecha, institucion);
 					}
 				} else {
 					String descripcion = txtDescripcion.getText();
 					if (txtLink.getText().isEmpty()) {
-						usuario.crearOrganizador(nickname, nombre, correo, descripcion);
+						usuario.crearOrganizador(nickname, nombre, correo, clave, DEFAULT_FOTO_SOURCE, descripcion);
 					} else {
 						String linkSitioWeb = txtLink.getText();
-						usuario.crearOrganizador(nickname, nombre, correo, descripcion, linkSitioWeb);
+						usuario.crearOrganizador(nickname, nombre, correo, clave, DEFAULT_FOTO_SOURCE, descripcion, linkSitioWeb);
 					}
 
 				}

@@ -30,7 +30,7 @@ class EdicionControllerTest extends BaseTest {
 					Set.of("CategoriaTest1")));
 
 			// Crear organizador
-			usuarioController.crearOrganizador("orgTest1", "Organizador Test", "org@test.com",
+			usuarioController.crearOrganizador("orgTest1", "Organizador Test", "org@test.com", "clave1234", "foto.jpg",
 					"Descripción organizador");
 
 			// Agregar edición al evento
@@ -66,7 +66,7 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(new DTEventoAlta("EventoConsulta1", "Descripcion Test", new Date(0), "SIGLA_C1",
 					Set.of("CategoriaConsulta1")));
 
-			usuarioController.crearOrganizador("orgConsulta1", "Organizador Consulta", "orgconsulta@test.com",
+			usuarioController.crearOrganizador("orgConsulta1", "Organizador Consulta", "orgconsulta@test.com", "clave1234", "foto.jpg",
 					"Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionConsulta1", "SIGLA_EC1", new Date(1000), new Date(2000),
@@ -103,7 +103,7 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(new DTEventoAlta("EventoMostrar1", "Descripcion", new Date(0), "SIGLA_M1",
 					Set.of("CategoriaMostrar1")));
 
-			usuarioController.crearOrganizador("orgMostrar1", "Organizador Mostrar", "orgmostrar@test.com",
+			usuarioController.crearOrganizador("orgMostrar1", "Organizador Mostrar", "orgmostrar@test.com",  "clave1234", "foto.jpg",
 					"Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionMostrar1", "SIGLA_EM1", new Date(1000), new Date(2000),
@@ -134,9 +134,9 @@ class EdicionControllerTest extends BaseTest {
 	void testMostrarAsistentes() {
 		assertDoesNotThrow(() -> {
 			// Crear algunos asistentes
-			usuarioController.crearAsistente("asistenteTest1", "Juan", "Pérez", "juan@test.com",
+			usuarioController.crearAsistente("asistenteTest1", "Juan", "Pérez", "juan@test.com",  "clave1234", "foto.jpg",
 					java.time.LocalDate.of(1990, 1, 1));
-			usuarioController.crearAsistente("asistenteTest2", "María", "González", "maria@test.com",
+			usuarioController.crearAsistente("asistenteTest2", "María", "González", "maria@test.com",  "clave1234", "foto.jpg",
 					java.time.LocalDate.of(1985, 5, 15));
 
 			// Mostrar asistentes
@@ -154,7 +154,7 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(
 					new DTEventoAlta("EventoCupo1", "Descripcion", new Date(0), "SIGLA_CU1", Set.of("CategoriaCupo1")));
 
-			usuarioController.crearOrganizador("orgCupo1", "Organizador Cupo", "orgcupo@test.com", "Descripción");
+			usuarioController.crearOrganizador("orgCupo1", "Organizador Cupo", "orgcupo@test.com",  "clave1234", "foto.jpg", "Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionCupo1", "SIGLA_ECU1", new Date(1000), new Date(2000),
 					new Date(0), "Montevideo", "Uruguay");
@@ -177,7 +177,7 @@ class EdicionControllerTest extends BaseTest {
 	void testAsistenteNoRegistrado() {
 		assertDoesNotThrow(() -> {
 			// Crear un asistente
-			usuarioController.crearAsistente("asistenteNoReg1", "Pedro", "Martínez", "pedro@test.com",
+			usuarioController.crearAsistente("asistenteNoReg1", "Pedro", "pedro@test.com",  "clave1234", "foto.jpg", "Martínez",
 					java.time.LocalDate.of(1988, 3, 20));
 
 			// Preparar edición
@@ -185,7 +185,7 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(new DTEventoAlta("EventoNoReg1", "Descripcion", new Date(0), "SIGLA_NR1",
 					Set.of("CategoriaNoReg1")));
 
-			usuarioController.crearOrganizador("orgNoReg1", "Organizador NoReg", "orgnoreg@test.com", "Descripción");
+			usuarioController.crearOrganizador("orgNoReg1", "Organizador NoReg", "orgnoreg@test.com",  "clave1234", "foto.jpg", "Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionNoReg1", "SIGLA_ENR1", new Date(1000), new Date(2000),
 					new Date(0), "Montevideo", "Uruguay");
@@ -209,8 +209,8 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(new DTEventoAlta("EventoRegistro1", "Descripcion", new Date(0), "SIGLA_REG1",
 					Set.of("CategoriaRegistro1")));
 
-			usuarioController.crearOrganizador("orgReg1", "Organizador Registro", "orgreg@test.com", "Descripción");
-			usuarioController.crearAsistente("asistenteReg1", "Ana", "López", "ana@test.com",
+			usuarioController.crearOrganizador("orgReg1", "Organizador Registro", "orgreg@test.com",  "clave1234", "foto.jpg", "Descripción");
+			usuarioController.crearAsistente("asistenteReg1", "Ana", "ana@test.com",  "clave1234", "foto.jpg", "López",
 					java.time.LocalDate.of(1992, 7, 10));
 
 			DTEdicion edicionData = new DTEdicion("EdicionRegistro1", "SIGLA_ERG1", new Date(1000), new Date(2000),
@@ -250,7 +250,7 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(new DTEventoAlta("EventoDetallado1", "Descripcion Detallada", new Date(0),
 					"SIGLA_DET1", Set.of("CategoriaDetallada1")));
 
-			usuarioController.crearOrganizador("orgDet1", "Organizador Detallado", "orgdet@test.com",
+			usuarioController.crearOrganizador("orgDet1", "Organizador Detallado", "orgdet@test.com",  "clave1234", "foto.jpg",
 					"Descripción detallada");
 
 			DTEdicion edicionData = new DTEdicion("EdicionDetallada1", "SIGLA_EDET1", new Date(1000), new Date(2000),
@@ -278,7 +278,7 @@ class EdicionControllerTest extends BaseTest {
 	void testObtenerEdicionesPorOrganizador() {
 		assertDoesNotThrow(() -> {
 			// Preparar datos
-			usuarioController.crearOrganizador("orgTest1", "Organizador1", "", "");
+			usuarioController.crearOrganizador("orgTest1", "Organizador1", "",  "clave1234", "foto.jpg", "");
 			eventoController.altaCategoria("CategoriaOrg1");
 			eventoController.altaEvento(new DTEventoAlta("EventoOrg1", "Descripcion Org", new Date(0), "SIGLA_ORG1",
 					Set.of("CategoriaOrg1")));
@@ -319,7 +319,7 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(
 					new DTEventoAlta("EventoVacio1", "", new Date(0), "SIGLA_V1", Set.of("CategoriaVacia1")));
 
-			usuarioController.crearOrganizador("orgVacio1", "Organizador", "orgvacio@test.com", "");
+			usuarioController.crearOrganizador("orgVacio1", "Organizador", "orgvacio@test.com",  "clave1234", "foto.jpg", "");
 
 			DTEdicion edicionData = new DTEdicion("EdicionVacia1", "", new Date(1000), new Date(2000), new Date(0), "",
 					"");
@@ -357,7 +357,7 @@ class EdicionControllerTest extends BaseTest {
 			eventoController.altaEvento(
 					new DTEventoAlta("EventoLimite1", "Desc", new Date(0), "SIGLA_LIM1", Set.of("CategoriaLimite1")));
 
-			usuarioController.crearOrganizador("orgLimite1", "Organizador Limite", "orglimite@test.com", "Desc");
+			usuarioController.crearOrganizador("orgLimite1", "Organizador Limite", "orglimite@test.com",  "clave1234", "foto.jpg", "Desc");
 
 			DTEdicion edicionData = new DTEdicion("EdicionLimite1", "SIGLA_ELIM1", new Date(1000), new Date(2000),
 					new Date(0), "Ciudad", "País");

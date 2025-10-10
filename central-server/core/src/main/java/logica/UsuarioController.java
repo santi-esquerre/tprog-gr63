@@ -48,7 +48,7 @@ public class UsuarioController implements IUsuarioController {
 	}
 
 	@Override
-	public void crearAsistente(String nickname, String nombre, String apellido, String correo,
+	public void crearAsistente(String nickname, String nombre, String correo, String clave, String foto, String apellido,
 			LocalDate fechaNacimiento, String nombreInstitucion)
 			throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException, InstitucionNoExistenteException {
 		if (!verificarNoExistenciaNickname(nickname)) {
@@ -66,7 +66,7 @@ public class UsuarioController implements IUsuarioController {
 				if (i == null) {
 					throw new RuntimeException(new InstitucionNoExistenteException(nombreInstitucion));
 				}
-				faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento, i);
+				faU.altaAsistente(em, nickname, nombre, correo, clave, foto, apellido, fechaNacimiento, i);
 				return null;
 			});
 		} catch (RuntimeException e) {
@@ -78,7 +78,7 @@ public class UsuarioController implements IUsuarioController {
 	}
 
 	@Override
-	public void crearAsistente(String nickname, String nombre, String apellido, String correo,
+	public void crearAsistente(String nickname, String nombre, String correo, String clave, String foto, String apellido,
 			LocalDate fechaNacimiento) throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
 		if (!verificarNoExistenciaNickname(nickname)) {
 			throw new UsuarioNicknameRepetidoException(nickname);
@@ -88,12 +88,12 @@ public class UsuarioController implements IUsuarioController {
 			throw new UsuarioCorreoRepetidoException(nickname);
 		}
 		Tx.inTx(em -> {
-			faU.altaAsistente(em, nickname, nombre, apellido, correo, fechaNacimiento);
+			faU.altaAsistente(em, nickname, nombre, correo, clave, foto, apellido, fechaNacimiento);
 			return null;
 		});
 	}
 
-	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion, String linkSitioWeb)
+	public void crearOrganizador(String nickname, String nombre, String correo, String clave, String foto, String descripcion, String linkSitioWeb)
 			throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
 		if (!verificarNoExistenciaNickname(nickname)) {
 			throw new UsuarioNicknameRepetidoException(nickname);
@@ -103,12 +103,12 @@ public class UsuarioController implements IUsuarioController {
 			throw new UsuarioCorreoRepetidoException(nickname);
 		}
 		Tx.inTx(em -> {
-			faU.altaOrganizador(em, nickname, nombre, correo, descripcion, linkSitioWeb);
+			faU.altaOrganizador(em, nickname, nombre, correo, clave, foto, descripcion, linkSitioWeb);
 			return null;
 		});
 	}
 
-	public void crearOrganizador(String nickname, String nombre, String correo, String descripcion)
+	public void crearOrganizador(String nickname, String nombre, String correo, String clave, String foto, String descripcion)
 			throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
 		if (!verificarNoExistenciaNickname(nickname)) {
 			throw new UsuarioNicknameRepetidoException(nickname);
@@ -119,7 +119,7 @@ public class UsuarioController implements IUsuarioController {
 		}
 
 		Tx.inTx(em -> {
-			faU.altaOrganizador(em, nickname, nombre, correo, descripcion);
+			faU.altaOrganizador(em, nickname, nombre, correo, clave, foto, descripcion);
 			return null;
 		});
 	}

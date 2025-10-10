@@ -37,8 +37,8 @@ class DominioTest extends BaseTest {
 
         // Test basic getters after creation through controller
         assertDoesNotThrow(() -> {
-            usuarioController.crearAsistente("asist" + uniqueId, "nombre", "apellido",
-                    "asist" + uniqueId + "@test.com", LocalDate.now());
+            usuarioController.crearAsistente("asist" + uniqueId, "nombre", "asist" + uniqueId + "@test.com",
+                    "clave123", "foto.jpg", "apellido", LocalDate.now());
 
             eventoController.altaDeCategoria("cat" + uniqueId);
             Set<String> cats = new HashSet<>();
@@ -46,7 +46,8 @@ class DominioTest extends BaseTest {
 
             eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
 
-            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", "desc");
+            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
+                    "clave123", "foto.jpg", "desc");
 
             DTEdicion edicion = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
@@ -84,7 +85,8 @@ class DominioTest extends BaseTest {
 
             eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
 
-            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", "desc");
+            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
+                    "clave123", "foto.jpg", "desc");
 
             DTEdicion edicion = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
@@ -120,7 +122,8 @@ class DominioTest extends BaseTest {
         String correo = "asist" + uniqueId + "@test.com";
 
         assertDoesNotThrow(() -> {
-            usuarioController.crearAsistente(nickname, "Nombre", "Apellido", correo, LocalDate.of(1990, 5, 15));
+            usuarioController.crearAsistente(nickname, "Nombre", correo, "clave123", "foto.jpg", 
+                    "Apellido", LocalDate.of(1990, 5, 15));
 
             DTAsistente asistente = usuarioController.seleccionarAsistente(nickname);
             assertNotNull(asistente);
@@ -139,7 +142,8 @@ class DominioTest extends BaseTest {
         String correo = "org" + uniqueId + "@test.com";
 
         assertDoesNotThrow(() -> {
-            usuarioController.crearOrganizador(nickname, "NombreOrg", correo, "Descripcion", "http://web.com");
+            usuarioController.crearOrganizador(nickname, "NombreOrg", correo, "clave123", "foto.jpg", 
+                    "Descripcion", "http://web.com");
 
             DTOrganizador organizador = usuarioController.seleccionarOrganizador(nickname);
             assertNotNull(organizador);
@@ -164,7 +168,8 @@ class DominioTest extends BaseTest {
 
             eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
 
-            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", "desc");
+            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
+                    "clave123", "foto.jpg", "desc");
 
             DTEdicion edicion = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
@@ -254,7 +259,8 @@ class DominioTest extends BaseTest {
 
             eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
 
-            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", "desc");
+            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
+                    "clave123", "foto.jpg", "desc");
 
             DTEdicion edicionData = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
