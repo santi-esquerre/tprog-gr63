@@ -19,4 +19,6 @@ public class Factory {
 	public IInstitucionController getIInstitucionController(){ return InstitucionController.get(); }
 	
 	public IRepository getIRepository(){ return Repository.get(); }
+	
+	public ISesionController getISesionController(){ return SesionController.get(); }
 }

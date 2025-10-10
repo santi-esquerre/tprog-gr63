@@ -23,7 +23,6 @@
     <link href="css/styles.css" rel="stylesheet" />
   </head>
   <body class="d-flex flex-column min-vh-100">
-    Include header.jsp here
     <jsp:include page="/WEB-INF/template/header.jsp" />
 
     <main class="flex-grow-1">
@@ -466,14 +465,6 @@
         { threshold: 0.6 }
       );
       counters.forEach((c) => io.observe(c));
-
-      // (Opcional) Quick search: solo redirige a "about.html" con querystring
-      document.getElementById("q")?.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          const term = encodeURIComponent(e.target.value.trim());
-          const d = document.getElementById("fecha")?.value || "";
-          location.href = `about.html?q=${term}&date=${encodeURIComponent(d)}`;
-        }
       });
     </script>
   </body>

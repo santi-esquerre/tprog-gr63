@@ -184,5 +184,13 @@ public final class UsuarioRepository {
         .setParameter("n", nickname)
         .getResultStream().findFirst().orElse(null);
   }
-
+  
+  public Boolean comprobarCredenciales(EntityManager em, String usuario, String clave) {
+	  Usuario u = em.createQuery(
+		        "select u from Usuario a where a.nickname = :n or a.correo = :n", Usuario.class)
+		        .setParameter("n", usuario)
+		        .getResultStream().findFirst().orElse(null);
+	  if (u == null) return false;
+	  return u.validarClave(clave);
+  }
 }
