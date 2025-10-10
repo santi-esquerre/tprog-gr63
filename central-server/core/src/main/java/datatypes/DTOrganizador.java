@@ -4,8 +4,8 @@ public class DTOrganizador extends DTUsuario {
   String linkSitioWeb;
   String descripcion;
 
-  public DTOrganizador(String nickname, String nombre, String correo, String linkSitioWeb, String descripcion) {
-    super(nickname, nombre, correo);
+  public DTOrganizador(String nickname, String nombre, String correo, String foto, String linkSitioWeb, String descripcion) {
+    super(nickname, nombre, correo, foto);
     this.linkSitioWeb = linkSitioWeb;
     this.descripcion = descripcion;
   }

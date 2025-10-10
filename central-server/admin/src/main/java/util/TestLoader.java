@@ -36,8 +36,7 @@ import java.util.HashSet;
 
 public class TestLoader {
 	private static final String COMMA_DELIMITER = ";";
-	private static final String FILEPATH = "assets/tests";
-
+	private static final String DEFAULT_USUARIO_FOTO_SOURCE = "https://placehold.co/225x225";
 	private enum FileName {
 		CATEGORIAS("Categorias"),
 		EDICIONES("EdicionesEventos"),
@@ -85,17 +84,18 @@ public class TestLoader {
 		IEdicionController edicionController = factory.getIEdicionController();
 		IInstitucionController institucionController = factory.getIInstitucionController();
 		factory.getIRepository().reset();
-		Map<String, List<Map<String, String>>> allRecords = new HashMap<>();
+		
+		Map<String, List<Map<String, String>>> data = new HashMap<>();
 		File folder = new File(folderPath);
 		File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".csv"));
 		if (files != null) {
 			for (File file : files) {
-				allRecords.put(file.getName(), loadCsvWithHeader(file.getAbsolutePath()));
+				data.put(file.getName(), loadCsvWithHeader(file.getAbsolutePath()));
 			}
 		}
 
 		// Carga de instituciones
-		List<Map<String, String>> instituciones = allRecords.get(FileName.INSTITUCIONES.label);
+		List<Map<String, String>> instituciones = data.get(FileName.INSTITUCIONES.label);
 
 		for (Map<String, String> institucion : instituciones) {
 			String nombre = institucion.get("Nombre");
@@ -104,14 +104,16 @@ public class TestLoader {
 			institucionController.crearInstitucion(nombre, direccion, descripcion);
 		}
 		// Carga de usuarios
-		List<Map<String, String>> users = allRecords.get(FileName.USUARIOS.label);
-		List<Map<String, String>> asistentes = allRecords.get(FileName.ASISTENTES.label);
-		List<Map<String, String>> organizadores = allRecords.get(FileName.ORGANIZADORES.label);
+		List<Map<String, String>> users = data.get(FileName.USUARIOS.label);
+		List<Map<String, String>> asistentes = data.get(FileName.ASISTENTES.label);
+		List<Map<String, String>> organizadores = data.get(FileName.ORGANIZADORES.label);
 
 		for (Map<String, String> user : users) {
 			String nickname = user.get("Nickname");
 			String nombre = user.get("Nombre");
 			String email = user.get("Correo");
+			String clave = user.get("Contraseña");
+			String foto = user.get("Imagen") == "-" ? DEFAULT_USUARIO_FOTO_SOURCE : user.get("Imagen");
 			if (user.get("Tipo").equals("O")) {
 				Map<String, String> orga = organizadores.stream()
 						.filter(o -> o.get("Ref").equals(user.get("Ref")))
@@ -123,6 +125,8 @@ public class TestLoader {
 				usuarioController.crearOrganizador(nickname,
 						nombre,
 						email,
+						clave,
+						foto,
 						descripcion,
 						linkSitioWeb);
 			} else if (user.get("Tipo").equals("A")) {
@@ -142,14 +146,18 @@ public class TestLoader {
 				if (insti == null) {
 					usuarioController.crearAsistente(nickname,
 							nombre,
-							apellido,
 							email,
+							clave,
+							foto,
+							apellido,
 							fechaNac);
 				} else {
 					usuarioController.crearAsistente(nickname,
 							nombre,
-							apellido,
 							email,
+							clave,
+							foto,
+							apellido,
 							fechaNac,
 							insti.get("Nombre"));
 				}
@@ -159,7 +167,7 @@ public class TestLoader {
 		}
 
 		// Carga de categorias
-		List<Map<String, String>> categorias = allRecords.get(FileName.CATEGORIAS.label);
+		List<Map<String, String>> categorias = data.get(FileName.CATEGORIAS.label);
 		for (Map<String, String> categoria : categorias) {
 			if (categoria.get("Nombre") == null)
 				continue;
@@ -168,7 +176,7 @@ public class TestLoader {
 		}
 
 		// Carga de eventos
-		List<Map<String, String>> eventos = allRecords.get(FileName.EVENTOS.label);
+		List<Map<String, String>> eventos = data.get(FileName.EVENTOS.label);
 		for (Map<String, String> evento : eventos) {
 			String nombre = evento.get("Nombre");
 			String descripcion = evento.get("Descripcion");
@@ -191,7 +199,7 @@ public class TestLoader {
 		}
 
 		// Carga de ediciones
-		List<Map<String, String>> ediciones = allRecords.get(FileName.EDICIONES.label);
+		List<Map<String, String>> ediciones = data.get(FileName.EDICIONES.label);
 		for (Map<String, String> edicion : ediciones) {
 			String nombre = edicion.get("Nombre");
 			String evento = eventos.stream()
@@ -221,7 +229,7 @@ public class TestLoader {
 		}
 
 		// Carga de tipos de registro
-		List<Map<String, String>> tiposRegistro = allRecords.get(FileName.TIPOREGISTROS.label);
+		List<Map<String, String>> tiposRegistro = data.get(FileName.TIPOREGISTROS.label);
 		for (Map<String, String> tipoRegistro : tiposRegistro) {
 			String edicion = ediciones.stream().filter(e -> e.get("Ref").equals(tipoRegistro.get("EdicionEvento")))
 					.findFirst().orElse(null).get("Nombre");
@@ -237,7 +245,7 @@ public class TestLoader {
 
 		// Carga de patrocinios
 
-		List<Map<String, String>> patrocinios = allRecords.get(FileName.PATROCINIOS.label);
+		List<Map<String, String>> patrocinios = data.get(FileName.PATROCINIOS.label);
 		for (Map<String, String> patrocinio : patrocinios) {
 			String edicion = ediciones.stream().filter(e -> e.get("Ref").equals(patrocinio.get("EdicionEvento")))
 					.findFirst().orElse(null).get("Nombre");
@@ -252,7 +260,7 @@ public class TestLoader {
 			float costoTR = Float.parseFloat(tipoRegistroMap.get("Costo"));
 			int cupoTR = Integer.parseInt(tipoRegistroMap.get("Cupo"));
 			LocalDate fechaRealizacion = LocalDate.parse(patrocinio.get("fechaPatrocinio"),
-					DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+					DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			Float aporte = Float.parseFloat(patrocinio.get("Aporte"));
 			NivelPatrocinio nivel = NivelPatrocinio.valueOf(patrocinio.get("Nivel").toUpperCase());
 			System.out.println("Cargando patrocinio: " + institucion + " - " + edicion + " - " + nivel + " con aporte " + aporte + " y " + cantidadRegistros + " registros de tipo " + nombreTR + ". Codigo: " + codigo + ". Costo TR: " + costoTR + ", cupo TR: " + cupoTR + ", descripcion TR: " + descripcionTR); 
@@ -260,7 +268,7 @@ public class TestLoader {
 		}
 
 		// Carga de registros
-		List<Map<String, String>> registros = allRecords.get(FileName.REGISTROS.label);
+		List<Map<String, String>> registros = data.get(FileName.REGISTROS.label);
 		for (Map<String, String> registro : registros) {
 			String asistente = users.stream()
 					.filter(a -> a.get("Ref").equals(registro.get("Usuario")))

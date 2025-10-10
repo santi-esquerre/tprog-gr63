@@ -63,7 +63,7 @@ class DatatypesTest extends BaseTest {
         DTEvento evento = new DTEvento("EventoTest", "SGLA", "desc", new Date());
         DTEdicion edicion = new DTEdicion("EdicionTest", "SGLA", new Date(), new Date(), new Date(), "Montevideo",
                 "Uruguay");
-        DTAsistente asistente = new DTAsistente("nick", "nombre", "apellido", "email", new Date());
+        DTAsistente asistente = new DTAsistente("nick", "nombre", "email", "src/foto1234.jpg" ,"apellido",  new Date());
         DTTipoRegistro tipoRegistro = new DTTipoRegistro("Tipo", "Desc", 100.0f, 10);
         Optional<DTPatrocinio> patrocinio = Optional.empty();
 
@@ -94,7 +94,7 @@ class DatatypesTest extends BaseTest {
     void testDTEdicionDetallada() {
         DTEdicion edicion = new DTEdicion("EdicionTest", "SGLA", new Date(), new Date(), new Date(), "Montevideo",
                 "Uruguay");
-        DTOrganizador organizador = new DTOrganizador("nick", "nombre", "email", "desc", "web");
+        DTOrganizador organizador = new DTOrganizador("nick", "nombre", "email", "src/foto1234.jpg" ,"desc", "web");
 
         DTEdicionDetallada detallada = new DTEdicionDetallada(
                 edicion, organizador, null, null, null);
@@ -121,14 +121,14 @@ class DatatypesTest extends BaseTest {
     @Test
     void testDTUsuarioTypes() {
         // Test DTUsuario
-        DTUsuario usuario = new DTUsuario("nickU", "NombreU", "correoU@test.com");
+        DTUsuario usuario = new DTUsuario("nickU", "NombreU", "correoU@test.com", "src/fotoU.jpg");
         assertEquals("nickU", usuario.nickname());
         assertEquals("NombreU", usuario.nombre());
         assertEquals("correoU@test.com", usuario.correo());
         assertEquals("nickU", usuario.toString());
 
         // Test DTUsuarioItemListado
-        DTUsuarioItemListado item = new DTUsuarioItemListado("nickU", "correoU@test.com", TipoUsuario.ASISTENTE);
+        DTUsuarioItemListado item = new DTUsuarioItemListado("nickU", "correoU@test.com", "src/fotoH.jpg", TipoUsuario.ASISTENTE);
         assertEquals("nickU", item.nickname());
         assertEquals("correoU@test.com", item.correo());
         assertEquals(TipoUsuario.ASISTENTE, item.tipoUsuario());
@@ -140,7 +140,7 @@ class DatatypesTest extends BaseTest {
     void testDTAsistente() {
         Date fechaNacimiento = new Date();
         // Constructor order: nickname, nombre, correo, apellido, fechaNacimiento
-        DTAsistente asistente = new DTAsistente("nick", "nombre", "correo", "apellido", fechaNacimiento);
+        DTAsistente asistente = new DTAsistente("nick", "nombre", "correo", "src/fotoH.jpg", "apellido", fechaNacimiento);
 
         assertEquals("nick", asistente.nickname());
         assertEquals("nombre", asistente.nombre());
@@ -154,7 +154,7 @@ class DatatypesTest extends BaseTest {
     @Test
     void testDTOrganizador() {
         // Constructor order: nickname, nombre, correo, linkSitioWeb, descripcion
-        DTOrganizador organizador = new DTOrganizador("nick", "nombre", "correo", "web", "desc");
+        DTOrganizador organizador = new DTOrganizador("nick", "nombre", "correo", "src/fotoH.jpg", "web", "desc");
 
         assertEquals("nick", organizador.nickname());
         assertEquals("nombre", organizador.nombre());

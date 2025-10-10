@@ -34,7 +34,7 @@ public class Inicio extends HttpServlet {
 
 		Factory factory = Factory.get();
 		
-		List<DTUsuarioItemListado> listadoUsuarios = factory.getIUsuarioController().obtenerUsuarios();
+		//List<DTUsuarioItemListado> listadoUsuarios = factory.getIUsuarioController().obtenerUsuarios();
 		
 		request.getRequestDispatcher("/WEB-INF/inicio/inicio.jsp").forward(request, response);
 		//response.getWriter().append("Served at: " + listadoUsuarios.toString()).append(request.getContextPath());

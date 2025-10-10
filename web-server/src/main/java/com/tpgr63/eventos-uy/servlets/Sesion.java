@@ -1,11 +1,20 @@
 package servlets;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.EstadoSesion;
+
 import java.io.IOException;
+
+import controllers.SessionManager;
+import interfaces.Factory;
+import interfaces.ISesionController;
+import interfaces.IUsuarioController;
 
 /**
  * Servlet implementation class Sesion
@@ -27,7 +36,46 @@ public class Sesion extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+//		HttpSession objSesion = request.getSession();
+//		String usuario = request.getParameter("usuario");
+//		String clave = request.getParameter("clave");
+//		
+//		SessionManager.initSesion(request);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
+		dispatcher.forward(request, response);
+	
+//		if((usuario == null || clave == null) && objSesion.getAttribute("estado_sesion") ==  EstadoSesion.NO_LOGIN) {
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
+//			dispatcher.forward(request, response);
+//			return;
+//		}
+//		EstadoSesion nuevoEstado;
+//		
+//		ISesionController sesionController = Factory.get().getISesionController();
+//
+//		// chequea contraseña
+//		if (!sesionController.iniciarSesion(usuario, clave)) {
+//			nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
+//			dispatcher.forward(request, response);
+//			return;
+//		}
+//		else {
+//			nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
+//			
+//			IUsuarioController usuarioController = Factory.get().getIUsuarioController();
+//			
+//			// setea el usuario logueado
+//			request.getSession().setAttribute("usuario_logueado", usuario);
+//		}
+//
+//		objSesion.setAttribute("estado_sesion", nuevoEstado);
+//
+//		// redirige a la página principal para que luego rediriga a la página
+//		// que corresponde
+//		RequestDispatcher dispatcher = request.getRequestDispatcher("/inicio");
+//		dispatcher.forward(request, response);
 	}
 
 	/**
