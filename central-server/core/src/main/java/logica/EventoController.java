@@ -8,6 +8,7 @@ import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTEventoAlta;
 import datatypes.DTEventoDetallado;
+import datatypes.EstadoEdicion;
 import dominio.Categoria;
 import exceptions.CategoriaRepetidaException;
 import exceptions.CategoriasInvalidasException;
@@ -111,6 +112,17 @@ public final class EventoController implements IEventoController {
       var ev = eventoRepo.buscarEvento(em, nombreEvento);
       return (ev == null) ? Set.of() : ev.listarDTEdiciones();
     });
+  }
+  
+  @Override
+  public Set<DTEdicion> mostrarEdiciones(String nombreEvento, EstadoEdicion estado) throws ValidationInputException {
+	 if (nombreEvento == null)
+		 throw new ValidationInputException("nombreEvento requerido");
+	 EventoRepository eventoRepo = EventoRepository.get();
+	 return  Tx.inTx(em -> {
+		 var ev = eventoRepo.buscarEvento(em, nombreEvento);
+		 return (ev == null) ? Set.of() : ev.listarDTEdiciones(estado);
+	 });
   }
 
   @Override

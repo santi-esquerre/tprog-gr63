@@ -6,6 +6,7 @@ import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTEventoAlta;
 import datatypes.DTEventoDetallado;
+import datatypes.EstadoEdicion;
 import exceptions.ValidationInputException;
 
 public interface IEventoController {
@@ -20,6 +21,8 @@ public interface IEventoController {
   Set<DTEdicion> mostrarEdiciones(String nombreEvento) throws ValidationInputException;
   void altaDeCategoria(String nombreCategoria) throws ValidationInputException;
 
+  Set<DTEdicion> mostrarEdiciones(String nombreEvento, EstadoEdicion estado) throws ValidationInputException;
+  
   boolean agregarEdicionAEvento(String nombreEvento,
       String nicknameOrganizador,
       DTEdicion datos) throws ValidationInputException;

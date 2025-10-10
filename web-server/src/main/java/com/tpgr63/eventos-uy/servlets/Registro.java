@@ -6,6 +6,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import interfaces.Factory;
+import interfaces.IInstitucionController;
+import datatypes.DTInstitucion;
+import java.util.Set;
+
 
 /**
  * Servlet implementation class Registro
@@ -27,7 +32,12 @@ public class Registro extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		Factory factory = Factory.get();
+		IInstitucionController institucionController = factory.getIInstitucionController();
+		Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
+		request.setAttribute("instituciones", instituciones);
+		request.getRequestDispatcher("/WEB-INF/registro/registroUsuario.jsp").forward(request, response);
 	}
 
 	/**

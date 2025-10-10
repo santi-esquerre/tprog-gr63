@@ -9,6 +9,7 @@ import datatypes.DTAsistente;
 import datatypes.DTEdicion;
 import datatypes.DTEvento;
 import datatypes.DTTipoRegistro;
+import datatypes.EstadoEdicion;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,9 @@ public class Edicion extends BaseEntity {
 
   @Column(nullable = false, length = 20)
   private String sigla;
+  
+  @Column
+  private EstadoEdicion estado;
 
   @Temporal(TemporalType.DATE)
   @Column(nullable = false)
@@ -73,7 +77,7 @@ public class Edicion extends BaseEntity {
 
   // DCD
   public DTEdicion obtenerDTEdicion() {
-    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais);
+    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, estado);
   }
 
   public Set<DTTipoRegistro> listarDTTiposDeRegistro() {
@@ -137,9 +141,17 @@ public class Edicion extends BaseEntity {
   public Evento getEvento() {
     return evento;
   }
+  
+  public EstadoEdicion getEstado() {
+	return estado;
+  }
+  
+  public void setEstado(EstadoEdicion estado) {
+	  this.estado = estado;
+  }
 
   public DTEdicion toDTEdicion() {
-    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais);
+    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, estado);
   }
 
   // core/src/main/java/dominio/Edicion.java

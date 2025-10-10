@@ -42,6 +42,8 @@ const edicionActual = ediciones[id];
 
 const lista = document.getElementById("listaRegistros");
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const nombreEd = document.getElementById("nombreEdicion");
     const siglaEd = document.getElementById("siglaEdicion");

@@ -3,6 +3,7 @@ package dominio;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import datatypes.EstadoEdicion;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -63,6 +64,16 @@ public class Evento extends BaseEntity {
     for (Edicion e : ediciones)
       out.add(e.obtenerDTEdicion());
     return out;
+  }
+  
+  public Set<datatypes.DTEdicion> listarDTEdiciones(EstadoEdicion estado) {
+	Set<datatypes.DTEdicion> out = new LinkedHashSet<>();
+	for (Edicion e : ediciones) {
+	  if (e.getEstado() == estado) {
+		out.add(e.obtenerDTEdicion());
+	  }
+	}
+	return out;
   }
 
   public void addEdicion(Edicion e) {

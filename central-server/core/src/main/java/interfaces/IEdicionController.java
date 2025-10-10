@@ -8,6 +8,7 @@ import datatypes.DTAsistente;
 import datatypes.DTEdicion;
 import datatypes.DTEdicionDetallada;
 import datatypes.DTTipoRegistro;
+import datatypes.EstadoEdicion;
 import datatypes.NivelPatrocinio;
 import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
@@ -47,4 +48,7 @@ public interface IEdicionController {
   DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEdicion) throws ValidationInputException;
 
   Set<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador) throws ValidationInputException;
+  
+  void decisionSeleccion(String nombreEdicion, EstadoEdicion decision) throws ValidationInputException ;
+  
 }
