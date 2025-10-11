@@ -69,7 +69,7 @@
                                 </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="registroUsuario.html">Crea tu cuenta!</a>
+                                        <a class="small" href="registro">Crea tu cuenta!</a>
                                     </div>
                                 </div>
                             </div>
