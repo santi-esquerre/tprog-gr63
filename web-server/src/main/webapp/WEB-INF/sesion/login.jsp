@@ -1,10 +1,11 @@
+<%@page import="org.apache.commons.lang3.ObjectUtils.Null"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
 
-<% %>
+<% String message = (String) request.getAttribute("alert_message"); request.setAttribute("alert_message", null); %>
 
 <head>
     <title>EventosUY - Login</title>
@@ -28,17 +29,21 @@
                             <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div> -->
                             <div class="col-lg-12">
                                 <div class="p-5">
+                                	<div class="alert alert-warning alert-dismissible fade show" role="alert" id="alert" <%= message != null ? "" : "hidden" %>>
+                                		<%= message != null ? message : "" %>
+									  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+									</div>
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Bienvenido</h1>
                                     </div>
-                                    <form id="loginForm" action="./index.html" method="post">
+                                    <form id="loginForm" action="sesion" method="get">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="usuario" type="text" placeholder="Enter your name..." required/>
+                                        <input class="form-control" id="usuario" name="usuario" type="text" placeholder="Enter your name..." required/>
                                         <label for="usuario">Nickname o correo electrónico</label>
                                         <div class="invalid-feedback" data-sb-feedback="usuario:required">Debe ingresar un nickname o correo electrónico</div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="clave" type="password" placeholder="name@example.com" minlength="8" required/>
+                                        <input class="form-control" id="clave" name="clave" type="password" placeholder="name@example.com" minlength="8" required/>
                                         <label for="clave">Contraseña</label>
                                         <div class="invalid-feedback" data-sb-feedback="clave:required">Debe ingresar su contraseña</div>
                                     </div>

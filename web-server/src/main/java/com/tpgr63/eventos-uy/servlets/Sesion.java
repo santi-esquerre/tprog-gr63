@@ -36,46 +36,57 @@ public class Sesion extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-//		HttpSession objSesion = request.getSession();
-//		String usuario = request.getParameter("usuario");
-//		String clave = request.getParameter("clave");
-//		
-//		SessionManager.initSesion(request);
+		HttpSession objSesion = request.getSession();
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
-		dispatcher.forward(request, response);
-	
-//		if((usuario == null || clave == null) && objSesion.getAttribute("estado_sesion") ==  EstadoSesion.NO_LOGIN) {
-//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
-//			dispatcher.forward(request, response);
-//			return;
-//		}
-//		EstadoSesion nuevoEstado;
-//		
-//		ISesionController sesionController = Factory.get().getISesionController();
-//
-//		// chequea contraseña
-//		if (!sesionController.iniciarSesion(usuario, clave)) {
-//			nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
-//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
-//			dispatcher.forward(request, response);
-//			return;
-//		}
-//		else {
-//			nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
-//			
-//			IUsuarioController usuarioController = Factory.get().getIUsuarioController();
-//			
-//			// setea el usuario logueado
-//			request.getSession().setAttribute("usuario_logueado", usuario);
-//		}
-//
-//		objSesion.setAttribute("estado_sesion", nuevoEstado);
-//
-//		// redirige a la página principal para que luego rediriga a la página
-//		// que corresponde
-//		RequestDispatcher dispatcher = request.getRequestDispatcher("/inicio");
-//		dispatcher.forward(request, response);
+		if(request.getParameter("cerrar_sesion") != null) {
+			objSesion.setAttribute("estado_sesion", EstadoSesion.NO_LOGIN);
+			response.sendRedirect("inicio");
+			return;
+		}
+		
+		String usuario = request.getParameter("usuario");
+		String clave = request.getParameter("clave");
+		
+		SessionManager.initSesion(request);
+		
+
+		
+		if(objSesion.getAttribute("estado_sesion") ==  EstadoSesion.LOGIN_CORRECTO) {
+			response.sendRedirect("inicio");
+			return;
+		}
+		
+		
+		if((usuario == null || clave == null) && objSesion.getAttribute("estado_sesion") ==  EstadoSesion.NO_LOGIN) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		EstadoSesion nuevoEstado;
+		
+		ISesionController sesionController = Factory.get().getISesionController();
+
+		// chequea contraseña
+		if (!sesionController.iniciarSesion(usuario, clave)) {
+			request.setAttribute("alert_message", "Usuario y/o contraseña incorrectos");
+			nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
+			objSesion.setAttribute("estado_sesion", nuevoEstado);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		else {
+			nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
+			objSesion.setAttribute("estado_sesion", nuevoEstado);
+			IUsuarioController usuarioController = Factory.get().getIUsuarioController();
+			
+			// setea el usuario logueado
+			request.getSession().setAttribute("usuario_logueado", usuario);
+
+			// redirige a la página principal para que luego rediriga a la página
+			// que corresponde
+			response.sendRedirect("inicio");
+		}
 	}
 
 	/**

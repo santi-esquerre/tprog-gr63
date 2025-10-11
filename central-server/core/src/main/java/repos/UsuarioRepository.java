@@ -187,7 +187,7 @@ public final class UsuarioRepository {
   
   public Boolean comprobarCredenciales(EntityManager em, String usuario, String clave) {
 	  Usuario u = em.createQuery(
-		        "select u from Usuario a where a.nickname = :n or a.correo = :n", Usuario.class)
+		        "select u from Usuario u where u.nickname = :n or u.correo = :n", Usuario.class)
 		        .setParameter("n", usuario)
 		        .getResultStream().findFirst().orElse(null);
 	  if (u == null) return false;
