@@ -8,6 +8,7 @@ import java.util.Set;
 import datatypes.DTAsistente;
 import datatypes.DTEdicion;
 import datatypes.DTTipoRegistro;
+import datatypes.EstadoEdicion;
 import datatypes.NivelPatrocinio;
 import dominio.Edicion;
 import dominio.TipoRegistro;
@@ -281,4 +282,26 @@ public final class EdicionController implements IEdicionController {
         .stream().map(e -> e.toDTEdicion()).toArray(DTEdicion[]::new));
     return resultado;
   }
+  
+  @Override
+  public void decisionSeleccion(String nombreEdicion, EstadoEdicion decision) throws ValidationInputException {
+	  boolean existeEd = Tx.inTx(em -> {
+		  Edicion ed = edicionRepo.buscarEdicion(em, nombreEdicion);
+		  if (ed != null) {
+			  ed.setEstado(decision);
+			  em.merge(ed);
+			  return true;
+		  }
+		  else {
+			  return false;
+		  }
+	  });
+	  
+	  if (!existeEd)
+	  {
+		  throw new ValidationInputException(
+	              "No existe la edición '" + nombreEdicion + "'");
+	  }
+  }
+  
 }
