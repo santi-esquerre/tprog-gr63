@@ -8,8 +8,8 @@
     <title>Registro de Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     
-    <link href="${pageContext.request.contextPath}/media/styles/styles.css" rel="stylesheet" />
-    <link href="${pageContext.request.contextPath}/media/styles/sb-admin-2.min.css" rel="stylesheet">
+    <link href="media/css/styles.css" rel="stylesheet" />
+    <link href="media/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
     <body class="d-flex flex-column h-100 bg-primary">
         
@@ -145,7 +145,7 @@
                     <h2>Crea una cuenta</h2>
                 </div>
                 <div class="card-body p-4">
-                    <form action="Registro" method="POST">
+                    <form action="${pageContext.request.contextPath}/registro" method="POST" enctype="multipart/form-data">
                         <div class="form-floating mb-3 text-muted">
                             <input type="text" class="form-control" name="nickname" id="nickname" placeholder="Nombre de usuario">
                             <label for="nickname">Nombre de usuario</label>
@@ -171,11 +171,11 @@
 
                         <div class="btn-group mb-3 w-100" role="group" aria-label="Basic radio toggle button group">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="rol" id="btnRadioAsistente" autocomplete="off" checked>
+                                <input class="form-check-input" type="radio" name="rol" value="asistente" id="btnRadioAsistente" autocomplete="off" checked>
                                 <label class="form-check-label" for="btnRadioAsistente">Asistente</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="rol" id="btnRadioOrganizador" autocomplete="off">
+                                <input class="form-check-input" type="radio" name="rol" value="organizador" id="btnRadioOrganizador" autocomplete="off">
                                 <label class="form-check-label" for="btnRadioOrganizador">Organizador</label>
                             </div>
                         </div>
@@ -268,7 +268,7 @@
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
-    <script src="${pageContext.request.contextPath}/media/js/scripts.js"></script>
-    <script src="${pageContext.request.contextPath}/media/js/pages/registroUsuario.js"></script>
+    <script src="media/js/scripts.js"></script>
+    <script src="media/js/pages/registroUsuario.js"></script>
 </body>
 </html>
