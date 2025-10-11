@@ -14,6 +14,7 @@ public class ImagesManager {
 	
 	public static String uploadImage(HttpServletRequest request, HttpServletResponse response) {
 		String nombreArchivo = "";
+		int contador=1;
 		try {
 		    // Obtenemos la imagen subida desde el formulario
 		    Part foto = request.getPart("imagen");		
@@ -44,6 +45,20 @@ public class ImagesManager {
 
 		    // Guardar la imagen
 		    File archivoDestino = new File(carpetaDestino, nombreArchivo);
+		    
+		    if(archivoDestino.exists()) {
+		    	String nombreSinExtension = nombreArchivo.contains(".") ? 
+		    			nombreArchivo.substring(0, nombreArchivo.lastIndexOf('.')) : nombreArchivo;
+		    	String extension = nombreArchivo.contains(".") ? 
+		    			nombreArchivo.substring(nombreArchivo.lastIndexOf('.')) : "";
+		    	
+		    	while(archivoDestino.exists()) {
+		    		nombreArchivo = nombreSinExtension + " (" + contador + ")" + extension;
+		    		archivoDestino = new File(carpetaDestino, nombreArchivo);
+		    		contador++;
+		    	}
+		    }
+		    
 		    if (foto != null && foto.getSize() > 0) {
 		        foto.write(archivoDestino.getAbsolutePath());
 		    }
@@ -80,6 +95,23 @@ public class ImagesManager {
 	    
 	    return archivoImagen.getAbsolutePath();
 	}
+	
+	public static boolean deleteImage(String imageName, HttpServletRequest request) {
+		String imagePath = getImagePath(imageName, request);
+		try {
+			File imageFile = new File(imagePath);
+			if (imageFile.exists()) {
+				return imageFile.delete();
+			} else {
+				System.out.println("La imagen no existe: " + imagePath);
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} 
+	}
+	
 	
 	public static File getDefaultDirectory(HttpServletRequest request) {
 		// Carpeta base dentro del deployment actual
