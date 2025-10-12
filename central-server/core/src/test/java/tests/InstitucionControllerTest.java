@@ -88,10 +88,10 @@ class InstitucionControllerTest extends BaseTest {
 			// Crear edición usando el controlador de eventos
 			eventoController.altaCategoria("CatPatrocinio");
 			eventoController.altaEvento(new DTEventoAlta("EventoPatrocinio", "DescEvento", new java.util.Date(),
-					"SIGLA_PAT", Set.of("CatPatrocinio")));
+					"SIGLA_PAT", "img.jpg", Set.of("CatPatrocinio")));
 			usuarioController.crearOrganizador("OrgPatrocinio", "OrgPatrocinio", "org@patrocinio.com",  "clave1234", "foto.jpg", "desc org");
 			var edicion = new DTEdicion("EdicionEventoTest", "SIGLA_ED", new java.util.Date(), new java.util.Date(),
-					new java.util.Date(), "Montevideo", "Uruguay");
+					new java.util.Date(), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoPatrocinio", "OrgPatrocinio", edicion);
 			DTTipoRegistro tipoRegistro = new DTTipoRegistro("TipoRegTest", "DescTipoReg", 1000.0f, 10);
 			edicionController.altaTipoRegistro(edicion.nombre(), tipoRegistro);

@@ -89,7 +89,7 @@ public final class EventoController implements IEventoController {
 
     boolean res = Tx.inTx(em -> {
       var cats = mapCategorias(em, dta.categorias());
-      return eventoFactory.crearEvento(em, dta.nombre(), dta.descripcion(), dta.fechaAlta(), dta.sigla(), cats);
+      return eventoFactory.crearEvento(em, dta.nombre(), dta.descripcion(), dta.fechaAlta(), dta.sigla(), dta.foto(), cats);
     });
     if (!res)
       throw new EventoRepetidoException("Ya existe el evento de nombre " + dta.nombre() + "");

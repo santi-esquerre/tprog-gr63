@@ -14,10 +14,10 @@ public final class EventoFactory {
 
   public boolean crearEvento(EntityManager em,
                              String nombre, String descripcion,
-                             java.util.Date fechaAlta, String sigla,
+                             java.util.Date fechaAlta, String sigla, String foto,
                              Set<Categoria> categorias){
     if (EventoRepository.get().existeEvento(em, nombre)) return false;
-    var ev = new Evento(nombre, descripcion, fechaAlta, sigla, categorias);
+    var ev = new Evento(nombre, descripcion, fechaAlta, sigla, foto, categorias);
     em.persist(ev);
     return true;
   }
