@@ -142,10 +142,19 @@
     <div class="container mt-2 py-5">
       <div class="card mx-auto shadow" style="max-width: 600px;">
                 <div class="card-header bg-white text-center">
-                    <h2>Crea una cuenta</h2>
+                    <h2 class="fw-bold" style="color: black;">Crea una cuenta</h2>
                 </div>
                 <div class="card-body p-4">
                     <form action="${pageContext.request.contextPath}/registro" method="POST" enctype="multipart/form-data">
+                    
+                		<%
+                		String error = (String) request.getAttribute("error");
+                		if (error != null) {
+                			
+                		%>
+            			<div class="border border-danger mb-3" style="background-color: rgba(220, 53, 69, 0.3)"><p class="text-center fw-bold" style="color: black;"><%=error%></p> </div>
+                		<% } %>
+                		
                         <div class="form-floating mb-3 text-muted">
                             <input type="text" class="form-control" name="nickname" id="nickname" placeholder="Nombre de usuario">
                             <label for="nickname">Nombre de usuario</label>
@@ -195,7 +204,7 @@
                                         	for (int i =1; i <=31; i++) {
  
                                         %>
-                                        		<option value="<%=i%>)"><%=i%></option>
+                                        		<option value="<%=i%>"><%=i%></option>
                                         
 										<% } %>
                                     </select>                                      
@@ -228,12 +237,12 @@
                             <div class="mb-3">
                                 <p>Institución (opcional)</p>
                                 <select class="form-select" name="institucion" aria-label="Institución" id="institucion">
-                                    <option selected>- Elección de institución -</option>
+                                    <option value="ninguna" selected>- Elección de institución -</option>
                                     <%
                                    	var instituciones = (Set<DTInstitucion>) request.getAttribute("instituciones");
                                     for (var institucion : instituciones) {
                                     	%>
-                                    	<option value="<%=institucion.nombre()%>>"><%=institucion.nombre()%></option>	
+                                    	<option value="<%=institucion.nombre()%>"><%=institucion.nombre()%></option>	
                                     	
                                     <% } %>
                                    

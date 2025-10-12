@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import interfaces.Factory;
 import interfaces.IInstitucionController;
 import datatypes.DTInstitucion;
+import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioNicknameRepetidoException;
 
 import java.util.Set;
@@ -73,27 +74,55 @@ public class Registro extends HttpServlet {
 		String correo = request.getParameter("correo");
 		String password = request.getParameter("password");
 		String rol = request.getParameter("rol");
-		String foto = ImagesManager.uploadImage(request, response);
+		String foto = ImagesManager.getImageName(request);
 		
 		Factory factory = Factory.get();
 		IUsuarioController usuarioController = factory.getIUsuarioController();
-		System.out.print("La imagen es " + foto);
 		
-		/*try {
+		try {
 			
 			if (rol.equals("asistente")) {
+				System.out.println("Está haciendo un asistente");
 				int dia = Integer.parseInt(request.getParameter("dia"));
 				int mes = Integer.parseInt(request.getParameter("mes"));
 				int anio = Integer.parseInt(request.getParameter("anio"));
 				LocalDate fechaNacimiento = LocalDate.of(anio, mes, dia);
 				String apellido = request.getParameter("apellido");
+				String institucion = request.getParameter("institucion");
+				if (institucion.equals("ninguna")) {
+					usuarioController.crearAsistente(nickname, nombre, correo, password, foto, apellido, fechaNacimiento);
+					
+				} else {
+					usuarioController.crearAsistente(nickname, nombre, correo, password, foto, apellido, fechaNacimiento, institucion);
+				}
+			}
+			else {
+				String descripcion = request.getParameter("descripcion");
+				String linkSitioWeb = request.getParameter("sitioWeb");
+				if (linkSitioWeb.isEmpty()) {
+					usuarioController.crearOrganizador(nickname, nombre, correo, password, foto, descripcion);
+				} else {
+					usuarioController.crearOrganizador(nickname, nombre, correo, password, foto, descripcion, linkSitioWeb);
+				}
 			}
 			
-			
 		} catch (UsuarioNicknameRepetidoException en) {
-			
-		}*/
-		
+			request.setAttribute("error", "El nickname ya está en uso. Por favor, elija otro.");
+			doGet(request, response);
+			return;
+		}
+		catch (UsuarioCorreoRepetidoException ec) {
+			request.setAttribute("error", "El correo ya está en uso. Por favor, elija otro.");
+			doGet(request, response);
+			return;
+		} catch (Exception e) {
+			request.setAttribute("error", "Error al registrar el usuario. Por favor, intente nuevamente.");
+			doGet(request, response);
+			return;
+		}
+		ImagesManager.uploadImage(request, response);
+		System.out.println("Usuario registrado con éxito.");
+		response.sendRedirect(request.getContextPath() + "/sesion");
 		
 	}
 
