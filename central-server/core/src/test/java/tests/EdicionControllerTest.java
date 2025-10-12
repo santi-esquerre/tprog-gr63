@@ -26,7 +26,7 @@ class EdicionControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			// Preparar datos necesarios
 			eventoController.altaCategoria("CategoriaTest1");
-			eventoController.altaEvento(new DTEventoAlta("EventoTest1", "Descripcion Test 1", new Date(0), "SIGLA1",
+			eventoController.altaEvento(new DTEventoAlta("EventoTest1", "Descripcion Test 1", new Date(0), "SIGLA1", "img.jpg",
 					Set.of("CategoriaTest1")));
 
 			// Crear organizador
@@ -35,7 +35,7 @@ class EdicionControllerTest extends BaseTest {
 
 			// Agregar edición al evento
 			DTEdicion edicionData = new DTEdicion("EdicionTest1", "SIGLA_ED1", new Date(1000), new Date(2000),
-					new Date(0), "Montevideo", "Uruguay");
+					new Date(0), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoTest1", "orgTest1", edicionData);
 
 			// Crear tipo de registro
@@ -63,14 +63,14 @@ class EdicionControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			// Preparar datos
 			eventoController.altaCategoria("CategoriaConsulta1");
-			eventoController.altaEvento(new DTEventoAlta("EventoConsulta1", "Descripcion Test", new Date(0), "SIGLA_C1",
+			eventoController.altaEvento(new DTEventoAlta("EventoConsulta1", "Descripcion Test", new Date(0), "SIGLA_C1", "img.jpg",
 					Set.of("CategoriaConsulta1")));
 
 			usuarioController.crearOrganizador("orgConsulta1", "Organizador Consulta", "orgconsulta@test.com", "clave1234", "foto.jpg",
 					"Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionConsulta1", "SIGLA_EC1", new Date(1000), new Date(2000),
-					new Date(0), "Montevideo", "Uruguay");
+					new Date(0), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoConsulta1", "orgConsulta1", edicionData);
 
 			DTTipoRegistro tipoRegistro = new DTTipoRegistro("TipoConsulta1", "Descripcion Tipo Consulta", 60.0f, 80);
@@ -100,14 +100,14 @@ class EdicionControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			// Preparar datos
 			eventoController.altaCategoria("CategoriaMostrar1");
-			eventoController.altaEvento(new DTEventoAlta("EventoMostrar1", "Descripcion", new Date(0), "SIGLA_M1",
+			eventoController.altaEvento(new DTEventoAlta("EventoMostrar1", "Descripcion", new Date(0), "SIGLA_M1", "img.jpg",
 					Set.of("CategoriaMostrar1")));
 
 			usuarioController.crearOrganizador("orgMostrar1", "Organizador Mostrar", "orgmostrar@test.com",  "clave1234", "foto.jpg",
 					"Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionMostrar1", "SIGLA_EM1", new Date(1000), new Date(2000),
-					new Date(0), "Montevideo", "Uruguay");
+					new Date(0), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoMostrar1", "orgMostrar1", edicionData);
 
 			// Crear múltiples tipos de registro
@@ -152,12 +152,12 @@ class EdicionControllerTest extends BaseTest {
 			// Preparar datos
 			eventoController.altaCategoria("CategoriaCupo1");
 			eventoController.altaEvento(
-					new DTEventoAlta("EventoCupo1", "Descripcion", new Date(0), "SIGLA_CU1", Set.of("CategoriaCupo1")));
+					new DTEventoAlta("EventoCupo1", "Descripcion", new Date(0), "SIGLA_CU1", "img.jpg", Set.of("CategoriaCupo1")));
 
 			usuarioController.crearOrganizador("orgCupo1", "Organizador Cupo", "orgcupo@test.com",  "clave1234", "foto.jpg", "Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionCupo1", "SIGLA_ECU1", new Date(1000), new Date(2000),
-					new Date(0), "Montevideo", "Uruguay");
+					new Date(0), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoCupo1", "orgCupo1", edicionData);
 
 			DTTipoRegistro tipo = new DTTipoRegistro("TipoCupo1", "Descripcion Cupo", 50.0f, 10);
@@ -182,13 +182,13 @@ class EdicionControllerTest extends BaseTest {
 
 			// Preparar edición
 			eventoController.altaCategoria("CategoriaNoReg1");
-			eventoController.altaEvento(new DTEventoAlta("EventoNoReg1", "Descripcion", new Date(0), "SIGLA_NR1",
+			eventoController.altaEvento(new DTEventoAlta("EventoNoReg1", "Descripcion", new Date(0), "SIGLA_NR1", "img.jpg",
 					Set.of("CategoriaNoReg1")));
 
 			usuarioController.crearOrganizador("orgNoReg1", "Organizador NoReg", "orgnoreg@test.com",  "clave1234", "foto.jpg", "Descripción");
 
 			DTEdicion edicionData = new DTEdicion("EdicionNoReg1", "SIGLA_ENR1", new Date(1000), new Date(2000),
-					new Date(0), "Montevideo", "Uruguay");
+					new Date(0), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoNoReg1", "orgNoReg1", edicionData);
 
 			// Configurar edición recordada
@@ -206,7 +206,7 @@ class EdicionControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			// Preparar datos completos
 			eventoController.altaCategoria("CategoriaRegistro1");
-			eventoController.altaEvento(new DTEventoAlta("EventoRegistro1", "Descripcion", new Date(0), "SIGLA_REG1",
+			eventoController.altaEvento(new DTEventoAlta("EventoRegistro1", "Descripcion", new Date(0), "SIGLA_REG1", "img.jpg",
 					Set.of("CategoriaRegistro1")));
 
 			usuarioController.crearOrganizador("orgReg1", "Organizador Registro", "orgreg@test.com",  "clave1234", "foto.jpg", "Descripción");
@@ -214,7 +214,7 @@ class EdicionControllerTest extends BaseTest {
 					java.time.LocalDate.of(1992, 7, 10));
 
 			DTEdicion edicionData = new DTEdicion("EdicionRegistro1", "SIGLA_ERG1", new Date(1000), new Date(2000),
-					new Date(0), "Montevideo", "Uruguay");
+					new Date(0), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoRegistro1", "orgReg1", edicionData);
 
 			DTTipoRegistro tipo = new DTTipoRegistro("TipoRegistroReg1", "Descripcion Registro", 100.0f, 50);
@@ -247,14 +247,14 @@ class EdicionControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			// Preparar datos
 			eventoController.altaCategoria("CategoriaDetallada1");
-			eventoController.altaEvento(new DTEventoAlta("EventoDetallado1", "Descripcion Detallada", new Date(0),
+			eventoController.altaEvento(new DTEventoAlta("EventoDetallado1", "Descripcion Detallada",  new Date(0), "img.jpg",
 					"SIGLA_DET1", Set.of("CategoriaDetallada1")));
 
 			usuarioController.crearOrganizador("orgDet1", "Organizador Detallado", "orgdet@test.com",  "clave1234", "foto.jpg",
 					"Descripción detallada");
 
 			DTEdicion edicionData = new DTEdicion("EdicionDetallada1", "SIGLA_EDET1", new Date(1000), new Date(2000),
-					new Date(0), "Montevideo", "Uruguay");
+					new Date(0), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoDetallado1", "orgDet1", edicionData);
 
 			// Obtener datos detallados
@@ -280,11 +280,11 @@ class EdicionControllerTest extends BaseTest {
 			// Preparar datos
 			usuarioController.crearOrganizador("orgTest1", "Organizador1", "",  "clave1234", "foto.jpg", "");
 			eventoController.altaCategoria("CategoriaOrg1");
-			eventoController.altaEvento(new DTEventoAlta("EventoOrg1", "Descripcion Org", new Date(0), "SIGLA_ORG1",
+			eventoController.altaEvento(new DTEventoAlta("EventoOrg1", "Descripcion Org", new Date(0), "SIGLA_ORG1", "img.jpg",
 					Set.of("CategoriaOrg1")));
 			eventoController.agregarEdicionAEvento("EventoOrg1", "orgTest1",
 					new DTEdicion("EdicionOrg1", "SIGLA_EORG1", new Date(1000), new Date(2000), new Date(0), "Ciudad",
-							"País"));
+							"País", "img1.png", null));
 			Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador("orgTest1");
 			assertEquals(1, ediciones.size(), "Debería devolver al menos una edición");
 
@@ -317,12 +317,12 @@ class EdicionControllerTest extends BaseTest {
 			// Test con strings vacíos
 			eventoController.altaCategoria("CategoriaVacia1");
 			eventoController.altaEvento(
-					new DTEventoAlta("EventoVacio1", "", new Date(0), "SIGLA_V1", Set.of("CategoriaVacia1")));
+					new DTEventoAlta("EventoVacio1", "", new Date(0), "SIGLA_V1", "img.jpg", Set.of("CategoriaVacia1")));
 
 			usuarioController.crearOrganizador("orgVacio1", "Organizador", "orgvacio@test.com",  "clave1234", "foto.jpg", "");
 
 			DTEdicion edicionData = new DTEdicion("EdicionVacia1", "", new Date(1000), new Date(2000), new Date(0), "",
-					"");
+					"", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoVacio1", "orgVacio1", edicionData);
 
 			DTTipoRegistro tipoVacio = new DTTipoRegistro("", "", 0.0f, 0);
@@ -355,12 +355,12 @@ class EdicionControllerTest extends BaseTest {
 					Float.MAX_VALUE, Integer.MAX_VALUE);
 			eventoController.altaCategoria("CategoriaLimite1");
 			eventoController.altaEvento(
-					new DTEventoAlta("EventoLimite1", "Desc", new Date(0), "SIGLA_LIM1", Set.of("CategoriaLimite1")));
+					new DTEventoAlta("EventoLimite1", "Desc", new Date(0), "SIGLA_LIM1", "img.jpg", Set.of("CategoriaLimite1")));
 
 			usuarioController.crearOrganizador("orgLimite1", "Organizador Limite", "orglimite@test.com",  "clave1234", "foto.jpg", "Desc");
 
 			DTEdicion edicionData = new DTEdicion("EdicionLimite1", "SIGLA_ELIM1", new Date(1000), new Date(2000),
-					new Date(0), "Ciudad", "País");
+					new Date(0), "Ciudad", "País", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoLimite1", "orgLimite1", edicionData);
 
 			edicionController.altaTipoRegistro("EdicionLimite1", tipoLimite);

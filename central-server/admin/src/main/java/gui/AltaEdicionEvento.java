@@ -240,7 +240,7 @@ public class AltaEdicionEvento extends JInternalFrame implements IReloadable {
         try {
             // DTEdicion constructor: nombre, sigla, fechaInicio, fechaFin, fechaAlta,
             // ciudad, pais
-            DTEdicion dt = new DTEdicion(nombre, sigla, fIni, fFin, fAlta, ciudad, pais);
+            DTEdicion dt = new DTEdicion(nombre, sigla, fIni, fFin, fAlta, ciudad, pais, "default.png", null);
             boolean ok = eventoController.agregarEdicionAEvento(ev.nombre(), org.nickname(), dt);
             if (ok) {
                 JOptionPane.showMessageDialog(this, "Edición creada correctamente.", "Éxito",

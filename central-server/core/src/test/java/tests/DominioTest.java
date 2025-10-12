@@ -44,7 +44,7 @@ class DominioTest extends BaseTest {
             Set<String> cats = new HashSet<>();
             cats.add("cat" + uniqueId);
 
-            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
+            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", "img1.jpg",cats));
 
             usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
                     "clave123", "foto.jpg", "desc");
@@ -52,7 +52,7 @@ class DominioTest extends BaseTest {
             DTEdicion edicion = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
                     new Date(System.currentTimeMillis() + 200000),
-                    new Date(), "Ciudad", "Pais");
+                    new Date(), "Ciudad", "Pais", "img1.png", null);
 
             eventoController.agregarEdicionAEvento("evento" + uniqueId, "org" + uniqueId, edicion);
 
@@ -83,7 +83,7 @@ class DominioTest extends BaseTest {
             Set<String> cats = new HashSet<>();
             cats.add("cat" + uniqueId);
 
-            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
+            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", "img1.jpg",cats));
 
             usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
                     "clave123", "foto.jpg", "desc");
@@ -91,7 +91,7 @@ class DominioTest extends BaseTest {
             DTEdicion edicion = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
                     new Date(System.currentTimeMillis() + 200000),
-                    new Date(), "Ciudad", "Pais");
+                    new Date(), "Ciudad", "Pais", "img1.png", null);
 
             eventoController.agregarEdicionAEvento("evento" + uniqueId, "org" + uniqueId, edicion);
 
@@ -166,17 +166,16 @@ class DominioTest extends BaseTest {
             Set<String> cats = new HashSet<>();
             cats.add("cat" + uniqueId);
 
-            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
+            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", "img1.jpg",cats));
 
-            usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
-                    "clave123", "foto.jpg", "desc");
+            usuarioController.crearOrganizador(uniqueId, "nombre org", "org" + uniqueId + "@test.com", "clave123", "foto.jpg", "desc");
 
             DTEdicion edicion = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
                     new Date(System.currentTimeMillis() + 200000),
-                    new Date(), "Ciudad", "Pais");
+                    new Date(), "Ciudad", "Pais", "img1.png", null);
 
-            eventoController.agregarEdicionAEvento("evento" + uniqueId, "org" + uniqueId, edicion);
+       eventoController.agregarEdicionAEvento("evento" + uniqueId, "org" + uniqueId, edicion);
 
             DTTipoRegistro tipoReg = new DTTipoRegistro("tipo" + uniqueId, "Descripcion tipo", 150.0f, 20);
             edicionController.altaTipoRegistro("edicion" + uniqueId, tipoReg);
@@ -201,7 +200,7 @@ class DominioTest extends BaseTest {
             Set<String> cats = new HashSet<>();
             cats.add("cat" + uniqueId);
 
-            eventoController.altaEvento(new DTEventoAlta(nombreEvento, "Descripcion evento", new Date(), "EVNT", cats));
+            eventoController.altaEvento(new DTEventoAlta(nombreEvento, "Descripcion evento", new Date(), "EVNT", "img1.jpg", cats));
 
             Set<DTEvento> eventos = eventoController.listarEventos();
             assertNotNull(eventos);
@@ -257,7 +256,7 @@ class DominioTest extends BaseTest {
             Set<String> cats = new HashSet<>();
             cats.add("cat" + uniqueId);
 
-            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", cats));
+            eventoController.altaEvento(new DTEventoAlta("evento" + uniqueId, "desc", new Date(), "SIG", "img1.jpg", cats));
 
             usuarioController.crearOrganizador("org" + uniqueId, "nombre org", "org" + uniqueId + "@test.com", 
                     "clave123", "foto.jpg", "desc");
@@ -265,7 +264,7 @@ class DominioTest extends BaseTest {
             DTEdicion edicionData = new DTEdicion("edicion" + uniqueId, "SGLA",
                     new Date(System.currentTimeMillis() + 100000),
                     new Date(System.currentTimeMillis() + 200000),
-                    new Date(), "Montevideo", "Uruguay");
+                    new Date(), "Montevideo", "Uruguay", "img1.png", null);
 
             eventoController.agregarEdicionAEvento("evento" + uniqueId, "org" + uniqueId, edicionData);
 

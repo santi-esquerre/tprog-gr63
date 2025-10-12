@@ -13,6 +13,8 @@ import datatypes.EstadoEdicion;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
@@ -69,6 +71,9 @@ public class Edicion extends BaseEntity {
   @OneToMany(mappedBy = "edicion", fetch = FetchType.LAZY)
   private Set<Patrocinio> patrocinios = new LinkedHashSet<>(); // Asociación con Patrocinio
   
+  @Column(name = "foto", length = 230, nullable = false)
+  private String foto ;
+  
   protected Edicion() {}
 
   public DTEvento obtenerDTEvento() {
@@ -77,7 +82,7 @@ public class Edicion extends BaseEntity {
 
   // DCD
   public DTEdicion obtenerDTEdicion() {
-    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, estado);
+    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
   }
 
   public Set<DTTipoRegistro> listarDTTiposDeRegistro() {
@@ -151,14 +156,14 @@ public class Edicion extends BaseEntity {
   }
 
   public DTEdicion toDTEdicion() {
-    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, estado);
+    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
   }
 
   // core/src/main/java/dominio/Edicion.java
   public Edicion(Evento evento,
       String nombre, String sigla,
       Date fechaInicio, Date fechaFin, Date fechaAlta,
-      String ciudad, String pais,
+      String ciudad, String pais, String foto,
       Organizador organizador) {
     this.evento = Objects.requireNonNull(evento);
     this.nombre = Objects.requireNonNull(nombre);
@@ -169,6 +174,8 @@ public class Edicion extends BaseEntity {
     this.ciudad = Objects.requireNonNull(ciudad);
     this.pais = Objects.requireNonNull(pais);
     this.organizador = Objects.requireNonNull(organizador);
+    this.foto = Objects.requireNonNull(foto);
+    this.estado = EstadoEdicion.INGRESADA;
   }
 
    public datatypes.DTEdicionDetallada toDTEdicionDetallada() {

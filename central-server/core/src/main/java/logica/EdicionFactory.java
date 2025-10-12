@@ -28,7 +28,7 @@ public final class EdicionFactory {
         var ed = new Edicion(evento,
                 dte.nombre(), dte.sigla(),
                 dte.fechaInicio(), dte.fechaFin(), dte.fechaAlta(),
-                dte.ciudad(), dte.pais(),
+                dte.ciudad(), dte.pais(), dte.foto(),
                 org);
         evento.addEdicion(ed); // mantiene bidireccional
         em.persist(ed);

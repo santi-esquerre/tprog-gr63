@@ -7,6 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import datatypes.DTEventoDetallado;
+import exceptions.ValidationInputException;
+import interfaces.Factory;
+import interfaces.IEventoController;
+
 /**
  * Servlet implementation class Evento
  */
@@ -27,7 +32,17 @@ public class Evento extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String nombre = request.getParameter("nombre"); // obtiene "nombreDelEvento" de "/nombreDelEvento"
+		IEventoController eventoController = Factory.get().getIEventoController();
+		try {
+			DTEventoDetallado evento = eventoController.obtenerDatosDetalladosEvento(nombre);
+			request.setAttribute("data_evento", evento);
+			
+			request.getRequestDispatcher("/WEB-INF/eventos/consultaDetalladaEvento.jsp").forward(request, response);
+		} catch(ValidationInputException e) {
+			// TODO Auto-generated catch block
+			response.sendRedirect("inicio");
+		}
 	}
 
 	/**

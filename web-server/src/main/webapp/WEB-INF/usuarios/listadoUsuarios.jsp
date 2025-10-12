@@ -9,6 +9,7 @@
 		int pagina = (Integer)request.getAttribute("pagina") ;
 	%>
     <head>
+    	        <title>Eventos UY - Usuarios</title>
         <jsp:include page="/WEB-INF/template/head.jsp" />
     </head>
     <body class="d-flex flex-column h-100">
@@ -29,7 +30,7 @@
                             <a 
                             class="list-group-item list-group-item-action d-flex border-start-0 border-end-0" 
                             href="perfil?tipo=<%=(usu.tipoUsuario() == TipoUsuario.ASISTENTE) ? "asistente" : "organizador" %>&nickname=<%=usu.nickname()%>">
-                                <img class="rounded-1 align-self-center" src="<%=usu.foto()%>" style="width: 40px; height: 40px;">
+                                <img class="rounded-1 align-self-center" src="image/<%=usu.foto()%>" style="width: 40px; height: 40px;">
 	                                <div class="ms-3">
 	                                    <div class="fw-bold">
 	                                        <%=usu.nickname()%>

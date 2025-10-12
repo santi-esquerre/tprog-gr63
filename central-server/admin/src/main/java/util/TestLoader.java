@@ -36,7 +36,10 @@ import java.util.HashSet;
 
 public class TestLoader {
 	private static final String COMMA_DELIMITER = ";";
-	private static final String DEFAULT_USUARIO_FOTO_SOURCE = "https://placehold.co/225x225";
+	private static final String DEFAULT_USUARIO_FOTO_SOURCE = "default.png";
+	private static final String DEFAULT_EVENTO_FOTO_SOURCE = "default.png";
+	private static final String DEFAULT_EDICION_FOTO_SOURCE = "default.png";
+
 	private enum FileName {
 		CATEGORIAS("Categorias"),
 		EDICIONES("EdicionesEventos"),
@@ -113,7 +116,7 @@ public class TestLoader {
 			String nombre = user.get("Nombre");
 			String email = user.get("Correo");
 			String clave = user.get("Contraseña");
-			String foto = user.get("Imagen") == "-" ? DEFAULT_USUARIO_FOTO_SOURCE : user.get("Imagen");
+			String foto = user.get("Imagen").equals("-") ? DEFAULT_USUARIO_FOTO_SOURCE : user.get("Imagen");
 			if (user.get("Tipo").equals("O")) {
 				Map<String, String> orga = organizadores.stream()
 						.filter(o -> o.get("Ref").equals(user.get("Ref")))
@@ -182,6 +185,7 @@ public class TestLoader {
 			String descripcion = evento.get("Descripcion");
 			String sigla = evento.get("Sigla");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String foto =  !evento.get("Imagen").equals("-") ? evento.get("Imagen") : DEFAULT_EVENTO_FOTO_SOURCE;
 			Date fechaAlta = Date.from(LocalDate.parse(evento.get("FechaAlta"), formatter)
 					.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Set<String> categoriasRefs = new HashSet<String>(Arrays.asList(evento.get("Categorias").split(",")));
@@ -194,7 +198,7 @@ public class TestLoader {
 						.orElse(null));
 			}
 
-			DTEventoAlta dtEvento = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, categoriasEvento);
+			DTEventoAlta dtEvento = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, foto, categoriasEvento);
 			eventoController.altaEvento(dtEvento);
 		}
 
@@ -225,7 +229,8 @@ public class TestLoader {
 					.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			eventoController.agregarEdicionAEvento(evento, organizador,
-					new datatypes.DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais));
+					new datatypes.DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, 
+							edicion.get("Imagen").equals("-") ? DEFAULT_EDICION_FOTO_SOURCE : edicion.get("Imagen"), null));
 		}
 
 		// Carga de tipos de registro
