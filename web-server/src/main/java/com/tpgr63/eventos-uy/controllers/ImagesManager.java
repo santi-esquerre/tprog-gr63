@@ -97,6 +97,11 @@ public class ImagesManager {
 	}
 	
 	public static boolean deleteImage(String imageName, HttpServletRequest request) {
+		if (imageName.equals("default.png")) {
+			// No borramos la imagen por defecto
+			return false;
+		}
+		
 		String imagePath = getImagePath(imageName, request);
 		try {
 			File imageFile = new File(imagePath);
@@ -128,6 +133,22 @@ public class ImagesManager {
 	    
 	    
 	    return carpetaDestino;
+	}
+	
+	public static String getImageName(HttpServletRequest request) {
+	    String imageName = "";
+	    try {
+	        Part foto = request.getPart("imagen");
+	        if (foto != null && foto.getSize() > 0) {
+	        	imageName = Paths.get(foto.getSubmittedFileName()).getFileName().toString();
+	        } else {
+	        	imageName = "default.png"; // por defecto si no se subió nada
+	        }
+	    } catch (IOException | ServletException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return imageName;
 	}
 }
 
