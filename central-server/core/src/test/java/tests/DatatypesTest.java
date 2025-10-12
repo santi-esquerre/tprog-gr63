@@ -60,9 +60,9 @@ class DatatypesTest extends BaseTest {
     void testDTRegistroDetallado() {
         Date fecha = new Date();
         float costo = 100.0f;
-        DTEvento evento = new DTEvento("EventoTest", "SGLA", "desc", new Date());
+        DTEvento evento = new DTEvento("EventoTest", "SGLA", "desc", new Date(), "foto1.jpg");
         DTEdicion edicion = new DTEdicion("EdicionTest", "SGLA", new Date(), new Date(), new Date(), "Montevideo",
-                "Uruguay");
+                "Uruguay", "img1.png", null);
         DTAsistente asistente = new DTAsistente("nick", "nombre", "email", "src/foto1234.jpg" ,"apellido",  new Date());
         DTTipoRegistro tipoRegistro = new DTTipoRegistro("Tipo", "Desc", 100.0f, 10);
         Optional<DTPatrocinio> patrocinio = Optional.empty();
@@ -93,7 +93,7 @@ class DatatypesTest extends BaseTest {
     @Test
     void testDTEdicionDetallada() {
         DTEdicion edicion = new DTEdicion("EdicionTest", "SGLA", new Date(), new Date(), new Date(), "Montevideo",
-                "Uruguay");
+                "Uruguay", "img1.png", null);
         DTOrganizador organizador = new DTOrganizador("nick", "nombre", "email", "src/foto1234.jpg" ,"desc", "web");
 
         DTEdicionDetallada detallada = new DTEdicionDetallada(
@@ -184,7 +184,7 @@ class DatatypesTest extends BaseTest {
     @Test
     void testDTEvento() {
         Date fechaAlta = new Date();
-        DTEvento evento = new DTEvento("nombre", "SGLA", "desc", fechaAlta);
+        DTEvento evento = new DTEvento("nombre", "SGLA", "desc", fechaAlta, "foto1.jpg");
 
         assertEquals("nombre", evento.nombre());
         assertEquals("SGLA", evento.sigla());
@@ -198,7 +198,7 @@ class DatatypesTest extends BaseTest {
         Date fechaFin = new Date(System.currentTimeMillis() + 100000);
         Date fechaAlta = new Date();
 
-        DTEdicion edicion = new DTEdicion("nombre", "SGLA", fechaInicio, fechaFin, fechaAlta, "ciudad", "pais");
+        DTEdicion edicion = new DTEdicion("nombre", "SGLA", fechaInicio, fechaFin, fechaAlta, "ciudad", "pais", "img1.png", null);
 
         assertEquals("nombre", edicion.nombre());
         assertEquals("SGLA", edicion.sigla());
@@ -242,7 +242,7 @@ class DatatypesTest extends BaseTest {
 
     @Test
     void testDTEventoDetallado() {
-        DTEvento evento = new DTEvento("evento", "SGLA", "desc", new Date());
+        DTEvento evento = new DTEvento("evento", "SGLA", "desc", new Date(), "foto1.jpg");
         DTEventoDetallado detallado = new DTEventoDetallado(evento, null, null);
 
         assertEquals(evento, detallado.evento());

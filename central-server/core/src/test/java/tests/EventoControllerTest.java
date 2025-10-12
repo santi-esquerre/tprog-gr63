@@ -115,7 +115,7 @@ public class EventoControllerTest extends BaseTest {
 		// Test de alta exitosa
 		assertDoesNotThrow(() -> {
 			DTEventoAlta evento = new DTEventoAlta("EventoExitoso1", "Descripción del evento exitoso",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA1", Set.of("CategoriaEventoTest1"));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA1", "img.jpg", Set.of("CategoriaEventoTest1"));
 			boolean resultado = eventoController.altaEvento(evento);
 			assertTrue(resultado, "El alta de evento debería ser exitosa");
 		});
@@ -123,9 +123,9 @@ public class EventoControllerTest extends BaseTest {
 		// Test de evento repetido
 		Exception exceptionRepetido = assertThrows(EventoRepetidoException.class, () -> {
 			DTEventoAlta evento1 = new DTEventoAlta("EventoRepetido1", "Descripción 1",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA2", Set.of("CategoriaEventoTest1"));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA2", "img.jpg", Set.of("CategoriaEventoTest1"));
 			DTEventoAlta evento2 = new DTEventoAlta("EventoRepetido1", "Descripción 2",
-					new Date(System.currentTimeMillis() + 172800000), "SIGLA3", Set.of("CategoriaEventoTest2"));
+					new Date(System.currentTimeMillis() + 172800000), "SIGLA3", "img.jpg", Set.of("CategoriaEventoTest2"));
 			eventoController.altaEvento(evento1);
 			eventoController.altaEvento(evento2);
 		});
@@ -134,7 +134,7 @@ public class EventoControllerTest extends BaseTest {
 		// Test sin categorías seleccionadas
 		Exception exceptionNinguna = assertThrows(NingunaCategoriaSeleccionadaException.class, () -> {
 			DTEventoAlta evento = new DTEventoAlta("EventoSinCategorias", "Descripción",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA4", Set.of());
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA4", "img.jpg", Set.of());
 			eventoController.altaEvento(evento);
 		});
 		assertNotNull(exceptionNinguna, "Debería lanzar excepción sin categorías");
@@ -142,7 +142,7 @@ public class EventoControllerTest extends BaseTest {
 		// Test con categorías inválidas
 		Exception exceptionInvalidas = assertThrows(CategoriasInvalidasException.class, () -> {
 			DTEventoAlta evento = new DTEventoAlta("EventoCategoriaInvalida", "Descripción",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA5",
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA5", "img.jpg",
 					Set.of("CategoriaInexistente1", "CategoriaEventoTest1"));
 			eventoController.altaEvento(evento);
 		});
@@ -157,7 +157,7 @@ public class EventoControllerTest extends BaseTest {
 		// Test con campos null en el evento
 		Exception exceptionCampoNull = assertThrows(ValidationInputException.class, () -> {
 			DTEventoAlta evento = new DTEventoAlta(null, "Descripción",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA6", Set.of("CategoriaEventoTest1"));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA6", "img.jpg", Set.of("CategoriaEventoTest1"));
 			eventoController.altaEvento(evento);
 		});
 		assertNotNull(exceptionCampoNull, "Debería lanzar excepción con nombre null");
@@ -171,9 +171,9 @@ public class EventoControllerTest extends BaseTest {
 			eventoController.altaCategoria("CategoriaListar2");
 
 			DTEventoAlta evento1 = new DTEventoAlta("EventoListar1", "Descripción evento 1",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA_L1", Set.of("CategoriaListar1"));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA_L1", "img.jpg", Set.of("CategoriaListar1"));
 			DTEventoAlta evento2 = new DTEventoAlta("EventoListar2", "Descripción evento 2",
-					new Date(System.currentTimeMillis() + 172800000), "SIGLA_L2", Set.of("CategoriaListar2"));
+					new Date(System.currentTimeMillis() + 172800000), "SIGLA_L2", "img.jpg", Set.of("CategoriaListar2"));
 
 			eventoController.altaEvento(evento1);
 			eventoController.altaEvento(evento2);
@@ -197,7 +197,7 @@ public class EventoControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			eventoController.altaCategoria("CategoriaEdiciones1");
 			eventoController.altaEvento(new DTEventoAlta("EventoEdiciones1", "Descripcion",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA_ED1", Set.of("CategoriaEdiciones1")));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA_ED1", "img.jpg", Set.of("CategoriaEdiciones1")));
 
 			usuarioController.crearOrganizador("orgEdiciones1", "Organizador Ediciones",
 					"orgediciones@test.com",  "clave1234", "foto.jpg", "Descripción organizador");
@@ -214,7 +214,7 @@ public class EventoControllerTest extends BaseTest {
 			DTEdicion edicionData = new DTEdicion("EdicionTest1", "SIGLA_E1",
 					new Date(System.currentTimeMillis() + 86400000),
 					new Date(System.currentTimeMillis() + 172800000),
-					new Date(), "Montevideo", "Uruguay");
+					new Date(), "Montevideo", "Uruguay", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoEdiciones1", "orgEdiciones1", edicionData);
 
 			Set<DTEdicion> edicionesConDatos = eventoController.mostrarEdiciones("EventoEdiciones1");
@@ -240,7 +240,7 @@ public class EventoControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			eventoController.altaCategoria("CategoriaAgregarEd1");
 			eventoController.altaEvento(new DTEventoAlta("EventoAgregarEd1", "Descripcion",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA_AGR1", Set.of("CategoriaAgregarEd1")));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA_AGR1", "img.jpg", Set.of("CategoriaAgregarEd1")));
 
 			usuarioController.crearOrganizador("orgAgregar1", "Organizador Agregar",
 					"orgagregar@test.com",  "clave1234", "foto.jpg", "Descripción organizador agregar");
@@ -251,7 +251,7 @@ public class EventoControllerTest extends BaseTest {
 			DTEdicion edicionData = new DTEdicion("EdicionAgregar1", "SIGLA_EA1",
 					new Date(System.currentTimeMillis() + 86400000),
 					new Date(System.currentTimeMillis() + 172800000),
-					new Date(), "Montevideo", "Uruguay");
+					new Date(), "Montevideo", "Uruguay", "img1.png", null);
 			boolean resultado = eventoController.agregarEdicionAEvento("EventoAgregarEd1", "orgAgregar1", edicionData);
 			assertTrue(resultado, "Agregar edición debería ser exitoso");
 		});
@@ -261,7 +261,7 @@ public class EventoControllerTest extends BaseTest {
 			DTEdicion edicionData = new DTEdicion("EdicionEvInexistente", "SIGLA_EI",
 					new Date(System.currentTimeMillis() + 86400000),
 					new Date(System.currentTimeMillis() + 172800000),
-					new Date(), "Ciudad", "País");
+					new Date(), "Ciudad", "País", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoInexistente", "orgAgregar1", edicionData);
 		});
 		assertNotNull(exceptionEvento, "Debería lanzar excepción con evento inexistente");
@@ -271,7 +271,7 @@ public class EventoControllerTest extends BaseTest {
 			DTEdicion edicionData = new DTEdicion("EdicionOrgInexistente", "SIGLA_OI",
 					new Date(System.currentTimeMillis() + 86400000),
 					new Date(System.currentTimeMillis() + 172800000),
-					new Date(), "Ciudad", "País");
+					new Date(), "Ciudad", "País", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoAgregarEd1", "organizadorInexistente", edicionData);
 		});
 		assertNotNull(exceptionOrg, "Debería lanzar excepción con organizador inexistente");
@@ -281,7 +281,7 @@ public class EventoControllerTest extends BaseTest {
 			DTEdicion edicionData = new DTEdicion("EdicionFechasInvalidas", "SIGLA_FI",
 					new Date(System.currentTimeMillis() + 172800000), // fecha inicio posterior
 					new Date(System.currentTimeMillis() + 86400000), // fecha fin anterior
-					new Date(), "Ciudad", "País");
+					new Date(), "Ciudad", "País", "img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoAgregarEd1", "orgAgregar1", edicionData);
 		});
 		assertNotNull(exceptionFechas, "Debería lanzar excepción con fechas inválidas");
@@ -291,7 +291,7 @@ public class EventoControllerTest extends BaseTest {
 			DTEdicion edicionData = new DTEdicion("EdicionNull", "SIGLA_N",
 					new Date(System.currentTimeMillis() + 86400000),
 					new Date(System.currentTimeMillis() + 172800000),
-					new Date(), "Ciudad", "País");
+					new Date(), "Ciudad", "País", "img1.png", null);
 			eventoController.agregarEdicionAEvento(null, "orgAgregar1", edicionData);
 		});
 		assertNotNull(exceptionNull1, "Debería lanzar excepción con nombreEvento null");
@@ -300,7 +300,7 @@ public class EventoControllerTest extends BaseTest {
 			DTEdicion edicionData = new DTEdicion("EdicionNull2", "SIGLA_N2",
 					new Date(System.currentTimeMillis() + 86400000),
 					new Date(System.currentTimeMillis() + 172800000),
-					new Date(), "Ciudad", "País");
+					new Date(), "Ciudad", "País","img1.png", null);
 			eventoController.agregarEdicionAEvento("EventoAgregarEd1", null, edicionData);
 		});
 		assertNotNull(exceptionNull2, "Debería lanzar excepción con nicknameOrganizador null");
@@ -317,7 +317,7 @@ public class EventoControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			eventoController.altaCategoria("CategoriaDetallado1");
 			eventoController.altaEvento(new DTEventoAlta("EventoDetallado1", "Descripcion detallada del evento",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA_DET1", Set.of("CategoriaDetallado1")));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA_DET1", "img.jpg", Set.of("CategoriaDetallado1")));
 		});
 
 		// Test obtener datos detallados
@@ -353,7 +353,7 @@ public class EventoControllerTest extends BaseTest {
 			String nombreLargo = "EventoConNombreMuyMuyMuyLargo".repeat(10);
 			eventoController.altaCategoria("CategoriaLarga1");
 			DTEventoAlta eventoLargo = new DTEventoAlta(nombreLargo, "Descripción",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA_LARGO", Set.of("CategoriaLarga1"));
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA_LARGO", "img.jpg", Set.of("CategoriaLarga1"));
 			eventoController.altaEvento(eventoLargo);
 		}, "Debería lanzar excepción con nombres muy largos");
 
@@ -364,7 +364,7 @@ public class EventoControllerTest extends BaseTest {
 			}
 
 			DTEventoAlta eventoMultipleCat = new DTEventoAlta("EventoMultiCat", "Descripción",
-					new Date(System.currentTimeMillis() + 86400000), "SIGLA_MULTI",
+					new Date(System.currentTimeMillis() + 86400000), "SIGLA_MULTI", "img.jpg",
 					Set.of("CategoriaMultiple1", "CategoriaMultiple2", "CategoriaMultiple3"));
 			eventoController.altaEvento(eventoMultipleCat);
 		}, "Debería manejar múltiples categorías");
@@ -384,7 +384,7 @@ public class EventoControllerTest extends BaseTest {
 		assertDoesNotThrow(() -> {
 			for (int i = 1; i <= 3; i++) {
 				DTEventoAlta evento = new DTEventoAlta("EventoConcurrente" + i, "Descripción " + i,
-						new Date(System.currentTimeMillis() + (86400000L * i)), "SIGLA_C" + i,
+						new Date(System.currentTimeMillis() + (86400000L * i)), "SIGLA_C" + i, "img.jpg",
 						Set.of("CategoriaConcurrente1"));
 				eventoController.altaEvento(evento);
 			}

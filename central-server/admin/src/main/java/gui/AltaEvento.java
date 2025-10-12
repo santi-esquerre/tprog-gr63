@@ -30,6 +30,7 @@ import util.Dialog;
 import util.ExceptionHandler;
 
 public class AltaEvento extends JInternalFrame implements IReloadable {
+	private final String DEFAULT_FOTO = "https://placehold.co/600x350/png";
 
     private static final long serialVersionUID = 1L;
     private JTextField txtNombre;
@@ -208,7 +209,7 @@ public class AltaEvento extends JInternalFrame implements IReloadable {
         Date fechaAlta = Date.from(dateFechaAlta.getDate().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
 
         try {
-            DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla,
+            DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, DEFAULT_FOTO,
                     listCategorias.getSelectedValuesList() != null
                             ? new HashSet<>(listCategorias.getSelectedValuesList())
                             : new HashSet<>());
