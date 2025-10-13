@@ -146,48 +146,44 @@ public final class EdicionController implements IEdicionController {
   public Set<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion) {
     Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
     return Tx.inTx(em -> {
-      edicionRecordada = edicionRepo.buscarEdicion(em, nombreEdicion);
-      return (edicionRecordada == null) ? Set.of() : edicionRecordada.listarDTTiposDeRegistro();
+      var edicion = edicionRepo.buscarEdicion(em, nombreEdicion);
+      return (edicion == null) ? Set.of() : edicion.listarDTTiposDeRegistro();
     });
   }
 
   @Override
-  public Set<DTAsistente> mostrarAsistentes() {
-    if (edicionRecordada == null)
-      return Set.of();
+  public Set<DTAsistente> mostrarAsistentes(String nombreEdicion) {
+	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
     return Tx.inTx(em -> {
       // refresco para evitar lazy issues
-      var ed = edicionRepo.buscarEdicion(em, edicionRecordada.getNombre());
+      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
       return (ed == null) ? Set.of() : ed.obtenerDTAsistentes();
     });
   }
 
   @Override
-  public boolean cupoDisponible(String nombreTipoRegistro) {
-    if (edicionRecordada == null)
-      return false;
+  public boolean cupoDisponible(String nombreEdicion, String nombreTipoRegistro) {
+	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
     return Tx.inTx(em -> {
-      var ed = edicionRepo.buscarEdicion(em, edicionRecordada.getNombre());
+      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
       return ed != null && ed.cupoDisponible(nombreTipoRegistro);
     });
   }
 
   @Override
-  public boolean asistenteNoRegistrado(String nickname) {
-    if (edicionRecordada == null)
-      return false;
+  public boolean asistenteNoRegistrado(String nombreEdicion, String nickname) {
+	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
     return Tx.inTx(em -> {
-      var ed = edicionRepo.buscarEdicion(em, edicionRecordada.getNombre());
+      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
       return ed != null && ed.verificarNoRegistro(nickname);
     });
   }
 
   @Override
-  public void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname, Date fecha) {
-    if (edicionRecordada == null)
-      throw new IllegalStateException("Edición no seleccionada");
+  public void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha) {
+	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
     Tx.inTx(em -> {
-      var ed = edicionRepo.buscarEdicion(em, edicionRecordada.getNombre());
+      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
       if (ed == null)
         throw new IllegalArgumentException("Edición inexistente");
       var tr = ed.buscarTipoRegistro(nombreTipoRegistro);

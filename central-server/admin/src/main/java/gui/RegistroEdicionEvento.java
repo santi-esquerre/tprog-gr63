@@ -49,7 +49,8 @@ import java.awt.event.ActionEvent;
 
 public class RegistroEdicionEvento extends JInternalFrame implements IReloadable {
 	private JTable table;
-	DTTipoRegistro seleccionado = null; // Variable que se usará para tomar el valor del tipo de registro seleccionado
+	DTTipoRegistro seleccionado = null; // Variable que se usará para tomar el valor del tipo de registro seleccionado.
+	String edSeleccionada = null;
 	JComboBox comboBoxEvento;
 	JComboBox comboBoxAsistente;
 	JLabel lblSeleccion;
@@ -253,6 +254,7 @@ public class RegistroEdicionEvento extends JInternalFrame implements IReloadable
 						dialog.setLocationRelativeTo(parent);
 						dialog.setVisible(true);
 						seleccionado = dialog.getSelectedValue();
+						edSeleccionada = valor.toString();
 						if (seleccionado != null)
 							mostrarSeleccion();
 						else
@@ -355,7 +357,7 @@ public class RegistroEdicionEvento extends JInternalFrame implements IReloadable
 			String nombreTipoRegistro = seleccionado.nombre();
 			var edicion = factory.getIEdicionController();
 			try {
-				edicion.altaRegistroEdicionEvento(nombreTipoRegistro, nicknameAsistente,
+				edicion.altaRegistroEdicionEvento(edSeleccionada, nombreTipoRegistro, nicknameAsistente,
 						new java.sql.Date(fecha.getTime()));
 				JOptionPane.showMessageDialog(this, "Se ha registrado con exito", "Registro a Edicion de Evento",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -381,7 +383,7 @@ public class RegistroEdicionEvento extends JInternalFrame implements IReloadable
 	private boolean checkCampos() {
 		if (comboBoxAsistente.getSelectedIndex() == -1 || comboBoxDia.getSelectedIndex() == -1
 				|| comboBoxMes.getSelectedIndex() == -1 || comboBoxAnio.getSelectedIndex() == -1
-				|| seleccionado == null) {
+				|| seleccionado == null || edSeleccionada == null) {
 			JOptionPane.showMessageDialog(this, "Quedan campos obligatorios por rellenar",
 					"Registro a Edicion de Evento", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -404,8 +406,7 @@ public class RegistroEdicionEvento extends JInternalFrame implements IReloadable
 		lblSeleccion.setText("");
 		lblSeleccion.setVisible(false);
 		seleccionado = null;
-		var e = factory.getIEdicionController();
-		e.cancelarRegistroEdicionEvento();
+		edSeleccionada = null;
 	}
 
 	@Override

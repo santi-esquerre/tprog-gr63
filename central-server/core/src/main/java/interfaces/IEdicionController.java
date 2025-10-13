@@ -23,13 +23,13 @@ public interface IEdicionController {
 
   Set<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion); // fija edicionRecordada
 
-  Set<DTAsistente> mostrarAsistentes(); // usa edicionRecordada
+  Set<DTAsistente> mostrarAsistentes(String nombreEdicion); // usa edicionRecordada
 
-  boolean cupoDisponible(String nombreTipoRegistro); // idem
+  boolean cupoDisponible(String nombreEdicion, String nombreTipoRegistro); // idem
 
-  boolean asistenteNoRegistrado(String nickname); // idem
+  boolean asistenteNoRegistrado(String nombreEdicion, String nickname); // idem
 
-  void altaRegistroEdicionEvento(String nombreTipoRegistro, String nickname, Date fecha);
+  void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha);
 
   void cancelarRegistroEdicionEvento();
 
