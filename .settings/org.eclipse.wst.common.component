@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+            
+    
     <wb-module deploy-name="tpgr63">
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/central-server/admin/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/central-server/core/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/central-server/core/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/web-server/src/main/java/com/tpgr63/eventos-uy"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/web-server/src/main/webapp/WEB-INF/lib"/>
+                        
+        
         <property name="context-root" value="tpgr63"/>
+                        
+        
         <property name="java-output-path" value="/tpgr63/bin"/>
+                    
+    
     </wb-module>
+        
+
 </project-modules>
