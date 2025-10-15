@@ -1,10 +1,5 @@
 package logica;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
-
 import datatypes.DTAsistente;
 import datatypes.DTEdicion;
 import datatypes.DTTipoRegistro;
@@ -21,6 +16,10 @@ import exceptions.TipoRegistroRepetidoException;
 import exceptions.ValidationInputException;
 import infra.Tx;
 import interfaces.IEdicionController;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 import repos.EdicionRepository;
 import repos.InstitucionRepository;
 import repos.TipoRegistroRepository;
@@ -34,11 +33,7 @@ public final class EdicionController implements IEdicionController {
   private final TipoRegistroRepository tipoRegistroRepo = TipoRegistroRepository.get();
   private final PatrocinioFactory patrocinioFactory = PatrocinioFactory.get();
 
-  // “edicionRecordada” como en el DCD
-  private Edicion edicionRecordada;
-
-  private EdicionController() {
-  }
+  private EdicionController() {}
 
   public static EdicionController get() {
     return INSTANCE;
@@ -46,13 +41,12 @@ public final class EdicionController implements IEdicionController {
 
   /**
    * Da de alta un nuevo tipo de registro en una edición existente.
-   * 
-   * @param nombreEdicion     El nombre de la edición donde se dará de alta el
-   *                          tipo de registro.
+   *
+   * @param nombreEdicion El nombre de la edición donde se dará de alta el tipo de registro.
    * @param datosTipoRegistro Los datos del tipo de registro a dar de alta.
-   * @throws EdicionInexistenteException   Si la edición no existe.
-   * @throws TipoRegistroRepetidoException Si ya existe un tipo de registro con el
-   *                                       mismo nombre en la edición.
+   * @throws EdicionInexistenteException Si la edición no existe.
+   * @throws TipoRegistroRepetidoException Si ya existe un tipo de registro con el mismo nombre en
+   *     la edición.
    */
   @Override
   public void altaTipoRegistro(String nombreEdicion, DTTipoRegistro datosTipoRegistro)
@@ -72,46 +66,53 @@ public final class EdicionController implements IEdicionController {
     }
 
     // Create truncated DTTipoRegistro if necessary
-    DTTipoRegistro datosTruncados = (!nombre.equals(datosTipoRegistro.nombre())
-        || !descripcion.equals(datosTipoRegistro.descripcion()))
-            ? new DTTipoRegistro(nombre, descripcion, datosTipoRegistro.costo(), datosTipoRegistro.cupo())
+    DTTipoRegistro datosTruncados =
+        (!nombre.equals(datosTipoRegistro.nombre())
+                || !descripcion.equals(datosTipoRegistro.descripcion()))
+            ? new DTTipoRegistro(
+                nombre, descripcion, datosTipoRegistro.costo(), datosTipoRegistro.cupo())
             : datosTipoRegistro;
 
     // Verificar si la edición existe
-    var ed = Tx.inTx(em -> {
-      return edicionRepo.buscarEdicion(em, nombreEdicion);
-    });
+    var edicion =
+        Tx.inTx(
+            entityManager -> {
+              return edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+            });
 
-    if (ed == null) {
+    if (edicion == null) {
       // La edición no existe
       throw new EdicionInexistenteException("No existe la edición de nombre " + nombreEdicion);
     }
-    if (Tx.inTx(em -> {
-      // Verificar si ya existe el tipo de registro
-      var tr = ed.buscarTipoRegistro(datosTruncados.nombre());
-      // Si no existe, dar de alta el tipo de registro
-      return tr != null;
-    }))
+    if (Tx.inTx(
+        entityManager -> {
+          // Verificar si ya existe el tipo de registro
+          var tipoRegistro = edicion.buscarTipoRegistro(datosTruncados.nombre());
+          // Si no existe, dar de alta el tipo de registro
+          return tipoRegistro != null;
+        }))
       throw new TipoRegistroRepetidoException(
-          "Ya existe el tipo de registro de nombre " + datosTruncados.nombre() + " en la edición " + nombreEdicion);
+          "Ya existe el tipo de registro de nombre "
+              + datosTruncados.nombre()
+              + " en la edición "
+              + nombreEdicion);
 
-    Tx.inTx(em -> {
-      // Alta del tipo de registro
-      TipoRegistroFactory.get().altaTipoRegistro(em, ed, datosTruncados);
-      return null;
-    });
+    Tx.inTx(
+        entityManager -> {
+          // Alta del tipo de registro
+          TipoRegistroFactory.get().altaTipoRegistro(entityManager, edicion, datosTruncados);
+          return null;
+        });
   }
 
   /**
    * Consulta un tipo de registro en una edición existente.
-   * 
-   * @param nombreEdicion      El nombre de la edición donde se encuentra el tipo
-   *                           de registro.
+   *
+   * @param nombreEdicion El nombre de la edición donde se encuentra el tipo de registro.
    * @param nombreTipoRegistro El nombre del tipo de registro a consultar.
    * @return Los datos del tipo de registro consultado.
    * @throws EdicionInexistenteException Si la edición no existe.
-   * @throws ValidationInputException    Si el tipo de registro no existe en la
-   *                                     edición.
+   * @throws ValidationInputException Si el tipo de registro no existe en la edición.
    */
   @Override
   public DTTipoRegistro consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro)
@@ -119,150 +120,191 @@ public final class EdicionController implements IEdicionController {
     Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
     Objects.requireNonNull(nombreTipoRegistro, "nombreTipoRegistro requerido");
     // Verificar si la edición existe
-    var ed = Tx.inTx(em -> {
-      return edicionRepo.buscarEdicion(em, nombreEdicion);
-    });
+    var edicion =
+        Tx.inTx(
+            entityManager -> {
+              return edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+            });
 
-    if (ed == null) {
+    if (edicion == null) {
       // La edición no existe
       throw new EdicionInexistenteException("No existe la edición de nombre " + nombreEdicion);
     }
 
-    var tipoRegistro = Tx.inTx(em -> {
-      return ed.buscarTipoRegistro(nombreTipoRegistro);
-    });
+    var tipoRegistro =
+        Tx.inTx(
+            entityManager -> {
+              return edicion.buscarTipoRegistro(nombreTipoRegistro);
+            });
 
     if (tipoRegistro == null) {
       throw new ValidationInputException(
-          "No existe el tipo de registro de nombre " + nombreTipoRegistro + " en la edición " + nombreEdicion);
+          "No existe el tipo de registro de nombre "
+              + nombreTipoRegistro
+              + " en la edición "
+              + nombreEdicion);
     }
 
-    DTTipoRegistro tr = tipoRegistro.obtenerDTTipoRegistro();
+    DTTipoRegistro dtTipoRegistro = tipoRegistro.obtenerDTTipoRegistro();
 
-    return tr;
+    return dtTipoRegistro;
   }
 
   @Override
   public Set<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion) {
     Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
-    return Tx.inTx(em -> {
-      var edicion = edicionRepo.buscarEdicion(em, nombreEdicion);
-      return (edicion == null) ? Set.of() : edicion.listarDTTiposDeRegistro();
-    });
+    return Tx.inTx(
+        entityManager -> {
+          var edicion = edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+          return (edicion == null) ? Set.of() : edicion.listarDTTiposDeRegistro();
+        });
   }
 
   @Override
   public Set<DTAsistente> mostrarAsistentes(String nombreEdicion) {
-	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
-    return Tx.inTx(em -> {
-      // refresco para evitar lazy issues
-      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
-      return (ed == null) ? Set.of() : ed.obtenerDTAsistentes();
-    });
+    Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
+    return Tx.inTx(
+        entityManager -> {
+          // refresco para evitar lazy issues
+          var edicion = edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+          return (edicion == null) ? Set.of() : edicion.obtenerDTAsistentes();
+        });
   }
 
   @Override
   public boolean cupoDisponible(String nombreEdicion, String nombreTipoRegistro) {
-	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
-    return Tx.inTx(em -> {
-      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
-      return ed != null && ed.cupoDisponible(nombreTipoRegistro);
-    });
+    Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
+    return Tx.inTx(
+        entityManager -> {
+          var edicion = edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+          return edicion != null && edicion.cupoDisponible(nombreTipoRegistro);
+        });
   }
 
   @Override
   public boolean asistenteNoRegistrado(String nombreEdicion, String nickname) {
-	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
-    return Tx.inTx(em -> {
-      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
-      return ed != null && ed.verificarNoRegistro(nickname);
-    });
+    Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
+    return Tx.inTx(
+        entityManager -> {
+          var edicion = edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+          return edicion != null && edicion.verificarNoRegistro(nickname);
+        });
   }
 
   @Override
-  public void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha) {
-	Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
-    Tx.inTx(em -> {
-      var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
-      if (ed == null)
-        throw new IllegalArgumentException("Edición inexistente");
-      var tr = ed.buscarTipoRegistro(nombreTipoRegistro);
-      if (tr == null)
-        throw new IllegalArgumentException("Tipo de registro inexistente");
-      var a = usuarioRepo.obtenerAsistente(em, nickname);
-      if (a == null)
-        throw new IllegalArgumentException("Asistente inexistente");
-      if (!ed.cupoDisponible(nombreTipoRegistro))
-        throw new IllegalStateException("Sin cupo");
-      if (!ed.verificarNoRegistro(nickname))
-        throw new IllegalStateException("Ya registrado");
-      registroFactory.altaRegistro(em, ed, a, tr, tr.obtenerDTTipoRegistro().costo(), fecha);
-      tr.decrementarCupo();
-      em.merge(tr);
-      edicionRecordada = null;
-      return null;
-    });
+  public void altaRegistroEdicionEvento(
+      String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha) {
+    Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
+    Tx.inTx(
+        entityManager -> {
+          var edicion = edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+          if (edicion == null) throw new IllegalArgumentException("Edición inexistente");
+          var tipoRegistro = edicion.buscarTipoRegistro(nombreTipoRegistro);
+          if (tipoRegistro == null) throw new IllegalArgumentException("Tipo de registro inexistente");
+          var asistente = usuarioRepo.obtenerAsistente(entityManager, nickname);
+          if (asistente == null) throw new IllegalArgumentException("Asistente inexistente");
+          if (!edicion.cupoDisponible(nombreTipoRegistro)) throw new IllegalStateException("Sin cupo");
+          if (!edicion.verificarNoRegistro(nickname)) throw new IllegalStateException("Ya registrado");
+          registroFactory.altaRegistro(entityManager, edicion, asistente, tipoRegistro, tipoRegistro.obtenerDTTipoRegistro().costo(), fecha);
+          tipoRegistro.decrementarCupo();
+          entityManager.merge(tipoRegistro);
+          return null;
+        });
   }
 
   @Override
-  public void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
-      String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
-      throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException, InstitucionNoExistenteException {
-	  
-	  //Chequear si existe la institución
-	  Objects.requireNonNull(nombreInstitucion, "nombreInstitucion requerido");
-	  	if (Tx.inTx(em -> {return InstitucionRepository.get().noExisteInstitucion(em,nombreInstitucion);})) {
-	  throw new InstitucionNoExistenteException("No existe la institución '" + nombreInstitucion + "'");
-	}
+  public void altaPatrocinio(
+      LocalDate fecha,
+      String nombreEdicion,
+      String nombreInstitucion,
+      Float aporte,
+      String nombreTipoRegistro,
+      Integer cantGratuitos,
+      String codigo,
+      NivelPatrocinio nivelPatrocinio)
+      throws ExistePatrocinioException,
+          CostoRegistrosGratuitosException,
+          CantidadCuposDisponiblesException,
+          InstitucionNoExistenteException {
 
-    if (Tx.inTx(em -> {
-      return edicionRepo.existePatrocinio(em, nombreEdicion, nombreInstitucion);
-    })) {
+    // Chequear si existe la institución
+    Objects.requireNonNull(nombreInstitucion, "nombreInstitucion requerido");
+    if (Tx.inTx(
+        entityManager -> {
+          return InstitucionRepository.get().noExisteInstitucion(entityManager, nombreInstitucion);
+        })) {
+      throw new InstitucionNoExistenteException(
+          "No existe la institución '" + nombreInstitucion + "'");
+    }
+
+    if (Tx.inTx(
+        entityManager -> {
+          return edicionRepo.existePatrocinio(entityManager, nombreEdicion, nombreInstitucion);
+        })) {
       throw new ExistePatrocinioException(nombreInstitucion, nombreEdicion);
     }
 
-    TipoRegistro tr = Tx.inTx(emt -> {
-      return tipoRegistroRepo.buscarTipoRegistro(emt, nombreTipoRegistro, nombreEdicion);
-    });
-    int cupos = tr.getCupo();
+    TipoRegistro tipoRegistro =
+        Tx.inTx(
+            emt -> {
+              return tipoRegistroRepo.buscarTipoRegistro(emt, nombreTipoRegistro, nombreEdicion);
+            });
+    int cupos = tipoRegistro.getCupo();
     if (cupos < cantGratuitos) {
       throw new CantidadCuposDisponiblesException(cupos, nombreTipoRegistro);
     }
-    
-    System.out.println(((tr.getCosto() * cantGratuitos) / aporte) + "Datos: " + tr.getCosto() + ", " + cantGratuitos + ", " + aporte);
 
-    if (((tr.getCosto() * cantGratuitos) / aporte) > 0.2f) {
+    System.out.println(
+        ((tipoRegistro.getCosto() * cantGratuitos) / aporte)
+            + "Datos: "
+            + tipoRegistro.getCosto()
+            + ", "
+            + cantGratuitos
+            + ", "
+            + aporte);
+
+    if (((tipoRegistro.getCosto() * cantGratuitos) / aporte) > 0.2f) {
       throw new CostoRegistrosGratuitosException();
     }
 
-    Tx.inTx(em -> {
-      patrocinioFactory.crearPatrocinio(em, fecha, nombreEdicion, nombreInstitucion, aporte, tr, cantGratuitos, codigo,
-          nivelPatrocinio);
-      return null;
-    });
+    Tx.inTx(
+        entityManager -> {
+          patrocinioFactory.crearPatrocinio(
+              entityManager,
+              fecha,
+              nombreEdicion,
+              nombreInstitucion,
+              aporte,
+              tipoRegistro,
+              cantGratuitos,
+              codigo,
+              nivelPatrocinio);
+          return null;
+        });
   }
 
   @Override
   public void cancelarRegistroEdicionEvento() {
-    edicionRecordada = null;
-  }
-  
-  @Override
-  public datatypes.DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEdicion) throws ValidationInputException {
-	java.util.Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
-	var resultado = Tx.inTx(em -> edicionRepo.obtenerDatosDetalladosEdicion(em, nombreEdicion));
-	if (resultado == null) {
-	  throw new EdicionInexistenteException("No existe la edición '" + nombreEdicion + "'");
-	}
-	return resultado;
   }
 
   @Override
-  public datatypes.DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion)
+  public datatypes.DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEdicion)
       throws ValidationInputException {
+    java.util.Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
+    var resultado = Tx.inTx(entityManager -> edicionRepo.obtenerDatosDetalladosEdicion(entityManager, nombreEdicion));
+    if (resultado == null) {
+      throw new EdicionInexistenteException("No existe la edición '" + nombreEdicion + "'");
+    }
+    return resultado;
+  }
+
+  @Override
+  public datatypes.DTEdicionDetallada obtenerDatosDetalladosEdicion(
+      String nombreEvento, String nombreEdicion) throws ValidationInputException {
     java.util.Objects.requireNonNull(nombreEvento, "nombreEvento requerido");
     java.util.Objects.requireNonNull(nombreEdicion, "nombreEdicion requerido");
-    var resultado = Tx.inTx(em -> edicionRepo.obtenerDatosDetalladosEdicion(em, nombreEvento, nombreEdicion));
+    var resultado =
+        Tx.inTx(entityManager -> edicionRepo.obtenerDatosDetalladosEdicion(entityManager, nombreEvento, nombreEdicion));
     if (resultado == null) {
       throw new ValidationInputException(
           "No existe la edición '" + nombreEdicion + "' para el evento '" + nombreEvento + "'");
@@ -274,30 +316,33 @@ public final class EdicionController implements IEdicionController {
   public Set<datatypes.DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador)
       throws ValidationInputException {
     java.util.Objects.requireNonNull(nicknameOrganizador, "nicknameOrganizador requerido");
-    Set<DTEdicion> resultado = Set.of(Tx.inTx(em -> edicionRepo.obtenerEdicionesPorOrganizador(em, nicknameOrganizador))
-        .stream().map(e -> e.toDTEdicion()).toArray(DTEdicion[]::new));
+    Set<DTEdicion> resultado =
+        Set.of(
+            Tx.inTx(entityManager -> edicionRepo.obtenerEdicionesPorOrganizador(entityManager, nicknameOrganizador))
+                .stream()
+                .map(e -> e.toDTEdicion())
+                .toArray(DTEdicion[]::new));
     return resultado;
   }
-  
+
   @Override
-  public void decisionSeleccion(String nombreEdicion, EstadoEdicion decision) throws ValidationInputException {
-	  boolean existeEd = Tx.inTx(em -> {
-		  Edicion ed = edicionRepo.buscarEdicion(em, nombreEdicion);
-		  if (ed != null) {
-			  ed.setEstado(decision);
-			  em.merge(ed);
-			  return true;
-		  }
-		  else {
-			  return false;
-		  }
-	  });
-	  
-	  if (!existeEd)
-	  {
-		  throw new ValidationInputException(
-	              "No existe la edición '" + nombreEdicion + "'");
-	  }
+  public void decisionSeleccion(String nombreEdicion, EstadoEdicion decision)
+      throws ValidationInputException {
+    boolean existeEd =
+        Tx.inTx(
+            entityManager -> {
+              Edicion edicion = edicionRepo.buscarEdicion(entityManager, nombreEdicion);
+              if (edicion != null) {
+                edicion.setEstado(decision);
+                entityManager.merge(edicion);
+                return true;
+              } else {
+                return false;
+              }
+            });
+
+    if (!existeEd) {
+      throw new ValidationInputException("No existe la edición '" + nombreEdicion + "'");
+    }
   }
-  
 }

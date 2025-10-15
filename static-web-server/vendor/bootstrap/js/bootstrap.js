@@ -2678,7 +2678,7 @@
     col: [],
     code: [],
     div: [],
-    em: [],
+    entityManager: [],
     hr: [],
     h1: [],
     h2: [],

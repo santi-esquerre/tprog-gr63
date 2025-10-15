@@ -156,9 +156,9 @@ public class ConsultaUsuario extends JInternalFrame implements IReloadable {
 							txtNicknameAsistente.setText(usuario.nickname());
 							txtNombreAsistente.setText(usuario.nombre());
 							txtCorreoAsistente.setText(usuario.correo());
-							txtApellidoAsistente.setText(usuario.apellido());
+							txtApellidoAsistente.setText(usuario.getApellido());
 							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-							String[] fechaNac = sdf.format(usuario.fechaNacimiento()).split("/");
+							String[] fechaNac = sdf.format(usuario.getFechaNacimientoDate()).split("/");
 							txtDia.setText(fechaNac[0]);
 							txtMes.setText(fechaNac[1]);
 							txtAnio.setText(fechaNac[2]);

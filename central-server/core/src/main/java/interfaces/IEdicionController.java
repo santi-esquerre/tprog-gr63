@@ -1,9 +1,5 @@
 package interfaces;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Set;
-
 import datatypes.DTAsistente;
 import datatypes.DTEdicion;
 import datatypes.DTEdicionDetallada;
@@ -15,11 +11,16 @@ import exceptions.CostoRegistrosGratuitosException;
 import exceptions.ExistePatrocinioException;
 import exceptions.InstitucionNoExistenteException;
 import exceptions.ValidationInputException;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Set;
 
 public interface IEdicionController {
-  void altaTipoRegistro(String nombreEdicion, DTTipoRegistro datosTipoRegistro) throws ValidationInputException;
+  void altaTipoRegistro(String nombreEdicion, DTTipoRegistro datosTipoRegistro)
+      throws ValidationInputException;
 
-  DTTipoRegistro consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro) throws ValidationInputException;
+  DTTipoRegistro consultaTipoRegistro(String nombreEdicion, String nombreTipoRegistro)
+      throws ValidationInputException;
 
   Set<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion); // fija edicionRecordada
 
@@ -29,13 +30,24 @@ public interface IEdicionController {
 
   boolean asistenteNoRegistrado(String nombreEdicion, String nickname); // idem
 
-  void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha);
+  void altaRegistroEdicionEvento(
+      String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha);
 
   void cancelarRegistroEdicionEvento();
 
-  void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
-      String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
-      throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException, InstitucionNoExistenteException;
+  void altaPatrocinio(
+      LocalDate fecha,
+      String nombreEdicion,
+      String nombreInstitucion,
+      Float aporte,
+      String nombreTipoRegistro,
+      Integer cantGratuitos,
+      String codigo,
+      NivelPatrocinio nivelPatrocinio)
+      throws ExistePatrocinioException,
+          CostoRegistrosGratuitosException,
+          CantidadCuposDisponiblesException,
+          InstitucionNoExistenteException;
 
   // boolean altaEdicion(String nombreEvento,
   // String nicknameOrganizador,
@@ -44,11 +56,14 @@ public interface IEdicionController {
   // Obtener datos detallados de una edición
   DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEvento, String nombreEdicion)
       throws ValidationInputException;
-  // Obtener datos detallados de una edición, identifcada solo por su nombre
-  DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEdicion) throws ValidationInputException;
 
-  Set<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador) throws ValidationInputException;
-  
-  void decisionSeleccion(String nombreEdicion, EstadoEdicion decision) throws ValidationInputException ;
-  
+  // Obtener datos detallados de una edición, identifcada solo por su nombre
+  DTEdicionDetallada obtenerDatosDetalladosEdicion(String nombreEdicion)
+      throws ValidationInputException;
+
+  Set<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador)
+      throws ValidationInputException;
+
+  void decisionSeleccion(String nombreEdicion, EstadoEdicion decision)
+      throws ValidationInputException;
 }

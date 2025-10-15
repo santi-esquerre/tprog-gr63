@@ -1,9 +1,5 @@
 package dominio;
 
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import datatypes.DTOrganizador;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
@@ -11,6 +7,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("ORGANIZADOR")
@@ -25,16 +23,23 @@ public class Organizador extends Usuario {
   @OneToMany(mappedBy = "organizador")
   private Set<Edicion> ediciones = new LinkedHashSet<>();
 
-  protected Organizador() {
-  }
+  protected Organizador() {}
 
-  public Organizador(String nickname, String nombre, String correo, String clave, String foto, String desc, String linkWeb) {
+  public Organizador(
+      String nickname,
+      String nombre,
+      String correo,
+      String clave,
+      String foto,
+      String desc,
+      String linkWeb) {
     super(nickname, nombre, correo, clave, foto);
     this.descripcion = desc;
     this.sitioWeb = linkWeb;
   }
 
-  public Organizador(String nickname, String nombre, String correo, String clave, String foto,  String desc) {
+  public Organizador(
+      String nickname, String nombre, String correo, String clave, String foto, String desc) {
     super(nickname, nombre, correo, clave, foto);
     this.descripcion = desc;
   }
@@ -49,12 +54,12 @@ public class Organizador extends Usuario {
 
   @Override
   public DTOrganizador toDataType() {
-    return new DTOrganizador(nickname, nombre, correo, foto, sitioWeb, descripcion);
+    return new DTOrganizador(
+        getNickname(), getNombre(), getCorreo(), getFoto(), sitioWeb, descripcion);
   }
 
   @Override
   public DTUsuarioItemListado toDTUsuarioItemListado() {
-    return new DTUsuarioItemListado(nickname, correo, foto, TipoUsuario.ORGANIZADOR);
+    return new DTUsuarioItemListado(getNickname(), getCorreo(), getFoto(), TipoUsuario.ORGANIZADOR);
   }
-
 }

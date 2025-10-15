@@ -1,10 +1,6 @@
 package dominio;
 
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import datatypes.EstadoEdicion;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,9 +13,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "evento", uniqueConstraints = @UniqueConstraint(name = "uk_evento_nombre", columnNames = "nombre"))
+@Table(
+    name = "evento",
+    uniqueConstraints = @UniqueConstraint(name = "uk_evento_nombre", columnNames = "nombre"))
 public class Evento extends BaseEntity {
 
   @Column(nullable = false, length = 120)
@@ -34,29 +35,39 @@ public class Evento extends BaseEntity {
 
   @Column(nullable = false, length = 20)
   private String sigla;
-  
+
   @Column(nullable = false, length = 300)
   private String foto;
 
-
   @ManyToMany
-  @JoinTable(name = "evento_categoria", joinColumns = @JoinColumn(name = "evento_id", foreignKey = @ForeignKey(name = "fk_ev_cat_evento")), inverseJoinColumns = @JoinColumn(name = "categoria_id", foreignKey = @ForeignKey(name = "fk_ev_cat_categoria")))
+  @JoinTable(
+      name = "evento_categoria",
+      joinColumns =
+          @JoinColumn(name = "evento_id", foreignKey = @ForeignKey(name = "fk_ev_cat_evento")),
+      inverseJoinColumns =
+          @JoinColumn(
+              name = "categoria_id",
+              foreignKey = @ForeignKey(name = "fk_ev_cat_categoria")))
   private Set<Categoria> categorias = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Edicion> ediciones = new LinkedHashSet<>();
 
-  protected Evento() {
-  }
+  protected Evento() {}
 
-  public Evento(String nombre, String descripcion, Date fechaAlta, String sigla, String foto, Set<Categoria> cats) {
+  public Evento(
+      String nombre,
+      String descripcion,
+      Date fechaAlta,
+      String sigla,
+      String foto,
+      Set<Categoria> cats) {
     this.nombre = nombre;
     this.descripcion = descripcion;
     this.fechaAlta = fechaAlta;
     this.sigla = sigla;
     this.foto = foto;
-    if (cats != null)
-      categorias.addAll(cats);
+    if (cats != null) categorias.addAll(cats);
   }
 
   // DCD
@@ -66,24 +77,23 @@ public class Evento extends BaseEntity {
 
   public Set<datatypes.DTEdicion> listarDTEdiciones() {
     Set<datatypes.DTEdicion> out = new LinkedHashSet<>();
-    for (Edicion e : ediciones)
-      out.add(e.obtenerDTEdicion());
+    for (Edicion edicion : ediciones) out.add(edicion.obtenerDTEdicion());
     return out;
   }
-  
+
   public Set<datatypes.DTEdicion> listarDTEdiciones(EstadoEdicion estado) {
-	Set<datatypes.DTEdicion> out = new LinkedHashSet<>();
-	for (Edicion e : ediciones) {
-	  if (e.getEstado() == estado) {
-		out.add(e.obtenerDTEdicion());
-	  }
-	}
-	return out;
+    Set<datatypes.DTEdicion> out = new LinkedHashSet<>();
+    for (Edicion edicion : ediciones) {
+      if (edicion.getEstado() == estado) {
+        out.add(edicion.obtenerDTEdicion());
+      }
+    }
+    return out;
   }
 
-  public void addEdicion(Edicion e) {
-    ediciones.add(e);
-    e.setEvento(this);
+  public void addEdicion(Edicion edicion) {
+    ediciones.add(edicion);
+    edicion.setEvento(this);
   }
 
   public String getNombre() {
@@ -93,9 +103,9 @@ public class Evento extends BaseEntity {
   public Set<Categoria> getCategorias() {
     return categorias;
   }
-  
+
   public String getFoto() {
-	return foto;
+    return foto;
   }
 
   public datatypes.DTEvento toDTEvento() {
@@ -115,9 +125,6 @@ public class Evento extends BaseEntity {
       dtEdiciones.add(ed.toDTEdicion());
     }
 
-    return new datatypes.DTEventoDetallado(
-        this.toDTEvento(),
-        categoriasNombres,
-        dtEdiciones);
+    return new datatypes.DTEventoDetallado(this.toDTEvento(), categoriasNombres, dtEdiciones);
   }
 }
