@@ -1,5 +1,12 @@
 package logica;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
+
+import org.hibernate.Hibernate;
+
 import datatypes.DTAsistente;
 import datatypes.DTEdicion;
 import datatypes.DTTipoRegistro;
@@ -211,6 +218,36 @@ public final class EdicionController implements IEdicionController {
           return null;
         });
   }
+  
+  @Override
+  public void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha, String codigo) throws ValidationInputException, IllegalArgumentException {
+	  if (verificarCodigoPatrocinio(nombreEdicion, nombreTipoRegistro, nickname, codigo)) {
+		  Tx.inTx(em -> {
+			  var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
+			  var tr = ed.buscarTipoRegistro(nombreTipoRegistro);
+			  var asistente = usuarioRepo.obtenerAsistente(em, nickname);
+			  if (!ed.cupoDisponible(nombreTipoRegistro))
+				  throw new IllegalStateException("No hay cupo disponible para el tipo de registro '" + nombreTipoRegistro + "' en la edición '" + nombreEdicion + "'");
+			  if (!ed.verificarNoRegistro(nickname))
+				  throw new IllegalStateException("El asistente '" + nickname + "' ya está registrado en la edición '" + nombreEdicion + "'");
+			  var registro = registroFactory.altaRegistro(em, ed, asistente, tr, 0.0f, fecha);
+			  var institucion = asistente.getInstitucion();
+			  var patrocinio = edicionRepo.obtenerPatrocinio(em, nombreEdicion, institucion.getNombre());
+			  var otorga = patrocinio.getOtorgan();
+			  tr.decrementarCupo();
+			  otorga.decrementarCantidad();
+			  patrocinio.agregarRegistro(registro);
+			  em.merge(tr);
+			  em.merge(otorga);
+			  em.merge(patrocinio);
+			  em.merge(registro);
+			  return null;
+		  });
+	  }
+	  else {
+		  throw new ValidationInputException("Código de patrocinio inválido");
+	  }
+  }
 
   @Override
   public void altaPatrocinio(
@@ -281,6 +318,45 @@ public final class EdicionController implements IEdicionController {
               nivelPatrocinio);
           return null;
         });
+  }
+  
+  @Override
+  public boolean verificarCodigoPatrocinio(String nombreEdicion, String nombreTipoRegistro, String nickname, String codigo) throws ValidationInputException {
+	  System.out.println("Verificando código de patrocinio...");
+	  var asistente = Tx.inTx(em -> {  
+			  var asistenteARetornar =  usuarioRepo.obtenerAsistente(em, nickname);
+			  if (asistenteARetornar != null) {
+				  Hibernate.initialize(asistenteARetornar.getInstitucion());
+			  }
+			  return asistenteARetornar; });
+	  if (asistente == null) {
+		  throw new ValidationInputException("No existe el asistente '" + nickname + "'");
+	  }
+	  var institucion = asistente.getInstitucion();
+	  if (institucion == null) {
+		  throw new ValidationInputException("El asistente '" + nickname + "' no pertenece a ninguna institución");
+	  }
+	  var patrocinio = Tx.inTx(em -> {  
+			  var patrocinioARetornar = edicionRepo.obtenerPatrocinio(em, nombreEdicion, institucion.getNombre()); 
+			  if (patrocinioARetornar != null) {
+				  Hibernate.initialize(patrocinioARetornar.getOtorgan());
+				  Hibernate.initialize(patrocinioARetornar.getOtorgan().getTipoRegistro());
+			  }
+			  return patrocinioARetornar;
+	  });
+	  if (patrocinio == null) {
+		  throw new ValidationInputException("No existe un patrocinio de la institución '" + institucion.getNombre() + "' para la edición '" + nombreEdicion + "'");
+	  }
+	  var otorga = patrocinio.getOtorgan();
+	  if (otorga.getCantidad() <= 0) {
+		  throw new ValidationInputException("El patrocinio de la institución '" + institucion.getNombre() + "' para la edición '" + nombreEdicion + "' no tiene registros gratuitos disponibles");
+	  }
+	  var tr = otorga.getTipoRegistro();
+	  if (!tr.getNombre().equals(nombreTipoRegistro)) {
+		  throw new ValidationInputException("El patrocinio de la institución '" + institucion.getNombre() + "' para la edición '" + nombreEdicion + "' no incluye el tipo de registro '" + nombreTipoRegistro + "'");
+	  }
+	  return patrocinio.getCodigo().equals(codigo);	  
+	  
   }
 
   @Override

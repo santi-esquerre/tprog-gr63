@@ -4,11 +4,13 @@ import datatypes.DTAsistente;
 import datatypes.DTOrganizador;
 import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
+import datatypes.DTUsuario;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
 import dominio.Asistente;
 import dominio.Institucion;
 import dominio.Organizador;
+import dominio.Usuario;
 import exceptions.InstitucionNoExistenteException;
 import exceptions.UsuarioCorreoRepetidoException;
 import exceptions.UsuarioInexistenteException;
@@ -206,6 +208,19 @@ public class UsuarioController implements IUsuarioController {
           "No existe un organizador con el nickname: " + nickname);
     }
 
-    return organizador.toDataType();
-  }
+		return organizador.toDataType();
+	}
+	
+	@Override
+	public DTUsuario obtenerUsuario(String usuario) throws Exception {
+		Usuario u = Tx.inTx(em -> {
+			return repoU.obtenerUsuario(em, usuario);
+			});
+		if (u == null) {
+			throw new UsuarioInexistenteException("No existe un usuario con el nickname o correo: " + usuario);
+		}
+		
+		return u.toDataType();
+	}
+
 }

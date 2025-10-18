@@ -2,6 +2,7 @@ package dominio;
 
 import datatypes.DTUsuario;
 import datatypes.DTUsuarioItemListado;
+import datatypes.TipoUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -42,9 +43,21 @@ public abstract class Usuario extends BaseEntity {
     this.foto = foto;
   }
 
-  public String getNickname() {
-    return nickname;
-  }
+  public String getNickname(){ return nickname; }
+  public String getNombre(){ return nombre; }
+  public String getCorreo(){ return correo; }
+  public String getFoto(){ return foto; }
+  public String getClave(){ return clave; }
+  public TipoUsuario getTipo(){ 
+	  if (this.getClass().getSimpleName().equals("Asistente")) {
+		  return TipoUsuario.ASISTENTE;
+	  } else {
+		  return TipoUsuario.ORGANIZADOR; }
+	  }
+  
+  public Boolean validarClave(String clave){ 
+	  return Cryptography.validateHash(clave, this.clave);
+   }
 
   public String getNombre() {
     return nombre;
@@ -70,4 +83,6 @@ public abstract class Usuario extends BaseEntity {
   public abstract DTUsuario toDataType();
 
   public abstract DTUsuarioItemListado toDTUsuarioItemListado();
+  
+
 }

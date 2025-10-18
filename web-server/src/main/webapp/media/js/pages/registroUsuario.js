@@ -100,16 +100,16 @@ correo.addEventListener("blur", function () {
 
 
 const password = document.getElementById("password");
-let passwordTooltip = tooltip(password, "La contraseña es obligatoria");
+let passwordTooltip = tooltip(password, "La contraseña debe tener al menos 8 caracteres");
 let checkPassword = false;
 password.addEventListener("focus", function () {
-    if (password.value.trim() === "" && checkPassword) {
+    if (password.value.length < 8 && checkPassword) {
         passwordTooltip.show();
     }
     password.style.borderColor = "";
 });
 password.addEventListener("blur", function () {
-    if (password.value.trim() === "") {
+    if (password.value.length < 8) {
         password.style.borderColor = "red";
 		checkPassword = true;
     } else {
@@ -262,7 +262,7 @@ btnRegistro.addEventListener("click", function (e) {
         valid = false;
     }
 
-    if (password.value.trim() === "") {
+    if (password.value.length < 8) {
         password.style.borderColor = "red";
 		checkPassword = true;
         valid = false;

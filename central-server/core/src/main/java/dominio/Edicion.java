@@ -43,8 +43,10 @@ public class Edicion extends BaseEntity {
 
   @Column(nullable = false, length = 20)
   private String sigla;
-
-  @Column private EstadoEdicion estado;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 50)
+  private EstadoEdicion estado;
 
   @Temporal(TemporalType.DATE)
   @Column(nullable = false)
@@ -91,8 +93,7 @@ public class Edicion extends BaseEntity {
 
   // DCD
   public DTEdicion obtenerDTEdicion() {
-    return new DTEdicion(
-        nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
+    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
   }
 
   public Set<DTTipoRegistro> listarDTTiposDeRegistro() {
@@ -110,14 +111,17 @@ public class Edicion extends BaseEntity {
   public Set<datatypes.DTRegistro> obtenerDTRegistros() {
     Set<datatypes.DTRegistro> out = new LinkedHashSet<>();
     for (Registro registro : registros) {
-      out.add(
-          new datatypes.DTRegistro(
-              registro.getFecha(),
-              registro.getCosto(),
-              this.getEvento().getNombre(),
-              this.getNombre(),
-              registro.getAsistente().getNickname(),
-              registro.getTipo().obtenerDTTipoRegistro()));
+      boolean usoCodigo = registro.getPatrocinio()!= null;
+      out.add(new datatypes.DTRegistro(
+          registro.getFecha(),
+          registro.getCosto(),
+          this.getEvento().getNombre(),
+          this.getNombre(),
+          registro.getAsistente().getNickname(),
+          registro.getAsistente().getFoto(),
+          registro.getTipo().obtenerDTTipoRegistro(),
+          usoCodigo)
+		  );
     }
     return out;
   }

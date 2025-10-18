@@ -9,7 +9,7 @@ String estado = request.getParameter("estado");  // Aprobada, Rechazada, Ingresa
 String foto = request.getParameter("foto"); // URL de la foto
 %>
 <div class="col-12 col-xxl-3 col-xl-4 col-md-6 col-12 edicionContainer">
-                        <a class="text-decoration-none edicionLink" href="edicion?nombre=<%=nombre %>">
+                        <a class="text-decoration-none edicionLink" href="<%=request.getContextPath()%>/edicion/<%=nombre.replace(' ','-')%>">
 <div class="card bg-body h-100 shadow-sm border-0">
 <img
 class="card-img-top fotoEdicion"

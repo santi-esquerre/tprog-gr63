@@ -119,15 +119,15 @@ public final class UsuarioRepository {
     return entityManager.createQuery(jpql, Registro.class)
         .setParameter("nickname", nickname)
         .getResultStream()
-        .map(
-            registro ->
-                new DTRegistro(
-                    registro.getFecha(),
-                    registro.getCosto(),
-                    registro.getEdicion().getEvento().getNombre(),
-                    registro.getEdicion().getNombre(),
-                    registro.getAsistente().getNickname(),
-                    registro.getTipo().obtenerDTTipoRegistro()))
+        .map(registro -> new DTRegistro(
+            registro.getFecha(),
+            registro.getCosto(),
+            registro.getEdicion().getEvento().getNombre(),
+            registro.getEdicion().getNombre(),
+            registro.getAsistente().getNickname(),
+            registro.getAsistente().getFoto(),
+            registro.getTipo().obtenerDTTipoRegistro(),
+            registro.getPatrocinio() != null ? true: false))
         .toList();
   }
 
@@ -200,4 +200,12 @@ public final class UsuarioRepository {
     if (usuarioNuevo == null) return false;
     return usuarioNuevo.validarClave(clave);
   }
+  
+  public Usuario obtenerUsuario(EntityManager em, String usuario) {
+	  return em.createQuery(
+		        "select u from Usuario u where u.nickname = :n or u.correo = :n", Usuario.class)
+		        .setParameter("n", usuario)
+		        .getResultStream().findFirst().orElse(null);
+  }
+  
 }

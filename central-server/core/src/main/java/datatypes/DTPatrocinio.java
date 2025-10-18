@@ -8,5 +8,5 @@ public record DTPatrocinio(
     float monto,
     String codigo,
     NivelPatrocinio nivel,
-    DTInstitucion institucion)
-    implements Serializable {}
+    DTInstitucion institucion
+    ) implements Serializable {}

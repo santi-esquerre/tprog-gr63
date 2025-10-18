@@ -14,7 +14,7 @@ evento.ediciones();
 <head>
     <title>Consulta Detallada de Edición</title>
     
-    <jsp:include page="/WEB-INF/template/head.jsp" />
+   <jsp:include page="/WEB-INF/template/head.jsp" />
     
 </head>
 <body class="d-flex flex-column h-100 bg-body-tertiary">

@@ -16,37 +16,55 @@ import java.util.Set;
     uniqueConstraints = @UniqueConstraint(name = "uk_institucion_nombre", columnNames = "nombre"))
 public class Institucion extends BaseEntity {
 
-  @Column(nullable = false, length = 120)
-  private String nombre;
+	@Column(nullable = false, length = 120)
+	private String nombre;
+	
+	@Column(nullable = false, length = 300)
+	private String descripcion;
+	
+	@Column(length = 120)
+	private String sitioWeb;
+	
+	@Column(name = "foto", length = 230, nullable = false)
+	private String foto;
 
-  @Column(nullable = false, length = 300)
-  private String descripcion;
+	protected Institucion() {}
+	
+	@OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
+	private Set<Asistente> asistentes = new LinkedHashSet<>();
+	
+	@OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
+	private Set<Patrocinio> patrocinios = new LinkedHashSet<>();
+
+	
+	public Institucion(String nombre, String descripcion, String sitioWeb, String foto) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.sitioWeb = sitioWeb;
+		this.foto = foto;
+	}
+	
+	public Institucion(String nombre, String descripcion) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+	}
+	
+	public DTInstitucion obtenerDTInstitucion() {
+		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
+	}
 
   @Column(length = 120)
   private String sitioWeb;
-
-  protected Institucion() {}
-
-  @OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
-  private Set<Asistente> asistentes = new LinkedHashSet<>();
-
-  @OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
-  private Set<Patrocinio> patrocinios = new LinkedHashSet<>();
-
-  public Institucion(String nombre, String descripcion, String sitioWeb) {
-    this.nombre = nombre;
-    this.descripcion = descripcion;
-    this.sitioWeb = sitioWeb;
-  }
+	// DTO conversion
+	public DTInstitucion toDTInstitucion() {
+		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
+	}
 
   public Institucion(String nombre, String descripcion) {
     this.nombre = nombre;
     this.descripcion = descripcion;
   }
 
-  public DTInstitucion obtenerDTInstitucion() {
-    return new DTInstitucion(nombre, descripcion, sitioWeb);
-  }
 
   public void addAsistente(Asistente asistente) {
     this.asistentes.add(asistente);
@@ -77,10 +95,6 @@ public class Institucion extends BaseEntity {
     return patrocinios;
   }
 
-  // DTO conversion
-  public DTInstitucion toDTInstitucion() {
-    return new DTInstitucion(nombre, descripcion, sitioWeb);
-  }
 
   // Business methods
   public void agregarAsistente(Asistente asistente) {

@@ -5,10 +5,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import repos.EdicionRepository;
+
 import java.io.IOException;
 
 import datatypes.DTEventoDetallado;
 import exceptions.ValidationInputException;
+import infra.Tx;
 import interfaces.Factory;
 import interfaces.IEventoController;
 
@@ -37,7 +40,7 @@ public class Evento extends HttpServlet {
 		try {
 			DTEventoDetallado evento = eventoController.obtenerDatosDetalladosEvento(nombre);
 			request.setAttribute("data_evento", evento);
-			
+
 			request.getRequestDispatcher("/WEB-INF/eventos/consultaDetalladaEvento.jsp").forward(request, response);
 		} catch(ValidationInputException e) {
 			// TODO Auto-generated catch block

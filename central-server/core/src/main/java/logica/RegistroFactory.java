@@ -16,7 +16,7 @@ public final class RegistroFactory {
     return INSTANCE;
   }
 
-  public void altaRegistro(
+  public Registro altaRegistro(
       EntityManager entityManager, Edicion edicion, Asistente asistente, TipoRegistro tipoRegistro, float costo, Date fecha) {
     var registro = new Registro();
     // Seteo por reflexión para mantener entidades sin setters públicos
@@ -40,5 +40,6 @@ public final class RegistroFactory {
       throw new IllegalStateException(e);
     }
     entityManager.persist(registro);
+    return registro;
   }
 }

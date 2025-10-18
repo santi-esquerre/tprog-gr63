@@ -68,6 +68,8 @@ public class Principal {
 	ConsultaEdicionEvento internalFrameConsultaEdicion = new ConsultaEdicionEvento(eventoController, edicionController);
 
 	RegistroEdicionEvento internalFrameRegistroEdicion = new RegistroEdicionEvento(this);
+	
+	DecisionEdicion internalFrameDecisionEdicion = new DecisionEdicion();
 
 	ConsultaRegistro internalFrameConsultaRegistro = new ConsultaRegistro(usuarioController);
 
@@ -372,7 +374,33 @@ public class Principal {
 			}
 		});
 		internalFrameRegistroEdicion.setIconifiable(false);
+		
+		// ======================= Consulta de Edición de Evento =======================
 
+		JMenuItem menuItemDecisionEdicion = new JMenuItem("Aceptar/Rechazar edición");
+		menuItemDecisionEdicion.setIcon(iconEdiciones);
+		menuEdicionesBar.add(menuItemDecisionEdicion);
+
+		internalFrameDecisionEdicion.setVisible(false);
+		getFrame().getContentPane().add(internalFrameDecisionEdicion);
+
+		menuItemDecisionEdicion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Abriendo decision de edición...");
+				try {
+					internalFrameDecisionEdicion.cargarDatos();
+					internalFrameDecisionEdicion.setVisible(true);
+					internalFrameDecisionEdicion.setMaximum(false);
+					internalFrameDecisionEdicion.moveToFront();
+					internalFrameDecisionEdicion.setSelected(true);
+				} catch (Exception e1) {
+					ExceptionHandler.manageException(getFrame(), e1);
+				}
+			}
+		});
+		internalFrameDecisionEdicion.setIconifiable(false);
+		
+		
 		// ======================= Registro a Edición de Evento =======================
 
 		internalFrameRegistroEdicion.setVisible(false);

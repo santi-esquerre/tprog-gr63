@@ -2,6 +2,7 @@ package repos;
 
 import datatypes.DTEdicionDetallada;
 import dominio.Edicion;
+import dominio.Patrocinio;
 import dominio.TipoRegistro;
 import jakarta.persistence.EntityManager;
 import java.util.LinkedHashSet;
@@ -165,11 +166,17 @@ public final class EdicionRepository {
             .getSingleResult();
     return rowCount > 0;
   }
-
-  public Set<Edicion> obtenerEdicionesPorOrganizador(EntityManager entityManager, String nicknameOrganizador) {
-    return new LinkedHashSet<>(
-        entityManager.createQuery("select e from Edicion e where e.organizador.nickname = :ne", Edicion.class)
-            .setParameter("ne", nicknameOrganizador)
-            .getResultList());
+  
+  public Patrocinio obtenerPatrocinio(EntityManager em, String nombreEdicion, String nombreInstitucion) {
+	  return em.createQuery("select p from Patrocinio p where p.edicion.nombre = :ne and p.institucion.nombre = :ni", Patrocinio.class)
+			  .setParameter("ne", nombreEdicion)
+			  .setParameter("ni", nombreInstitucion)
+			  .getResultStream().findFirst().orElse(null);
+  }
+  
+  public Set<Edicion> obtenerEdicionesPorOrganizador(EntityManager em, String nicknameOrganizador) {
+	return new LinkedHashSet<>(em.createQuery("select e from Edicion e where e.organizador.nickname = :ne", Edicion.class)
+		.setParameter("ne", nicknameOrganizador)
+		.getResultList());
   }
 }

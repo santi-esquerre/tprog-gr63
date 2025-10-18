@@ -37,6 +37,13 @@ public final class InstitucionRepository {
         .orElse(null);
   }
 
+  public boolean crearInstitucion(EntityManager em, String nombre, String descripcion, String sitioWeb, String foto) {
+      if (!noExisteInstitucion(em, nombre)) return false;
+      Institucion institucion = new Institucion(nombre, descripcion, sitioWeb, foto);
+      em.persist(institucion);
+      return true;
+  }
+  
   public boolean noExisteInstitucion(EntityManager entityManager, String nombre) {
     Long rowCount =
         entityManager.createQuery("select count(i) from Institucion i where i.nombre = :n", Long.class)
@@ -45,13 +52,6 @@ public final class InstitucionRepository {
     return rowCount == 0;
   }
 
-  public boolean crearInstitucion(
-      EntityManager entityManager, String nombre, String descripcion, String sitioWeb) {
-    if (!noExisteInstitucion(entityManager, nombre)) return false;
-    Institucion institucion = new Institucion(nombre, descripcion, sitioWeb);
-    entityManager.persist(institucion);
-    return true;
-  }
 
   public Optional<Institucion> findByNombre(EntityManager entityManager, String nombre) {
     return entityManager.createQuery("SELECT i FROM Institucion i WHERE i.nombre = :nombre", Institucion.class)

@@ -14,8 +14,8 @@ public class InstitucionFactory {
   }
 
   public void crearInstitucion(
-      EntityManager entityManager, String nombre, String sitioweb, String descripcion) {
-    var institucion = new Institucion(nombre, descripcion, sitioweb);
+      EntityManager entityManager, String nombre, String sitioweb, String descripcion, String foto) {
+    var institucion = new Institucion(nombre, descripcion, sitioweb, foto);
     entityManager.persist(institucion);
   }
 }
