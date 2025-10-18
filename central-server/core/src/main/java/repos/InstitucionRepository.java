@@ -39,9 +39,9 @@ public final class InstitucionRepository {
 			return c == 0;
   }
 
-  public boolean crearInstitucion(EntityManager em, String nombre, String descripcion, String sitioWeb) {
+  public boolean crearInstitucion(EntityManager em, String nombre, String descripcion, String sitioWeb, String foto) {
       if (!noExisteInstitucion(em, nombre)) return false;
-      Institucion institucion = new Institucion(nombre, descripcion, sitioWeb);
+      Institucion institucion = new Institucion(nombre, descripcion, sitioWeb, foto);
       em.persist(institucion);
       return true;
   }

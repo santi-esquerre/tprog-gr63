@@ -10,120 +10,11 @@
     
     <link href="media/css/styles.css" rel="stylesheet" />
     <link href="media/css/sb-admin-2.min.css" rel="stylesheet">
+    <jsp:include page="/WEB-INF/template/head.jsp" />
 </head>
     <body class="d-flex flex-column h-100 bg-primary">
         
-    <style>
-      :root {
-        --brand: #6f42c1;
-        --brand-2: #0d6efd;
-      }
-      .navbar-blur {
-        backdrop-filter: blur(8px);
-        background: rgba(33, 37, 41, 0.8) !important;
-      }
-      .hero {
-        position: relative;
-        min-height: 75vh;
-        display: grid;
-        place-items: center;
-        overflow: clip;
-        color: #fff;
-      }
-      .hero video,
-      .hero .hero-img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: brightness(0.55);
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-            1200px 600px at 20% 20%,
-            rgba(111, 66, 193, 0.35),
-            transparent 50%
-          ),
-          linear-gradient(180deg, rgba(13, 110, 253, 0.25), transparent 60%),
-          linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
-        pointer-events: none;
-      }
-      .hero-content {
-        position: relative;
-        z-index: 2;
-      }
-      .chip {
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        color: #fff;
-        background: rgba(255, 255, 255, 0.08);
-        padding: 0.4rem 0.75rem;
-        border-radius: 999px;
-        display: inline-flex;
-        gap: 0.4rem;
-        align-items: center;
-        transition: all 0.2s ease;
-      }
-      .chip:hover {
-        background: rgba(255, 255, 255, 0.18);
-        transform: translateY(-1px);
-      }
-      .search-wrap {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 1rem;
-        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset,
-          0 8px 30px rgba(0, 0, 0, 0.2);
-      }
-      .stat {
-        border-radius: 1rem;
-        background: linear-gradient(
-          145deg,
-          rgba(13, 110, 253, 0.1),
-          rgba(111, 66, 193, 0.1)
-        );
-        border: 1px solid rgba(13, 110, 253, 0.15);
-      }
-      .card-hover:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
-      }
-      .logo-cloud img {
-        opacity: 0.6;
-        transition: opacity 0.2s;
-        filter: grayscale(1);
-      }
-      .logo-cloud img:hover {
-        opacity: 1;
-        filter: none;
-      }
-
-      /* Pequeñas animaciones */
-      @keyframes float {
-        from {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-6px);
-        }
-        to {
-          transform: translateY(0);
-        }
-      }
-      .float {
-        animation: float 5s ease-in-out infinite;
-      }
-
-      [data-bs-theme="dark"] .search-wrap {
-        background: rgba(33, 37, 41, 0.9);
-        color: #fff;
-      }
-      [data-bs-theme="dark"] .chip {
-        border-color: rgba(255, 255, 255, 0.25);
-      }
-      
+    <style>    
 .tooltip .tooltip-inner {
     background-color: #be4b49 !important;
     color: white !important;
@@ -137,15 +28,16 @@
 	
 
     </style>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-blur"> </nav>
+     <!-- NAV -->
+     <jsp:include page="/WEB-INF/template/header.jsp" />
 
-    <div class="container mt-2 py-5">
+    <div class="container mt-5 py-5">
       <div class="card mx-auto shadow" style="max-width: 600px;">
                 <div class="card-header bg-white text-center">
                     <h2 class="fw-bold" style="color: black;">Crea una cuenta</h2>
                 </div>
                 <div class="card-body p-4">
-                    <form action="${pageContext.request.contextPath}/registro" method="POST" enctype="multipart/form-data">
+                    <form action="<%= request.getContextPath()%>/registro" method="POST" enctype="multipart/form-data">
                     
                 		<%
                 		String error = (String) request.getAttribute("error");
@@ -269,7 +161,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mt-5" id="btnRegistro">Registrarse</button>
-                        <p class="text-center mt-2"><a href="login.html" class="text-decoration-none">¿Ya tienes una cuenta? </a></p>
+                        <p class="text-center mt-2"><a href="sesion" class="text-decoration-none">¿Ya tienes una cuenta? </a></p>
                     </form>
                 </div>
         </div> 

@@ -30,12 +30,16 @@ public interface IEdicionController {
   boolean asistenteNoRegistrado(String nombreEdicion, String nickname); // idem
 
   void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha);
+  
+  void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha, String codigo) throws ValidationInputException, IllegalArgumentException;
 
   void cancelarRegistroEdicionEvento();
 
   void altaPatrocinio(LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
       String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
       throws ExistePatrocinioException, CostoRegistrosGratuitosException, CantidadCuposDisponiblesException, InstitucionNoExistenteException;
+  
+  boolean verificarCodigoPatrocinio(String nombreEdicion, String nombreTipoRegistro, String nickname, String codigo) throws ValidationInputException;
 
   // boolean altaEdicion(String nombreEvento,
   // String nicknameOrganizador,

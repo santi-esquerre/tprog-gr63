@@ -21,7 +21,7 @@ public final class UsuarioFactory {
 	private final InstitucionRepository repoI = InstitucionRepository.get();
 	
 	public void altaAsistente(EntityManager entm, String nickname, String nombre, String correo, String clave, String foto, String apellido, LocalDate fechaNacimiento, Institucion i) {
-		var u = new Asistente(nickname, nombre, apellido, clave, foto, correo, fechaNacimiento);
+		var u = new Asistente(nickname, nombre, correo, clave, foto, apellido, fechaNacimiento);
 		u.setInstitucion(i);
 		i.addAsistente(u);
 		entm.persist(u);

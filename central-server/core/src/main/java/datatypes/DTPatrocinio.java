@@ -10,6 +10,4 @@ public record DTPatrocinio(
     String codigo,
     NivelPatrocinio nivel,
     DTInstitucion institucion
-    
-    
-) implements Serializable {}
+    ) implements Serializable {}

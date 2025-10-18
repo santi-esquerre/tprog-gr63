@@ -27,7 +27,7 @@ public class InstitucionController implements interfaces.IInstitucionController 
 	
 	// Legacy method - keeping for compatibility but adapting to interface
 	@Override
-	public boolean crearInstitucion(String nombre, String descripcion, String sitioWeb) throws InstitucionRepetidaException {
+	public boolean crearInstitucion(String nombre, String descripcion, String sitioWeb, String foto) throws InstitucionRepetidaException {
 		if(Tx.inTx(em -> {
 			try {
 				return institucionRepo.noExisteInstitucion(em, nombre);
@@ -38,7 +38,7 @@ public class InstitucionController implements interfaces.IInstitucionController 
 			// Institution doesn't exist, create it
 			InstitucionFactory factory = InstitucionFactory.get();
 			Tx.inTx(emt -> {
-				factory.crearInstitucion(emt, nombre, sitioWeb, descripcion);
+				factory.crearInstitucion(emt, nombre, sitioWeb, descripcion, foto);
 				return null;
 			});
 			return true;

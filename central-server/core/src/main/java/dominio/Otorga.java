@@ -23,4 +23,8 @@ public class Otorga extends BaseEntity {
 	}
 	public int getCantidad() { return cantidad; }
 	
+	public TipoRegistro getTipoRegistro() { return tipoRegistro; }
+	
+	public void decrementarCantidad() { this.cantidad--; }
+	
 }

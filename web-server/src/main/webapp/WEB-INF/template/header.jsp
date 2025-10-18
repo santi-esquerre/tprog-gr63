@@ -138,26 +138,26 @@
         <div class="collapse navbar-collapse" id="nav">
           <ul class="navbar-nav ms-auto align-items-lg-center">
             <li class="nav-item">
-              <a class="nav-link" href="inicio">Inicio</a>
+              <a class="nav-link" href="<%=request.getContextPath()%>/inicio">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="eventos">Eventos</a>
+              <a class="nav-link" href="<%=request.getContextPath()%>/eventos">Eventos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="usuarios">Usuarios</a>
+              <a class="nav-link" href="<%=request.getContextPath()%>/usuarios">Usuarios</a>
             </li>
             <% if(estadoSesion == EstadoSesion.LOGIN_CORRECTO) { %>
             <li class="nav-item">
-              <a class="nav-link" href="perfil">Mi perfil</a>
+              <a class="nav-link" href="<%=request.getContextPath()%>/perfil">Mi perfil</a>
             </li>
             
             <li class="nav-item ms-lg-2">
-              <a class="btn btn-danger" id="login/logout" href="sesion?cerrar_sesion=1"
+              <a class="btn btn-danger" id="login/logout" href="<%=request.getContextPath()%>/logout"
                 ><i class="bi bi-box-arrow-in-right me-1"></i> Cerrar sesión</a>
             </li>
             <%} else {%>
             <li class="nav-item ms-lg-2">
-              <a class="btn btn-primary" id="login/logout" href="sesion"
+              <a class="btn btn-primary" id="login/logout" href="<%=request.getContextPath()%>/sesion"
                 ><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión</a
               >
             </li>

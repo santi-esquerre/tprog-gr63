@@ -76,6 +76,7 @@ public class Registro extends HttpServlet {
 		String rol = request.getParameter("rol");
 		String foto = ImagesManager.getImageName(request);
 		
+		System.out.println("Primer Correo: " + correo);
 		Factory factory = Factory.get();
 		IUsuarioController usuarioController = factory.getIUsuarioController();
 		

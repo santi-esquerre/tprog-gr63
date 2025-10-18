@@ -30,7 +30,7 @@ import util.Dialog;
 import util.ExceptionHandler;
 
 public class AltaEvento extends JInternalFrame implements IReloadable {
-	private final String DEFAULT_FOTO = "https://placehold.co/600x350/png";
+	private final String DEFAULT_FOTO = "default.png";
 
     private static final long serialVersionUID = 1L;
     private JTextField txtNombre;

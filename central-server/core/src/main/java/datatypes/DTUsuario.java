@@ -40,5 +40,12 @@ public class DTUsuario implements Serializable {
 		return nickname;
 	}
 	
+	public TipoUsuario getTipo(){ 
+		  if (this.getClass().getSimpleName().equals("DTAsistente")) {
+			  return TipoUsuario.ASISTENTE;
+		  } else {
+			  return TipoUsuario.ORGANIZADOR; }
+		  }
+	
 	
 }

@@ -5,11 +5,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.EstadoSesion;
+
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+
+import controllers.SessionManager;
 import interfaces.Factory;
 import interfaces.IEdicionController;
 import datatypes.DTEdicion;
 import datatypes.DTEdicionDetallada;
+import datatypes.DTUsuario;
 import exceptions.ValidationInputException;
 
 /**
@@ -37,22 +44,39 @@ public class Edicion extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
 		}
+		
 		String nombreEdicionUrl = pathInfo.substring(1); // nombreDeLaEdicion
-		String nombreEdicion = nombreEdicionUrl.replaceAll("-+"," "); 
+		String nombreEdicion = nombreEdicionUrl.replace('-',' '); 
 		
 		Factory factory = Factory.get();
+		
+		SessionManager.initSesion(request);
+		EstadoSesion estado_sesion = (EstadoSesion) request.getSession().getAttribute("estado_sesion");
+		if(estado_sesion == EstadoSesion.LOGIN_CORRECTO) {
+			String usuario = (String) request.getSession().getAttribute("usuario_logueado");
+			System.out.println("Asistente logueado: " + usuario);
+			var usuarioController = factory.getIUsuarioController();
+			DTUsuario dtUsuario;
+			try {
+				dtUsuario = usuarioController.obtenerUsuario(usuario);
+				request.setAttribute("usuario", dtUsuario);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} 
+		
 		IEdicionController edicionController = factory.getIEdicionController();
 		
 		try {
-			DTEdicionDetallada dtEdicion = edicionController.obtenerDatosDetalladosEdicion(nombreEdicion);
-			request.setAttribute("edicion", dtEdicion);
+			DTEdicionDetallada dtEdicionDetallada = edicionController.obtenerDatosDetalladosEdicion(nombreEdicion);
+			request.setAttribute("edicionDetallada", dtEdicionDetallada);
 			request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);
 			
 		} catch (ValidationInputException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);
 	}
 
 	/**
@@ -60,6 +84,81 @@ public class Edicion extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String action = request.getParameter("action");
+		String nombreEdicion = request.getParameter("nombreEdicion");
+		String nombreTipoRegistro = request.getParameter("nombreTipoRegistro");
+		String nicknameAsistente = request.getParameter("nickname");
+		System.out.println("Nickname asistente en edicion servlet: " + nicknameAsistente);
+		String codigo = request.getParameter("codigoPatrocinio");
+		
+		if (action.equals("validarCodigo")) {
+			IEdicionController edicionController = Factory.get().getIEdicionController();
+			boolean codigoValido = false;
+			try {
+				codigoValido = edicionController.verificarCodigoPatrocinio(
+						nombreEdicion,
+						nombreTipoRegistro,
+						nicknameAsistente,
+						codigo
+				);
+			} catch (ValidationInputException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (codigoValido) {
+				request.setAttribute("abrirModal", nombreTipoRegistro);
+				request.setAttribute("codigoValido", true);
+				request.setAttribute("codigoIngresado", codigo);
+				doGet(request, response);
+				return;	
+			}
+			else {
+				System.out.println("El código ingresado no es válido.");
+				request.setAttribute("abrirModal", nombreTipoRegistro);
+				request.setAttribute("codigoValido", false);
+				request.setAttribute("codigoIngresado", codigo);
+				doGet(request, response);
+				return;
+			}
+			// Handle registration action
+			// You can add your registration logic here
+		}
+		else if (action.equals("confirmarRegistro")) {
+			IEdicionController edicionController = Factory.get().getIEdicionController();
+			LocalDate fechaActual = LocalDate.now();
+			Date fechaRegistro = java.sql.Date.valueOf(fechaActual);
+			try {
+				if (codigo.isEmpty()) {
+						edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente, fechaRegistro);
+					}
+				else {
+						edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente, fechaRegistro, codigo);
+					}
+			}
+			catch (ValidationInputException e) {
+				// TODO Auto-generated catch block
+				request.setAttribute("errorRegistro", e.getMessage());
+				doGet(request, response);
+				return;
+			}
+			catch (IllegalArgumentException ie) {
+				// TODO Auto-generated catch block
+				request.setAttribute("errorRegistro", ie.getMessage());
+				doGet(request, response);
+				return;
+			}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				request.setAttribute("errorRegistro", e.getMessage());
+				doGet(request, response);
+				return;
+			}
+			System.out.println("Registro exitoso.");
+			request.setAttribute("registroExitoso", true);
+			doGet(request, response);
+			return;
+	
+		}
 		doGet(request, response);
 	}
 

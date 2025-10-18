@@ -28,6 +28,7 @@ public class AltaInstitucion extends JInternalFrame{
 	private JTextField textWeb;
 	private JTextArea textDesc;
 	private IInstitucionController institucionController;
+	private String fotoDefault = "default.png";
 	private Principal parent;
 	public AltaInstitucion(Principal parent, IInstitucionController institucionController) {
 		this.parent = parent;
@@ -134,7 +135,7 @@ public class AltaInstitucion extends JInternalFrame{
 		
 		if (checkCampos()) {
 			try {
-				institucionController.crearInstitucion(nombre, desc, web);
+				institucionController.crearInstitucion(nombre, desc, web, fotoDefault);
 				JOptionPane.showMessageDialog(this, "Institución registrada correctamente", "Registro de Institucion", JOptionPane.INFORMATION_MESSAGE);
 			} catch (InstitucionRepetidaException i) {
 				JOptionPane.showMessageDialog(this, i.getMessage(), "Registro de Institucion", JOptionPane.ERROR_MESSAGE);

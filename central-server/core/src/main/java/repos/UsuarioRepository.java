@@ -129,7 +129,9 @@ public final class UsuarioRepository {
             registro.getEdicion().getEvento().getNombre(),
             registro.getEdicion().getNombre(),
             registro.getAsistente().getNickname(),
-            registro.getTipo().obtenerDTTipoRegistro()))
+            registro.getAsistente().getFoto(),
+            registro.getTipo().obtenerDTTipoRegistro(),
+            registro.getPatrocinio() != null ? true: false))
         .toList();
   }
 
@@ -193,4 +195,12 @@ public final class UsuarioRepository {
 	  if (u == null) return false;
 	  return u.validarClave(clave);
   }
+  
+  public Usuario obtenerUsuario(EntityManager em, String usuario) {
+	  return em.createQuery(
+		        "select u from Usuario u where u.nickname = :n or u.correo = :n", Usuario.class)
+		        .setParameter("n", usuario)
+		        .getResultStream().findFirst().orElse(null);
+  }
+  
 }

@@ -407,6 +407,7 @@ public class RegistroEdicionEvento extends JInternalFrame implements IReloadable
 		lblSeleccion.setVisible(false);
 		seleccionado = null;
 		edSeleccionada = null;
+
 	}
 
 	@Override

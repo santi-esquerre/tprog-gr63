@@ -13,7 +13,7 @@ public final class RegistroFactory {
   private RegistroFactory() {}
   public static RegistroFactory get() { return INSTANCE; }
 
-  public void altaRegistro(EntityManager em, Edicion ed, Asistente as, TipoRegistro tr, float costo, Date fecha){
+  public Registro altaRegistro(EntityManager em, Edicion ed, Asistente as, TipoRegistro tr, float costo, Date fecha){
     var r = new Registro();
     // Seteo por reflexión para mantener entidades sin setters públicos
     try {
@@ -26,5 +26,6 @@ public final class RegistroFactory {
       throw new IllegalStateException(e);
     }
     em.persist(r);
+    return r;
   }
 }

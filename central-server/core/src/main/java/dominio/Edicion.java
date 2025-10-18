@@ -40,7 +40,8 @@ public class Edicion extends BaseEntity {
   @Column(nullable = false, length = 20)
   private String sigla;
   
-  @Column
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 50)
   private EstadoEdicion estado;
 
   @Temporal(TemporalType.DATE)
@@ -82,6 +83,7 @@ public class Edicion extends BaseEntity {
 
   // DCD
   public DTEdicion obtenerDTEdicion() {
+	System.out.println("Obteniendo DTEdicion de Edicion con estado: " + estado);
     return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
   }
 
@@ -102,13 +104,17 @@ public class Edicion extends BaseEntity {
   public Set<datatypes.DTRegistro> obtenerDTRegistros() {
     Set<datatypes.DTRegistro> out = new LinkedHashSet<>();
     for (Registro r : registros) {
+      boolean usoCodigo = r.getPatrocinio()!= null;
       out.add(new datatypes.DTRegistro(
           r.getFecha(),
           r.getCosto(),
           this.getEvento().getNombre(),
           this.getNombre(),
           r.getAsistente().getNickname(),
-          r.getTipo().obtenerDTTipoRegistro()));
+          r.getAsistente().getFoto(),
+          r.getTipo().obtenerDTTipoRegistro(),
+          usoCodigo)
+		  );
     }
     return out;
   }

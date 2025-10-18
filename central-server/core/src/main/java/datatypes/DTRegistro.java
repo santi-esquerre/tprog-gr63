@@ -8,5 +8,7 @@ public record DTRegistro(
         String nombreEvento,
         String nombreEdicion,
         String nicknameAsistente,
-        DTTipoRegistro tipoRegistro) {
+        String fotoAsistente,
+        DTTipoRegistro tipoRegistro,
+		Boolean usoCodigo) { 
 }

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import datatypes.DTEdicionDetallada;
 import dominio.Edicion;
+import dominio.Patrocinio;
 import dominio.TipoRegistro;
 import jakarta.persistence.EntityManager;
 
@@ -151,6 +152,13 @@ public final class EdicionRepository {
 			  .setParameter("ni", nombreInstitucion)
 			  .getSingleResult();
 	  return c > 0;
+  }
+  
+  public Patrocinio obtenerPatrocinio(EntityManager em, String nombreEdicion, String nombreInstitucion) {
+	  return em.createQuery("select p from Patrocinio p where p.edicion.nombre = :ne and p.institucion.nombre = :ni", Patrocinio.class)
+			  .setParameter("ne", nombreEdicion)
+			  .setParameter("ni", nombreInstitucion)
+			  .getResultStream().findFirst().orElse(null);
   }
   
   public Set<Edicion> obtenerEdicionesPorOrganizador(EntityManager em, String nicknameOrganizador) {

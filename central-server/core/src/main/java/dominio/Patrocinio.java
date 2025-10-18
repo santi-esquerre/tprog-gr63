@@ -36,13 +36,13 @@ public class Patrocinio extends BaseEntity {
 	private	String codigo;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	NivelPatrocinio nivel;
 	
 	protected Patrocinio() {}
 	
 	@OneToMany(mappedBy = "patrocinio", fetch = FetchType.LAZY)
-	private Set<Registro> registro;
+	private Set<Registro> registro = new LinkedHashSet<>(); // Asociación con Registro
 	
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "institucion_id", nullable = false, 
@@ -54,12 +54,12 @@ public class Patrocinio extends BaseEntity {
 			foreignKey = @ForeignKey(name = "fk_patrocinio_edicion"))
 	private Edicion edicion; // Asociación con Edicion
 	
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "patrocinio_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
-	private Set<Otorga> otorgan = new HashSet<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "otorga_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
+	private Otorga otorgan; // Asociación con Otorga
 	
-	@OneToMany(mappedBy = "patrocinio")
-    private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();
+	/*@OneToMany(mappedBy = "patrocinio")
+    private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();*/
 	
 	public Patrocinio(float monto, String codigo, NivelPatrocinio nivel, LocalDate fechaRealizacion, Institucion institucion, Edicion edicion) {
 		this.monto = monto;
@@ -71,7 +71,7 @@ public class Patrocinio extends BaseEntity {
 	}
 	
 	public void addOtorga(Otorga o) {
-		this.otorgan.add(o);
+		this.otorgan = o;
 	}
 
 	public Institucion getInstitucion() {
@@ -91,8 +91,9 @@ public class Patrocinio extends BaseEntity {
     public String getCodigo() { return codigo; }
     public NivelPatrocinio getNivel() { return nivel; }
     public Edicion getEdicion() { return edicion; }
-    public Set<RegistroOtorgado> getRegistrosOtorgados() { return registrosOtorgados; }
+    /*public Set<RegistroOtorgado> getRegistrosOtorgados() { return registrosOtorgados; }*/
     public Set<Registro> getRegistros() { return registro; }
+    public Otorga getOtorgan() { return otorgan; }
     
     public void setInstitucion(Institucion institucion) {
         this.institucion = institucion;
@@ -102,10 +103,10 @@ public class Patrocinio extends BaseEntity {
         this.edicion = edicion;
     }
 
-    public void agregarRegistroOtorgado(RegistroOtorgado registro) {
+   /* public void agregarRegistroOtorgado(RegistroOtorgado registro) {
         this.registrosOtorgados.add(registro);
         registro.setPatrocinio(this);
-    }
+    }*/
 
     public void agregarRegistro(Registro registro) {
         this.registro.add(registro);

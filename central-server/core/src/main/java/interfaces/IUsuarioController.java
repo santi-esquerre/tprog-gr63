@@ -8,6 +8,7 @@ import datatypes.DTAsistente;
 import datatypes.DTOrganizador;
 import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
+import datatypes.DTUsuario;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
 import exceptions.InstitucionNoExistenteException;
@@ -49,4 +50,7 @@ public interface IUsuarioController {
 	List<DTUsuarioItemListado> obtenerUsuarios();
 
 	List<DTUsuarioItemListado> obtenerUsuarios(TipoUsuario tipoUsuario);
+	
+	DTUsuario obtenerUsuario(String usuario) throws Exception;
+	
 }

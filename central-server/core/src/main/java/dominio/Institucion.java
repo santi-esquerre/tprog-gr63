@@ -25,6 +25,9 @@ public class Institucion extends BaseEntity {
 	
 	@Column(length = 120)
 	private String sitioWeb;
+	
+	@Column(name = "foto", length = 230, nullable = false)
+	private String foto;
 
 	protected Institucion() {}
 	
@@ -33,11 +36,13 @@ public class Institucion extends BaseEntity {
 	
 	@OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
 	private Set<Patrocinio> patrocinios = new LinkedHashSet<>();
+
 	
-	public Institucion(String nombre, String descripcion, String sitioWeb) {
+	public Institucion(String nombre, String descripcion, String sitioWeb, String foto) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.sitioWeb = sitioWeb;
+		this.foto = foto;
 	}
 	
 	public Institucion(String nombre, String descripcion) {
@@ -46,7 +51,7 @@ public class Institucion extends BaseEntity {
 	}
 	
 	public DTInstitucion obtenerDTInstitucion() {
-		return new DTInstitucion(nombre, descripcion, sitioWeb);
+		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
 	}
 
 	
@@ -67,7 +72,7 @@ public class Institucion extends BaseEntity {
 
 	// DTO conversion
 	public DTInstitucion toDTInstitucion() {
-		return new DTInstitucion(nombre, descripcion, sitioWeb);
+		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
 	}
 
 	// Business methods
