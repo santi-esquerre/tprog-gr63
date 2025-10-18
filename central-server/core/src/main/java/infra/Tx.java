@@ -7,19 +7,20 @@ import java.util.function.Function;
 
 public final class Tx {
   private Tx() {}
+
   public static <T> T inTx(Function<EntityManager, T> work) {
-    EntityManager em = JPA.em();
-    EntityTransaction tx = em.getTransaction();
+    EntityManager entityManager = JPA.entityManager();
+    EntityTransaction transaction = entityManager.getTransaction();
     try {
-      tx.begin();
-      T out = work.apply(em);
-      tx.commit();
+      transaction.begin();
+      T out = work.apply(entityManager);
+      transaction.commit();
       return out;
     } catch (RuntimeException e) {
-      if (tx.isActive()) tx.rollback();
+      if (transaction.isActive()) transaction.rollback();
       throw e;
     } finally {
-      em.close();
+      entityManager.close();
     }
   }
 }

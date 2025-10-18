@@ -10,5 +10,4 @@ public record DTRegistroDetallado(
     DTEdicion edicion,
     DTAsistente asistente,
     DTTipoRegistro tipoRegistro,
-    Optional<DTPatrocinio> patrocinio
-) {}
+    Optional<DTPatrocinio> patrocinio) {}

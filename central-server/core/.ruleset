@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Custom PMD Ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+                             https://pmd.sourceforge.net/ruleset_2_0_0.xsd"
+         xsi:noNamespaceSchemaLocation="https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+  <description>
+    Custom PMD ruleset that enforces naming conventions, coupling limits, and unused code detection.
+  </description>
+
+  <!-- ========================================================= -->
+  <!-- === Design Rules ======================================== -->
+  <!-- ========================================================= -->
+  <rule ref="category/java/design.xml/AbstractClassWithoutAbstractMethod"/>
+
+  <!-- ========================================================= -->
+  <!-- === Coupling Rules ====================================== -->
+  <!-- ========================================================= -->
+  <rule ref="category/java/design.xml/LooseCoupling"/>
+
+  <!-- ========================================================= -->
+  <!-- === Naming Rules ======================================== -->
+  <!-- ========================================================= -->
+  <rule ref="category/java/codestyle.xml/PackageCase"/>
+  <rule ref="category/java/naming.xml/ShortVariable"/>
+
+  <!-- ========================================================= -->
+  <!-- === Unused Code Rules =================================== -->
+  <!-- ========================================================= -->
+  <rule ref="category/java/unnecessary.xml/UnusedPrivateField"/>
+
+</ruleset>

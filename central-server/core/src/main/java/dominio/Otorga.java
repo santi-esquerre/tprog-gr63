@@ -1,4 +1,5 @@
 package dominio;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,9 +18,9 @@ public class Otorga extends BaseEntity {
 			foreignKey = @ForeignKey(name = "fk_ortoga_tiporegistro"))
 	private TipoRegistro tipoRegistro; // Asociación con TipoRegistro
 	
-	public Otorga(int cant, TipoRegistro tr) {
+	public Otorga(int cant, TipoRegistro tipoRegistro) {
 		this.cantidad = cant;
-		this.tipoRegistro = tr;
+		this.tipoRegistro = tipoRegistro;
 	}
 	public int getCantidad() { return cantidad; }
 	

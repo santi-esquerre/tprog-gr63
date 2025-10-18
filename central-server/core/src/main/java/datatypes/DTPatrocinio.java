@@ -3,7 +3,6 @@ package datatypes;
 import java.io.Serializable;
 import java.util.Date;
 
-
 public record DTPatrocinio(
     Date fechaRealizacion,
     float monto,

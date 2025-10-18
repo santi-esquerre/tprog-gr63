@@ -1,10 +1,17 @@
 package datatypes;
 
+@SuppressWarnings("serial")
 public class DTOrganizador extends DTUsuario {
-  String linkSitioWeb;
-  String descripcion;
+  private String linkSitioWeb;
+  private String descripcion;
 
-  public DTOrganizador(String nickname, String nombre, String correo, String foto, String linkSitioWeb, String descripcion) {
+  public DTOrganizador(
+      String nickname,
+      String nombre,
+      String correo,
+      String foto,
+      String linkSitioWeb,
+      String descripcion) {
     super(nickname, nombre, correo, foto);
     this.linkSitioWeb = linkSitioWeb;
     this.descripcion = descripcion;
@@ -12,26 +19,6 @@ public class DTOrganizador extends DTUsuario {
 
   public TipoUsuario getTipoUsuario() {
     return TipoUsuario.ORGANIZADOR;
-  }
-
-  @Override
-  public String nickname() {
-    return nickname;
-  }
-
-  @Override
-  public String nombre() {
-    return nombre;
-  }
-
-  @Override
-  public String correo() {
-    return correo;
-  }
-
-  @Override
-  public String toString() {
-    return nickname;
   }
 
   public String linkSitioWeb() {

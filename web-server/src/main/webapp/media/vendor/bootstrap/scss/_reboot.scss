@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6 {
 // Reset margins on paragraphs
 //
 // Similarly, the top margin on `<p>`s get reset. However, we also reset the
-// bottom margin to use `rem` units instead of `em`.
+// bottom margin to use `rem` units instead of `entityManager`.
 p {
   margin-top: 0;
   margin-bottom: $paragraph-margin-bottom;
@@ -219,7 +219,7 @@ code,
 kbd,
 samp {
   font-family: $font-family-monospace;
-  @include font-size(1em); // Correct the odd `em` font sizing in all browsers.
+  @include font-size(1em); // Correct the odd `entityManager` font sizing in all browsers.
 }
 
 pre {

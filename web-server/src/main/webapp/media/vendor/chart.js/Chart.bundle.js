@@ -3040,7 +3040,7 @@ var helpers_options = {
 	 * @since 2.7.0
 	 */
 	toLineHeight: function(value, size) {
-		var matches = ('' + value).match(/^(normal|(\d+(?:\.\d+)?)(px|em|%)?)$/);
+		var matches = ('' + value).match(/^(normal|(\d+(?:\.\d+)?)(px|entityManager|%)?)$/);
 		if (!matches || matches[1] === 'normal') {
 			return size * 1.2;
 		}

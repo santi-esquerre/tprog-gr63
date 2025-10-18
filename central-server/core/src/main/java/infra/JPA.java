@@ -8,8 +8,7 @@ import jakarta.persistence.Persistence;
 public final class JPA {
   private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("eventosPU");
 
-  private JPA() {
-  }
+  private JPA() {}
 
   public static void switchPU(String puName) {
     if (emf != null && emf.isOpen()) {
@@ -19,7 +18,7 @@ public final class JPA {
     emf = Persistence.createEntityManagerFactory(puName);
   }
 
-  public static EntityManager em() {
+  public static EntityManager entityManager() {
     return emf.createEntityManager();
   }
 

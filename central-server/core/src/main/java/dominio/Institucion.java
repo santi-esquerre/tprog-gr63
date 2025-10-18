@@ -1,10 +1,5 @@
 package dominio;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import datatypes.DTInstitucion;
-import jakarta.persistence.CascadeType;
 import datatypes.DTInstitucion;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,9 +7,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "institucion", uniqueConstraints = @UniqueConstraint(name = "uk_institucion_nombre", columnNames = "nombre"))
+@Table(
+    name = "institucion",
+    uniqueConstraints = @UniqueConstraint(name = "uk_institucion_nombre", columnNames = "nombre"))
 public class Institucion extends BaseEntity {
 
 	@Column(nullable = false, length = 120)
@@ -54,35 +53,57 @@ public class Institucion extends BaseEntity {
 		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
 	}
 
-	
-	public void addAsistente(Asistente a) {
-		this.asistentes.add(a);
-	}
-	
-	public void addPatrocinio(Patrocinio p) {
-		this.patrocinios.add(p);
-	}
-	
-	// Getters
-	public String getNombre() { return nombre; }
-	public String getDescripcion() { return descripcion; }
-	public String getSitioWeb() { return sitioWeb; }
-	public Set<Asistente> getAsistentes() { return asistentes; }
-	public Set<Patrocinio> getPatrocinios() { return patrocinios; }
-
+  @Column(length = 120)
+  private String sitioWeb;
 	// DTO conversion
 	public DTInstitucion toDTInstitucion() {
 		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
 	}
 
-	// Business methods
-	public void agregarAsistente(Asistente asistente) {
-		this.asistentes.add(asistente);
-		asistente.setInstitucion(this);
-	}
-	
-	public void agregarPatrocinio(Patrocinio patrocinio) {
-		this.patrocinios.add(patrocinio);
-		patrocinio.setInstitucion(this);
-	}
+  public Institucion(String nombre, String descripcion) {
+    this.nombre = nombre;
+    this.descripcion = descripcion;
+  }
+
+
+  public void addAsistente(Asistente asistente) {
+    this.asistentes.add(asistente);
+  }
+
+  public void addPatrocinio(Patrocinio patrocinio) {
+    this.patrocinios.add(patrocinio);
+  }
+
+  // Getters
+  public String getNombre() {
+    return nombre;
+  }
+
+  public String getDescripcion() {
+    return descripcion;
+  }
+
+  public String getSitioWeb() {
+    return sitioWeb;
+  }
+
+  public Set<Asistente> getAsistentes() {
+    return asistentes;
+  }
+
+  public Set<Patrocinio> getPatrocinios() {
+    return patrocinios;
+  }
+
+
+  // Business methods
+  public void agregarAsistente(Asistente asistente) {
+    this.asistentes.add(asistente);
+    asistente.setInstitucion(this);
+  }
+
+  public void agregarPatrocinio(Patrocinio patrocinio) {
+    this.patrocinios.add(patrocinio);
+    patrocinio.setInstitucion(this);
+  }
 }

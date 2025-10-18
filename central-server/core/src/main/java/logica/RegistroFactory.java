@@ -1,31 +1,45 @@
 package logica;
 
-import java.util.Date;
-
 import dominio.Asistente;
 import dominio.Edicion;
 import dominio.Registro;
 import dominio.TipoRegistro;
 import jakarta.persistence.EntityManager;
+import java.util.Date;
 
 public final class RegistroFactory {
   private static final RegistroFactory INSTANCE = new RegistroFactory();
-  private RegistroFactory() {}
-  public static RegistroFactory get() { return INSTANCE; }
 
-  public Registro altaRegistro(EntityManager em, Edicion ed, Asistente as, TipoRegistro tr, float costo, Date fecha){
-    var r = new Registro();
+  private RegistroFactory() {}
+
+  public static RegistroFactory get() {
+    return INSTANCE;
+  }
+
+  public Registro altaRegistro(
+      EntityManager entityManager, Edicion edicion, Asistente asistente, TipoRegistro tipoRegistro, float costo, Date fecha) {
+    var registro = new Registro();
     // Seteo por reflexión para mantener entidades sin setters públicos
     try {
-      var f1 = Registro.class.getDeclaredField("fecha"); f1.setAccessible(true); f1.set(r, fecha);
-      var f2 = Registro.class.getDeclaredField("costo"); f2.setAccessible(true); f2.set(r, costo);
-      var f3 = Registro.class.getDeclaredField("asistente"); f3.setAccessible(true); f3.set(r, as);
-      var f4 = Registro.class.getDeclaredField("edicion"); f4.setAccessible(true); f4.set(r, ed);
-      var f5 = Registro.class.getDeclaredField("tipo"); f5.setAccessible(true); f5.set(r, tr);
+      var fechaRegistro = Registro.class.getDeclaredField("fecha");
+      fechaRegistro.setAccessible(true);
+      fechaRegistro.set(registro, fecha);
+      var costoRegistro = Registro.class.getDeclaredField("costo");
+      costoRegistro.setAccessible(true);
+      costoRegistro.set(registro, costo);
+      var asistenteRegistro = Registro.class.getDeclaredField("asistente");
+      asistenteRegistro.setAccessible(true);
+      asistenteRegistro.set(registro, asistente);
+      var edicionRegistro = Registro.class.getDeclaredField("edicion");
+      edicionRegistro.setAccessible(true);
+      edicionRegistro.set(registro, edicion);
+      var tipoRegistroNuevo = Registro.class.getDeclaredField("tipo");
+      tipoRegistroNuevo.setAccessible(true);
+      tipoRegistroNuevo.set(registro, tipoRegistro);
     } catch (ReflectiveOperationException e) {
       throw new IllegalStateException(e);
     }
-    em.persist(r);
-    return r;
+    entityManager.persist(registro);
+    return registro;
   }
 }

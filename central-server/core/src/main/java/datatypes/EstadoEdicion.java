@@ -1,7 +1,7 @@
 package datatypes;
 
 public enum EstadoEdicion {
-	INGRESADA,
-	ACEPTADA,
-	RECHAZADA
+  INGRESADA,
+  ACEPTADA,
+  RECHAZADA
 }

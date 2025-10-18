@@ -1,10 +1,5 @@
 package dominio;
 
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-
 import datatypes.DTAsistente;
 import datatypes.DTEdicion;
 import datatypes.DTEvento;
@@ -13,8 +8,6 @@ import datatypes.EstadoEdicion;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
@@ -24,14 +17,25 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "edicion", uniqueConstraints = @UniqueConstraint(name = "uk_edicion_nombre_evento", columnNames = {
-    "nombre", "evento_id" }))
+@Table(
+    name = "edicion",
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uk_edicion_nombre_evento",
+            columnNames = {"nombre", "evento_id"}))
 public class Edicion extends BaseEntity {
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "evento_id", nullable = false, foreignKey = @ForeignKey(name = "fk_edicion_evento"))
+  @JoinColumn(
+      name = "evento_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "fk_edicion_evento"))
   private Evento evento;
 
   @Column(nullable = false, length = 120)
@@ -47,15 +51,18 @@ public class Edicion extends BaseEntity {
   @Temporal(TemporalType.DATE)
   @Column(nullable = false)
   private Date fechaInicio;
+
   @Temporal(TemporalType.DATE)
   @Column(nullable = false)
   private Date fechaFin;
+
   @Temporal(TemporalType.DATE)
   @Column(nullable = false)
   private Date fechaAlta;
 
   @Column(nullable = false, length = 120)
   private String ciudad;
+
   @Column(nullable = false, length = 120)
   private String pais;
 
@@ -66,15 +73,18 @@ public class Edicion extends BaseEntity {
   private Set<Registro> registros = new LinkedHashSet<>();
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "organizador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_edicion_organizador"))
+  @JoinColumn(
+      name = "organizador_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "fk_edicion_organizador"))
   private Organizador organizador; // Asociación con Organizador
-  
+
   @OneToMany(mappedBy = "edicion", fetch = FetchType.LAZY)
   private Set<Patrocinio> patrocinios = new LinkedHashSet<>(); // Asociación con Patrocinio
-  
+
   @Column(name = "foto", length = 230, nullable = false)
-  private String foto ;
-  
+  private String foto;
+
   protected Edicion() {}
 
   public DTEvento obtenerDTEvento() {
@@ -83,36 +93,33 @@ public class Edicion extends BaseEntity {
 
   // DCD
   public DTEdicion obtenerDTEdicion() {
-	System.out.println("Obteniendo DTEdicion de Edicion con estado: " + estado);
     return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
   }
 
   public Set<DTTipoRegistro> listarDTTiposDeRegistro() {
     Set<DTTipoRegistro> out = new LinkedHashSet<>();
-    for (TipoRegistro t : tipos)
-      out.add(t.obtenerDTTipoRegistro());
+    for (TipoRegistro tipoRegistro : tipos) out.add(tipoRegistro.obtenerDTTipoRegistro());
     return out;
   }
 
   public Set<DTAsistente> obtenerDTAsistentes() {
     Set<DTAsistente> out = new LinkedHashSet<>();
-    for (Registro r : registros)
-      out.add(r.obtenerDTAsistente());
+    for (Registro registro : registros) out.add(registro.obtenerDTAsistente());
     return out;
   }
 
   public Set<datatypes.DTRegistro> obtenerDTRegistros() {
     Set<datatypes.DTRegistro> out = new LinkedHashSet<>();
-    for (Registro r : registros) {
-      boolean usoCodigo = r.getPatrocinio()!= null;
+    for (Registro registro : registros) {
+      boolean usoCodigo = registro.getPatrocinio()!= null;
       out.add(new datatypes.DTRegistro(
-          r.getFecha(),
-          r.getCosto(),
+          registro.getFecha(),
+          registro.getCosto(),
           this.getEvento().getNombre(),
           this.getNombre(),
-          r.getAsistente().getNickname(),
-          r.getAsistente().getFoto(),
-          r.getTipo().obtenerDTTipoRegistro(),
+          registro.getAsistente().getNickname(),
+          registro.getAsistente().getFoto(),
+          registro.getTipo().obtenerDTTipoRegistro(),
           usoCodigo)
 		  );
     }
@@ -120,30 +127,35 @@ public class Edicion extends BaseEntity {
   }
 
   public boolean cupoDisponible(String nombreTipo) {
-    var t = buscarTipoRegistro(nombreTipo);
-    if (t == null)
-      return false;
-    long insc = registros.stream().filter(r -> r.getTipo().equals(t)).count();
-    return insc < t.getCupo();
+    var tipoRegistro = buscarTipoRegistro(nombreTipo);
+    if (tipoRegistro == null) return false;
+    long insc = registros.stream().filter(registro -> registro.getTipo().equals(tipoRegistro)).count();
+    return insc < tipoRegistro.getCupo();
   }
 
   public boolean verificarNoRegistro(String nickname) {
-    return registros.stream().noneMatch(r -> r.getAsistente().getNickname().equals(nickname));
+    return registros.stream().noneMatch(registro -> registro.getAsistente().getNickname().equals(nickname));
   }
 
-  public void agregarTipoRegistro(TipoRegistro tr) {
-    tipos.add(tr);
+  public void agregarTipoRegistro(TipoRegistro tipoRegistro) {
+    tipos.add(tipoRegistro);
   }
 
   public TipoRegistro buscarTipoRegistro(String nombreTipo) {
-    return tipos.stream().filter(t -> t.getNombre().equals(nombreTipo)).findFirst().orElse(null);
+    return tipos.stream().filter(tipoRegistro -> tipoRegistro.getNombre().equals(nombreTipo)).findFirst().orElse(null);
   }
 
-  
-  void setEvento(Evento e){ this.evento = e; }
-  public String getNombre(){ return nombre; }
-  
-  public void addPatrocinio(Patrocinio p) { this.patrocinios.add(p); }
+  void setEvento(Evento evento) {
+    this.evento = evento;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void addPatrocinio(Patrocinio patrocinio) {
+    this.patrocinios.add(patrocinio);
+  }
 
   public datatypes.DTOrganizador obtenerDTOrganizador() {
     return organizador.toDataType();
@@ -152,24 +164,31 @@ public class Edicion extends BaseEntity {
   public Evento getEvento() {
     return evento;
   }
-  
+
   public EstadoEdicion getEstado() {
-	return estado;
+    return estado;
   }
-  
+
   public void setEstado(EstadoEdicion estado) {
-	  this.estado = estado;
+    this.estado = estado;
   }
 
   public DTEdicion toDTEdicion() {
-    return new DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
+    return new DTEdicion(
+        nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, foto, estado);
   }
 
   // core/src/main/java/dominio/Edicion.java
-  public Edicion(Evento evento,
-      String nombre, String sigla,
-      Date fechaInicio, Date fechaFin, Date fechaAlta,
-      String ciudad, String pais, String foto,
+  public Edicion(
+      Evento evento,
+      String nombre,
+      String sigla,
+      Date fechaInicio,
+      Date fechaFin,
+      Date fechaAlta,
+      String ciudad,
+      String pais,
+      String foto,
       Organizador organizador) {
     this.evento = Objects.requireNonNull(evento);
     this.nombre = Objects.requireNonNull(nombre);
@@ -184,30 +203,22 @@ public class Edicion extends BaseEntity {
     this.estado = EstadoEdicion.INGRESADA;
   }
 
-   public datatypes.DTEdicionDetallada toDTEdicionDetallada() {
-   // Convert edition
-   datatypes.DTEdicion dtEdicion = this.toDTEdicion();
+  public datatypes.DTEdicionDetallada toDTEdicionDetallada() {
+    // Convert edition
+    datatypes.DTEdicion dtEdicion = this.toDTEdicion();
 
-   // Convert organizador
-   datatypes.DTOrganizador dtOrganizador = this.obtenerDTOrganizador();
+    // Convert organizador
+    datatypes.DTOrganizador dtOrganizador = this.obtenerDTOrganizador();
 
-   // Convert tipos de registro
-   Set<datatypes.DTTipoRegistro> dtTiposRegistro =
-   this.listarDTTiposDeRegistro();
+    // Convert tipos de registro
+    Set<datatypes.DTTipoRegistro> dtTiposRegistro = this.listarDTTiposDeRegistro();
 
-   Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
+    Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
 
-  // // Convert registros to DTRegistro
-  Set<datatypes.DTRegistro> dtRegistros = this.obtenerDTRegistros();
+    // // Convert registros to DTRegistro
+    Set<datatypes.DTRegistro> dtRegistros = this.obtenerDTRegistros();
 
-  return new datatypes.DTEdicionDetallada(
-   dtEdicion,
-   dtOrganizador,
-   dtTiposRegistro,
-   dtPatrocinios,
-   dtRegistros
-   );
-   }
-
+    return new datatypes.DTEdicionDetallada(
+        dtEdicion, dtOrganizador, dtTiposRegistro, dtPatrocinios, dtRegistros);
+  }
 }
-

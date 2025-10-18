@@ -732,11 +732,11 @@
     var val = '';
 
     if (startCentered && IS_IE) {
-      val += "translate(".concat(transform.x / d - width / 2, "em, ").concat(transform.y / d - height / 2, "em) ");
+      val += "translate(".concat(transform.x / d - width / 2, "entityManager, ").concat(transform.y / d - height / 2, "entityManager) ");
     } else if (startCentered) {
-      val += "translate(calc(-50% + ".concat(transform.x / d, "em), calc(-50% + ").concat(transform.y / d, "em)) ");
+      val += "translate(calc(-50% + ".concat(transform.x / d, "entityManager), calc(-50% + ").concat(transform.y / d, "entityManager)) ");
     } else {
-      val += "translate(".concat(transform.x / d, "em, ").concat(transform.y / d, "em) ");
+      val += "translate(".concat(transform.x / d, "entityManager, ").concat(transform.y / d, "entityManager) ");
     }
 
     val += "scale(".concat(transform.size / d * (transform.flipX ? -1 : 1), ", ").concat(transform.size / d * (transform.flipY ? -1 : 1), ") ");
@@ -899,7 +899,7 @@
         y: 0.5
       };
       attributes['style'] = joinStyles(_objectSpread({}, styles, {
-        'transform-origin': "".concat(offset.x + transform.x / 16, "em ").concat(offset.y + transform.y / 16, "em")
+        'transform-origin': "".concat(offset.x + transform.x / 16, "entityManager ").concat(offset.y + transform.y / 16, "entityManager")
       }));
     }
 
@@ -970,7 +970,7 @@
       })
     };
     var uploadedIconWidthStyle = isUploadedIcon && !~extra.classes.indexOf('fa-fw') ? {
-      width: "".concat(width / height * 16 * 0.0625, "em")
+      width: "".concat(width / height * 16 * 0.0625, "entityManager")
     } : {};
 
     if (watchable) {

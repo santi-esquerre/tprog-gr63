@@ -1,9 +1,5 @@
 package logica;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
-
 import datatypes.DTAsistente;
 import datatypes.DTOrganizador;
 import datatypes.DTRegistro;
@@ -21,159 +17,196 @@ import exceptions.UsuarioInexistenteException;
 import exceptions.UsuarioNicknameRepetidoException;
 import infra.Tx;
 import interfaces.IUsuarioController;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 import repos.InstitucionRepository;
 import repos.UsuarioRepository;
 
 public class UsuarioController implements IUsuarioController {
 
-	private static UsuarioController INSTANCE = new UsuarioController();
+  private static UsuarioController INSTANCE = new UsuarioController();
 
-	private UsuarioController() {
-	}
+  private UsuarioController() {}
 
-	private final UsuarioRepository repoU = UsuarioRepository.get();
-	private final UsuarioFactory faU = UsuarioFactory.get();
-	private final InstitucionRepository repoI = InstitucionRepository.get();
+  private final UsuarioRepository repoU = UsuarioRepository.get();
+  private final UsuarioFactory faU = UsuarioFactory.get();
+  private final InstitucionRepository repoI = InstitucionRepository.get();
 
-	public static UsuarioController get() {
-		return INSTANCE;
-	}
+  public static UsuarioController get() {
+    return INSTANCE;
+  }
 
-	@Override
-	public boolean verificarNoExistenciaNickname(String nickname) {
-		return Tx.inTx(em -> repoU.noExisteNickname(em, nickname));
-	}
+  @Override
+  public boolean verificarNoExistenciaNickname(String nickname) {
+    return Tx.inTx(entityManager -> repoU.noExisteNickname(entityManager, nickname));
+  }
 
-	@Override
-	public boolean verificarNoExistenciaCorreo(String correo) {
-		return Tx.inTx(em -> repoU.noExisteCorreo(em, correo));
-	}
+  @Override
+  public boolean verificarNoExistenciaCorreo(String correo) {
+    return Tx.inTx(entityManager -> repoU.noExisteCorreo(entityManager, correo));
+  }
 
-	@Override
-	public void crearAsistente(String nickname, String nombre, String correo, String clave, String foto, String apellido,
-			LocalDate fechaNacimiento, String nombreInstitucion)
-			throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException, InstitucionNoExistenteException {
-		if (!verificarNoExistenciaNickname(nickname)) {
+  @Override
+  public void crearAsistente(
+      String nickname,
+      String nombre,
+      String correo,
+      String clave,
+      String foto,
+      String apellido,
+      LocalDate fechaNacimiento,
+      String nombreInstitucion)
+      throws UsuarioNicknameRepetidoException,
+          UsuarioCorreoRepetidoException,
+          InstitucionNoExistenteException {
+    if (!verificarNoExistenciaNickname(nickname)) {
 
-			throw new UsuarioNicknameRepetidoException(nickname);
-		}
+      throw new UsuarioNicknameRepetidoException(nickname);
+    }
 
-		if (!verificarNoExistenciaCorreo(correo)) {
-			throw new UsuarioCorreoRepetidoException(nickname);
-		}
+    if (!verificarNoExistenciaCorreo(correo)) {
+      throw new UsuarioCorreoRepetidoException(nickname);
+    }
 
-		try {
-			Tx.inTx(em -> {
-				Institucion i = repoI.buscarInstitucion(em, nombreInstitucion);
-				if (i == null) {
-					throw new RuntimeException(new InstitucionNoExistenteException(nombreInstitucion));
-				}
-				faU.altaAsistente(em, nickname, nombre, correo, clave, foto, apellido, fechaNacimiento, i);
-				return null;
-			});
-		} catch (RuntimeException e) {
-			if (e.getCause() instanceof InstitucionNoExistenteException institucionNoExistenteException) {
-				throw institucionNoExistenteException;
-			}
-			throw e;
-		}
-	}
+    try {
+      Tx.inTx(
+          entityManager -> {
+            Institucion institucion = repoI.buscarInstitucion(entityManager, nombreInstitucion);
+            if (institucion == null) {
+              throw new RuntimeException(new InstitucionNoExistenteException(nombreInstitucion));
+            }
+            faU.altaAsistente(
+                entityManager, nickname, nombre, correo, clave, foto, apellido, fechaNacimiento, institucion);
+            return null;
+          });
+    } catch (RuntimeException e) {
+      if (e.getCause() instanceof InstitucionNoExistenteException institucionNoExistenteException) {
+        throw institucionNoExistenteException;
+      }
+      throw e;
+    }
+  }
 
-	@Override
-	public void crearAsistente(String nickname, String nombre, String correo, String clave, String foto, String apellido,
-			LocalDate fechaNacimiento) throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
-		if (!verificarNoExistenciaNickname(nickname)) {
-			throw new UsuarioNicknameRepetidoException(nickname);
-		}
+  @Override
+  public void crearAsistente(
+      String nickname,
+      String nombre,
+      String correo,
+      String clave,
+      String foto,
+      String apellido,
+      LocalDate fechaNacimiento)
+      throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
+    if (!verificarNoExistenciaNickname(nickname)) {
+      throw new UsuarioNicknameRepetidoException(nickname);
+    }
 
-		if (!verificarNoExistenciaCorreo(correo)) {
-			throw new UsuarioCorreoRepetidoException(nickname);
-		}
-		Tx.inTx(em -> {
-			faU.altaAsistente(em, nickname, nombre, correo, clave, foto, apellido, fechaNacimiento);
-			return null;
-		});
-	}
+    if (!verificarNoExistenciaCorreo(correo)) {
+      throw new UsuarioCorreoRepetidoException(nickname);
+    }
+    Tx.inTx(
+        entityManager -> {
+          faU.altaAsistente(entityManager, nickname, nombre, correo, clave, foto, apellido, fechaNacimiento);
+          return null;
+        });
+  }
 
-	public void crearOrganizador(String nickname, String nombre, String correo, String clave, String foto, String descripcion, String linkSitioWeb)
-			throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
-		if (!verificarNoExistenciaNickname(nickname)) {
-			throw new UsuarioNicknameRepetidoException(nickname);
-		}
+  public void crearOrganizador(
+      String nickname,
+      String nombre,
+      String correo,
+      String clave,
+      String foto,
+      String descripcion,
+      String linkSitioWeb)
+      throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
+    if (!verificarNoExistenciaNickname(nickname)) {
+      throw new UsuarioNicknameRepetidoException(nickname);
+    }
 
-		if (!verificarNoExistenciaCorreo(correo)) {
-			throw new UsuarioCorreoRepetidoException(nickname);
-		}
-		Tx.inTx(em -> {
-			faU.altaOrganizador(em, nickname, nombre, correo, clave, foto, descripcion, linkSitioWeb);
-			return null;
-		});
-	}
+    if (!verificarNoExistenciaCorreo(correo)) {
+      throw new UsuarioCorreoRepetidoException(nickname);
+    }
+    Tx.inTx(
+        entityManager -> {
+          faU.altaOrganizador(entityManager, nickname, nombre, correo, clave, foto, descripcion, linkSitioWeb);
+          return null;
+        });
+  }
 
-	public void crearOrganizador(String nickname, String nombre, String correo, String clave, String foto, String descripcion)
-			throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
-		if (!verificarNoExistenciaNickname(nickname)) {
-			throw new UsuarioNicknameRepetidoException(nickname);
-		}
+  public void crearOrganizador(
+      String nickname, String nombre, String correo, String clave, String foto, String descripcion)
+      throws UsuarioNicknameRepetidoException, UsuarioCorreoRepetidoException {
+    if (!verificarNoExistenciaNickname(nickname)) {
+      throw new UsuarioNicknameRepetidoException(nickname);
+    }
 
-		if (!verificarNoExistenciaCorreo(correo)) {
-			throw new UsuarioCorreoRepetidoException(nickname);
-		}
+    if (!verificarNoExistenciaCorreo(correo)) {
+      throw new UsuarioCorreoRepetidoException(nickname);
+    }
 
-		Tx.inTx(em -> {
-			faU.altaOrganizador(em, nickname, nombre, correo, clave, foto, descripcion);
-			return null;
-		});
-	}
+    Tx.inTx(
+        entityManager -> {
+          faU.altaOrganizador(entityManager, nickname, nombre, correo, clave, foto, descripcion);
+          return null;
+        });
+  }
 
-	@Override
-	public Set<DTAsistente> mostrarAsistentes() {
-		return Tx.inTx(repoU::listarAsistentes);
-	}
+  @Override
+  public Set<DTAsistente> mostrarAsistentes() {
+    return Tx.inTx(repoU::listarAsistentes);
+  }
 
-	@Override
-	public List<DTUsuarioItemListado> obtenerUsuarios(TipoUsuario tipoUsuario) {
-		return Tx.inTx(em -> repoU.obtenerUsuarios(em, tipoUsuario));
-	}
+  @Override
+  public List<DTUsuarioItemListado> obtenerUsuarios(TipoUsuario tipoUsuario) {
+    return Tx.inTx(entityManager -> repoU.obtenerUsuarios(entityManager, tipoUsuario));
+  }
 
-	@Override
-	public List<DTUsuarioItemListado> obtenerUsuarios() {
-		return Tx.inTx(em -> repoU.obtenerUsuarios(em));
-	}
+  @Override
+  public List<DTUsuarioItemListado> obtenerUsuarios() {
+    return Tx.inTx(entityManager -> repoU.obtenerUsuarios(entityManager));
+  }
 
-	@Override
-	public List<DTRegistro> obtenerRegistrosUsuario(String nickname) {
-		return Tx.inTx(em -> repoU.obtenerRegistrosUsuario(em, nickname));
-	}
+  @Override
+  public List<DTRegistro> obtenerRegistrosUsuario(String nickname) {
+    return Tx.inTx(entityManager -> repoU.obtenerRegistrosUsuario(entityManager, nickname));
+  }
 
-	@Override
-	public DTRegistroDetallado obtenerRegistroDetallado(String nicknameAsistente, String nombreEdicion) {
-		return Tx.inTx(em -> repoU.obtenerRegistroDetallado(em, nicknameAsistente, nombreEdicion));
-	}
+  @Override
+  public DTRegistroDetallado obtenerRegistroDetallado(
+      String nicknameAsistente, String nombreEdicion) {
+    return Tx.inTx(entityManager -> repoU.obtenerRegistroDetallado(entityManager, nicknameAsistente, nombreEdicion));
+  }
 
-	@Override
-	public DTAsistente seleccionarAsistente(String nickname) throws Exception {
+  @Override
+  public DTAsistente seleccionarAsistente(String nickname) throws Exception {
 
-		Asistente asistente = Tx.inTx(em -> {
-			return repoU.obtenerAsistente(em, nickname);
-		});
+    Asistente asistente =
+        Tx.inTx(
+            entityManager -> {
+              return repoU.obtenerAsistente(entityManager, nickname);
+            });
 
-		if (asistente == null) {
-			throw new UsuarioInexistenteException("No existe un asistente con el nickname: " + nickname);
-		}
+    if (asistente == null) {
+      throw new UsuarioInexistenteException("No existe un asistente con el nickname: " + nickname);
+    }
 
-		return asistente.toDataType();
-	}
+    return asistente.toDataType();
+  }
 
-	@Override
-	public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
-		Organizador organizador = Tx.inTx(em -> {
-			return repoU.obtenerOrganizador(em, nickname);
-		});
+  @Override
+  public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
+    Organizador organizador =
+        Tx.inTx(
+            entityManager -> {
+              return repoU.obtenerOrganizador(entityManager, nickname);
+            });
 
-		if (organizador == null) {
-			throw new UsuarioInexistenteException("No existe un organizador con el nickname: " + nickname);
-		}
+    if (organizador == null) {
+      throw new UsuarioInexistenteException(
+          "No existe un organizador con el nickname: " + nickname);
+    }
 
 		return organizador.toDataType();
 	}

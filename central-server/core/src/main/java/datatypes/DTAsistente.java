@@ -2,11 +2,18 @@ package datatypes;
 
 import java.util.Date;
 
+@SuppressWarnings("serial")
 public class DTAsistente extends DTUsuario {
-  String apellido;
-  Date fechaNacimiento;
+  private String apellido;
+  private Date fechaNacimiento;
 
-  public DTAsistente(String nickname, String nombre, String correo, String foto, String apellido, Date fechaNacimiento) {
+  public DTAsistente(
+      String nickname,
+      String nombre,
+      String correo,
+      String foto,
+      String apellido,
+      Date fechaNacimiento) {
     super(nickname, nombre, correo, foto);
     this.apellido = apellido;
     this.fechaNacimiento = fechaNacimiento;
@@ -14,26 +21,6 @@ public class DTAsistente extends DTUsuario {
 
   public TipoUsuario getTipoUsuario() {
     return TipoUsuario.ASISTENTE;
-  }
-
-  @Override
-  public String nickname() {
-    return nickname;
-  }
-
-  @Override
-  public String nombre() {
-    return nombre;
-  }
-
-  @Override
-  public String correo() {
-    return correo;
-  }
-
-  @Override
-  public String toString() {
-    return nickname;
   }
 
   public String apellido() {
