@@ -31,7 +31,7 @@ class InstitucionControllerTest extends BaseTest {
         () -> {
           boolean creada =
               institucionController.crearInstitucion(
-                  "InstitucionTest", "DescripcionTest", "www.test.com");
+                  "InstitucionTest", "DescripcionTest", "www.test.com", "default.png");
           assertTrue(creada, "La institución debería crearse correctamente");
         });
 
@@ -41,7 +41,7 @@ class InstitucionControllerTest extends BaseTest {
             InstitucionRepetidaException.class,
             () -> {
               institucionController.crearInstitucion(
-                  "InstitucionTest", "DescripcionTest", "www.test.com");
+                  "InstitucionTest", "DescripcionTest", "www.test.com", "default.png");
             });
     assertNotNull(exception, "Debería lanzar excepción por institución repetida");
   }
@@ -56,7 +56,7 @@ class InstitucionControllerTest extends BaseTest {
         assertThrows(
             Exception.class,
             () -> {
-              institucionController.crearInstitucion("InstitucionLarga", descLarga, "web.com");
+              institucionController.crearInstitucion("InstitucionLarga", descLarga, "web.com", "default.png");
             });
     assertNotNull(ex2, "Debería lanzar excepción por descripción muy larga");
 
@@ -64,7 +64,7 @@ class InstitucionControllerTest extends BaseTest {
     assertDoesNotThrow(
         () -> {
           boolean creada =
-              institucionController.crearInstitucion("InstitucionSinWeb", "desc", null);
+              institucionController.crearInstitucion("InstitucionSinWeb", "desc", null, "default.png");
           assertTrue(creada, "Debería permitir sitio web nulo");
         });
   }
@@ -73,8 +73,8 @@ class InstitucionControllerTest extends BaseTest {
   void testListarInstituciones() {
     assertDoesNotThrow(
         () -> {
-          institucionController.crearInstitucion("InstitucionA", "DescA", "webA.com");
-          institucionController.crearInstitucion("InstitucionB", "DescB", "webB.com");
+          institucionController.crearInstitucion("InstitucionA", "DescA", "webA.com", "default.png");
+          institucionController.crearInstitucion("InstitucionB", "DescB", "webB.com", "default.png");
         });
     Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
     assertNotNull(instituciones, "La lista de instituciones no debe ser null");
@@ -98,7 +98,7 @@ class InstitucionControllerTest extends BaseTest {
     assertDoesNotThrow(
         () -> {
           institucionController.crearInstitucion(
-              "InstitucionPatrocinio", "DescPatrocinio", "webPatrocinio.com");
+              "InstitucionPatrocinio", "DescPatrocinio", "webPatrocinio.com", "default.png");
           // Crear edición usando el controlador de eventos
           eventoController.altaCategoria("CatPatrocinio");
           eventoController.altaEvento(
@@ -181,7 +181,7 @@ class InstitucionControllerTest extends BaseTest {
     assertDoesNotThrow(
         () -> {
           institucionController.crearInstitucion(
-              "InstitucionAfiliacion", "DescAfiliacion", "webAfiliacion.com");
+              "InstitucionAfiliacion", "DescAfiliacion", "webAfiliacion.com", "default.png");
         });
     boolean afiliado =
         institucionController.afiliarAsistenteAInstitucion(
@@ -211,7 +211,7 @@ class InstitucionControllerTest extends BaseTest {
         assertThrows(
             Exception.class,
             () -> {
-              institucionController.crearInstitucion(null, "desc", "web.com");
+              institucionController.crearInstitucion(null, "desc", "web.com", "default.png");
             });
     assertNotNull(exception, "Debe lanzar excepción si el nombre es nulo");
   }

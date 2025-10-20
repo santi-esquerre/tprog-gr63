@@ -12,11 +12,11 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public class Patrocinio extends BaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 50)
-	NivelPatrocinio nivel;
+	private NivelPatrocinio nivel;
 	
 	protected Patrocinio() {}
 	
@@ -52,28 +52,13 @@ public class Patrocinio extends BaseEntity {
 			foreignKey = @ForeignKey(name = "fk_patrocinio_edicion"))
 	private Edicion edicion; // Asociación con Edicion
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "otorga_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
 	private Otorga otorgan; // Asociación con Otorga
 	
-	/*@OneToMany(mappedBy = "patrocinio")
-    private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();*/
-	
-	public Patrocinio(float monto, String codigo, NivelPatrocinio nivel, LocalDate fechaRealizacion, Institucion institucion, Edicion edicion) {
-		this.monto = monto;
-		this.codigo = codigo;
-		this.nivel = nivel;
-		this.institucion = institucion;
-		this.edicion = edicion;
-		this.fechaRealizacion = fechaRealizacion;
+	public void addOtorga(Otorga otorga) {
+		this.otorgan = otorga;
 	}
-	
-	public void addOtorga(Otorga o) {
-		this.otorgan = o;
-	}
-
-  @Column(nullable = false)
-  private float monto;
 
 	public DTPatrocinio toDTPatrocinio(DTInstitucion dtInstitucion) {
         String cod = codigo;
@@ -83,51 +68,11 @@ public class Patrocinio extends BaseEntity {
 	}
 	
 	
-	public LocalDate getFechaRealizacion() { return fechaRealizacion; }
-    public float getMonto() { return monto; }
-    public String getCodigo() { return codigo; }
-    public NivelPatrocinio getNivel() { return nivel; }
-    public Edicion getEdicion() { return edicion; }
-    /*public Set<RegistroOtorgado> getRegistrosOtorgados() { return registrosOtorgados; }*/
-    public Set<Registro> getRegistros() { return registro; }
-    public Otorga getOtorgan() { return otorgan; }
-    
-    public void setInstitucion(Institucion institucion) {
-        this.institucion = institucion;
+
+    public Otorga getOtorgan() { 
+    	return otorgan; 
     }
-
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private NivelPatrocinio nivel;
-
-   /* public void agregarRegistroOtorgado(RegistroOtorgado registro) {
-        this.registrosOtorgados.add(registro);
-        registro.setPatrocinio(this);
-    }*/
-
-  @OneToMany(mappedBy = "patrocinio", fetch = FetchType.LAZY)
-  private Set<Registro> registro;
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(
-      name = "institucion_id",
-      nullable = false,
-      foreignKey = @ForeignKey(name = "fk_patrocinio_institucion"))
-  private Institucion institucion; // Asociación con Institucion
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(
-      name = "edicion_id",
-      nullable = false,
-      foreignKey = @ForeignKey(name = "fk_patrocinio_edicion"))
-  private Edicion edicion; // Asociación con Edicion
-
-  @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "patrocinio_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
-  private Set<Otorga> otorgan = new HashSet<>();
-
-  @OneToMany(mappedBy = "patrocinio")
-  private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();
+    
 
   public Patrocinio(
       float monto,
@@ -144,19 +89,9 @@ public class Patrocinio extends BaseEntity {
     this.fechaRealizacion = fechaRealizacion;
   }
 
-  public void addOtorga(Otorga otorga) {
-    this.otorgan.add(otorga);
-  }
 
   public Institucion getInstitucion() {
     return institucion;
-  }
-
-  public DTPatrocinio toDTPatrocinio(DTInstitucion dtInstitucion) {
-    String cod = codigo;
-    Date date = Date.from(fechaRealizacion.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    DTPatrocinio dtPatrocinio = new DTPatrocinio(date, monto, cod, nivel, dtInstitucion);
-    return dtPatrocinio;
   }
 
   public LocalDate getFechaRealizacion() {
@@ -179,13 +114,6 @@ public class Patrocinio extends BaseEntity {
     return edicion;
   }
 
-  public Set<RegistroOtorgado> getRegistrosOtorgados() {
-    return registrosOtorgados;
-  }
-
-  public Set<Registro> getRegistros() {
-    return registro;
-  }
 
   public void setInstitucion(Institucion institucion) {
     this.institucion = institucion;
@@ -195,10 +123,6 @@ public class Patrocinio extends BaseEntity {
     this.edicion = edicion;
   }
 
-  public void agregarRegistroOtorgado(RegistroOtorgado registro) {
-    this.registrosOtorgados.add(registro);
-    registro.setPatrocinio(this);
-  }
 
   public void agregarRegistro(Registro registro) {
     this.registro.add(registro);

@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Otorga extends BaseEntity {
@@ -13,7 +13,7 @@ public class Otorga extends BaseEntity {
 	private int cantidad;
 	protected Otorga() {}
 	
-	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "tipo_registro_id", nullable = false,
 			foreignKey = @ForeignKey(name = "fk_ortoga_tiporegistro"))
 	private TipoRegistro tipoRegistro; // Asociación con TipoRegistro

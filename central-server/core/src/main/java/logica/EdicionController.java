@@ -23,10 +23,6 @@ import exceptions.TipoRegistroRepetidoException;
 import exceptions.ValidationInputException;
 import infra.Tx;
 import interfaces.IEdicionController;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
 import repos.EdicionRepository;
 import repos.InstitucionRepository;
 import repos.TipoRegistroRepository;
@@ -223,28 +219,27 @@ public final class EdicionController implements IEdicionController {
   public void altaRegistroEdicionEvento(String nombreEdicion, String nombreTipoRegistro, String nickname, Date fecha, String codigo) throws ValidationInputException, IllegalArgumentException {
 	  if (verificarCodigoPatrocinio(nombreEdicion, nombreTipoRegistro, nickname, codigo)) {
 		  Tx.inTx(em -> {
-			  var ed = edicionRepo.buscarEdicion(em, nombreEdicion);
-			  var tr = ed.buscarTipoRegistro(nombreTipoRegistro);
+			  var edic = edicionRepo.buscarEdicion(em, nombreEdicion);
+			  var tiporeg = edic.buscarTipoRegistro(nombreTipoRegistro);
 			  var asistente = usuarioRepo.obtenerAsistente(em, nickname);
-			  if (!ed.cupoDisponible(nombreTipoRegistro))
+			  if (!edic.cupoDisponible(nombreTipoRegistro))
 				  throw new IllegalStateException("No hay cupo disponible para el tipo de registro '" + nombreTipoRegistro + "' en la edición '" + nombreEdicion + "'");
-			  if (!ed.verificarNoRegistro(nickname))
+			  if (!edic.verificarNoRegistro(nickname))
 				  throw new IllegalStateException("El asistente '" + nickname + "' ya está registrado en la edición '" + nombreEdicion + "'");
-			  var registro = registroFactory.altaRegistro(em, ed, asistente, tr, 0.0f, fecha);
+			  var registro = registroFactory.altaRegistro(em, edic, asistente, tiporeg, 0.0f, fecha);
 			  var institucion = asistente.getInstitucion();
 			  var patrocinio = edicionRepo.obtenerPatrocinio(em, nombreEdicion, institucion.getNombre());
 			  var otorga = patrocinio.getOtorgan();
-			  tr.decrementarCupo();
+			  tiporeg.decrementarCupo();
 			  otorga.decrementarCantidad();
 			  patrocinio.agregarRegistro(registro);
-			  em.merge(tr);
+			  em.merge(tiporeg);
 			  em.merge(otorga);
 			  em.merge(patrocinio);
 			  em.merge(registro);
 			  return null;
 		  });
-	  }
-	  else {
+	  }else {
 		  throw new ValidationInputException("Código de patrocinio inválido");
 	  }
   }
@@ -351,8 +346,8 @@ public final class EdicionController implements IEdicionController {
 	  if (otorga.getCantidad() <= 0) {
 		  throw new ValidationInputException("El patrocinio de la institución '" + institucion.getNombre() + "' para la edición '" + nombreEdicion + "' no tiene registros gratuitos disponibles");
 	  }
-	  var tr = otorga.getTipoRegistro();
-	  if (!tr.getNombre().equals(nombreTipoRegistro)) {
+	  var tiporeg = otorga.getTipoRegistro();
+	  if (!tiporeg.getNombre().equals(nombreTipoRegistro)) {
 		  throw new ValidationInputException("El patrocinio de la institución '" + institucion.getNombre() + "' para la edición '" + nombreEdicion + "' no incluye el tipo de registro '" + nombreTipoRegistro + "'");
 	  }
 	  return patrocinio.getCodigo().equals(codigo);	  

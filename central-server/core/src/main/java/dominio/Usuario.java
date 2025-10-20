@@ -44,41 +44,27 @@ public abstract class Usuario extends BaseEntity {
   }
 
   public String getNickname(){ return nickname; }
+  
   public String getNombre(){ return nombre; }
+  
   public String getCorreo(){ return correo; }
+  
   public String getFoto(){ return foto; }
-  public String getClave(){ return clave; }
+  
   public TipoUsuario getTipo(){ 
 	  if (this.getClass().getSimpleName().equals("Asistente")) {
 		  return TipoUsuario.ASISTENTE;
 	  } else {
-		  return TipoUsuario.ORGANIZADOR; }
-	  }
-  
-  public Boolean validarClave(String clave){ 
-	  return Cryptography.validateHash(clave, this.clave);
-   }
-
-  public String getNombre() {
-    return nombre;
-  }
-
-  public String getCorreo() {
-    return correo;
-  }
-
-  public String getFoto() {
-    return foto;
-  }
-
-  public String getClave() {
-    return clave;
+		  return TipoUsuario.ORGANIZADOR; 
+		}
   }
 
   public Boolean validarClave(String clave) {
-    return Cryptography.validateHash(clave, this.clave);
-  }
+	    return Cryptography.validateHash(clave, this.clave);
+	  }
 
+  
+  
   // Métodos abstractos para conversión a DTOs
   public abstract DTUsuario toDataType();
 
