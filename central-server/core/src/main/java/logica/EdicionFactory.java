@@ -37,6 +37,7 @@ public final class EdicionFactory {
             dtEdicion.pais(),
             dtEdicion.foto(),
             org);
+    edicion.setEstado(dtEdicion.estado());
     evento.addEdicion(edicion); // mantiene bidireccional
     entityManager.persist(edicion);
     return true;

@@ -63,4 +63,23 @@ public final class EventoRepository {
 
     return (evento != null) ? evento.toDTEventoDetallado() : null;
   }
+  
+  public datatypes.DTEventoDetallado obtenerDatosDetalladosEventoAprobadas(
+      EntityManager entityManager, String nombreEvento) {
+    Evento evento =
+        entityManager.createQuery(
+                """
+        select e from Evento e
+        left join fetch e.categorias
+        left join fetch e.ediciones
+        where e.nombre = :n
+      """,
+                Evento.class)
+            .setParameter("n", nombreEvento)
+            .getResultStream()
+            .findFirst()
+            .orElse(null);
+
+    return (evento != null) ? evento.toDTEventoDetallado(true) : null;
+  }
 }

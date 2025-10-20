@@ -26,7 +26,7 @@
                     <div class="row g-3 card-body">
                     <% for (DTEvento ev : eventos){ %>
                         <div class="col-xl-3 col-lg-4 col-sm-6 col-12">
-                            <a href="evento?nombre=<%= ev.nombre() %>" class="text-decoration-none">
+                            <a href="<%=request.getContextPath() %>/evento/<%= ev.nombre() %>" class="text-decoration-none">
                                 <div class="card h-100 shadow-sm border-0 text-start evento-card position-relative overflow-hidden" style="transition: box-shadow 0.3s;">
                                     <img
                                         class="card-img-top"
