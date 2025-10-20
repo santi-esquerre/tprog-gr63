@@ -13,7 +13,7 @@ String foto = request.getParameter("foto"); // URL de la foto
 <div class="card bg-body h-100 shadow-sm border-0">
 <img
 class="card-img-top fotoEdicion"
-                            src="image/<%=foto %>"
+                            src="<%=request.getContextPath()%>/image/<%=foto %>"
                             alt="Banner edición"
                             style="aspect-ratio: 600 / 350;"
                             />

@@ -140,6 +140,18 @@ public final class EventoController implements IEventoController {
     if (resultado == null) throw new ValidationInputException("Evento no encontrado");
     return resultado;
   }
+  
+  @Override
+  public DTEventoDetallado obtenerDatosDetalladosEventoAprobadas(String nombreEvento) throws ValidationInputException {
+  System.out.println("Obteniendo datos detallados del evento: " + nombreEvento);
+    if (nombreEvento == null)
+      throw new ValidationInputException("nombreEvento requerido");
+    EventoRepository eventoRepo = EventoRepository.get();
+    DTEventoDetallado resultado =
+        Tx.inTx(entityManager -> eventoRepo.obtenerDatosDetalladosEventoAprobadas(entityManager, nombreEvento));
+    if (resultado == null) throw new ValidationInputException("Evento no encontrado");
+    return resultado;
+  }
 
   private Set<Categoria> mapCategorias(EntityManager entityManager, Set<String> nombres) {
     if (nombres == null || nombres.isEmpty()) return Set.of();

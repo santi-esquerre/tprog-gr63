@@ -18,7 +18,7 @@ import interfaces.IEventoController;
 /**
  * Servlet implementation class Evento
  */
-@WebServlet("/evento")
+@WebServlet("/evento/*")
 public class Evento extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -35,17 +35,19 @@ public class Evento extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String nombre = request.getParameter("nombre"); // obtiene "nombreDelEvento" de "/nombreDelEvento"
+		String nombre = request.getPathInfo().substring(1); // obtiene "nombreDelEvento" de "/nombreDelEvento"
 		IEventoController eventoController = Factory.get().getIEventoController();
-		try {
-			DTEventoDetallado evento = eventoController.obtenerDatosDetalladosEvento(nombre);
-			request.setAttribute("data_evento", evento);
+    try {
+      DTEventoDetallado evento = eventoController.obtenerDatosDetalladosEventoAprobadas(nombre);
+      request.setAttribute("data_evento", evento);
 
-			request.getRequestDispatcher("/WEB-INF/eventos/consultaDetalladaEvento.jsp").forward(request, response);
-		} catch(ValidationInputException e) {
-			// TODO Auto-generated catch block
-			response.sendRedirect("inicio");
-		}
+      request.getRequestDispatcher("/WEB-INF/eventos/consultaDetalladaEvento.jsp").forward(request, response);
+    } catch(ValidationInputException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      response.sendRedirect(request.getContextPath());
+    }
+		
 	}
 
 	/**
