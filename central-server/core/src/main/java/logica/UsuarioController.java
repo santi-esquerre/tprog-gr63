@@ -213,14 +213,14 @@ public class UsuarioController implements IUsuarioController {
 	
 	@Override
 	public DTUsuario obtenerUsuario(String usuario) throws Exception {
-		Usuario u = Tx.inTx(em -> {
+		Usuario usr = Tx.inTx(em -> {
 			return repoU.obtenerUsuario(em, usuario);
 			});
-		if (u == null) {
+		if (usr == null) {
 			throw new UsuarioInexistenteException("No existe un usuario con el nickname o correo: " + usuario);
 		}
 		
-		return u.toDataType();
+		return usr.toDataType();
 	}
 
 }

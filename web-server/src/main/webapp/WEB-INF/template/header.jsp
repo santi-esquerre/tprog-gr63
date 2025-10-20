@@ -121,7 +121,7 @@
     </style>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-blur">
       <div class="container">
-        <a class="navbar-brand fw-semibold" href="index.html">
+        <a class="navbar-brand fw-semibold" href="<%=request.getContextPath()%>/index.html">
           <i class="bi bi-stars me-2 text-warning"></i>Eventos<span
             class="text-primary"
             >.uy</span

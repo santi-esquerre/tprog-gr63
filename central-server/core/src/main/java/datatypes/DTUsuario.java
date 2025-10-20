@@ -7,7 +7,7 @@ public class DTUsuario implements Serializable {
   private String nickname;
   private String nombre;
   private String correo;
-  private String foto;
+  protected String foto;
 
   public DTUsuario(String nickname, String nombre, String correo, String foto) {
     this.nickname = nickname;
@@ -33,12 +33,16 @@ public class DTUsuario implements Serializable {
 		return nickname;
 	}
 	
+	public String foto() {
+    return foto;
+  }
+	
 	public TipoUsuario getTipo(){ 
 		  if (this.getClass().getSimpleName().equals("DTAsistente")) {
 			  return TipoUsuario.ASISTENTE;
 		  } else {
-			  return TipoUsuario.ORGANIZADOR; }
+			  return TipoUsuario.ORGANIZADOR; 
 		  }
 	
-	
+	}
 }

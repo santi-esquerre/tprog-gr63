@@ -41,7 +41,7 @@ class DatatypesTest extends BaseTest {
     DTTipoRegistro tipoRegistro = new DTTipoRegistro("Tipo", "Desc", 100.0f, 10);
 
     DTRegistro registro =
-        new DTRegistro(fecha, costo, nombreEvento, nombreEdicion, nicknameAsistente, tipoRegistro);
+        new DTRegistro(fecha, costo, nombreEvento, nombreEdicion, nicknameAsistente, "default.png", tipoRegistro, null);
 
     assertEquals(fecha, registro.fecha());
     assertEquals(costo, registro.costo());
@@ -88,7 +88,7 @@ class DatatypesTest extends BaseTest {
     assertEquals(patrocinio, detallado.patrocinio());
 
     // Test with patrocinio present
-    DTInstitucion institucion = new DTInstitucion("InstTest", "desc", "web");
+    DTInstitucion institucion = new DTInstitucion("InstTest", "desc", "web", "default.png");
     DTPatrocinio dtPatrocinio =
         new DTPatrocinio(new Date(), 1000.0f, "123", NivelPatrocinio.ORO, institucion);
     Optional<DTPatrocinio> optPatrocinio = Optional.of(dtPatrocinio);
@@ -168,8 +168,8 @@ class DatatypesTest extends BaseTest {
     assertEquals("nick", asistente.nickname());
     assertEquals("nombre", asistente.nombre());
     assertEquals("correo", asistente.correo());
-    assertEquals("apellido", asistente.getApellido());
-    assertEquals(fechaNacimiento, asistente.getFechaNacimientoDate());
+    assertEquals("apellido", asistente.apellido());
+    assertEquals(fechaNacimiento, asistente.fechaNacimiento());
     assertEquals(TipoUsuario.ASISTENTE, asistente.getTipoUsuario());
     assertEquals("nick", asistente.toString());
   }
@@ -237,7 +237,7 @@ class DatatypesTest extends BaseTest {
 
   @Test
   void testDTInstitucion() {
-    DTInstitucion institucion = new DTInstitucion("nombre", "desc", "web");
+    DTInstitucion institucion = new DTInstitucion("nombre", "desc", "web", "default.png");
 
     assertEquals("nombre", institucion.nombre());
     assertEquals("desc", institucion.descripcion());
@@ -246,7 +246,7 @@ class DatatypesTest extends BaseTest {
 
   @Test
   void testDTPatrocinio() {
-    DTInstitucion institucion = new DTInstitucion("inst", "desc", "web");
+    DTInstitucion institucion = new DTInstitucion("inst", "desc", "web", "default.png");
     Date fecha = new Date();
     DTPatrocinio patrocinio =
         new DTPatrocinio(fecha, 1000.0f, "123", NivelPatrocinio.ORO, institucion);

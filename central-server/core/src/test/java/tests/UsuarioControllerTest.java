@@ -197,7 +197,7 @@ class UsuarioControllerTest extends BaseTest {
     assertDoesNotThrow(
         () -> {
           institucionController.crearInstitucion(
-              "InstitucionTest1", "Descripción de prueba", "http://www.universidadtest.com");
+              "InstitucionTest1", "Descripción de prueba", "http://www.universidadtest.com", "default.png");
           usuarioController.crearAsistente(
               "asistenteTest2",
               "Ana",

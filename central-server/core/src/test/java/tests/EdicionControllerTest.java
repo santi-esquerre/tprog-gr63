@@ -232,7 +232,7 @@ class EdicionControllerTest extends BaseTest {
               java.time.LocalDate.of(1985, 5, 15));
 
           // Mostrar asistentes
-          Set<DTAsistente> asistentes = edicionController.mostrarAsistentes();
+          Set<DTAsistente> asistentes = edicionController.mostrarAsistentes("");
           assertNotNull(asistentes, "El set de asistentes no debería ser null");
           // No podemos garantizar el número exacto debido a otros tests
         });
@@ -281,7 +281,7 @@ class EdicionControllerTest extends BaseTest {
           edicionController.mostrarTiposDeRegistro("EdicionCupo1");
 
           // Verificar cupo disponible
-          boolean cupoDisponible = edicionController.cupoDisponible("TipoCupo1");
+          boolean cupoDisponible = edicionController.cupoDisponible("EdicionCupo1", "TipoCupo1");
           // El resultado depende del estado interno, pero no debería fallar
           assertNotNull(cupoDisponible, "El método debería retornar un booleano");
         });
@@ -337,7 +337,7 @@ class EdicionControllerTest extends BaseTest {
           edicionController.mostrarTiposDeRegistro("EdicionNoReg1");
 
           // Verificar que el asistente no está registrado
-          boolean noRegistrado = edicionController.asistenteNoRegistrado("asistenteNoReg1");
+          boolean noRegistrado = edicionController.asistenteNoRegistrado("EdicionNoReg1", "asistenteNoReg1");
           // El resultado depende del estado interno
           assertNotNull(noRegistrado, "El método debería retornar un booleano");
         });
@@ -395,7 +395,7 @@ class EdicionControllerTest extends BaseTest {
           edicionController.mostrarTiposDeRegistro("EdicionRegistro1");
 
           // Realizar registro
-          edicionController.altaRegistroEdicionEvento(
+          edicionController.altaRegistroEdicionEvento("EdicionRegistro1",
               "TipoRegistroReg1", "asistenteReg1", new Date());
         },
         "El alta de registro debería ejecutarse sin errores");
@@ -405,7 +405,7 @@ class EdicionControllerTest extends BaseTest {
     assertThrows(
         IllegalStateException.class,
         () -> {
-          edicionController.altaRegistroEdicionEvento(
+          edicionController.altaRegistroEdicionEvento("EdicionRegistro1",
               "TipoInexistente", "asistenteInexistente", new Date());
         },
         "Debería lanzar excepción sin edición recordada");

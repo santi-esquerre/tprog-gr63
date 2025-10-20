@@ -53,17 +53,10 @@ public class Institucion extends BaseEntity {
 		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
 	}
 
-  @Column(length = 120)
-  private String sitioWeb;
 	// DTO conversion
 	public DTInstitucion toDTInstitucion() {
 		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
 	}
-
-  public Institucion(String nombre, String descripcion) {
-    this.nombre = nombre;
-    this.descripcion = descripcion;
-  }
 
 
   public void addAsistente(Asistente asistente) {

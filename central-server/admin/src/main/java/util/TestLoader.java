@@ -39,7 +39,7 @@ public class TestLoader {
 	private static final String DEFAULT_USUARIO_FOTO_SOURCE = "default.png";
 	private static final String DEFAULT_EVENTO_FOTO_SOURCE = "default.png";
 	private static final String DEFAULT_EDICION_FOTO_SOURCE = "default.png";
-
+	private static final String DEFAULT_INSTITUCION_FOTO_SOURCE = "default.png";
 	private enum FileName {
 		CATEGORIAS("Categorias"),
 		EDICIONES("EdicionesEventos"),
@@ -104,7 +104,7 @@ public class TestLoader {
 			String nombre = institucion.get("Nombre");
 			String direccion = institucion.get("Descripcion");
 			String descripcion = institucion.get("SitioWeb");
-			institucionController.crearInstitucion(nombre, direccion, descripcion);
+			institucionController.crearInstitucion(nombre, direccion, descripcion, DEFAULT_INSTITUCION_FOTO_SOURCE);
 		}
 		// Carga de usuarios
 		List<Map<String, String>> users = data.get(FileName.USUARIOS.label);
@@ -306,19 +306,19 @@ public class TestLoader {
 
 			edicionController.mostrarTiposDeRegistro(edicionNombre);
 
-			if (!(edicionController.cupoDisponible(tipoRegistro))) {
+			if (!(edicionController.cupoDisponible(edicionNombre, tipoRegistro))) {
 				throw new ValidationInputException("TestLoader: No se puede registrar al asistente " + asistente
 						+ " en la edicion " + edicionNombre + " con el tipo de registro " + tipoRegistro
 						+ ". No quedan cupos disponibles");
 			}
 
-			if (!edicionController.asistenteNoRegistrado(asistente)) {
+			if (!edicionController.asistenteNoRegistrado(edicionNombre, asistente)) {
 				throw new ValidationInputException("TestLoader: No se puede registrar al asistente " + asistente
 						+ " en la edicion " + edicionNombre + " con el tipo de registro " + tipoRegistro
 						+ ". El asistente ya se encuentra registrado en la edicion");
 			}
 
-			edicionController.altaRegistroEdicionEvento(tipoRegistro, asistente, fechaRegistro);
+			edicionController.altaRegistroEdicionEvento(edicionNombre, tipoRegistro, asistente, fechaRegistro);
 
 		}
 	}
