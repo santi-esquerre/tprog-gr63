@@ -12,6 +12,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -51,7 +52,7 @@ public class Patrocinio extends BaseEntity {
 			foreignKey = @ForeignKey(name = "fk_patrocinio_edicion"))
 	private Edicion edicion; // Asociación con Edicion
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "otorga_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
 	private Otorga otorgan; // Asociación con Otorga
 	
@@ -72,10 +73,6 @@ public class Patrocinio extends BaseEntity {
     	return otorgan; 
     }
     
-
-
-  @OneToMany(mappedBy = "patrocinio")
-  private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();
 
   public Patrocinio(
       float monto,
@@ -117,9 +114,6 @@ public class Patrocinio extends BaseEntity {
     return edicion;
   }
 
-  public Set<RegistroOtorgado> getRegistrosOtorgados() {
-    return registrosOtorgados;
-  }
 
   public void setInstitucion(Institucion institucion) {
     this.institucion = institucion;

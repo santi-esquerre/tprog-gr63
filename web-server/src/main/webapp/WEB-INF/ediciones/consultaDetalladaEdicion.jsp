@@ -78,11 +78,14 @@
                 </div>
             </section>
         </div>
+        
 
        <div class="container p-5 mt-4">
                     <div class="row gx-5 justify-content-center align-items-center align-items-stretch" id="tipoRegistro">
                         <!-- Pricing card free-->
-                      <% for(DTTipoRegistro tipoRegistro : tiposRegistro) { %>
+                      <% for(DTTipoRegistro tipoRegistro : tiposRegistro) {
+                    	  request.setAttribute("tipoRegistro", tipoRegistro);
+                      %>
                         <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
                             <div class="card mb-5 mb-xl-0 h-100 borderh-100">
                                 <div class="card-body p-5 d-flex flex-column min-vh-50" style="min-height: 50vh;">
@@ -94,24 +97,74 @@
                                         <span class="display-4 fw-bold">$<%=(int) tipoRegistro.costo()%></span>
                                     </div>
                                     <p><%=tipoRegistro.descripcion()%></p>
-                                    <div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="<%= asistente ? "#" + tipoRegistro.nombre() + "registroModal" : "#errorregistroModal" %>" href="#!">Elegir</a></div>
+                                    
+                                    <% if(asistente && !((boolean) request.getAttribute("usuarioRegistrado"))) { 
+                                    	request.setAttribute("edicion", edicion); %>
+                                    	<div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.nombre() + "registroModal" %>" href="#!">Elegir</a></div>
+                                		<jsp:include page="/WEB-INF/registro/altaRegistroEdicion.jsp" />
+                                	<% } %>
+                                	
                                 </div>
                             </div>        
                         </div>
                         <!-- Modal para  registro -->
-                        <% request.setAttribute("tipoRegistro", tipoRegistro); %>
                         <jsp:include page="/WEB-INF/registro/consultaTipoRegistro.jsp" />
-                        <%
-                        if (asistente) {
-    						request.setAttribute("edicion", edicion); 
-						%>
-                        <jsp:include page="/WEB-INF/registro/altaRegistroEdicion.jsp" />
-                        
-                        <% } %>
                         
                      <% } %>
                     </div>
         </div>
+        
+        <% String mensajeError = (String) request.getAttribute("errorRegistro"); 
+        if (mensajeError != null) { %>
+        <div class="container p-5 mt-4">
+        	<div class="border border-danger mb-3" style="background-color: rgba(220, 53, 69, 0.3)"><p class="text-center fw-bold" style="color: black;"><%=mensajeError %></p> </div>
+        </div>
+        <% } %>
+        
+        <% if(asistente && ((boolean) request.getAttribute("usuarioRegistrado"))) {     	
+        	DTRegistro registroUsuario = (DTRegistro) request.getAttribute("datosRegistroUsuario");
+        	%>
+        <div class="container p-5 mt-4">
+        
+        	<div class="border border-success p-2 mb-3 d-flex justify-content-center" style="background-color: rgba(40, 167, 69, 0.3)">
+        		<div> 	
+        		<p class="fw-bold mb-0 p-0">¡Ya estás registrado a esta edición!<p>
+        		<div class="d-flex gap-2 fw-normal">
+                    <p class="fw-bold mb-0 p-0">Nickname del usuario registrado: </p>
+                    <p class="mb-0 p-0"><%=registroUsuario.nicknameAsistente() %></p>
+                </div>
+                <div class="d-flex gap-2 fw-normal">
+                    <p class="fw-bold mb-0 p-0">Nombre del evento: </p>
+                    <p class="mb-0 p-0"><%=registroUsuario.nombreEvento() %></p>
+                </div>
+                <div class="d-flex gap-2 fw-normal">
+                    <p class="fw-bold mb-0 p-0">Nombre de la edición: </p>
+                    <p class="mb-0 p-0"><%=registroUsuario.nombreEdicion() %></p>
+                </div>
+                <div class="d-flex gap-2 fw-normal">
+                    <p class="fw-bold mb-0 p-0">Fecha del registro: </p>
+                    <p class="mb-0 p-0"><%=formatter.format(registroUsuario.fecha()) %></p>
+                </div>
+                <div class="d-flex gap-2 fw-normal">
+                    <p class="fw-bold mb-0 p-0">Nombre del tipo de registro: </p>
+                    <p class="mb-0 p-0"><%=registroUsuario.tipoRegistro().nombre() %></p>
+                </div>
+                <div class="d-flex gap-2 fw-normal">
+                    <p class="fw-bold mb-0 p-0">Costo: </p>
+                    <p class="mb-0 p-0">$<%=(int) registroUsuario.costo() %></p>
+                </div>
+                 <div class="d-flex gap-2 fw-normal">
+                    <p class="fw-bold mb-0 p-0">Uso código de patrocinio?: </p>
+                    <p class="mb-0 p-0"><%=registroUsuario.usoCodigo() ? "Sí" : "No" %></p>
+                </div>               
+        		
+        		</div>
+        		
+        	</div>
+        
+        
+        </div>	
+        <% } %>
      
     </main>
     <footer class="bg-dark py-4 mt-auto">
@@ -120,10 +173,10 @@
                 <h5 class="mb-0">PATROCINADORES DE LA EDICIÓN</h5>
                 <div class ="d-flex flex-wrap justify-content-center align-items-end mt-4">
                 <% for(var patrocinio : patrocinios) { %>
-                    <div class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100"  data-bs-toggle="modal" data-bs-target="#<%=patrocinio.institucion().nombre()%>patrocinadorModal">
+                    <a href="#!"class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100 text-decoration-none text-white"  data-bs-toggle="modal" data-bs-target="#<%=patrocinio.institucion().nombre()%>patrocinadorModal">
                         <p><%=patrocinio.institucion().nombre()%></p>
                         <img class="img-fluid rounded-pill" src="<%=request.getContextPath() %>/image/<%=patrocinio.institucion().foto().equals("default.png") ? "patrocinadorDefault.png" : patrocinio.institucion().foto() %>" style="width: 100px; height: 100px;" alt="Logo <%=patrocinio.institucion().nombre()%>">
-                    </div>
+                    </a>
                  <% request.setAttribute("patrocinador", patrocinio); %>
                 <jsp:include page="/WEB-INF/ediciones/consultaPatrocinadores.jsp" />
                 <% } %>
