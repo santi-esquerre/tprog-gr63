@@ -57,54 +57,6 @@ public class Edicion extends HttpServlet {
 		
 		SessionManager.initSesion(request);
 		EstadoSesion estado_sesion = (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-		/*if(estado_sesion == EstadoSesion.LOGIN_CORRECTO) {
-			String usuario = (String) request.getSession().getAttribute("usuario_logueado");
-			var usuarioController = factory.getIUsuarioController();
-			try {
-				final DTUsuario dtUsuario = usuarioController.obtenerUsuario(usuario);
-				if (dtUsuario == null) {
-					request.setAttribute("errorRegistro", mensajeUsuarioNoLogueado);
-				}
-				request.setAttribute("usuario", dtUsuario);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			request.setAttribute("errorRegistro", mensajeUsuarioNoLogueado);
-		} 
-		
-		IEdicionController edicionController = factory.getIEdicionController();
-		
-		try {
-			DTEdicionDetallada dtEdicionDetallada = edicionController.obtenerDatosDetalladosEdicion(nombreEdicion);
-			
-			
-			
-			
-			if ((dtEdicionDetallada != null) && (dtUsuario != null) && (dtUsuario.getTipo() == TipoUsuario.ASISTENTE)) {
-				usuarioRegistrado = !factory.getIEdicionController()
-						.asistenteNoRegistrado(nombreEdicion, dtUsuario.nickname());
-				request.setAttribute("usuarioRegistrado", usuarioRegistrado);
-			} else if ((dtEdicionDetallada != null) && (dtUsuario != null) && (dtUsuario.getTipo() == TipoUsuario.ORGANIZADOR)) {
-				request.setAttribute("errorRegistro", "Solo los asistentes pueden registrarse en una edición.");
-			}
-			
-			if (usuarioRegistrado && (dtEdicionDetallada != null)) {
-				DTRegistro registroUsuario = dtEdicionDetallada.registros().stream()
-						.filter(r -> r.nicknameAsistente().equals(dtUsuario.nickname()))
-						.findFirst()
-						.orElse(null);
-			}
-			
-			request.setAttribute("edicionDetallada", dtEdicionDetallada);
-			request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);
-			
-		} catch (ValidationInputException e) {
-			response.sendRedirect(request.getContextPath() + "/inicio");
-			return;
-		}*/
-		
 		
 		try {
 			IEdicionController edicionController = factory.getIEdicionController();
