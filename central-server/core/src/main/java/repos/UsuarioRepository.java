@@ -201,8 +201,8 @@ public final class UsuarioRepository {
     return usuarioNuevo.validarClave(clave);
   }
   
-  public Usuario obtenerUsuario(EntityManager em, String usuario) {
-	  return em.createQuery(
+  public Usuario obtenerUsuario(EntityManager entityManager, String usuario) {
+	  return entityManager.createQuery(
 		        "select u from Usuario u where u.nickname = :n or u.correo = :n", Usuario.class)
 		        .setParameter("n", usuario)
 		        .getResultStream().findFirst().orElse(null);

@@ -81,7 +81,7 @@ class DominioTest extends BaseTest {
           // Now register the user
           edicionController.mostrarTiposDeRegistro("edicion" + uniqueId);
           edicionController.altaRegistroEdicionEvento(
-              "tipo" + uniqueId, "asist" + uniqueId, new Date());
+              "evento" + uniqueId, "tipo" + uniqueId, "asist" + uniqueId , new Date());
 
           // Verify registration was successful
           var registros = usuarioController.obtenerRegistrosUsuario("asist" + uniqueId);
@@ -97,7 +97,7 @@ class DominioTest extends BaseTest {
     assertDoesNotThrow(
         () -> {
           // Create institucion
-          institucionController.crearInstitucion("inst" + uniqueId, "desc", "web.com");
+          institucionController.crearInstitucion("inst" + uniqueId, "desc", "web.com", "default.png");
 
           // Create complete event structure
           eventoController.altaDeCategoria("cat" + uniqueId);
@@ -176,7 +176,7 @@ class DominioTest extends BaseTest {
           assertNotNull(asistente);
           assertEquals(nickname, asistente.nickname());
           assertEquals("Nombre", asistente.nombre());
-          assertEquals("Apellido", asistente.getApellido());
+          assertEquals("Apellido", asistente.apellido());
           assertEquals(correo, asistente.correo());
           assertEquals(TipoUsuario.ASISTENTE, asistente.getTipoUsuario());
         });
@@ -306,7 +306,7 @@ class DominioTest extends BaseTest {
     assertDoesNotThrow(
         () -> {
           institucionController.crearInstitucion(
-              nombreInstitucion, "Descripcion inst", "http://inst.com");
+              nombreInstitucion, "Descripcion inst", "http://inst.com", "default.png");
 
           Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
           assertNotNull(instituciones);

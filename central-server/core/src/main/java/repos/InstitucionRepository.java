@@ -37,10 +37,10 @@ public final class InstitucionRepository {
         .orElse(null);
   }
 
-  public boolean crearInstitucion(EntityManager em, String nombre, String descripcion, String sitioWeb, String foto) {
-      if (!noExisteInstitucion(em, nombre)) return false;
+  public boolean crearInstitucion(EntityManager entityManager, String nombre, String descripcion, String sitioWeb, String foto) {
+      if (!noExisteInstitucion(entityManager, nombre)) return false;
       Institucion institucion = new Institucion(nombre, descripcion, sitioWeb, foto);
-      em.persist(institucion);
+      entityManager.persist(institucion);
       return true;
   }
   
