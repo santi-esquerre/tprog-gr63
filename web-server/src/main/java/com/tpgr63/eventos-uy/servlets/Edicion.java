@@ -50,6 +50,8 @@ public class Edicion extends HttpServlet {
 		
 		Factory factory = Factory.get();
 		
+		boolean usuarioRegistrado = false;
+		
 		SessionManager.initSesion(request);
 		EstadoSesion estado_sesion = (EstadoSesion) request.getSession().getAttribute("estado_sesion");
 		if(estado_sesion == EstadoSesion.LOGIN_CORRECTO) {
@@ -59,6 +61,10 @@ public class Edicion extends HttpServlet {
 			DTUsuario dtUsuario;
 			try {
 				dtUsuario = usuarioController.obtenerUsuario(usuario);
+				if (dtUsuario != null) {
+					usuarioRegistrado = !factory.getIEdicionController()
+							.asistenteNoRegistrado(nombreEdicion, dtUsuario.nickname());
+				}
 				request.setAttribute("usuario", dtUsuario);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -74,9 +80,10 @@ public class Edicion extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);
 			
 		} catch (ValidationInputException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+			response.sendRedirect(request.getContextPath() + "/inicio");
+			return;
+		}
+		
 	}
 
 	/**

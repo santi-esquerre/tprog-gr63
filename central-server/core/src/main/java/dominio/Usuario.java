@@ -52,26 +52,7 @@ public abstract class Usuario extends BaseEntity {
 		}
   }
 
-  public String getNombre() {
-    return nombre;
-  }
-
-  public String getCorreo() {
-    return correo;
-  }
-
-  public String getFoto() {
-    return foto;
-  }
-
-  public String getClave() {
-    return clave;
-  }
-
-  public Boolean validarClave(String clave) {
-    return Cryptography.validateHash(clave, this.clave);
-  }
-
+  
   // Métodos abstractos para conversión a DTOs
   public abstract DTUsuario toDataType();
 

@@ -44,14 +44,10 @@ public class Institucion extends BaseEntity {
 		this.foto = foto;
 	}
 	
-	public Institucion(String nombre, String descripcion) {
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-	}
-	
 	public DTInstitucion obtenerDTInstitucion() {
 		return new DTInstitucion(nombre, descripcion, sitioWeb, foto);
 	}
+
 
 	// DTO conversion
 	public DTInstitucion toDTInstitucion() {

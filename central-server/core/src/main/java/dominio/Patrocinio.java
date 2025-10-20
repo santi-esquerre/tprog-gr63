@@ -55,20 +55,8 @@ public class Patrocinio extends BaseEntity {
 	@JoinColumn(name = "otorga_id", foreignKey = @ForeignKey(name = "fk_otorga_patrocinio"))
 	private Otorga otorgan; // Asociación con Otorga
 	
-	/*@OneToMany(mappedBy = "patrocinio")
-    private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();*/
-	
-	public Patrocinio(float monto, String codigo, NivelPatrocinio nivel, LocalDate fechaRealizacion, Institucion institucion, Edicion edicion) {
-		this.monto = monto;
-		this.codigo = codigo;
-		this.nivel = nivel;
-		this.institucion = institucion;
-		this.edicion = edicion;
-		this.fechaRealizacion = fechaRealizacion;
-	}
-	
-	public void addOtorga(Otorga object) {
-		this.otorgan = object;
+	public void addOtorga(Otorga otorga) {
+		this.otorgan = otorga;
 	}
 
 	public DTPatrocinio toDTPatrocinio(DTInstitucion dtInstitucion) {
@@ -78,16 +66,32 @@ public class Patrocinio extends BaseEntity {
         return dtPatrocinio; 
 	}
 	
-    /*public Set<RegistroOtorgado> getRegistrosOtorgados() { return registrosOtorgados; }*/
-    public Otorga getOtorgan() { return otorgan; }
+	
 
-   /* public void agregarRegistroOtorgado(RegistroOtorgado registro) {
-        this.registrosOtorgados.add(registro);
-        registro.setPatrocinio(this);
-    }*/
+    public Otorga getOtorgan() { 
+    	return otorgan; 
+    }
+    
+
 
   @OneToMany(mappedBy = "patrocinio")
   private Set<RegistroOtorgado> registrosOtorgados = new LinkedHashSet<>();
+
+  public Patrocinio(
+      float monto,
+      String codigo,
+      NivelPatrocinio nivel,
+      LocalDate fechaRealizacion,
+      Institucion institucion,
+      Edicion edicion) {
+    this.monto = monto;
+    this.codigo = codigo;
+    this.nivel = nivel;
+    this.institucion = institucion;
+    this.edicion = edicion;
+    this.fechaRealizacion = fechaRealizacion;
+  }
+
 
   public Institucion getInstitucion() {
     return institucion;
@@ -125,10 +129,6 @@ public class Patrocinio extends BaseEntity {
     this.edicion = edicion;
   }
 
-  public void agregarRegistroOtorgado(RegistroOtorgado registro) {
-    this.registrosOtorgados.add(registro);
-    registro.setPatrocinio(this);
-  }
 
   public void agregarRegistro(Registro registro) {
     this.registro.add(registro);

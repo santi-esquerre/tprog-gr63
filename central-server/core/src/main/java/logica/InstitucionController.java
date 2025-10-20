@@ -38,9 +38,10 @@ public class InstitucionController implements interfaces.IInstitucionController 
 		}
 	}
 	
-	public Set<DTInstitucion> listarInstituciones() {
-		return Tx.inTx(em -> institucionRepo.listarInstituciones(em));
-	}
+
+  public Set<DTInstitucion> listarInstituciones() {
+    return Tx.inTx(entityManager -> institucionRepo.listarInstituciones(entityManager));
+  }
 
   @Override
   public DTPatrocinio obtenerDTPatrocinio(String nombreEdicionEvento, String nombreInstitucion) {
