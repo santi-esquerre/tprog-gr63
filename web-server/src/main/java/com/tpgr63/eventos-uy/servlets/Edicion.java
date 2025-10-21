@@ -62,6 +62,11 @@ public class Edicion extends HttpServlet {
 			IEdicionController edicionController = factory.getIEdicionController();
 			DTEdicionDetallada dtEdicionDetallada = edicionController.obtenerDatosDetalladosEdicion(nombreEdicion);
 			
+			if ((dtEdicionDetallada != null) && dtEdicionDetallada.edicion().estado() != datatypes.EstadoEdicion.ACEPTADA) {
+				response.sendRedirect(request.getContextPath() + "/inicio");
+				return;				
+			}
+			
 			if (estado_sesion == EstadoSesion.LOGIN_CORRECTO) {
 				String usuario = (String) request.getSession().getAttribute("usuario_logueado");
 				var usuarioController = factory.getIUsuarioController();
