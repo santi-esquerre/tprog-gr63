@@ -36,9 +36,6 @@
                                     />
                                     <div class="card-body">
                                         <span class="text-muted text-deco:ration-none"><%=ev.nombre() %></span>
-                                        <p class="mb-0 small text-muted">
-                                            Categorías: Tecnología, Innovación
-                                        </p>
                                     </div>
                                     <div class="evento-descripcion position-absolute top-0 start-0 w-100 h-100 bg-white p-3 d-flex align-items-center justify-content-center text-center" style="opacity:0; pointer-events:none; transition: opacity 0.3s;">
                                         <span class="text-muted"><%= ev.descripcion() %></span>
