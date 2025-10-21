@@ -21,7 +21,7 @@ evento.ediciones();
      <!-- NAV -->
      <jsp:include page="/WEB-INF/template/header.jsp" />
  
-    <section class="position-relative" style="min-height: 500px; background-image: url('image/<%=evento.evento().foto() %>'); background-size: cover; background-position: center;">
+    <section class="position-relative" style="min-height: 500px; background-image: url('<%=request.getContextPath()%>/image/<%=evento.evento().foto() %>'); background-size: cover; background-position: center;">
         <div class="position-absolute bottom-0 start-0 w-100" style="height: 40%;background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
             
             <div class="container h-100 d-flex flex-column justify-content-end pb-4">
@@ -43,7 +43,9 @@ evento.ediciones();
             <div class="card shadow-sm">
                 <div class="card-body row g-3 p-5 edicionesContainer">
                     <h3 class="mb-4">Ediciones</h3>
-		            <%for (DTEdicion edicion : evento.ediciones()) { String estado = edicion.estado() == EstadoEdicion.ACEPTADA ? "Aceptada" : (edicion.estado() == EstadoEdicion.RECHAZADA ? "Rechazada" : "Ingresada"); %>
+		            <%if(evento.ediciones().size() == 0){%>
+		              <p>Parece que no hay ediciones para este evento.</p>
+		            <%}else for (DTEdicion edicion : evento.ediciones()) { String estado = edicion.estado() == EstadoEdicion.ACEPTADA ? "Aceptada" : (edicion.estado() == EstadoEdicion.RECHAZADA ? "Rechazada" : "Ingresada"); %>
                     <jsp:include page="/WEB-INF/ediciones/edicionCard.jsp">
                     	<jsp:param name="nombre" value="<%=edicion.nombre() %>"/>
                         <jsp:param name="sigla" value="<%=edicion.sigla() %>"/>

@@ -113,6 +113,10 @@ public class Evento extends BaseEntity {
   }
 
   public datatypes.DTEventoDetallado toDTEventoDetallado() {
+    return toDTEventoDetallado(false);
+  }
+  
+  public datatypes.DTEventoDetallado toDTEventoDetallado(boolean soloAprobadas) {
     // Convert categories to names
     Set<String> categoriasNombres = new LinkedHashSet<>();
     for (Categoria cat : categorias) {
@@ -122,9 +126,13 @@ public class Evento extends BaseEntity {
     // Convert editions to DTEdicion
     Set<datatypes.DTEdicion> dtEdiciones = new LinkedHashSet<>();
     for (Edicion ed : ediciones) {
-      dtEdiciones.add(ed.toDTEdicion());
+      if (!soloAprobadas || ed.getEstado() == EstadoEdicion.ACEPTADA) dtEdiciones.add(ed.toDTEdicion());
     }
 
     return new datatypes.DTEventoDetallado(this.toDTEvento(), categoriasNombres, dtEdiciones);
+  }
+
+  public void setEdiciones(Set<Edicion> ediciones) {
+    this.ediciones = ediciones;
   }
 }

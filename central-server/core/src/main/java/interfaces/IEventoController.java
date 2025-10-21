@@ -30,4 +30,7 @@ public interface IEventoController {
   // New detailed data retrieval operation
   DTEventoDetallado obtenerDatosDetalladosEvento(String nombreEvento)
       throws ValidationInputException;
+
+  DTEventoDetallado obtenerDatosDetalladosEventoAprobadas(String nombreEvento)
+      throws ValidationInputException;
 }

@@ -16,8 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import datatypes.DTEventoAlta;
-import datatypes.DTRegistrosOtorgados;
-import datatypes.DTTipoRegistro;
+import datatypes.EstadoEdicion;
 import datatypes.NivelPatrocinio;
 import exceptions.CantidadCuposDisponiblesException;
 import exceptions.CostoRegistrosGratuitosException;
@@ -214,6 +213,10 @@ public class TestLoader {
 			String sigla = edicion.get("Sigla");
 			String ciudad = edicion.get("Ciudad");
 			String pais = edicion.get("Pais");
+			System.out.println("Cargando edicion: " + edicion.get("Estado"));
+	    EstadoEdicion estado = edicion.get("Estado").equals("Aceptada") ? EstadoEdicion.ACEPTADA :
+      		edicion.get("Estado").equals("Rechazada") ? EstadoEdicion.RECHAZADA :
+      		  EstadoEdicion.INGRESADA;
 
 			String organizador = users.stream()
 					.filter(u -> u.get("Ref").equals(edicion.get("Organizador")))
@@ -230,7 +233,7 @@ public class TestLoader {
 
 			eventoController.agregarEdicionAEvento(evento, organizador,
 					new datatypes.DTEdicion(nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad, pais, 
-							edicion.get("Imagen").equals("-") ? DEFAULT_EDICION_FOTO_SOURCE : edicion.get("Imagen"), null));
+							edicion.get("Imagen").equals("-") ? DEFAULT_EDICION_FOTO_SOURCE : edicion.get("Imagen"), estado));
 		}
 
 		// Carga de tipos de registro
