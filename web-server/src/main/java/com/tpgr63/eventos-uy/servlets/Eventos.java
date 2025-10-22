@@ -37,7 +37,6 @@ public class Eventos extends HttpServlet {
 		// Obtener controlador y lista completa de usuarios
 		IEventoController eventoController = Factory.get().getIEventoController();
 		Set<DTEvento> listadoEventos = eventoController.listarEventos();
-		//TO DO: manejo de imágenes
 
 		// Evitar que sea null
 		if (listadoEventos == null) listadoEventos = Set.of();

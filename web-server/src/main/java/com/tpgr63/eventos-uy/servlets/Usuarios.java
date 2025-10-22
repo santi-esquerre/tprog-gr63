@@ -37,7 +37,6 @@ public class Usuarios extends HttpServlet {
 		// Obtener controlador y lista completa de usuarios
 		IUsuarioController usuarioController = Factory.get().getIUsuarioController();
 		List<DTUsuarioItemListado> listadoUsuarios = usuarioController.obtenerUsuarios();
-		//TO DO: manejo de imágenes
 
 		// Evitar que sea null
 		if (listadoUsuarios == null) listadoUsuarios = List.of();

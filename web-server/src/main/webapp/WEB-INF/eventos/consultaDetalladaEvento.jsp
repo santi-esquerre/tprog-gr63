@@ -36,6 +36,15 @@ evento.ediciones();
             <section class>
                 <h3>Descripción </h3>
                 <p class="fs-5 fs-md-5" id="descripcionEvento"><%=evento.evento().descripcion() %></p>
+                <p class="text-muted fst-italic mb-0">
+                      Evento activo desde <%=new SimpleDateFormat("dd/MM/yyyy").format(evento.evento().fechaAlta()) %>
+                </p>
+                <br>
+                <div class="d-flex flex-row flex-md-row gap-2">
+                    <% for(String cat : evento.categorias()) { %>
+                    	<a class="badge fs-6 fs-md-5 btn btn-primary" id="categoriaEvento" href="<%=request.getContextPath() + "/eventos?categoria=" + cat %>"><%=cat %></a>
+                    <% } %>
+                </div>
             </section> 
         </div>
 
