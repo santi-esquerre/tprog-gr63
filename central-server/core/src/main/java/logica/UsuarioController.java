@@ -1,5 +1,9 @@
 package logica;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+
 import datatypes.DTAsistente;
 import datatypes.DTOrganizador;
 import datatypes.DTRegistro;
@@ -17,9 +21,6 @@ import exceptions.UsuarioInexistenteException;
 import exceptions.UsuarioNicknameRepetidoException;
 import infra.Tx;
 import interfaces.IUsuarioController;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 import repos.InstitucionRepository;
 import repos.UsuarioRepository;
 
@@ -27,7 +28,8 @@ public class UsuarioController implements IUsuarioController {
 
   private static UsuarioController INSTANCE = new UsuarioController();
 
-  private UsuarioController() {}
+  private UsuarioController() {
+  }
 
   private final UsuarioRepository repoU = UsuarioRepository.get();
   private final UsuarioFactory faU = UsuarioFactory.get();
@@ -58,8 +60,8 @@ public class UsuarioController implements IUsuarioController {
       LocalDate fechaNacimiento,
       String nombreInstitucion)
       throws UsuarioNicknameRepetidoException,
-          UsuarioCorreoRepetidoException,
-          InstitucionNoExistenteException {
+      UsuarioCorreoRepetidoException,
+      InstitucionNoExistenteException {
     if (!verificarNoExistenciaNickname(nickname)) {
 
       throw new UsuarioNicknameRepetidoException(nickname);
@@ -182,11 +184,10 @@ public class UsuarioController implements IUsuarioController {
   @Override
   public DTAsistente seleccionarAsistente(String nickname) throws Exception {
 
-    Asistente asistente =
-        Tx.inTx(
-            entityManager -> {
-              return repoU.obtenerAsistente(entityManager, nickname);
-            });
+    Asistente asistente = Tx.inTx(
+        entityManager -> {
+          return repoU.obtenerAsistente(entityManager, nickname);
+        });
 
     if (asistente == null) {
       throw new UsuarioInexistenteException("No existe un asistente con el nickname: " + nickname);
@@ -197,30 +198,144 @@ public class UsuarioController implements IUsuarioController {
 
   @Override
   public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
-    Organizador organizador =
-        Tx.inTx(
-            entityManager -> {
-              return repoU.obtenerOrganizador(entityManager, nickname);
-            });
+    Organizador organizador = Tx.inTx(
+        entityManager -> {
+          return repoU.obtenerOrganizador(entityManager, nickname);
+        });
 
     if (organizador == null) {
       throw new UsuarioInexistenteException(
           "No existe un organizador con el nickname: " + nickname);
     }
 
-		return organizador.toDataType();
-	}
-	
-	@Override
-	public DTUsuario obtenerUsuario(String usuario) throws Exception {
-		Usuario usr = Tx.inTx(em -> {
-			return repoU.obtenerUsuario(em, usuario);
-			});
-		if (usr == null) {
-			throw new UsuarioInexistenteException("No existe un usuario con el nickname o correo: " + usuario);
-		}
-		
-		return usr.toDataType();
-	}
+    return organizador.toDataType();
+  }
+
+  @Override
+  public DTUsuario obtenerUsuario(String usuario) throws Exception {
+    Usuario usr = Tx.inTx(em -> {
+      return repoU.obtenerUsuario(em, usuario);
+    });
+    if (usr == null) {
+      throw new UsuarioInexistenteException("No existe un usuario con el nickname o correo: " + usuario);
+    }
+
+    return usr.toDataType();
+  }
+
+  @Override
+  public void actualizarAsistente(
+      String nickname,
+      String nombre,
+      String apellido,
+      String correo,
+      LocalDate fechaNacimiento,
+      String foto,
+      String clave) throws UsuarioInexistenteException, UsuarioCorreoRepetidoException, Exception {
+
+    try {
+      Tx.inTx(entityManager -> {
+        // 1. Buscar el asistente
+        Asistente asistente = repoU.obtenerAsistente(entityManager, nickname);
+        if (asistente == null) {
+          throw new RuntimeException(
+              new UsuarioInexistenteException("No existe el asistente con nickname: " + nickname));
+        }
+
+        // 2. Validar correo único (si cambió)
+        if (!asistente.getCorreo().equals(correo)) {
+          if (!repoU.noExisteCorreo(entityManager, correo)) {
+            throw new RuntimeException(new UsuarioCorreoRepetidoException("El correo ya está en uso"));
+          }
+        }
+
+        // 3. Actualizar datos
+        asistente.setNombre(nombre);
+        asistente.setApellido(apellido);
+        asistente.setCorreo(correo);
+        asistente.setFechaNacimiento(fechaNacimiento);
+
+        if (foto != null && !foto.isEmpty()) {
+          asistente.setFoto(foto);
+        }
+
+        if (clave != null && !clave.isEmpty()) {
+          asistente.setClave(clave);
+        }
+
+        // 4. Persistir cambios (merge automático en transacción)
+        entityManager.merge(asistente);
+
+        return null;
+      });
+    } catch (RuntimeException e) {
+      if (e.getCause() instanceof UsuarioInexistenteException) {
+        throw (UsuarioInexistenteException) e.getCause();
+      }
+      if (e.getCause() instanceof UsuarioCorreoRepetidoException) {
+        throw (UsuarioCorreoRepetidoException) e.getCause();
+      }
+      throw e;
+    }
+  }
+
+  @Override
+  public void actualizarOrganizador(
+      String nickname,
+      String nombre,
+      String correo,
+      String descripcion,
+      String linkSitioWeb,
+      String foto,
+      String clave) throws UsuarioInexistenteException, UsuarioCorreoRepetidoException, Exception {
+
+    try {
+      Tx.inTx(entityManager -> {
+        // 1. Buscar el organizador
+        Organizador organizador = repoU.obtenerOrganizador(entityManager, nickname);
+        if (organizador == null) {
+          throw new RuntimeException(
+              new UsuarioInexistenteException("No existe el organizador con nickname: " + nickname));
+        }
+
+        // 2. Validar correo único (si cambió)
+        if (!organizador.getCorreo().equals(correo)) {
+          if (!repoU.noExisteCorreo(entityManager, correo)) {
+            throw new RuntimeException(new UsuarioCorreoRepetidoException("El correo ya está en uso"));
+          }
+        }
+
+        // 3. Actualizar datos
+        organizador.setNombre(nombre);
+        organizador.setCorreo(correo);
+        organizador.setDescripcion(descripcion);
+
+        if (linkSitioWeb != null && !linkSitioWeb.isEmpty()) {
+          organizador.setLinkSitioWeb(linkSitioWeb);
+        }
+
+        if (foto != null && !foto.isEmpty()) {
+          organizador.setFoto(foto);
+        }
+
+        if (clave != null && !clave.isEmpty()) {
+          organizador.setClave(clave);
+        }
+
+        // 4. Persistir cambios
+        entityManager.merge(organizador);
+
+        return null;
+      });
+    } catch (RuntimeException e) {
+      if (e.getCause() instanceof UsuarioInexistenteException) {
+        throw (UsuarioInexistenteException) e.getCause();
+      }
+      if (e.getCause() instanceof UsuarioCorreoRepetidoException) {
+        throw (UsuarioCorreoRepetidoException) e.getCause();
+      }
+      throw e;
+    }
+  }
 
 }

@@ -33,7 +33,8 @@ public abstract class Usuario extends BaseEntity {
   @Column(nullable = false, length = 120)
   private String correo;
 
-  protected Usuario() {}
+  protected Usuario() {
+  }
 
   protected Usuario(String nickname, String nombre, String correo, String clave, String foto) {
     this.nickname = nickname;
@@ -43,32 +44,53 @@ public abstract class Usuario extends BaseEntity {
     this.foto = foto;
   }
 
-  public String getNickname(){ return nickname; }
-  
-  public String getNombre(){ return nombre; }
-  
-  public String getCorreo(){ return correo; }
-  
-  public String getFoto(){ return foto; }
-  
-  public TipoUsuario getTipo(){ 
-	  if (this.getClass().getSimpleName().equals("Asistente")) {
-		  return TipoUsuario.ASISTENTE;
-	  } else {
-		  return TipoUsuario.ORGANIZADOR; 
-		}
+  public String getNickname() {
+    return nickname;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public String getCorreo() {
+    return correo;
+  }
+
+  public void setCorreo(String correo) {
+    this.correo = correo;
+  }
+
+  public String getFoto() {
+    return foto;
+  }
+
+  public void setFoto(String foto) {
+    this.foto = foto;
+  }
+
+  public void setClave(String clave) {
+    this.clave = Cryptography.getHash(clave);
+  }
+
+  public TipoUsuario getTipo() {
+    if (this.getClass().getSimpleName().equals("Asistente")) {
+      return TipoUsuario.ASISTENTE;
+    } else {
+      return TipoUsuario.ORGANIZADOR;
+    }
   }
 
   public Boolean validarClave(String clave) {
-	    return Cryptography.validateHash(clave, this.clave);
-	  }
+    return Cryptography.validateHash(clave, this.clave);
+  }
 
-  
-  
   // Métodos abstractos para conversión a DTOs
   public abstract DTUsuario toDataType();
 
   public abstract DTUsuarioItemListado toDTUsuarioItemListado();
-  
 
 }

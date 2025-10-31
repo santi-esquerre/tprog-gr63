@@ -1,5 +1,8 @@
 package dominio;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import datatypes.DTOrganizador;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
@@ -7,8 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @DiscriminatorValue("ORGANIZADOR")
@@ -23,7 +24,8 @@ public class Organizador extends Usuario {
   @OneToMany(mappedBy = "organizador")
   private Set<Edicion> ediciones = new LinkedHashSet<>();
 
-  protected Organizador() {}
+  protected Organizador() {
+  }
 
   public Organizador(
       String nickname,
@@ -48,8 +50,16 @@ public class Organizador extends Usuario {
     return descripcion;
   }
 
+  public void setDescripcion(String descripcion) {
+    this.descripcion = descripcion;
+  }
+
   public String getSitioWeb() {
     return sitioWeb;
+  }
+
+  public void setLinkSitioWeb(String sitioWeb) {
+    this.sitioWeb = sitioWeb;
   }
 
   @Override
