@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="jakarta.tags.core"%>
 <%
   datatypes.DTOrganizador organizador = (datatypes.DTOrganizador) request.getAttribute("organizador");
 %>
@@ -29,6 +29,24 @@
   <!-- Perfil Organizador -->
   <section class="py-5" style="margin-top:80px">
     <div class="container px-2">
+      
+      <!-- Mensajes de éxito o error -->
+      <c:if test="${not empty sessionScope.success_message}">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>${sessionScope.success_message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <c:remove var="success_message" scope="session"/>
+      </c:if>
+      
+      <c:if test="${not empty sessionScope.error_message}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>${sessionScope.error_message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <c:remove var="error_message" scope="session"/>
+      </c:if>
+
       <div class="row g-4">
 
         <!-- Col izquierda: tarjeta de perfil -->
@@ -87,6 +105,9 @@
               </button>
               <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#addEditionModal">
                 <i class="bi bi-plus-lg me-1"></i> Nueva Edición
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#addInstitutionModal">
+                <i class="bi bi-building-add me-1"></i> Nueva Institución
               </button>
             </div>
           </header>
@@ -312,9 +333,80 @@
   </div>
 </div>
 
+<!-- Alta de Institución -->
+<div class="modal fade" id="addInstitutionModal" tabindex="-1" aria-labelledby="addInstitutionLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form id="formAddInstitution" class="modal-content needs-validation" novalidate>
+      <div class="modal-header">
+        <h5 class="modal-title" id="addInstitutionLabel">
+          <i class="bi bi-building-add me-2"></i>Alta de Institución
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Nombre (único)</label>
+            <input id="insNombre" type="text" class="form-control" required />
+            <div class="invalid-feedback">El nombre es obligatorio.</div>
+            <div id="insDupWarn" class="form-text text-danger d-none">
+              Ya existe una institución con ese nombre.
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <label class="form-label">Descripción</label>
+            <textarea id="insDescripcion" class="form-control" rows="3" required></textarea>
+            <div class="invalid-feedback">La descripción es obligatoria.</div>
+          </div>
+          
+          <div class="col-12 col-md-8">
+            <label class="form-label">Sitio web (opcional)</label>
+            <input id="insWeb" type="url" class="form-control" placeholder="https://..." pattern="https?://.+" />
+            <div class="invalid-feedback">URL inválida (debe comenzar con http:// o https://)</div>
+          </div>
+          
+          <div class="col-12 col-md-4">
+            <label class="form-label">Logo (opcional)</label>
+            <input id="insLogo" type="file" class="form-control" accept="image/*" />
+          </div>
+          
+          <div class="col-12">
+            <img id="insPreview" class="img-fluid rounded d-none" alt="Vista previa del logo" />
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <i class="bi bi-check2-circle me-1"></i>Crear institución
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- jQuery primero (requerido por Bootstrap) -->
+<script src="${pageContext.request.contextPath}/media/vendor/jquery/jquery.min.js"></script>
+
 <!-- Bootstrap & page JS -->
-<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/media/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>window.appCtx='${pageContext.request.contextPath}';</script>
-<script src="${pageContext.request.contextPath}/js/pages/perfil-organizador.js"></script>
+<script src="${pageContext.request.contextPath}/media/js/pages/perfil-organizador.js?v=7"></script>
+
+<!-- Auto-hide alerts after 5 seconds -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+      setTimeout(function() {
+        const bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+      }, 5000); // 5 segundos
+    });
+  });
+</script>
 </body>
 </html>

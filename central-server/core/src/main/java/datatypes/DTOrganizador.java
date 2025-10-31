@@ -28,4 +28,13 @@ public class DTOrganizador extends DTUsuario {
   public String descripcion() {
     return descripcion;
   }
+
+  // JavaBeans-style getters for JSP EL compatibility
+  public String getLinkSitioWeb() {
+    return linkSitioWeb;
+  }
+
+  public String getDescripcion() {
+    return descripcion;
+  }
 }

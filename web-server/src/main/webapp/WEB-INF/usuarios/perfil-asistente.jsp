@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ page import="datatypes.DTAsistente, datatypes.DTRegistro, java.util.List, java.text.SimpleDateFormat" %>
 <%
 DTAsistente asistente = (DTAsistente) request.getAttribute("asistente");
@@ -31,8 +32,26 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         <jsp:include page="/WEB-INF/template/header.jsp" />
 
         <!-- PERFIL ASISTENTE -->
-        <section class="py-5" style="margin-top: 80px;">
+        <section class="py-5" style="margin-top:80px">
             <div class="container px-2">
+            
+                <!-- Mensajes de éxito o error -->
+                <c:if test="${not empty sessionScope.success_message}">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>${sessionScope.success_message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                  <c:remove var="success_message" scope="session"/>
+                </c:if>
+                
+                <c:if test="${not empty sessionScope.error_message}">
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>${sessionScope.error_message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                  <c:remove var="error_message" scope="session"/>
+                </c:if>
+            
                 <div class="row g-4">
                     <!-- Tarjeta de Perfil -->
                     <div class="col-lg-4">
@@ -534,6 +553,17 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             
             pendingDeleteEdicion = null;
         }
+    });
+    
+    // Auto-hide alerts after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000); // 5 segundos
+        });
     });
     </script>
 </body>

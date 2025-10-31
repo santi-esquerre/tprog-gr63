@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -156,10 +157,6 @@ public class Perfil extends HttpServlet {
 
 	private void handleEditProfile(HttpServletRequest request, HttpServletResponse response, DTUsuario usuario)
 			throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-
 		try {
 			Factory factory = Factory.get();
 			IUsuarioController usuarioController = factory.getIUsuarioController();
@@ -177,17 +174,18 @@ public class Perfil extends HttpServlet {
 				fechaNacimiento = LocalDate.parse(fechaNacStr);
 			}
 
-			// Handle image upload if present
-			String foto = usuario.foto();
-			String newFoto = ImagesManager.getImageName(request);
-			if (newFoto != null && !newFoto.isEmpty()) {
-				foto = newFoto;
-				ImagesManager.uploadImage(request, response);
-			}
-
 			// Update based on user type
 			if (usuario.getTipo() == TipoUsuario.ASISTENTE) {
 				DTAsistente asistente = usuarioController.seleccionarAsistente(usuario.nickname());
+
+				// Handle image upload if present, otherwise keep existing
+				String foto = asistente.foto();
+				String newFoto = ImagesManager.getImageName(request);
+				// Solo actualiza la foto si hay una nueva imagen (no default.png)
+				if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
+					foto = newFoto;
+					ImagesManager.uploadImage(request, response);
+				}
 
 				// Use provided values or keep existing ones
 				String finalNombre = (nombre != null && !nombre.isEmpty()) ? nombre : asistente.nombre();
@@ -213,10 +211,17 @@ public class Perfil extends HttpServlet {
 				DTAsistente updatedAsistente = usuarioController.seleccionarAsistente(usuario.nickname());
 				request.getSession().setAttribute("usuario_logueado", updatedAsistente);
 
-				out.print("{\"success\": true, \"message\": \"Perfil actualizado correctamente\"}");
-
 			} else if (usuario.getTipo() == TipoUsuario.ORGANIZADOR) {
 				DTOrganizador organizador = usuarioController.seleccionarOrganizador(usuario.nickname());
+
+				// Handle image upload if present, otherwise keep existing
+				String foto = organizador.foto();
+				String newFoto = ImagesManager.getImageName(request);
+				// Solo actualiza la foto si hay una nueva imagen (no default.png)
+				if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
+					foto = newFoto;
+					ImagesManager.uploadImage(request, response);
+				}
 
 				// Use provided values or keep existing ones
 				String finalNombre = (nombre != null && !nombre.isEmpty()) ? nombre : organizador.nombre();
@@ -245,20 +250,20 @@ public class Perfil extends HttpServlet {
 				// Reload updated data for session
 				DTOrganizador updatedOrganizador = usuarioController.seleccionarOrganizador(usuario.nickname());
 				request.getSession().setAttribute("usuario_logueado", updatedOrganizador);
-
-				out.print("{\"success\": true, \"message\": \"Perfil actualizado correctamente\"}");
-			} else {
-				out.print("{\"success\": false, \"message\": \"Tipo de usuario no soportado\"}");
 			}
 
+			// Redirect back to profile page with success message
+			request.getSession().setAttribute("success_message", "Perfil actualizado correctamente");
+			response.sendRedirect(request.getContextPath() + "/perfil");
+
 		} catch (UsuarioCorreoRepetidoException e) {
-			out.print("{\"success\": false, \"message\": \"El correo ya está en uso\"}");
+			request.getSession().setAttribute("error_message", "El correo ya está en uso");
+			response.sendRedirect(request.getContextPath() + "/perfil");
 		} catch (Exception e) {
 			e.printStackTrace();
-			out.print("{\"success\": false, \"message\": \"Error al actualizar el perfil: " + e.getMessage() + "\"}");
+			request.getSession().setAttribute("error_message", "Error al actualizar el perfil: " + e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/perfil");
 		}
-
-		out.flush();
 	}
 
 	private void handleDeleteRegistro(HttpServletRequest request, HttpServletResponse response, DTUsuario usuario)
@@ -360,12 +365,15 @@ public class Perfil extends HttpServlet {
 		try {
 			switch (pathInfo) {
 				case "/evento":
+				case "/eventos": // También aceptar plural
 					createEvento(request, response);
 					break;
 				case "/edicion":
+				case "/ediciones": // También aceptar plural
 					createEdicion(request, response);
 					break;
 				case "/institucion":
+				case "/instituciones": // También aceptar plural
 					createInstitucion(request, response);
 					break;
 				case "/tipo-registro":
@@ -401,8 +409,23 @@ public class Perfil extends HttpServlet {
 		try {
 			Factory factory = Factory.get();
 			IEventoController eventoController = factory.getIEventoController();
+
+			// Obtener eventos simples primero
 			Set<DTEvento> eventos = eventoController.listarEventos();
-			sendApiSuccess(response, eventos);
+
+			// Convertir a DTEventoDetallado para incluir categorías
+			List<DTEventoDetallado> eventosDetallados = new ArrayList<>();
+			for (DTEvento evento : eventos) {
+				try {
+					DTEventoDetallado detallado = eventoController.obtenerDatosDetalladosEvento(evento.nombre());
+					eventosDetallados.add(detallado);
+				} catch (Exception e) {
+					// Si no se puede obtener detalle, continuar con siguiente
+					System.err.println("Error obteniendo detalle de evento " + evento.nombre() + ": " + e.getMessage());
+				}
+			}
+
+			sendApiSuccess(response, eventosDetallados);
 		} catch (Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener eventos: " + e.getMessage());
@@ -411,16 +434,30 @@ public class Perfil extends HttpServlet {
 
 	private void getEdiciones(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
+			// Si se especifica un evento, obtener ediciones de ese evento
 			String nombreEvento = request.getParameter("evento");
-			if (nombreEvento == null || nombreEvento.isEmpty()) {
-				sendApiError(response, "Parámetro 'evento' requerido");
-				return;
-			}
 
 			Factory factory = Factory.get();
-			IEventoController eventoController = factory.getIEventoController();
-			Set<DTEdicion> ediciones = eventoController.mostrarEdiciones(nombreEvento);
-			sendApiSuccess(response, ediciones);
+
+			if (nombreEvento != null && !nombreEvento.isEmpty()) {
+				// Obtener ediciones de un evento específico
+				IEventoController eventoController = factory.getIEventoController();
+				Set<DTEdicion> ediciones = eventoController.mostrarEdiciones(nombreEvento);
+				sendApiSuccess(response, ediciones);
+			} else {
+				// Obtener TODAS las ediciones del organizador logueado
+				Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
+				if (!(usuarioObj instanceof DTUsuario)) {
+					sendApiError(response, "Usuario no logueado");
+					return;
+				}
+
+				DTUsuario usuario = (DTUsuario) usuarioObj;
+				IEdicionController edicionController = factory.getIEdicionController();
+				Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador(usuario.nickname());
+
+				sendApiSuccess(response, ediciones);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener ediciones: " + e.getMessage());
@@ -482,7 +519,13 @@ public class Perfil extends HttpServlet {
 			String nombre = request.getParameter("nombre");
 			String descripcion = request.getParameter("descripcion");
 			String sigla = request.getParameter("sigla");
-			String[] categorias = request.getParameterValues("categorias[]");
+			String categoriasJson = request.getParameter("categorias");
+
+			System.out.println("=== DEBUG createEvento ===");
+			System.out.println("nombre: " + nombre);
+			System.out.println("descripcion: " + descripcion);
+			System.out.println("sigla: " + sigla);
+			System.out.println("categoriasJson: " + categoriasJson);
 
 			if (nombre == null || nombre.isEmpty()) {
 				sendApiError(response, "El nombre del evento es requerido");
@@ -491,20 +534,43 @@ public class Perfil extends HttpServlet {
 
 			String foto = null;
 			String newFoto = ImagesManager.getImageName(request);
-			if (newFoto != null && !newFoto.isEmpty()) {
+			// Solo actualiza la foto si hay una nueva imagen (no default.png)
+			if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
 				foto = newFoto;
 				ImagesManager.uploadImage(request, response);
+			}
+			System.out.println("foto: " + foto);
+
+			// Parse categorías desde JSON
+			Set<String> categoriasSet = new HashSet<>();
+			if (categoriasJson != null && !categoriasJson.isEmpty()) {
+				try {
+					com.google.gson.JsonArray jsonArray = gson.fromJson(categoriasJson,
+							com.google.gson.JsonArray.class);
+					for (int i = 0; i < jsonArray.size(); i++) {
+						categoriasSet.add(jsonArray.get(i).getAsString());
+					}
+					System.out.println("categorías parseadas: " + categoriasSet);
+				} catch (Exception e) {
+					e.printStackTrace();
+					sendApiError(response, "Error al procesar las categorías");
+					return;
+				}
 			}
 
 			// DTEventoAlta expects: (nombre, descripcion, fechaAlta, sigla, foto,
 			// categorias)
-			Set<String> categoriasSet = categorias != null ? Set.of(categorias) : new HashSet<String>();
 			DTEventoAlta eventoAlta = new DTEventoAlta(nombre, descripcion, new java.util.Date(), sigla, foto,
 					categoriasSet);
 
+			System.out.println("DTEventoAlta creado: " + eventoAlta);
+
 			Factory factory = Factory.get();
 			IEventoController eventoController = factory.getIEventoController();
+
+			System.out.println("Llamando a altaEvento...");
 			boolean creado = eventoController.altaEvento(eventoAlta);
+			System.out.println("Resultado altaEvento: " + creado);
 
 			if (creado) {
 				sendApiSuccess(response, "Evento creado exitosamente");
@@ -512,8 +578,11 @@ public class Perfil extends HttpServlet {
 				sendApiError(response, "No se pudo crear el evento");
 			}
 		} catch (ValidationInputException e) {
+			System.out.println("ValidationInputException: " + e.getMessage());
+			e.printStackTrace();
 			sendApiError(response, "Error de validación: " + e.getMessage());
 		} catch (Exception e) {
+			System.out.println("Exception general: " + e.getMessage());
 			e.printStackTrace();
 			sendApiError(response, "Error al crear evento: " + e.getMessage());
 		}
@@ -532,6 +601,10 @@ public class Perfil extends HttpServlet {
 				sendApiError(response, "Usuario no logueado");
 				return;
 			}
+
+			System.out.println("=== DEBUG createEdicion ===");
+			System.out.println("Usuario logueado: " + usuario.nickname());
+
 			String nombreEvento = request.getParameter("evento");
 			String nombre = request.getParameter("nombre");
 			String sigla = request.getParameter("sigla");
@@ -539,6 +612,11 @@ public class Perfil extends HttpServlet {
 			String pais = request.getParameter("pais");
 			String fechaInicioStr = request.getParameter("fechaInicio");
 			String fechaFinStr = request.getParameter("fechaFin");
+
+			System.out.println("nombreEvento: " + nombreEvento);
+			System.out.println("nombre: " + nombre);
+			System.out.println("fechaInicio: " + fechaInicioStr);
+			System.out.println("fechaFin: " + fechaFinStr);
 
 			if (nombreEvento == null || nombreEvento.isEmpty() || nombre == null || nombre.isEmpty()) {
 				sendApiError(response, "Faltan campos requeridos");
@@ -551,10 +629,11 @@ public class Perfil extends HttpServlet {
 
 			String foto = null;
 			String newFoto = ImagesManager.getImageName(request);
-			if (newFoto != null && !newFoto.isEmpty()) {
+			if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
 				foto = newFoto;
 				ImagesManager.uploadImage(request, response);
 			}
+			System.out.println("foto: " + foto);
 
 			// Convert LocalDate to Date for DTEdicion
 			// DTEdicion expects: (nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad,
@@ -566,9 +645,19 @@ public class Perfil extends HttpServlet {
 			DTEdicion edicion = new DTEdicion(nombre, sigla, fechaInicioDate, fechaFinDate, fechaAltaDate,
 					ciudad, pais, foto, EstadoEdicion.INGRESADA);
 
+			System.out.println("DTEdicion creado: " + edicion);
+
 			Factory factory = Factory.get();
 			IEventoController eventoController = factory.getIEventoController();
+
+			System.out.println("Llamando a agregarEdicionAEvento con:");
+			System.out.println("  - nombreEvento: " + nombreEvento);
+			System.out.println("  - nickname: " + usuario.nickname());
+			System.out.println("  - edicion: " + edicion.nombre());
+
 			boolean creada = eventoController.agregarEdicionAEvento(nombreEvento, usuario.nickname(), edicion);
+
+			System.out.println("Resultado agregarEdicionAEvento: " + creada);
 
 			if (creada) {
 				sendApiSuccess(response, "Edición creada exitosamente");
@@ -576,8 +665,11 @@ public class Perfil extends HttpServlet {
 				sendApiError(response, "No se pudo crear la edición");
 			}
 		} catch (ValidationInputException e) {
+			System.out.println("ValidationInputException: " + e.getMessage());
+			e.printStackTrace();
 			sendApiError(response, "Error de validación: " + e.getMessage());
 		} catch (Exception e) {
+			System.out.println("Exception general: " + e.getMessage());
 			e.printStackTrace();
 			sendApiError(response, "Error al crear edición: " + e.getMessage());
 		}
