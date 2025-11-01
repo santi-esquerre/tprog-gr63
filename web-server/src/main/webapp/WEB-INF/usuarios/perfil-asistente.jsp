@@ -53,53 +53,60 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 </c:if>
             
                 <div class="row g-4">
-                    <!-- Tarjeta de Perfil -->
-                    <div class="col-lg-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body text-center profile-card">
+                    <!-- Col izquierda: tarjeta de perfil -->
+                    <aside class="col-12 col-lg-4">
+                        <div class="card profile-card shadow-sm">
+                            <div class="position-relative">
                                 <img 
-                                    src="<%= request.getContextPath() %>/images/<%= asistente.foto() != null ? asistente.foto() : "default-avatar.png" %>" 
-                                    alt="Foto de perfil" 
-                                    class="rounded-circle mb-3" 
-                                    width="150" 
-                                    height="150" 
-                                    id="asProfilePic"
+                                    src="<%= request.getContextPath() %>/image/<%= asistente.foto() != null ? asistente.foto() : "default.png" %>" 
+                                    class="card-img-top" 
+                                    alt="Foto del asistente"
                                 />
-                                <h4 class="fw-bold" id="asNombre"><%= asistente.nombre() %> <%= asistente.apellido() %></h4>
-                                <p class="text-muted mb-2" id="asNickname">@<%= asistente.nickname() %></p>
-                                <p class="text-muted small mb-3" id="asCorreo">
-                                    <i class="bi bi-envelope me-1"></i><%= asistente.correo() %>
+                                <span class="badge text-bg-primary position-absolute top-0 start-0 m-3 rounded-pill px-3">Asistente</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-start justify-content-between flex-wrap">
+                                    <div>
+                                        <h4 class="card-title mb-1" id="asNombre">
+                                            <%= asistente.nombre() %> <%= asistente.apellido() %>
+                                        </h4>
+                                        <a href="#" class="text-muted text-decoration-none">@<%= asistente.nickname() %></a>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm mt-2 mt-sm-0" data-bs-toggle="modal" data-bs-target="#editAssistantModal">
+                                        <i class="bi bi-pencil-square me-1"></i> Editar
+                                    </button>
+                                </div>
+
+                                <p class="mt-3 mb-2">
+                                    <i class="bi bi-envelope-fill me-1"></i>
+                                    <span id="asCorreo"><%= asistente.correo() %></span>
                                 </p>
-                                <p class="text-muted small mb-3" id="asFechaNacimiento">
-                                    <i class="bi bi-calendar me-1"></i>Nacimiento: <%= dateFormat.format(asistente.fechaNacimiento()) %>
+
+                                <p class="mb-1">
+                                    <i class="bi bi-calendar-fill me-1"></i>
+                                    Nacimiento: <%= dateFormat.format(asistente.fechaNacimiento()) %>
                                 </p>
-                                <button 
-                                    class="btn btn-primary w-100" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#editAssistantModal"
-                                >
-                                    <i class="bi bi-pencil me-2"></i>Editar Perfil
-                                </button>
+
+                                <p class="text-muted fst-italic mb-0">
+                                    Miembro de Eventos.uy
+                                </p>
                             </div>
                         </div>
-                    </div>
+                    </aside>
 
-                    <!-- Tabla de Registros -->
-                    <div class="col-lg-8">
+                    <!-- Col derecha: tabla de registros -->
+                    <section class="col-12 col-lg-8">
+                        <header class="d-flex align-items-center justify-content-between flex-wrap mb-3">
+                            <h3 class="fw-bold m-0">Mis Registros</h3>
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addRegistroModal">
+                                <i class="bi bi-plus-circle me-1"></i> Nuevo Registro
+                            </button>
+                        </header>
+
                         <div class="card shadow-sm">
-                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Mis Registros</h5>
-                                <button 
-                                    class="btn btn-sm btn-outline-primary" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#addRegistroModal"
-                                >
-                                    <i class="bi bi-plus-lg me-1"></i>Nuevo Registro
-                                </button>
-                            </div>
                             <div class="card-body p-0">
-                                <div class="table-wrap">
-                                    <table class="table table-hover mb-0" id="tablaRegistros">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0 align-middle" id="tablaRegistros">
                                         <thead class="table-light">
                                             <tr>
                                                 <th>Evento</th>
@@ -118,7 +125,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                                 <td><%= reg.nombreEdicion() %></td>
                                                 <td><%= reg.tipoRegistro().nombre() %></td>
                                                 <td><%= dateFormat.format(reg.fecha()) %></td>
-                                                <td>$<%= String.format("%.2f", reg.costo()) %></td>
+                                                <td>UYU <%= String.format("%.2f", reg.costo()) %></td>
                                                 <td class="text-end">
                                                     <button 
                                                         class="btn btn-sm btn-outline-secondary me-1 btn-view-registro"
@@ -150,7 +157,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </section>
@@ -292,7 +299,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         aria-hidden="true"
     >
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
+            <form class="modal-content needs-validation" novalidate id="formAddRegistro">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addRegistroLabel">
                         <i class="bi bi-plus-lg me-2"></i>Nuevo Registro
@@ -305,14 +312,49 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        Para registrarte en una edición, navega a la página del evento y selecciona la edición deseada.
-                    </div>
-                    <div class="d-grid">
-                        <a href="<%= request.getContextPath() %>/eventos" class="btn btn-primary">
-                            <i class="bi bi-calendar-event me-2"></i>Ver Eventos Disponibles
-                        </a>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Edición del evento</label>
+                            <select id="regEdicion" class="form-select" required>
+                                <option value="" disabled selected>Selecciona una edición…</option>
+                            </select>
+                            <div class="invalid-feedback">Selecciona una edición.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Tipo de registro</label>
+                            <select id="regTipo" class="form-select" disabled required>
+                                <option value="" disabled selected>Selecciona un tipo…</option>
+                            </select>
+                            <div class="invalid-feedback">Selecciona un tipo de registro.</div>
+                            <div class="form-text" id="regCupoInfo"></div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Costo</label>
+                            <div class="input-group">
+                                <span class="input-group-text">UYU</span>
+                                <input id="regCosto" type="number" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Fecha de registro</label>
+                            <input id="regFecha" type="date" class="form-control" readonly required />
+                            <div class="invalid-feedback">Se requiere fecha.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Código de patrocinio (opcional)</label>
+                            <div class="input-group">
+                                <input id="regCodigoPatrocinio" type="text" class="form-control" placeholder="Ingresa código si tienes uno" />
+                                <button type="button" class="btn btn-outline-secondary" id="btnValidarCodigo">
+                                    <i class="bi bi-check-circle me-1"></i>Validar
+                                </button>
+                            </div>
+                            <div class="form-text text-success d-none" id="regCodigoValido">
+                                <i class="bi bi-check-circle-fill me-1"></i>Código válido. Registro gratuito aplicado.
+                            </div>
+                            <div class="form-text text-danger d-none" id="regCodigoInvalido">
+                                <i class="bi bi-x-circle-fill me-1"></i>Código no válido o ya utilizado.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -321,6 +363,15 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         class="btn btn-secondary" 
                         data-bs-dismiss="modal"
                     >
+                        Cancelar
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-check2-circle me-1"></i>Confirmar Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
                         Cerrar
                     </button>
                 </div>
@@ -566,5 +617,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         });
     });
     </script>
+    <script src="${pageContext.request.contextPath}/media/js/pages/perfil-asistente.js?v=1"></script>
 </body>
 </html>

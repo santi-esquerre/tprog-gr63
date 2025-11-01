@@ -11,8 +11,11 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -31,9 +34,9 @@ import exceptions.*;
 
 /**
  * Servlet implementation class Perfil
- * Maneja tanto la vista del perfil como la API REST para organizadores
+ * Maneja tanto la vista del perfil como la API REST para organizadores y asistentes
  */
-@WebServlet(urlPatterns = { "/perfil", "/api/organizador/*" })
+@WebServlet(urlPatterns = { "/perfil", "/api/organizador/*", "/api/asistente/*" })
 @MultipartConfig
 public class Perfil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -60,6 +63,12 @@ public class Perfil extends HttpServlet {
 		// API Endpoints para organizador
 		if (servletPath.startsWith("/api/organizador")) {
 			handleApiGet(request, response);
+			return;
+		}
+
+		// API Endpoints para asistente
+		if (servletPath.startsWith("/api/asistente")) {
+			handleAsistenteApiGet(request, response);
 			return;
 		}
 
@@ -121,6 +130,12 @@ public class Perfil extends HttpServlet {
 		// API Endpoints para organizador
 		if (servletPath.startsWith("/api/organizador")) {
 			handleApiPost(request, response);
+			return;
+		}
+
+		// API Endpoints para asistente
+		if (servletPath.startsWith("/api/asistente")) {
+			handleAsistenteApiPost(request, response);
 			return;
 		}
 
@@ -445,7 +460,8 @@ public class Perfil extends HttpServlet {
 				Set<DTEdicion> ediciones = eventoController.mostrarEdiciones(nombreEvento);
 				sendApiSuccess(response, ediciones);
 			} else {
-				// Obtener TODAS las ediciones del organizador logueado
+				// Obtener TODAS las ediciones del organizador logueado con información del
+				// evento
 				Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
 				if (!(usuarioObj instanceof DTUsuario)) {
 					sendApiError(response, "Usuario no logueado");
@@ -454,9 +470,52 @@ public class Perfil extends HttpServlet {
 
 				DTUsuario usuario = (DTUsuario) usuarioObj;
 				IEdicionController edicionController = factory.getIEdicionController();
+				IEventoController eventoController = factory.getIEventoController();
+
 				Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador(usuario.nickname());
 
-				sendApiSuccess(response, ediciones);
+				// Obtener TODOS los eventos del sistema para cruzar con ediciones
+				Set<DTEvento> todosLosEventos = eventoController.listarEventos();
+
+				// Enriquecer las ediciones con el nombre del evento
+				java.util.List<java.util.Map<String, Object>> edicionesEnriquecidas = new java.util.ArrayList<>();
+				for (DTEdicion edicion : ediciones) {
+					// Buscar el evento al que pertenece esta edición
+					String nombreEventoPadre = "";
+					for (DTEvento evento : todosLosEventos) {
+						try {
+							Set<DTEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
+							for (DTEdicion ed : edicionesDelEvento) {
+								if (ed.nombre().equals(edicion.nombre())) {
+									nombreEventoPadre = evento.nombre();
+									break;
+								}
+							}
+							if (!nombreEventoPadre.isEmpty())
+								break;
+						} catch (Exception e) {
+							// Si falla al obtener ediciones de un evento, continuar con el siguiente
+							continue;
+						}
+					}
+
+					java.util.Map<String, Object> edicionMap = new java.util.HashMap<>();
+					edicionMap.put("nombre", edicion.nombre());
+					edicionMap.put("sigla", edicion.sigla());
+					edicionMap.put("fechaInicio", edicion.fechaInicio());
+					edicionMap.put("fechaFin", edicion.fechaFin());
+					edicionMap.put("fechaAlta", edicion.fechaAlta());
+					edicionMap.put("ciudad", edicion.ciudad());
+					edicionMap.put("pais", edicion.pais());
+					edicionMap.put("foto", edicion.foto());
+					edicionMap.put("imagen", edicion.foto());
+					edicionMap.put("estado", edicion.estado().toString());
+					edicionMap.put("nombreEvento", nombreEventoPadre);
+
+					edicionesEnriquecidas.add(edicionMap);
+				}
+
+				sendApiSuccess(response, edicionesEnriquecidas);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -799,6 +858,206 @@ public class Perfil extends HttpServlet {
 	}
 
 	// ==================== UTILIDADES API ====================
+
+	
+
+	// ==================== ASISTENTE API HANDLERS ====================
+
+	private void handleAsistenteApiGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		if (!isApiAuthenticated(request, response))
+			return;
+
+		String pathInfo = request.getPathInfo();
+		if (pathInfo == null)
+			pathInfo = "/";
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+
+		try {
+			switch (pathInfo) {
+				case "/ediciones-disponibles":
+					getEdicionesDisponibles(request, response);
+					break;
+				case "/tipos-registro":
+					getTiposRegistro(request, response);
+					break;
+				default:
+					sendApiError(response, "Endpoint no válido");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			sendApiError(response, "Error al procesar solicitud: " + e.getMessage());
+		}
+	}
+
+	private void handleAsistenteApiPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		if (!isApiAuthenticated(request, response))
+			return;
+
+		String pathInfo = request.getPathInfo();
+		if (pathInfo == null)
+			pathInfo = "/";
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+
+		try {
+			switch (pathInfo) {
+				case "/validar-patrocinio":
+					validarPatrocinio(request, response);
+					break;
+				case "/registro":
+					createRegistroAsistente(request, response);
+					break;
+				default:
+					sendApiError(response, "Endpoint no válido");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			sendApiError(response, "Error al procesar solicitud: " + e.getMessage());
+		}
+	}
+
+	// ==================== ASISTENTE ENDPOINTS ====================
+
+	private void getEdicionesDisponibles(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		try {
+			Factory factory = Factory.get();
+			IEventoController eventoController = factory.getIEventoController();
+
+			// Obtener todas las ediciones activas/confirmadas
+			Set<DTEvento> todosLosEventos = eventoController.listarEventos();
+			List<Map<String, Object>> edicionesDisponibles = new ArrayList<>();
+
+			for (DTEvento evento : todosLosEventos) {
+				Set<DTEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
+
+				for (DTEdicion edicion : edicionesDelEvento) {
+					// Solo incluir ediciones en estado confirmado
+					if (edicion.estado() == EstadoEdicion.ACEPTADA) {
+						Map<String, Object> edMap = new HashMap<>();
+						edMap.put("nombre", edicion.nombre());
+						edMap.put("nombreEvento", evento.nombre());
+						edMap.put("fechaInicio",
+								edicion.fechaInicio() != null ? edicion.fechaInicio().toString() : null);
+						edMap.put("fechaFin", edicion.fechaFin() != null ? edicion.fechaFin().toString() : null);
+						edMap.put("imagen", edicion.foto());
+						edicionesDisponibles.add(edMap);
+					}
+				}
+			}
+
+			Map<String, Object> result = new HashMap<>();
+			result.put("success", true);
+			result.put("data", edicionesDisponibles);
+			sendApiSuccess(response, result);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			sendApiError(response, "Error al obtener ediciones disponibles: " + e.getMessage());
+		}
+	}
+
+	private void validarPatrocinio(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		try {
+			String codigo = request.getParameter("codigo");
+			String edicion = request.getParameter("edicion");
+
+			if (codigo == null || codigo.trim().isEmpty() || edicion == null || edicion.trim().isEmpty()) {
+				sendApiError(response, "Código y edición son requeridos");
+				return;
+			}
+
+			// Obtener usuario logueado
+			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
+			if (!(usuarioObj instanceof DTUsuario)) {
+				sendApiError(response, "Usuario no autenticado");
+				return;
+			}
+			DTUsuario usuario = (DTUsuario) usuarioObj;
+
+			Factory factory = Factory.get();
+			IEdicionController edicionController = factory.getIEdicionController();
+
+			// Verificar código con tipo de registro y nickname del usuario
+			// Nota: Necesitamos el tipo de registro - usaremos validación simple
+			// El backend verificará el código cuando se intente crear el registro
+
+			Map<String, Object> result = new HashMap<>();
+			result.put("success", true);
+			result.put("valido", true); // Por ahora aceptamos cualquier código, se validará al crear el registro
+			result.put("message", "El código se validará al confirmar el registro");
+			sendApiSuccess(response, result);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, Object> result = new HashMap<>();
+			result.put("success", false);
+			result.put("valido", false);
+			result.put("message", "Error al validar código: " + e.getMessage());
+			sendApiSuccess(response, result);
+		}
+	}
+
+	private void createRegistroAsistente(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		try {
+			// Obtener usuario logueado
+			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
+			if (!(usuarioObj instanceof DTUsuario)) {
+				sendApiError(response, "Usuario no autenticado");
+				return;
+			}
+			DTUsuario usuario = (DTUsuario) usuarioObj;
+
+			String edicion = request.getParameter("edicion");
+			String tipo = request.getParameter("tipo");
+			String codigoPatrocinio = request.getParameter("codigoPatrocinio");
+
+			if (edicion == null || edicion.trim().isEmpty() || tipo == null || tipo.trim().isEmpty()) {
+				sendApiError(response, "Edición y tipo de registro son requeridos");
+				return;
+			}
+
+			Factory factory = Factory.get();
+			IEdicionController edicionController = factory.getIEdicionController();
+
+			// Crear registro con o sin código de patrocinio
+			Date fecha = new Date(); // Fecha actual
+
+			if (codigoPatrocinio != null && !codigoPatrocinio.trim().isEmpty()) {
+				// Registro con código de patrocinio - la sobrecarga valida el código
+				edicionController.altaRegistroEdicionEvento(
+						edicion,
+						tipo,
+						usuario.nickname(),
+						fecha,
+						codigoPatrocinio);
+			} else {
+				// Registro normal
+				edicionController.altaRegistroEdicionEvento(
+						edicion,
+						tipo,
+						usuario.nickname(),
+						fecha);
+			}
+
+			Map<String, Object> result = new HashMap<>();
+			result.put("success", true);
+			result.put("message", "Registro creado exitosamente");
+			sendApiSuccess(response, result);
+
+		} catch (ValidationInputException e) {
+			sendApiError(response, "Error de validación: " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			sendApiError(response, "Código de patrocinio inválido o ya utilizado");
+		} catch (Exception e) {
+			e.printStackTrace();
+			sendApiError(response, "Error al crear registro: " + e.getMessage());
+		}
+	}
+
+	// ==================== UTILITY METHODS ====================
 
 	private boolean isApiAuthenticated(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		SessionManager.initSesion(request);

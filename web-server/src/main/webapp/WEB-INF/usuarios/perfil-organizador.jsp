@@ -61,18 +61,20 @@
             </div>
             <div class="card-body">
               <div class="d-flex align-items-start justify-content-between flex-wrap">
-                <div class="flex-grow-1">
-                  <h4 class="fw-bold mb-1" id="orgNombre">
+                <div>
+                  <h4 class="card-title mb-1" id="orgNombre">
                     ${organizador.nombre}
                   </h4>
-                  <p class="mb-2" id="orgDescripcion">
-                    ${organizador.descripcion != null ? organizador.descripcion : '—'}
-                  </p>
+                  <a href="#" class="text-muted text-decoration-none">@${organizador.nickname}</a>
                 </div>
-                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editOrganizerModal">
+                <button class="btn btn-outline-primary btn-sm mt-2 mt-sm-0" data-bs-toggle="modal" data-bs-target="#editOrganizerModal">
                   <i class="bi bi-pencil-square me-1"></i> Editar
                 </button>
               </div>
+
+              <p class="mt-3 mb-2" id="orgDescripcion">
+                ${organizador.descripcion != null ? organizador.descripcion : '—'}
+              </p>
 
               <p class="mb-2">
                 <i class="bi bi-link-45deg me-1"></i>
@@ -388,18 +390,304 @@
   </div>
 </div>
 
+<!-- Modal: Alta de Patrocinio -->
+<div class="modal fade" id="addSponsorshipModal" tabindex="-1" aria-labelledby="addSponsorshipLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <form class="modal-content needs-validation" novalidate id="formAddSponsorship">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSponsorshipLabel">
+          <i class="bi bi-patch-plus me-2"></i>Alta de Patrocinio
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- CONTEXTO (solo lectura) -->
+        <div id="spContext" class="alert alert-light border">
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div>
+              <span class="text-muted">Evento:</span>
+              <strong id="spCtxEv">—</strong>
+            </div>
+            <div>
+              <span class="text-muted">Edición:</span>
+              <strong id="spCtxEd">—</strong>
+            </div>
+          </div>
+          <!-- ID de edición para el backend -->
+          <input type="hidden" id="spEdicionId" />
+        </div>
+        <!-- Formulario -->
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Institución</label>
+            <select id="spInstitucion" class="form-select" required>
+              <option value="" selected disabled>Selecciona una institución…</option>
+            </select>
+            <div class="invalid-feedback">Selecciona una institución.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Nivel de patrocinio</label>
+            <select id="spNivel" class="form-select" required>
+              <option value="" selected disabled>Selecciona nivel…</option>
+              <option>Platino</option>
+              <option>Oro</option>
+              <option>Plata</option>
+              <option>Bronce</option>
+            </select>
+            <div class="invalid-feedback">Selecciona un nivel.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Aporte económico</label>
+            <div class="input-group">
+              <span class="input-group-text">UYU</span>
+              <input id="spAporte" type="number" class="form-control" min="0" step="0.01" required />
+            </div>
+            <div class="invalid-feedback">Ingresa el aporte económico.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Código de patrocinio</label>
+            <input id="spCodigo" type="text" class="form-control" required />
+            <div class="invalid-feedback">Ingresa un código.</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label d-flex justify-content-between align-items-center">
+              Registros gratuitos a otorgar
+              <button type="button" class="btn btn-sm btn-outline-primary" id="spAddRow">
+                <i class="bi bi-plus-circle me-1"></i>Agregar registro
+              </button>
+            </label>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead>
+                  <tr>
+                    <th style="width: 38%">Tipo de registro</th>
+                    <th style="width: 22%">Costo unitario (UYU)</th>
+                    <th style="width: 22%">Cantidad</th>
+                    <th style="width: 18%"></th>
+                  </tr>
+                </thead>
+                <tbody id="spRows">
+                  <!-- filas dinámicas -->
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex flex-wrap gap-3 align-items-center">
+              <div>
+                <strong>Total costo registros gratuitos:</strong>
+                <span id="spTotal" class="badge bg-secondary">UYU 0.00</span>
+              </div>
+              <div>
+                <strong>Porcentaje sobre aporte:</strong>
+                <span id="spPct" class="badge bg-secondary">0%</span>
+              </div>
+              <div id="spWarn" class="alert alert-danger py-1 px-2 m-0 d-none">
+                El costo supera el 20% del aporte económico. Podés editar los valores o cancelar.
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Fecha de alta</label>
+            <input id="spFecha" type="date" class="form-control" readonly />
+          </div>
+          <div class="col-12">
+            <div id="spDup" class="alert alert-warning d-none">
+              Ya existe un patrocinio de <strong class="sp-inst"></strong> para esta edición.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <i class="bi bi-check2-circle me-1"></i>Registrar patrocinio
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Alta de Tipo de Registro -->
+<div class="modal fade" id="addTipoRegModal" tabindex="-1" aria-labelledby="addTipoRegLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <form class="modal-content needs-validation" novalidate id="formAddTipoReg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTipoRegLabel">
+          <i class="bi bi-card-checklist me-2"></i>Alta de Tipo de Registro
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Contexto edición -->
+        <div id="trContext" class="alert alert-light border">
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div>
+              <span class="text-muted">Evento:</span>
+              <strong id="trCtxEv"></strong>
+            </div>
+            <div>
+              <span class="text-muted">Edición:</span>
+              <strong id="trCtxEd"></strong>
+            </div>
+          </div>
+          <input type="hidden" id="trEdicionId" />
+        </div>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Nombre (único en la edición)</label>
+            <input id="trNombre" type="text" class="form-control" required />
+            <div class="invalid-feedback">El nombre es obligatorio.</div>
+            <div id="trDupWarn" class="form-text text-danger d-none">
+              Ya existe un tipo de registro con ese nombre en esta edición.
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Descripción</label>
+            <textarea id="trDescripcion" class="form-control" rows="3" required></textarea>
+            <div class="invalid-feedback">La descripción es obligatoria.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Costo</label>
+            <div class="input-group">
+              <span class="input-group-text">UYU</span>
+              <input id="trCosto" type="number" class="form-control" min="0" step="0.01" required />
+            </div>
+            <div class="invalid-feedback">Ingresa el costo.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Cupo</label>
+            <input id="trCupo" type="number" class="form-control" min="0" step="1" required />
+            <div class="invalid-feedback">Ingresa el cupo.</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <i class="bi bi-check2-circle me-1"></i>Crear tipo
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Consulta de Registro -->
+<div class="modal fade" id="consultaRegistroModal" tabindex="-1" aria-labelledby="consultaRegistroLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="consultaRegistroLabel">
+          <i class="bi bi-list-check me-2"></i>Consulta de Registro
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Contexto de edición -->
+        <div class="alert alert-light border mb-3">
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div>
+              <span class="text-muted">Evento:</span>
+              <strong id="crCtxEv">—</strong>
+            </div>
+            <div>
+              <span class="text-muted">Edición:</span>
+              <strong id="crCtxEd">—</strong>
+            </div>
+          </div>
+          <input type="hidden" id="crEdicionId" />
+        </div>
+        <!-- Buscador -->
+        <div class="row g-2 align-items-center mb-2">
+          <div class="col-12 col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input id="crSearch" type="text" class="form-control" placeholder="Buscar por nombre, nickname o correo..." />
+            </div>
+          </div>
+          <div class="col-12 col-md-6 text-md-end">
+            <span id="crCount" class="text-muted small">0 resultados</span>
+          </div>
+        </div>
+        <!-- Tabla de usuarios registrados -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" id="crTable">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 28%">Usuario</th>
+                <th style="width: 24%">Nickname</th>
+                <th style="width: 28%">Correo</th>
+                <th style="width: 20%" class="text-end">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="crTbody">
+              <!-- filas dinámicas -->
+            </tbody>
+          </table>
+          <!-- Paginación -->
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
+            <div class="d-flex align-items-center gap-2">
+              <label for="crPageSize" class="form-label m-0 small text-muted">Filas por página</label>
+              <select id="crPageSize" class="form-select form-select-sm" style="width: auto">
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+              </select>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm btn-outline-secondary" id="crPrev">
+                <i class="bi bi-caret-left-fill"></i>
+              </button>
+              <span id="crPageInfo" class="small text-muted">Página 1 de 1</span>
+              <button class="btn btn-sm btn-outline-secondary" id="crNext">
+                <i class="bi bi-caret-right-fill"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Detalle del registro seleccionado -->
+        <div id="crDetail" class="card mt-3 d-none">
+          <div class="card-body">
+            <h6 class="card-title mb-3">Detalle de registro</h6>
+            <div class="row g-3">
+              <div class="col-12 col-md-4">
+                <div class="text-muted small">Usuario</div>
+                <div id="crDetUser" class="fw-semibold">—</div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="text-muted small">Fecha de registro</div>
+                <div id="crDetFecha" class="fw-semibold">—</div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="text-muted small">Tipo de registro</div>
+                <div id="crDetTipo" class="fw-semibold">—</div>
+              </div>
+              <div class="col-12">
+                <div class="text-muted small">Código de patrocinio utilizado</div>
+                <div id="crDetCodigo" class="fw-semibold">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- jQuery primero (requerido por Bootstrap) -->
 <script src="${pageContext.request.contextPath}/media/vendor/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap & page JS -->
 <script src="${pageContext.request.contextPath}/media/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>window.appCtx='${pageContext.request.contextPath}';</script>
-<script src="${pageContext.request.contextPath}/media/js/pages/perfil-organizador.js?v=7"></script>
+<script src="${pageContext.request.contextPath}/media/js/pages/perfil-organizador.js?v=17"></script>
 
 <!-- Auto-hide alerts after 5 seconds -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const alerts = document.querySelectorAll('.alert');
+    // Solo cerrar alerts que NO estén dentro de modales
+    const alerts = document.querySelectorAll('.alert:not(.modal .alert)');
     alerts.forEach(function(alert) {
       setTimeout(function() {
         const bsAlert = new bootstrap.Alert(alert);
