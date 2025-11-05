@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-            
+                
     
-    <wb-module deploy-name="eventos-uy">
+    
+    <wb-module deploy-name="eventos-uy-web-server-0.0.1">
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java/com/tpgr63/eventos-uy"/>
-        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
-                        
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+                
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                                
         
-        <property name="context-root" value="eventos-uy"/>
-                        
         
         <property name="java-output-path" value="/eventos-uy/build/classes"/>
-                    
+        <property name="context-root" value="eventos-uy-web-server"/>
+                            
+    
     
     </wb-module>
-        
+            
+
 
 </project-modules>
