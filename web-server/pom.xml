@@ -39,28 +39,23 @@
       <plugin>
                 <groupId>com.sun.xml.ws</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <wsdlDirectory>${basedir}/src/main/resources</wsdlDirectory>
-                    <sourceDestDir>${basedir}/src/main/java</sourceDestDir>
-                    <extension>true</extension>
-                </configuration>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>wsimport</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlUrls>
-                                <wsdUrl>${webservice.endpoint}?wsdl</wsdUrl>
-                            </wsdlUrls>
-                            <packageName>
-                                webservice
-                            </packageName>
-                        </configuration>
-                    </execution>
+  <id>wsimport</id>
+  <phase>generate-sources</phase>
+  <goals>
+    <goal>wsimport</goal>
+  </goals>
+  <configuration>
+    <wsdlUrls>
+      <wsdlUrl>${webservice.endpoint}?wsdl</wsdlUrl>
+    </wsdlUrls>
+    <packageName>webservice</packageName>
+    <sourceDestDir>${project.basedir}/src/main/java/com/tpgr63/eventos-uy</sourceDestDir>
+    <keep>true</keep>
+  </configuration>
+</execution>
                 </executions>
             </plugin>
     </plugins>

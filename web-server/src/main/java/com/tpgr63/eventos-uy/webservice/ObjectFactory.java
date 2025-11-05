@@ -1,5 +1,5 @@
 
-package com.tpgr63.eventosuy.webservice.client;
+package webservice;
 
 import javax.xml.namespace.QName;
 import jakarta.xml.bind.JAXBElement;
@@ -10,7 +10,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the com.tpgr63.eventosuy.webservice.client package. 
+ * generated in the webservice package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -28,7 +28,7 @@ public class ObjectFactory {
     private final static QName _HolaMundoResponse_QNAME = new QName("http://webservice/", "holaMundoResponse");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.tpgr63.eventosuy.webservice.client
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: webservice
      * 
      */
     public ObjectFactory() {
