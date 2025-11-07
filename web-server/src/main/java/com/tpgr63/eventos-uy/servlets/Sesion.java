@@ -22,48 +22,47 @@ import interfaces.IUsuarioController;
 @WebServlet("/sesion")
 public class Sesion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Sesion() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public Sesion() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession objSesion = request.getSession();
-		
-		if(request.getParameter("cerrar_sesion") != null) {
+
+		if (request.getParameter("cerrar_sesion") != null) {
 			objSesion.setAttribute("estado_sesion", EstadoSesion.NO_LOGIN);
 			response.sendRedirect("inicio");
 			return;
 		}
-		
+
 		String usuario = request.getParameter("usuario");
 		String clave = request.getParameter("clave");
-		
-		SessionManager.initSesion(request);
-		
 
-		
-		if(objSesion.getAttribute("estado_sesion") ==  EstadoSesion.LOGIN_CORRECTO) {
+		SessionManager.initSesion(request);
+
+		if (objSesion.getAttribute("estado_sesion") == EstadoSesion.LOGIN_CORRECTO) {
 			response.sendRedirect("inicio");
 			return;
 		}
-		
-		
-		if((usuario == null || clave == null) && objSesion.getAttribute("estado_sesion") ==  EstadoSesion.NO_LOGIN) {
+
+		if ((usuario == null || clave == null) && objSesion.getAttribute("estado_sesion") == EstadoSesion.NO_LOGIN) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
 			dispatcher.forward(request, response);
 			return;
 		}
 		EstadoSesion nuevoEstado;
-		
+
 		ISesionController sesionController = Factory.get().getISesionController();
 
 		// chequea contraseña
@@ -74,14 +73,20 @@ public class Sesion extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/login.jsp");
 			dispatcher.forward(request, response);
 			return;
-		}
-		else {
+		} else {
 			nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
 			objSesion.setAttribute("estado_sesion", nuevoEstado);
 			IUsuarioController usuarioController = Factory.get().getIUsuarioController();
-			
-			// setea el usuario logueado
-			request.getSession().setAttribute("usuario_logueado", usuario);
+
+			// Obtener el objeto DTUsuario completo
+			try {
+				var dtUsuario = usuarioController.obtenerUsuario(usuario);
+				request.getSession().setAttribute("usuario_logueado", dtUsuario);
+			} catch (Exception e) {
+				e.printStackTrace();
+				// Si falla, al menos guardamos el nickname
+				request.getSession().setAttribute("usuario_logueado", usuario);
+			}
 
 			// redirige a la página principal para que luego rediriga a la página
 			// que corresponde
@@ -90,9 +95,11 @@ public class Sesion extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

@@ -27,60 +27,78 @@ import exceptions.ValidationInputException;
 @WebServlet("/edicion/*")
 public class Edicion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Edicion() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public Edicion() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String pathInfo = request.getPathInfo(); // /nombreDeLaEdicion
 		if (pathInfo == null || pathInfo.equals("/")) {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
 		}
-		
+
 		String nombreEdicionUrl = pathInfo.substring(1); // nombreDeLaEdicion
-		String nombreEdicion = nombreEdicionUrl.replace('-',' '); 
-		
+		String nombreEdicion = nombreEdicionUrl.replace('-', ' ');
+
 		Factory factory = Factory.get();
-		
+
 		boolean usuarioRegistrado = false;
 		String mensajeUsuarioNoLogueado = "Inicie sesión para registrarse en la edición!";
-		
+
 		SessionManager.initSesion(request);
 		EstadoSesion estado_sesion = (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-		
+
 		try {
 			IEdicionController edicionController = factory.getIEdicionController();
 			DTEdicionDetallada dtEdicionDetallada = edicionController.obtenerDatosDetalladosEdicion(nombreEdicion);
-			
-			if ((dtEdicionDetallada != null) && dtEdicionDetallada.edicion().estado() != datatypes.EstadoEdicion.ACEPTADA) {
+
+			if ((dtEdicionDetallada != null)
+					&& dtEdicionDetallada.edicion().estado() != datatypes.EstadoEdicion.ACEPTADA) {
 				response.sendRedirect(request.getContextPath() + "/inicio");
-				return;				
+				return;
 			}
-			
+
 			if (estado_sesion == EstadoSesion.LOGIN_CORRECTO) {
-				String usuario = (String) request.getSession().getAttribute("usuario_logueado");
-				var usuarioController = factory.getIUsuarioController();
-				final DTUsuario dtUsuario = usuarioController.obtenerUsuario(usuario);
+				Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
+				DTUsuario dtUsuarioTemp = null;
+
+				if (usuarioObj instanceof DTUsuario) {
+					dtUsuarioTemp = (DTUsuario) usuarioObj;
+				} else if (usuarioObj instanceof String) {
+					// Retrocompatibilidad: si todavía es String, obtenerlo de la BD
+					var usuarioController = factory.getIUsuarioController();
+					try {
+						dtUsuarioTemp = usuarioController.obtenerUsuario((String) usuarioObj);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+				final DTUsuario dtUsuario = dtUsuarioTemp;
+
 				if (dtUsuario == null) {
 					request.setAttribute("errorRegistro", mensajeUsuarioNoLogueado);
 				}
 				request.setAttribute("usuario", dtUsuario);
-				
-				if ((dtEdicionDetallada != null) && (dtUsuario != null) && (dtUsuario.getTipo() == TipoUsuario.ASISTENTE)) {
+				if ((dtEdicionDetallada != null) && (dtUsuario != null)
+						&& (dtUsuario.getTipo() == TipoUsuario.ASISTENTE)) {
 					usuarioRegistrado = !factory.getIEdicionController()
 							.asistenteNoRegistrado(nombreEdicion, dtUsuario.nickname());
 					request.setAttribute("usuarioRegistrado", usuarioRegistrado);
-				} else if ((dtEdicionDetallada != null) && (dtUsuario != null) && (dtUsuario.getTipo() == TipoUsuario.ORGANIZADOR)) {
+				} else if ((dtEdicionDetallada != null) && (dtUsuario != null)
+						&& (dtUsuario.getTipo() == TipoUsuario.ORGANIZADOR)) {
 					request.setAttribute("errorRegistro", "Solo los asistentes pueden registrarse en una edición.");
 				}
 				if (usuarioRegistrado && (dtEdicionDetallada != null)) {
@@ -94,24 +112,24 @@ public class Edicion extends HttpServlet {
 				request.setAttribute("errorRegistro", mensajeUsuarioNoLogueado);
 			}
 			request.setAttribute("edicionDetallada", dtEdicionDetallada);
-			request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);			
-		
-		} 
-		catch (ValidationInputException e) {
+			request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);
+
+		} catch (ValidationInputException e) {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
 		}
-		
+
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String action = request.getParameter("action");
 		String nombreEdicion = request.getParameter("nombreEdicion");
@@ -119,7 +137,7 @@ public class Edicion extends HttpServlet {
 		String nicknameAsistente = request.getParameter("nickname");
 		System.out.println("Nickname asistente en edicion servlet: " + nicknameAsistente);
 		String codigo = request.getParameter("codigoPatrocinio");
-		
+
 		if (action.equals("validarCodigo")) {
 			IEdicionController edicionController = Factory.get().getIEdicionController();
 			boolean codigoValido = false;
@@ -128,8 +146,7 @@ public class Edicion extends HttpServlet {
 						nombreEdicion,
 						nombreTipoRegistro,
 						nicknameAsistente,
-						codigo
-				);
+						codigo);
 			} catch (ValidationInputException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -139,9 +156,8 @@ public class Edicion extends HttpServlet {
 				request.setAttribute("codigoValido", true);
 				request.setAttribute("codigoIngresado", codigo);
 				doGet(request, response);
-				return;	
-			}
-			else {
+				return;
+			} else {
 				System.out.println("El código ingresado no es válido.");
 				request.setAttribute("abrirModal", nombreTipoRegistro);
 				request.setAttribute("codigoValido", false);
@@ -151,32 +167,29 @@ public class Edicion extends HttpServlet {
 			}
 			// Handle registration action
 			// You can add your registration logic here
-		}
-		else if (action.equals("confirmarRegistro")) {
+		} else if (action.equals("confirmarRegistro")) {
 			IEdicionController edicionController = Factory.get().getIEdicionController();
 			LocalDate fechaActual = LocalDate.now();
 			Date fechaRegistro = java.sql.Date.valueOf(fechaActual);
 			try {
 				if (codigo.isEmpty()) {
-						edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente, fechaRegistro);
-					}
-				else {
-						edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente, fechaRegistro, codigo);
-					}
-			}
-			catch (ValidationInputException e) {
+					edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente,
+							fechaRegistro);
+				} else {
+					edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente,
+							fechaRegistro, codigo);
+				}
+			} catch (ValidationInputException e) {
 				// TODO Auto-generated catch block
 				request.setAttribute("errorRegistro", e.getMessage());
 				doGet(request, response);
 				return;
-			}
-			catch (IllegalArgumentException ie) {
+			} catch (IllegalArgumentException ie) {
 				// TODO Auto-generated catch block
 				request.setAttribute("errorRegistro", ie.getMessage());
 				doGet(request, response);
 				return;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				request.setAttribute("errorRegistro", e.getMessage());
 				doGet(request, response);
@@ -186,7 +199,7 @@ public class Edicion extends HttpServlet {
 			request.setAttribute("registroExitoso", true);
 			doGet(request, response);
 			return;
-	
+
 		}
 		doGet(request, response);
 	}

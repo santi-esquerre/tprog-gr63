@@ -28,21 +28,38 @@ public class DTUsuario implements Serializable {
     return correo;
   }
 
-	@Override
-	public String toString() {
-		return nickname;
-	}
-	
-	public String foto() {
+  @Override
+  public String toString() {
+    return nickname;
+  }
+
+  public String foto() {
     return foto;
   }
-	
-	public TipoUsuario getTipo(){ 
-		  if (this.getClass().getSimpleName().equals("DTAsistente")) {
-			  return TipoUsuario.ASISTENTE;
-		  } else {
-			  return TipoUsuario.ORGANIZADOR; 
-		  }
-	
-	}
+
+  // JavaBeans-style getters for JSP EL compatibility
+  public String getNickname() {
+    return nickname;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public String getCorreo() {
+    return correo;
+  }
+
+  public String getFoto() {
+    return foto;
+  }
+
+  public TipoUsuario getTipo() {
+    if (this.getClass().getSimpleName().equals("DTAsistente")) {
+      return TipoUsuario.ASISTENTE;
+    } else {
+      return TipoUsuario.ORGANIZADOR;
+    }
+
+  }
 }
