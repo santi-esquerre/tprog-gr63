@@ -4,10 +4,14 @@ package datatypes;
 import java.io.Serializable;
 import java.util.Set;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
 /**
  * Versión detallada de una edición. Nota: En UML hereda de DTEdicion; en Java (records) lo
  * modelamos por composición.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public record DTEdicionDetallada(
     DTEdicion edicion, // datos base de la edición
     DTOrganizador organizador, // organizador
