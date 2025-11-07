@@ -1,5 +1,11 @@
 package dominio;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import datatypes.DTAsistente;
 import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
@@ -11,11 +17,6 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @DiscriminatorValue("ASISTENTE")
@@ -34,7 +35,8 @@ public class Asistente extends Usuario {
   @OneToMany(mappedBy = "asistente")
   private Set<Registro> registros = new LinkedHashSet<>(); // Asociación con Registro
 
-  protected Asistente() {}
+  protected Asistente() {
+  }
 
   public Asistente(
       String nickname,
@@ -53,8 +55,16 @@ public class Asistente extends Usuario {
     return apellido;
   }
 
+  public void setApellido(String apellido) {
+    this.apellido = apellido;
+  }
+
   public LocalDate getFechaNacimiento() {
     return fechaNacimiento;
+  }
+
+  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
   }
 
   public Institucion getInstitucion() {
