@@ -15,13 +15,14 @@
          xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>uy.edu.tpgr63</groupId>
-  <artifactId>eventos-parent</artifactId>
+  <artifactId>eventos-uy-central-server</artifactId>
   <version>0.1.0</version>
   <packaging>pom</packaging>
 
   <modules>
     <module>core</module>
     <module>admin</module>
+    <module>ensamblador</module>
   </modules>
 
   <properties>
@@ -40,6 +41,20 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
+  <dependencies>
+    <dependency>
+                <groupId>jakarta.xml.ws</groupId>
+                <artifactId>jakarta.xml.ws-api</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-rt</artifactId>
+                <version>4.0.0</version>
+                <scope>runtime</scope>
+            </dependency>
+    </dependencies>
 
   <build>
     <pluginManagement>

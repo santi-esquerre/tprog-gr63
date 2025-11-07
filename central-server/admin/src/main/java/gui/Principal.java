@@ -27,6 +27,7 @@ import interfaces.*;
 import jiconfont.swing.IconFontSwing;
 import util.ExceptionHandler;
 import util.TestLoader;
+import webservice.Publicador;
 import jiconfont.icons.font_awesome.FontAwesome;
 
 import javax.swing.JMenuBar;
@@ -92,6 +93,8 @@ public class Principal {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+			  Publicador publicador = new Publicador();
+			  publicador.publicar();
 				Principal window = new Principal();
 				window.getFrame().setVisible(true);
 			}

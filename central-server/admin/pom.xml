@@ -17,7 +17,7 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">-->
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>uy.edu.tpgr63</groupId>
-    <artifactId>eventos-parent</artifactId>
+    <artifactId>eventos-uy-central-server</artifactId>
     <version>0.1.0</version>
   </parent>
   <artifactId>admin</artifactId>
