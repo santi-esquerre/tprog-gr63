@@ -1,5 +1,7 @@
 package webservice;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import datatypes.DTAsistente;
@@ -40,13 +42,13 @@ public class EdicionService {
 	}
 	
 	@WebMethod
-	public Set<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion) {
-		return edController.mostrarTiposDeRegistro(nombreEdicion);
+	public ArrayList<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion) {
+		return new ArrayList<>(edController.mostrarTiposDeRegistro(nombreEdicion));
 	}
 	
 	@WebMethod
-	public Set<DTAsistente> mostrarAsistentes(String nombreEdicion) {
-		return edController.mostrarAsistentes(nombreEdicion);
+	public ArrayList<DTAsistente> mostrarAsistentes(String nombreEdicion) {
+		return new ArrayList<>(edController.mostrarAsistentes(nombreEdicion));
 	}
 	
 	@WebMethod
@@ -94,9 +96,9 @@ public class EdicionService {
 	}
 	
 	@WebMethod
-	public Set<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador)
+	public ArrayList<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador)
 	       throws ValidationInputException {
-		return edController.obtenerEdicionesPorOrganizador(nicknameOrganizador);
+		return new ArrayList<>(edController.obtenerEdicionesPorOrganizador(nicknameOrganizador));
 	}
 	
 

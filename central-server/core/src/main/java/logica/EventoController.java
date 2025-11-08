@@ -85,7 +85,7 @@ public final class EventoController implements IEventoController {
     boolean res =
         Tx.inTx(
             entityManager -> {
-              var cats = mapCategorias(entityManager, dta.categorias());
+              Set<Categoria> cats = mapCategorias(entityManager, dta.categorias().stream().collect(Collectors.toSet()));
               return eventoFactory.crearEvento(
                   entityManager,
                   dta.nombre(),

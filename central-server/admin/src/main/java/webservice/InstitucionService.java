@@ -1,5 +1,7 @@
 package webservice;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import datatypes.DTInstitucion;
@@ -28,8 +30,8 @@ public class InstitucionService {
 	}
 	
 	@WebMethod
-	public Set<DTInstitucion> listarInstituciones() {
-		return institucionController.listarInstituciones();
+	public ArrayList<DTInstitucion> listarInstituciones() {
+		return new ArrayList<>(institucionController.listarInstituciones());
 	}
 	
 	@WebMethod

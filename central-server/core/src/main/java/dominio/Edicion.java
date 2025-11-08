@@ -19,10 +19,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -213,12 +216,14 @@ public class Edicion extends BaseEntity {
     datatypes.DTOrganizador dtOrganizador = this.obtenerDTOrganizador();
 
     // Convert tipos de registro
-    Set<datatypes.DTTipoRegistro> dtTiposRegistro = this.listarDTTiposDeRegistro();
+    ArrayList<datatypes.DTTipoRegistro> dtTiposRegistro = this.listarDTTiposDeRegistro().stream()
+    	    .collect(Collectors.toCollection(ArrayList::new));
 
-    Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
+    ArrayList<datatypes.DTPatrocinio> dtPatrocinios = new ArrayList<>();
 
     // // Convert registros to DTRegistro
-    Set<datatypes.DTRegistro> dtRegistros = this.obtenerDTRegistros();
+    ArrayList<datatypes.DTRegistro> dtRegistros = this.obtenerDTRegistros().stream()
+		.collect(Collectors.toCollection(ArrayList::new));
 
     return new datatypes.DTEdicionDetallada(
         dtEdicion, dtOrganizador, dtTiposRegistro, dtPatrocinios, dtRegistros);

@@ -13,8 +13,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -118,13 +121,13 @@ public class Evento extends BaseEntity {
   
   public datatypes.DTEventoDetallado toDTEventoDetallado(boolean soloAprobadas) {
     // Convert categories to names
-    Set<String> categoriasNombres = new LinkedHashSet<>();
+    ArrayList<String> categoriasNombres = new ArrayList<>();
     for (Categoria cat : categorias) {
       categoriasNombres.add(cat.getNombre());
     }
 
     // Convert editions to DTEdicion
-    Set<datatypes.DTEdicion> dtEdiciones = new LinkedHashSet<>();
+    ArrayList<datatypes.DTEdicion> dtEdiciones = new ArrayList<>();
     for (Edicion ed : ediciones) {
       if (!soloAprobadas || ed.getEstado() == EstadoEdicion.ACEPTADA) dtEdiciones.add(ed.toDTEdicion());
     }

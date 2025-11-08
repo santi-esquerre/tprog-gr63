@@ -188,7 +188,7 @@ public class TestLoader {
 			Date fechaAlta = Date.from(LocalDate.parse(evento.get("FechaAlta"), formatter)
 					.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Set<String> categoriasRefs = new HashSet<String>(Arrays.asList(evento.get("Categorias").split(",")));
-			Set<String> categoriasEvento = new HashSet<String>();
+			ArrayList<String> categoriasEvento = new ArrayList<String>();
 			for (String c : categoriasRefs) {
 				categoriasEvento.add(categorias.stream()
 						.filter(cat -> cat.get("Ref").equals(c.trim()))

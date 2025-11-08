@@ -1,6 +1,7 @@
 package webservice;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -91,8 +92,8 @@ public class UsuarioService {
 	}
 	
 	@WebMethod
-	public Set<DTAsistente> mostrarAsistentes() {
-		return usuarioController.mostrarAsistentes();
+	public ArrayList<DTAsistente> mostrarAsistentes() {
+		return new ArrayList<>(usuarioController.mostrarAsistentes());
 	}
 	
 	@WebMethod
@@ -101,18 +102,18 @@ public class UsuarioService {
 	}
 	
 	@WebMethod
-	public List<DTRegistro> obtenerRegistrosUsuario(String nickname) {
-		return usuarioController.obtenerRegistrosUsuario(nickname);
+	public ArrayList<DTRegistro> obtenerRegistrosUsuario(String nickname) {
+		return new ArrayList<>(usuarioController.obtenerRegistrosUsuario(nickname));
 	}
 	
 	@WebMethod
-	public List<DTUsuarioItemListado> obtenerUsuarios() {
-		return usuarioController.obtenerUsuarios();
+	public ArrayList<DTUsuarioItemListado> obtenerUsuarios() {
+		return new ArrayList<>(usuarioController.obtenerUsuarios());
 	}
 	
 	@WebMethod
-	public List<DTUsuarioItemListado> obtenerUsuarios(TipoUsuario tipoUsuario) {
-		return usuarioController.obtenerUsuarios(tipoUsuario);
+	public ArrayList<DTUsuarioItemListado> obtenerUsuariosPorTipo(TipoUsuario tipoUsuario) {
+		return new ArrayList<>(usuarioController.obtenerUsuarios(tipoUsuario));
 	}
 	
 	@WebMethod

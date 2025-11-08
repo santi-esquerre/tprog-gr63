@@ -28,10 +28,15 @@ public class Publicador {
 
       String endpointUrl = props.getProperty("webservice.endpoint", "http://localhost:9050/publicador");
       System.out.println("Publicando en: " + endpointUrl);
+      System.out.println("Primero");
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/edicion", new EdicionService()));
+      System.out.println("Segundo");
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/evento", new EventoService()));
+      System.out.println("Tercero");
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/institucion", new InstitucionService()));
+      System.out.println("Cuarto");
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/sesion", new SesionService()));
+      System.out.println("Quinto");
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/usuario", new UsuarioService()));
     }
     catch (Exception e) {

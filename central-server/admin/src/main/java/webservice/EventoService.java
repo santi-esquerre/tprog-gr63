@@ -1,5 +1,7 @@
 package webservice;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import datatypes.DTEdicion;
@@ -26,8 +28,8 @@ public class EventoService {
 	public EventoService() {}
 	
 	@WebMethod
-	public Set<String> obtenerCategorias() {
-		return eventoController.obtenerCategorias();
+	public ArrayList<String> obtenerCategorias() {
+		return new ArrayList<>(eventoController.obtenerCategorias());
 	}
 	
 	@WebMethod
@@ -36,19 +38,19 @@ public class EventoService {
 	}
 	
 	@WebMethod
-	public Set<DTEvento> listarEventos() {
-		return eventoController.listarEventos();
+	public ArrayList<DTEvento> listarEventos() {
+		return new ArrayList<>(eventoController.listarEventos());
 	}
 	
 	@WebMethod
-	public Set<DTEdicion> mostrarEdiciones(String nombreEvento) throws ValidationInputException {
-		return eventoController.mostrarEdiciones(nombreEvento);
+	public ArrayList<DTEdicion> mostrarEdiciones(String nombreEvento) throws ValidationInputException {
+		return new ArrayList<>(eventoController.mostrarEdiciones(nombreEvento));
 	}
 	
 	@WebMethod
-	public Set<DTEdicion> mostrarEdiciones(String nombreEvento, EstadoEdicion estado)
+	public ArrayList<DTEdicion> mostrarEdicionesPorEstado(String nombreEvento, EstadoEdicion estado)
 		      throws ValidationInputException {
-		return eventoController.mostrarEdiciones(nombreEvento, estado);
+		return new ArrayList<>(eventoController.mostrarEdiciones(nombreEvento, estado));
 	}
 	
 	@WebMethod
