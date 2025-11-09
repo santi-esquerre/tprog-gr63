@@ -5,11 +5,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import webservice.DtAsistente;
+import webservice.DtEdicion;
+import webservice.DtOrganizador;
+import webservice.DtUsuarioItemListado;
+import webservice.EdicionService;
+import webservice.EstadoEdicion;
 import webservice.PortFactory;
-import webservice.PublicadorService;
 import webservice.UsuarioService;
 
-import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +22,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,7 +59,7 @@ public class Usuarios extends HttpServlet {
 
     // Obtener controlador y lista completa de usuarios
     UsuarioService usuarioPort = PortFactory.get().getUsuarioPort();
-    List<DTUsuarioItemListado> listadoUsuarios = usuarioPort.obtenerUsuarios();
+    List<DtUsuarioItemListado> listadoUsuarios = usuarioPort.obtenerUsuarios().getUsuario();
 
     // Evitar que sea null
     if (listadoUsuarios == null) listadoUsuarios = List.of();
@@ -85,7 +89,7 @@ public class Usuarios extends HttpServlet {
     int hasta = Math.min(desde + CANTIDAD_PAGINACION, totalUsuarios);
 
     // Sublista de la página actual
-    List<DTUsuarioItemListado> paginaUsuarios = listadoUsuarios.subList(desde, hasta);
+    List<DtUsuarioItemListado> paginaUsuarios = listadoUsuarios.subList(desde, hasta);
 
     // Pasar datos al JSP
     request.setAttribute("fin_paginacion", ultimaPagina);
@@ -112,10 +116,10 @@ public class Usuarios extends HttpServlet {
     }
 
     try {
-      IusuarioPort usuarioPort = Factory.get().getIusuarioPort();
+      UsuarioService usuarioPort = PortFactory.get().getUsuarioPort();
 
       if ("asistente".equalsIgnoreCase(tipo)) {
-        DTAsistente asistente = usuarioPort.seleccionarAsistente(nickname);
+        DtAsistente asistente = usuarioPort.seleccionarAsistente(nickname);
         if (asistente == null) {
           out.print(gson.toJson(Map.of("success", false, "message", "Asistente no encontrado")));
           return;
@@ -123,43 +127,44 @@ public class Usuarios extends HttpServlet {
 
         Map<String, Object> data = new HashMap<>();
         data.put("tipo", "asistente");
-        data.put("nickname", asistente.nickname());
-        data.put("nombre", asistente.nombre());
-        data.put("apellido", asistente.apellido());
-        data.put("correo", asistente.correo());
-        if (asistente.fechaNacimiento() != null) {
+        data.put("nickname", asistente.getNickname());
+        data.put("nombre", asistente.getNombre());
+        data.put("apellido", asistente.getApellido());
+        data.put("correo", asistente.getCorreo());
+        GregorianCalendar gCalendar = asistente.getFechaNacimiento().toGregorianCalendar();
+        if (asistente.getFechaNacimiento() != null) {
           data.put("fechaNacimiento",
-              DateTimeFormatter.ISO_LOCAL_DATE.format(asistente.fechaNacimiento().toInstant()
+              DateTimeFormatter.ISO_LOCAL_DATE.format(gCalendar.toInstant()
                   .atZone(ZoneId.systemDefault()).toLocalDate()));
         } else {
           data.put("fechaNacimiento", null);
         }
-        data.put("foto", asistente.foto());
+        data.put("foto", asistente.getFoto());
 
         out.print(gson.toJson(Map.of("success", true, "data", data)));
         return;
       } else if ("organizador".equalsIgnoreCase(tipo)) {
-        DTOrganizador org = usuarioPort.seleccionarOrganizador(nickname);
+        DtOrganizador org = usuarioPort.seleccionarOrganizador(nickname);
         if (org == null) {
           out.print(gson.toJson(Map.of("success", false, "message", "Organizador no encontrado")));
           return;
         }
         
-  IEdicionController edicionController = Factory.get().getIEdicionController();
-  Set<DTEdicion> dtEdicionesSet = edicionController.obtenerEdicionesPorOrganizador(nickname);
+  EdicionService edicionController = PortFactory.get().getEdicionPort();
+  List<DtEdicion> dtEdicionesSet = edicionController.obtenerEdicionesPorOrganizador(nickname).getEdicion();
   // Filtrar solo ediciones aceptadas y recolectar en un Set serializable
-  Set<DTEdicion> edicionesAceptadas = dtEdicionesSet == null ? Set.of()
+  Set<DtEdicion> edicionesAceptadas = dtEdicionesSet == null ? Set.of()
     : dtEdicionesSet.stream()
-      .filter(edicion -> edicion != null && edicion.estado() == EstadoEdicion.ACEPTADA)
+      .filter(edicion -> edicion != null && edicion.getEstado().equals(EstadoEdicion.ACEPTADA))
       .collect(Collectors.toSet());
         Map<String, Object> data = new HashMap<>();
         data.put("tipo", "organizador");
-        data.put("nickname", org.nickname());
-        data.put("nombre", org.nombre());
-        data.put("descripcion", org.descripcion());
-        data.put("correo", org.correo());
-        data.put("linkSitioWeb", org.linkSitioWeb());
-        data.put("foto", org.foto());
+        data.put("nickname", org.getNickname());
+        data.put("nombre", org.getNombre());
+        data.put("descripcion", org.getDescripcion());
+        data.put("correo", org.getCorreo());
+        data.put("linkSitioWeb", org.getLinkSitioWeb());
+        data.put("foto", org.getFoto());
   data.put("ediciones", edicionesAceptadas);
 
         out.print(gson.toJson(Map.of("success", true, "data", data)));

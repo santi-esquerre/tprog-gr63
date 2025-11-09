@@ -48,83 +48,19 @@ public interface EdicionService {
      * 
      * @param arg0
      * @param arg1
-     * @param arg2
-     * @param arg3
-     */
-    @WebMethod
-    @Action(input = "http://webservice/EdicionService/altaRegistroEdicionEventoRequest", output = "http://webservice/EdicionService/altaRegistroEdicionEventoResponse")
-    public void altaRegistroEdicionEvento(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0,
-        @WebParam(name = "arg1", partName = "arg1")
-        String arg1,
-        @WebParam(name = "arg2", partName = "arg2")
-        String arg2,
-        @WebParam(name = "arg3", partName = "arg3")
-        XMLGregorianCalendar arg3);
-
-    /**
-     * 
-     * @param arg0
-     * @param arg1
-     * @return
-     *     returns webservice.DtTipoRegistro
      * @throws ValidationInputException_Exception
      */
     @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EdicionService/consultaTipoRegistroRequest", output = "http://webservice/EdicionService/consultaTipoRegistroResponse", fault = {
-        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EdicionService/consultaTipoRegistro/Fault/ValidationInputException")
+    @Action(input = "http://webservice/EdicionService/altaTipoRegistroRequest", output = "http://webservice/EdicionService/altaTipoRegistroResponse", fault = {
+        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EdicionService/altaTipoRegistro/Fault/ValidationInputException")
     })
-    public DtTipoRegistro consultaTipoRegistro(
+    public void altaTipoRegistro(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0,
         @WebParam(name = "arg1", partName = "arg1")
-        String arg1)
+        DtTipoRegistro arg1)
         throws ValidationInputException_Exception
     ;
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns webservice.ArrayList
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EdicionService/mostrarTiposDeRegistroRequest", output = "http://webservice/EdicionService/mostrarTiposDeRegistroResponse")
-    public ArrayList mostrarTiposDeRegistro(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0);
-
-    /**
-     * 
-     * @param arg0
-     * @param arg1
-     * @return
-     *     returns boolean
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EdicionService/cupoDisponibleRequest", output = "http://webservice/EdicionService/cupoDisponibleResponse")
-    public boolean cupoDisponible(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0,
-        @WebParam(name = "arg1", partName = "arg1")
-        String arg1);
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns webservice.ArrayList
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EdicionService/mostrarAsistentesRequest", output = "http://webservice/EdicionService/mostrarAsistentesResponse")
-    public ArrayList mostrarAsistentes(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0);
 
     /**
      * 
@@ -172,19 +108,83 @@ public interface EdicionService {
      * 
      * @param arg0
      * @param arg1
-     * @throws ValidationInputException_Exception
+     * @return
+     *     returns boolean
      */
     @WebMethod
-    @Action(input = "http://webservice/EdicionService/altaTipoRegistroRequest", output = "http://webservice/EdicionService/altaTipoRegistroResponse", fault = {
-        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EdicionService/altaTipoRegistro/Fault/ValidationInputException")
-    })
-    public void altaTipoRegistro(
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EdicionService/cupoDisponibleRequest", output = "http://webservice/EdicionService/cupoDisponibleResponse")
+    public boolean cupoDisponible(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0,
         @WebParam(name = "arg1", partName = "arg1")
-        DtTipoRegistro arg1)
+        String arg1);
+
+    /**
+     * 
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     * @param arg3
+     */
+    @WebMethod
+    @Action(input = "http://webservice/EdicionService/altaRegistroEdicionEventoRequest", output = "http://webservice/EdicionService/altaRegistroEdicionEventoResponse")
+    public void altaRegistroEdicionEvento(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0,
+        @WebParam(name = "arg1", partName = "arg1")
+        String arg1,
+        @WebParam(name = "arg2", partName = "arg2")
+        String arg2,
+        @WebParam(name = "arg3", partName = "arg3")
+        XMLGregorianCalendar arg3);
+
+    /**
+     * 
+     * @param arg0
+     * @param arg1
+     * @return
+     *     returns webservice.DtTipoRegistro
+     * @throws ValidationInputException_Exception
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EdicionService/consultaTipoRegistroRequest", output = "http://webservice/EdicionService/consultaTipoRegistroResponse", fault = {
+        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EdicionService/consultaTipoRegistro/Fault/ValidationInputException")
+    })
+    public DtTipoRegistro consultaTipoRegistro(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0,
+        @WebParam(name = "arg1", partName = "arg1")
+        String arg1)
         throws ValidationInputException_Exception
     ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservice.DtTipoRegistroArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EdicionService/mostrarTiposDeRegistroRequest", output = "http://webservice/EdicionService/mostrarTiposDeRegistroResponse")
+    public DtTipoRegistroArray mostrarTiposDeRegistro(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservice.DtAsistenteArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EdicionService/mostrarAsistentesRequest", output = "http://webservice/EdicionService/mostrarAsistentesResponse")
+    public DtAsistenteArray mostrarAsistentes(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0);
 
     /**
      * 
@@ -217,7 +217,7 @@ public interface EdicionService {
      * 
      * @param arg0
      * @return
-     *     returns webservice.ArrayList
+     *     returns webservice.DtEdicionArray
      * @throws ValidationInputException_Exception
      */
     @WebMethod
@@ -225,7 +225,7 @@ public interface EdicionService {
     @Action(input = "http://webservice/EdicionService/obtenerEdicionesPorOrganizadorRequest", output = "http://webservice/EdicionService/obtenerEdicionesPorOrganizadorResponse", fault = {
         @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EdicionService/obtenerEdicionesPorOrganizador/Fault/ValidationInputException")
     })
-    public ArrayList obtenerEdicionesPorOrganizador(
+    public DtEdicionArray obtenerEdicionesPorOrganizador(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0)
         throws ValidationInputException_Exception

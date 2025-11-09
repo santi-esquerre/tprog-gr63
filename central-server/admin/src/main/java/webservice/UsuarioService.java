@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import datatypes.DTAsistente;
+import datatypes.DTOrganizador;
 import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
 import datatypes.DTUsuario;
@@ -92,8 +93,8 @@ public class UsuarioService {
 	}
 	
 	@WebMethod
-	public ArrayList<DTAsistente> mostrarAsistentes() {
-		return new ArrayList<>(usuarioController.mostrarAsistentes());
+	public DTAsistenteArray mostrarAsistentes() {
+		return new DTAsistenteArray(new ArrayList<DTAsistente>(usuarioController.mostrarAsistentes()));
 	}
 	
 	@WebMethod
@@ -102,19 +103,29 @@ public class UsuarioService {
 	}
 	
 	@WebMethod
-	public ArrayList<DTRegistro> obtenerRegistrosUsuario(String nickname) {
-		return new ArrayList<>(usuarioController.obtenerRegistrosUsuario(nickname));
+	public DTRegistroArray obtenerRegistrosUsuario(String nickname) {
+		return new DTRegistroArray(usuarioController.obtenerRegistrosUsuario(nickname));
 	}
 	
 	@WebMethod
-	public ArrayList<DTUsuarioItemListado> obtenerUsuarios() {
-		return new ArrayList<>(usuarioController.obtenerUsuarios());
+	public DTUsuarioItemListadoArray obtenerUsuarios() {
+		return new DTUsuarioItemListadoArray(new ArrayList<>(usuarioController.obtenerUsuarios()));
 	}
 	
 	@WebMethod
-	public ArrayList<DTUsuarioItemListado> obtenerUsuariosPorTipo(TipoUsuario tipoUsuario) {
-		return new ArrayList<>(usuarioController.obtenerUsuarios(tipoUsuario));
+	public DTUsuarioItemListadoArray obtenerUsuariosPorTipo(TipoUsuario tipoUsuario) {
+		return new DTUsuarioItemListadoArray(new ArrayList<>(usuarioController.obtenerUsuarios(tipoUsuario)));
 	}
+	
+ @WebMethod
+ public DTAsistente seleccionarAsistente(String nickname) throws Exception {
+     return usuarioController.seleccionarAsistente(nickname);
+ }
+ 
+ @WebMethod
+ public DTOrganizador seleccionarOrganizador(String nickname) throws Exception {
+     return usuarioController.seleccionarOrganizador(nickname);
+ }
 	
 	@WebMethod
 	public DTUsuario obtenerUsuario(String usuario) throws Exception {

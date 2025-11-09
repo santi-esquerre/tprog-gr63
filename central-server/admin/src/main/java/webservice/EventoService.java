@@ -38,19 +38,19 @@ public class EventoService {
 	}
 	
 	@WebMethod
-	public ArrayList<DTEvento> listarEventos() {
-		return new ArrayList<>(eventoController.listarEventos());
+	public DTEventoArray listarEventos() {
+		return new DTEventoArray(new ArrayList<>(eventoController.listarEventos()));
 	}
 	
 	@WebMethod
-	public ArrayList<DTEdicion> mostrarEdiciones(String nombreEvento) throws ValidationInputException {
-		return new ArrayList<>(eventoController.mostrarEdiciones(nombreEvento));
+	public DTEdicionArray mostrarEdiciones(String nombreEvento) throws ValidationInputException {
+		return new DTEdicionArray(new ArrayList<>(eventoController.mostrarEdiciones(nombreEvento)));
 	}
 	
 	@WebMethod
-	public ArrayList<DTEdicion> mostrarEdicionesPorEstado(String nombreEvento, EstadoEdicion estado)
-		      throws ValidationInputException {
-		return new ArrayList<>(eventoController.mostrarEdiciones(nombreEvento, estado));
+	public DTEdicionArray mostrarEdicionesPorEstado(String nombreEvento, EstadoEdicion estado)
+			  throws ValidationInputException {
+		return new DTEdicionArray(new ArrayList<>(eventoController.mostrarEdiciones(nombreEvento, estado)));
 	}
 	
 	@WebMethod

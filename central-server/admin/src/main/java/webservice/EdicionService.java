@@ -42,13 +42,13 @@ public class EdicionService {
 	}
 	
 	@WebMethod
-	public ArrayList<DTTipoRegistro> mostrarTiposDeRegistro(String nombreEdicion) {
-		return new ArrayList<>(edController.mostrarTiposDeRegistro(nombreEdicion));
+	public DTTipoRegistroArray mostrarTiposDeRegistro(String nombreEdicion) {
+		return new DTTipoRegistroArray(new ArrayList<>(edController.mostrarTiposDeRegistro(nombreEdicion)));
 	}
 	
 	@WebMethod
-	public ArrayList<DTAsistente> mostrarAsistentes(String nombreEdicion) {
-		return new ArrayList<>(edController.mostrarAsistentes(nombreEdicion));
+	public DTAsistenteArray mostrarAsistentes(String nombreEdicion) {
+		return new DTAsistenteArray(new ArrayList<>(edController.mostrarAsistentes(nombreEdicion)));
 	}
 	
 	@WebMethod
@@ -96,9 +96,9 @@ public class EdicionService {
 	}
 	
 	@WebMethod
-	public ArrayList<DTEdicion> obtenerEdicionesPorOrganizador(String nicknameOrganizador)
-	       throws ValidationInputException {
-		return new ArrayList<>(edController.obtenerEdicionesPorOrganizador(nicknameOrganizador));
+	public DTEdicionArray obtenerEdicionesPorOrganizador(String nicknameOrganizador)
+		   throws ValidationInputException {
+		return new DTEdicionArray(new ArrayList<>(edController.obtenerEdicionesPorOrganizador(nicknameOrganizador)));
 	}
 	
 

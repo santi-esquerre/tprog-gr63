@@ -31,6 +31,9 @@ public class ObjectFactory {
     private final static QName _UsuarioCorreoRepetidoException_QNAME = new QName("http://webservice/", "UsuarioCorreoRepetidoException");
     private final static QName _UsuarioInexistenteException_QNAME = new QName("http://webservice/", "UsuarioInexistenteException");
     private final static QName _UsuarioNicknameRepetidoException_QNAME = new QName("http://webservice/", "UsuarioNicknameRepetidoException");
+    private final static QName _Asistentes_QNAME = new QName("http://webservice/", "asistentes");
+    private final static QName _Registros_QNAME = new QName("http://webservice/", "registros");
+    private final static QName _Usuarios_QNAME = new QName("http://webservice/", "usuarios");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: webservice
@@ -110,13 +113,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayList }
+     * Create an instance of {@link DtAsistenteArray }
      * 
      * @return
-     *     the new instance of {@link ArrayList }
+     *     the new instance of {@link DtAsistenteArray }
      */
-    public ArrayList createArrayList() {
-        return new ArrayList();
+    public DtAsistenteArray createDtAsistenteArray() {
+        return new DtAsistenteArray();
+    }
+
+    /**
+     * Create an instance of {@link DtRegistroArray }
+     * 
+     * @return
+     *     the new instance of {@link DtRegistroArray }
+     */
+    public DtRegistroArray createDtRegistroArray() {
+        return new DtRegistroArray();
+    }
+
+    /**
+     * Create an instance of {@link DtUsuarioItemListadoArray }
+     * 
+     * @return
+     *     the new instance of {@link DtUsuarioItemListadoArray }
+     */
+    public DtUsuarioItemListadoArray createDtUsuarioItemListadoArray() {
+        return new DtUsuarioItemListadoArray();
+    }
+
+    /**
+     * Create an instance of {@link DtUsuarioItemListado }
+     * 
+     * @return
+     *     the new instance of {@link DtUsuarioItemListado }
+     */
+    public DtUsuarioItemListado createDtUsuarioItemListado() {
+        return new DtUsuarioItemListado();
     }
 
     /**
@@ -177,6 +210,16 @@ public class ObjectFactory {
      */
     public Optional createOptional() {
         return new Optional();
+    }
+
+    /**
+     * Create an instance of {@link DtRegistro }
+     * 
+     * @return
+     *     the new instance of {@link DtRegistro }
+     */
+    public DtRegistro createDtRegistro() {
+        return new DtRegistro();
     }
 
     /**
@@ -278,6 +321,45 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://webservice/", name = "UsuarioNicknameRepetidoException")
     public JAXBElement<UsuarioNicknameRepetidoException> createUsuarioNicknameRepetidoException(UsuarioNicknameRepetidoException value) {
         return new JAXBElement<>(_UsuarioNicknameRepetidoException_QNAME, UsuarioNicknameRepetidoException.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DtAsistenteArray }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DtAsistenteArray }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://webservice/", name = "asistentes")
+    public JAXBElement<DtAsistenteArray> createAsistentes(DtAsistenteArray value) {
+        return new JAXBElement<>(_Asistentes_QNAME, DtAsistenteArray.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DtRegistroArray }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DtRegistroArray }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://webservice/", name = "registros")
+    public JAXBElement<DtRegistroArray> createRegistros(DtRegistroArray value) {
+        return new JAXBElement<>(_Registros_QNAME, DtRegistroArray.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DtUsuarioItemListadoArray }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link DtUsuarioItemListadoArray }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://webservice/", name = "usuarios")
+    public JAXBElement<DtUsuarioItemListadoArray> createUsuarios(DtUsuarioItemListadoArray value) {
+        return new JAXBElement<>(_Usuarios_QNAME, DtUsuarioItemListadoArray.class, null, value);
     }
 
 }

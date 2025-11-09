@@ -30,8 +30,8 @@ public class InstitucionService {
 	}
 	
 	@WebMethod
-	public ArrayList<DTInstitucion> listarInstituciones() {
-		return new ArrayList<>(institucionController.listarInstituciones());
+	public DTInstitucionArray listarInstituciones() {
+		return new DTInstitucionArray(new ArrayList<>(institucionController.listarInstituciones()));
 	}
 	
 	@WebMethod

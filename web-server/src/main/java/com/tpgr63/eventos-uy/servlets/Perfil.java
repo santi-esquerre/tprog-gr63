@@ -6,31 +6,43 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.apache.jasper.compiler.JavacErrorDetail;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import controllers.ImagesManager;
 import controllers.SessionManager;
-import datatypes.*;
-import interfaces.Factory;
-import interfaces.IUsuarioController;
-import interfaces.IEdicionController;
-import interfaces.IEventoController;
-import interfaces.IInstitucionController;
+import webservice.PortFactory;
 import model.EstadoSesion;
-import exceptions.*;
+import webservice.DtAsistente;
+import webservice.DtOrganizador;
+import webservice.DtRegistro;
+import webservice.DtUsuario;
+import webservice.EdicionService;
+import webservice.EstadoEdicion;
+import webservice.Exception;
+import webservice.TipoUsuario;
+import webservice.UsuarioService;
+import webservice.ValidationInputException;
+import webservice.ValidationInputException_Exception;
 
 /**
  * Servlet implementation class Perfil
@@ -82,31 +94,31 @@ public class Perfil extends HttpServlet {
 		}
 
 		Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-		DTUsuario usuarioLogueado = null;
+		DtUsuario usuarioLogueado = null;
 
-		if (usuarioObj instanceof DTUsuario) {
-			usuarioLogueado = (DTUsuario) usuarioObj;
+		if (usuarioObj instanceof DtUsuario) {
+			usuarioLogueado = (DtUsuario) usuarioObj;
 		}
 
 		if (usuarioLogueado == null) {
 			response.sendRedirect(request.getContextPath() + "/sesion");
 			return;
 		}
-		Factory factory = Factory.get();
-		IUsuarioController usuarioController = factory.getIUsuarioController();
+		PortFactory factory = PortFactory.get();
+		UsuarioService usuarioController = factory.getUsuarioPort();
 
 		try {
 			// Determine user type and load appropriate data
 			if (usuarioLogueado.getTipo() == TipoUsuario.ASISTENTE) {
-				DTAsistente asistente = usuarioController.seleccionarAsistente(usuarioLogueado.nickname());
-				List<DTRegistro> registros = usuarioController.obtenerRegistrosUsuario(usuarioLogueado.nickname());
+				DtAsistente asistente = usuarioController.seleccionarAsistente(usuarioLogueado.getNickname());
+				List<DtRegistro> registros = usuarioController.obtenerRegistrosUsuario(usuarioLogueado.getNickname()).getRegistro();
 
 				request.setAttribute("asistente", asistente);
 				request.setAttribute("registros", registros);
 
 				request.getRequestDispatcher("/WEB-INF/usuarios/perfil-asistente.jsp").forward(request, response);
 			} else {
-				DTOrganizador organizador = usuarioController.seleccionarOrganizador(usuarioLogueado.nickname());
+				DtOrganizador organizador = usuarioController.seleccionarOrganizador(usuarioLogueado.getNickname());
 				request.setAttribute("organizador", organizador);
 
 				request.getRequestDispatcher("/WEB-INF/usuarios/perfil-organizador.jsp").forward(request, response);
@@ -149,10 +161,10 @@ public class Perfil extends HttpServlet {
 		}
 
 		Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-		DTUsuario usuarioLogueado = null;
+		DtUsuario usuarioLogueado = null;
 
-		if (usuarioObj instanceof DTUsuario) {
-			usuarioLogueado = (DTUsuario) usuarioObj;
+		if (usuarioObj instanceof DtUsuario) {
+			usuarioLogueado = (DtUsuario) usuarioObj;
 		}
 
 		if (usuarioLogueado == null) {
@@ -170,11 +182,11 @@ public class Perfil extends HttpServlet {
 		}
 	}
 
-	private void handleEditProfile(HttpServletRequest request, HttpServletResponse response, DTUsuario usuario)
+	private void handleEditProfile(HttpServletRequest request, HttpServletResponse response, DtUsuario usuario)
 			throws IOException {
 		try {
-			Factory factory = Factory.get();
-			IUsuarioController usuarioController = factory.getIUsuarioController();
+			PortFactory factory = PortFactory.get();
+			UsuarioService usuarioController = factory.getUsuarioPort();
 
 			// Get form data
 			String nombre = request.getParameter("nombre");
@@ -191,10 +203,10 @@ public class Perfil extends HttpServlet {
 
 			// Update based on user type
 			if (usuario.getTipo() == TipoUsuario.ASISTENTE) {
-				DTAsistente asistente = usuarioController.seleccionarAsistente(usuario.nickname());
+				DtAsistente asistente = usuarioController.seleccionarAsistente(usuario.getNickname());
 
 				// Handle image upload if present, otherwise keep existing
-				String foto = asistente.foto();
+				String foto = asistente.getFoto();
 				String newFoto = ImagesManager.getImageName(request);
 				// Solo actualiza la foto si hay una nueva imagen (no default.png)
 				if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
@@ -204,7 +216,7 @@ public class Perfil extends HttpServlet {
 
 				// Use provided values or keep existing ones
 				String finalNombre = (nombre != null && !nombre.isEmpty()) ? nombre : asistente.nombre();
-				String finalApellido = (apellido != null && !apellido.isEmpty()) ? apellido : asistente.apellido();
+				String finalApellido = (apellido != null && !apellido.isEmpty()) ? apellido : asistente.getNombre();
 				String finalCorreo = (correo != null && !correo.isEmpty()) ? correo : asistente.correo();
 				LocalDate finalFecha = (fechaNacimiento != null) ? fechaNacimiento
 						: asistente.fechaNacimiento().toInstant().atZone(java.time.ZoneId.systemDefault())
@@ -214,7 +226,7 @@ public class Perfil extends HttpServlet {
 				// actualizarAsistente(nickname, nombre, apellido, correo, fechaNacimiento,
 				// foto, clave)
 				usuarioController.actualizarAsistente(
-						usuario.nickname(),
+						usuario.getNickname(),
 						finalNombre,
 						finalApellido,
 						finalCorreo,
@@ -223,14 +235,14 @@ public class Perfil extends HttpServlet {
 						password);
 
 				// Reload updated data for session
-				DTAsistente updatedAsistente = usuarioController.seleccionarAsistente(usuario.nickname());
+				DtAsistente updatedAsistente = usuarioController.seleccionarAsistente(usuario.getNickname());
 				request.getSession().setAttribute("usuario_logueado", updatedAsistente);
 
 			} else if (usuario.getTipo() == TipoUsuario.ORGANIZADOR) {
-				DTOrganizador organizador = usuarioController.seleccionarOrganizador(usuario.nickname());
+				DTOrganizador organizador = usuarioController.seleccionarOrganizador(usuario.getNickname());
 
 				// Handle image upload if present, otherwise keep existing
-				String foto = organizador.foto();
+				String foto = organizador.getFoto();
 				String newFoto = ImagesManager.getImageName(request);
 				// Solo actualiza la foto si hay una nueva imagen (no default.png)
 				if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
@@ -254,7 +266,7 @@ public class Perfil extends HttpServlet {
 				// actualizarOrganizador(nickname, nombre, correo, descripcion, linkSitioWeb,
 				// foto, clave)
 				usuarioController.actualizarOrganizador(
-						usuario.nickname(),
+						usuario.getNickname(),
 						finalNombre,
 						finalCorreo,
 						finalDescripcion,
@@ -263,7 +275,7 @@ public class Perfil extends HttpServlet {
 						password);
 
 				// Reload updated data for session
-				DTOrganizador updatedOrganizador = usuarioController.seleccionarOrganizador(usuario.nickname());
+				DTOrganizador updatedOrganizador = usuarioController.seleccionarOrganizador(usuario.getNickname());
 				request.getSession().setAttribute("usuario_logueado", updatedOrganizador);
 			}
 
@@ -281,7 +293,7 @@ public class Perfil extends HttpServlet {
 		}
 	}
 
-	private void handleDeleteRegistro(HttpServletRequest request, HttpServletResponse response, DTUsuario usuario)
+	private void handleDeleteRegistro(HttpServletRequest request, HttpServletResponse response, DtUsuario usuario)
 			throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
@@ -296,15 +308,15 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 
 			// IMPORTANT NOTE: cancelarRegistroEdicionEvento() exists in the interface but:
 			// 1. It has no parameters (needs edicion and nickname)
 			// 2. The implementation is empty (see EdicionController line 358)
 			//
 			// TODO: You need to either:
-			// A) Modify IEdicionController to add: void
+			// A) Modify EdicionService to add: void
 			// cancelarRegistroEdicionEvento(String nombreEdicion, String nickname)
 			// B) Or implement the existing method to use stored state (edicionRecordada,
 			// etc.)
@@ -410,7 +422,7 @@ public class Perfil extends HttpServlet {
 
 	private void getCategorias(HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 			IEventoController eventoController = factory.getIEventoController();
 			Set<String> categorias = eventoController.obtenerCategorias();
 			sendApiSuccess(response, categorias);
@@ -422,7 +434,7 @@ public class Perfil extends HttpServlet {
 
 	private void getEventos(HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 			IEventoController eventoController = factory.getIEventoController();
 
 			// Obtener eventos simples primero
@@ -452,40 +464,40 @@ public class Perfil extends HttpServlet {
 			// Si se especifica un evento, obtener ediciones de ese evento
 			String nombreEvento = request.getParameter("evento");
 
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 
 			if (nombreEvento != null && !nombreEvento.isEmpty()) {
 				// Obtener ediciones de un evento específico
 				IEventoController eventoController = factory.getIEventoController();
-				Set<DTEdicion> ediciones = eventoController.mostrarEdiciones(nombreEvento);
+				Set<DtEdicion> ediciones = eventoController.mostrarEdiciones(nombreEvento);
 				sendApiSuccess(response, ediciones);
 			} else {
 				// Obtener TODAS las ediciones del organizador logueado con información del
 				// evento
 				Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-				if (!(usuarioObj instanceof DTUsuario)) {
+				if (!(usuarioObj instanceof DtUsuario)) {
 					sendApiError(response, "Usuario no logueado");
 					return;
 				}
 
-				DTUsuario usuario = (DTUsuario) usuarioObj;
-				IEdicionController edicionController = factory.getIEdicionController();
+				DtUsuario usuario = (DtUsuario) usuarioObj;
+				EdicionService edicionController = factory.getEdicionPort();
 				IEventoController eventoController = factory.getIEventoController();
 
-				Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador(usuario.nickname());
+				Set<DtEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador(usuario.getNickname());
 
 				// Obtener TODOS los eventos del sistema para cruzar con ediciones
 				Set<DTEvento> todosLosEventos = eventoController.listarEventos();
 
 				// Enriquecer las ediciones con el nombre del evento
 				java.util.List<java.util.Map<String, Object>> edicionesEnriquecidas = new java.util.ArrayList<>();
-				for (DTEdicion edicion : ediciones) {
+				for (DtEdicion edicion : ediciones) {
 					// Buscar el evento al que pertenece esta edición
 					String nombreEventoPadre = "";
 					for (DTEvento evento : todosLosEventos) {
 						try {
-							Set<DTEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
-							for (DTEdicion ed : edicionesDelEvento) {
+							Set<DtEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
+							for (DtEdicion ed : edicionesDelEvento) {
 								if (ed.nombre().equals(edicion.nombre())) {
 									nombreEventoPadre = evento.nombre();
 									break;
@@ -507,8 +519,8 @@ public class Perfil extends HttpServlet {
 					edicionMap.put("fechaAlta", edicion.fechaAlta());
 					edicionMap.put("ciudad", edicion.ciudad());
 					edicionMap.put("pais", edicion.pais());
-					edicionMap.put("foto", edicion.foto());
-					edicionMap.put("imagen", edicion.foto());
+					edicionMap.put("foto", edicion.getFoto());
+					edicionMap.put("imagen", edicion.getFoto());
 					edicionMap.put("estado", edicion.estado().toString());
 					edicionMap.put("nombreEvento", nombreEventoPadre);
 
@@ -525,7 +537,7 @@ public class Perfil extends HttpServlet {
 
 	private void getInstituciones(HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 			IInstitucionController institucionController = factory.getIInstitucionController();
 			Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
 			sendApiSuccess(response, instituciones);
@@ -543,8 +555,8 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 			Set<DTTipoRegistro> tiposRegistro = edicionController.mostrarTiposDeRegistro(nombreEdicion);
 			sendApiSuccess(response, tiposRegistro);
 		} catch (Exception e) {
@@ -561,9 +573,9 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
-			Set<DTAsistente> asistentes = edicionController.mostrarAsistentes(nombreEdicion);
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
+			Set<DtAsistente> asistentes = edicionController.mostrarAsistentes(nombreEdicion);
 			sendApiSuccess(response, asistentes);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -624,7 +636,7 @@ public class Perfil extends HttpServlet {
 
 			System.out.println("DTEventoAlta creado: " + eventoAlta);
 
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 			IEventoController eventoController = factory.getIEventoController();
 
 			System.out.println("Llamando a altaEvento...");
@@ -650,10 +662,10 @@ public class Perfil extends HttpServlet {
 	private void createEdicion(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
 			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-			DTUsuario usuario = null;
+			DtUsuario usuario = null;
 
-			if (usuarioObj instanceof DTUsuario) {
-				usuario = (DTUsuario) usuarioObj;
+			if (usuarioObj instanceof DtUsuario) {
+				usuario = (DtUsuario) usuarioObj;
 			}
 
 			if (usuario == null) {
@@ -662,7 +674,7 @@ public class Perfil extends HttpServlet {
 			}
 
 			System.out.println("=== DEBUG createEdicion ===");
-			System.out.println("Usuario logueado: " + usuario.nickname());
+			System.out.println("Usuario logueado: " + usuario.getNickname());
 
 			String nombreEvento = request.getParameter("evento");
 			String nombre = request.getParameter("nombre");
@@ -694,27 +706,27 @@ public class Perfil extends HttpServlet {
 			}
 			System.out.println("foto: " + foto);
 
-			// Convert LocalDate to Date for DTEdicion
-			// DTEdicion expects: (nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad,
+			// Convert LocalDate to Date for DtEdicion
+			// DtEdicion expects: (nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad,
 			// pais, foto, estado)
 			java.util.Date fechaInicioDate = java.sql.Date.valueOf(fechaInicio);
 			java.util.Date fechaFinDate = java.sql.Date.valueOf(fechaFin);
 			java.util.Date fechaAltaDate = new java.util.Date();
 
-			DTEdicion edicion = new DTEdicion(nombre, sigla, fechaInicioDate, fechaFinDate, fechaAltaDate,
+			DtEdicion edicion = new DtEdicion(nombre, sigla, fechaInicioDate, fechaFinDate, fechaAltaDate,
 					ciudad, pais, foto, EstadoEdicion.INGRESADA);
 
-			System.out.println("DTEdicion creado: " + edicion);
+			System.out.println("DtEdicion creado: " + edicion);
 
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 			IEventoController eventoController = factory.getIEventoController();
 
 			System.out.println("Llamando a agregarEdicionAEvento con:");
 			System.out.println("  - nombreEvento: " + nombreEvento);
-			System.out.println("  - nickname: " + usuario.nickname());
+			System.out.println("  - nickname: " + usuario.getNickname());
 			System.out.println("  - edicion: " + edicion.nombre());
 
-			boolean creada = eventoController.agregarEdicionAEvento(nombreEvento, usuario.nickname(), edicion);
+			boolean creada = eventoController.agregarEdicionAEvento(nombreEvento, usuario.getNickname(), edicion);
 
 			System.out.println("Resultado agregarEdicionAEvento: " + creada);
 
@@ -752,7 +764,7 @@ public class Perfil extends HttpServlet {
 				ImagesManager.uploadImage(request, response);
 			}
 
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 			IInstitucionController institucionController = factory.getIInstitucionController();
 			boolean creada = institucionController.crearInstitucion(nombre, descripcion, sitioWeb, foto);
 
@@ -787,8 +799,8 @@ public class Perfil extends HttpServlet {
 
 			DTTipoRegistro tipoRegistro = new DTTipoRegistro(nombre, descripcion, costo, cupo);
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 			edicionController.altaTipoRegistro(nombreEdicion, tipoRegistro);
 
 			sendApiSuccess(response, "Tipo de registro creado exitosamente");
@@ -831,8 +843,8 @@ public class Perfil extends HttpServlet {
 					String nombreTipoRegistro = primerRegistro.get("tipo").getAsString();
 					int cantGratuitos = primerRegistro.get("cantidad").getAsInt();
 
-					Factory factory = Factory.get();
-					IEdicionController edicionController = factory.getIEdicionController();
+					PortFactory factory = PortFactory.get();
+					EdicionService edicionController = factory.getEdicionPort();
 					edicionController.altaPatrocinio(fechaAlta, nombreEdicion, nombreInstitucion, aporte,
 							nombreTipoRegistro, cantGratuitos, codigo, nivel);
 
@@ -923,7 +935,7 @@ public class Perfil extends HttpServlet {
 
 	private void getEdicionesDisponibles(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 			IEventoController eventoController = factory.getIEventoController();
 
 			// Obtener todas las ediciones activas/confirmadas
@@ -931,9 +943,9 @@ public class Perfil extends HttpServlet {
 			List<Map<String, Object>> edicionesDisponibles = new ArrayList<>();
 
 			for (DTEvento evento : todosLosEventos) {
-				Set<DTEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
+				Set<DtEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
 
-				for (DTEdicion edicion : edicionesDelEvento) {
+				for (DtEdicion edicion : edicionesDelEvento) {
 					// Solo incluir ediciones en estado confirmado
 					if (edicion.estado() == EstadoEdicion.ACEPTADA) {
 						Map<String, Object> edMap = new HashMap<>();
@@ -942,7 +954,7 @@ public class Perfil extends HttpServlet {
 						edMap.put("fechaInicio",
 								edicion.fechaInicio() != null ? edicion.fechaInicio().toString() : null);
 						edMap.put("fechaFin", edicion.fechaFin() != null ? edicion.fechaFin().toString() : null);
-						edMap.put("imagen", edicion.foto());
+						edMap.put("imagen", edicion.getFoto());
 						edicionesDisponibles.add(edMap);
 					}
 				}
@@ -971,14 +983,14 @@ public class Perfil extends HttpServlet {
 
 			// Obtener usuario logueado
 			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-			if (!(usuarioObj instanceof DTUsuario)) {
+			if (!(usuarioObj instanceof DtUsuario)) {
 				sendApiError(response, "Usuario no autenticado");
 				return;
 			}
-			DTUsuario usuario = (DTUsuario) usuarioObj;
+			DtUsuario usuario = (DtUsuario) usuarioObj;
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 
 			// Verificar código con tipo de registro y nickname del usuario
 			// Nota: Necesitamos el tipo de registro - usaremos validación simple
@@ -990,7 +1002,7 @@ public class Perfil extends HttpServlet {
 			result.put("message", "El código se validará al confirmar el registro");
 			sendApiSuccess(response, result);
 
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			Map<String, Object> result = new HashMap<>();
 			result.put("success", false);
@@ -1004,11 +1016,11 @@ public class Perfil extends HttpServlet {
 		try {
 			// Obtener usuario logueado
 			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-			if (!(usuarioObj instanceof DTUsuario)) {
+			if (!(usuarioObj instanceof DtUsuario)) {
 				sendApiError(response, "Usuario no autenticado");
 				return;
 			}
-			DTUsuario usuario = (DTUsuario) usuarioObj;
+			DtUsuario usuario = (DtUsuario) usuarioObj;
 
 			String edicion = request.getParameter("edicion");
 			String tipo = request.getParameter("tipo");
@@ -1019,18 +1031,20 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 
 			// Crear registro con o sin código de patrocinio
-			Date fecha = new Date(); // Fecha actual
+			GregorianCalendar gCalendar = new GregorianCalendar();
+			gCalendar.setTime(new Date());
+			XMLGregorianCalendar fecha = DatatypeFactory.newInstance().newXMLGregorianCalendar(gCalendar); // Fecha actual
 
 			if (codigoPatrocinio != null && !codigoPatrocinio.trim().isEmpty()) {
 				// Registro con código de patrocinio - la sobrecarga valida el código
-				edicionController.altaRegistroEdicionEvento(
+				edicionController.altaRegistroEdicionEventoConCodigo(
 						edicion,
 						tipo,
-						usuario.nickname(),
+						usuario.getNickname(),
 						fecha,
 						codigoPatrocinio);
 			} else {
@@ -1038,7 +1052,7 @@ public class Perfil extends HttpServlet {
 				edicionController.altaRegistroEdicionEvento(
 						edicion,
 						tipo,
-						usuario.nickname(),
+						usuario.getNickname(),
 						fecha);
 			}
 
@@ -1047,11 +1061,11 @@ public class Perfil extends HttpServlet {
 			result.put("message", "Registro creado exitosamente");
 			sendApiSuccess(response, result);
 
-		} catch (ValidationInputException e) {
+		} catch (ValidationInputException_Exception e) {
 			sendApiError(response, "Error de validación: " + e.getMessage());
 		} catch (IllegalArgumentException e) {
 			sendApiError(response, "Código de patrocinio inválido o ya utilizado");
-		} catch (Exception e) {
+		} catch (java.lang.Exception  e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al crear registro: " + e.getMessage());
 		}
@@ -1070,10 +1084,10 @@ public class Perfil extends HttpServlet {
 		}
 
 		Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-		DTUsuario usuario = null;
+		DtUsuario usuario = null;
 
-		if (usuarioObj instanceof DTUsuario) {
-			usuario = (DTUsuario) usuarioObj;
+		if (usuarioObj instanceof DtUsuario) {
+			usuario = (DtUsuario) usuarioObj;
 		}
 
 		if (usuario == null || usuario.getTipo() != TipoUsuario.ORGANIZADOR) {
