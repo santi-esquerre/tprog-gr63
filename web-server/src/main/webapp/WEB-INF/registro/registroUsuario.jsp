@@ -1,4 +1,5 @@
-<%@ page import="java.time.LocalDate, java.util.Set, java.util.Map, datatypes.DTInstitucion" %>
+<%@page import="webservice.DtInstitucion"%>
+<%@ page import="java.time.LocalDate, java.util.Set, java.util.Map, webservice.DtInstitucion" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,8 +108,8 @@
                                         <%
                                         String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
                                         for (int i = 0; i < meses.length; i++) {
-                                        	 %>
-                                        	 <option value="<%=i+1%>"><%=meses[i]%></option> 	
+                                         	 %>
+                                         	 <option value="<%=i+1%>"><%=meses[i]%></option> 	
                                         <% } %> 
                                     </select>
                                 </div>
@@ -116,10 +117,10 @@
                                     <select class="form-select" aria-label="Año" name="anio" id="anio">
                                         <option value="0" selected>Año</option>
                                         <%
-                                        var anioActual = LocalDate.now().getYear();
+                                        int anioActual = LocalDate.now().getYear();
                                         for (int i = 0; i <= 120; i++) {
                                         %>
-                                        	<option value="<%=anioActual-i%>"><%=anioActual-i%></option>            
+                                         	<option value="<%=anioActual-i%>"><%=anioActual-i%></option>            
                                         <% } %>
                                         
                                     </select>
@@ -131,10 +132,10 @@
                                 <select class="form-select" name="institucion" aria-label="Institución" id="institucion">
                                     <option value="ninguna" selected>- Elección de institución -</option>
                                     <%
-                                   	var instituciones = (Set<DTInstitucion>) request.getAttribute("instituciones");
-                                    for (var institucion : instituciones) {
+                                    	Set<DtInstitucion> instituciones = (Set<DtInstitucion>) request.getAttribute("instituciones");
+                                    for (DtInstitucion institucion : instituciones) {
                                     	%>
-                                    	<option value="<%=institucion.nombre()%>"><%=institucion.nombre()%></option>	
+                                    	<option value="<%=institucion.getNombre()%>"><%=institucion.getNombre()%></option>	
                                     	
                                     <% } %>
                                    

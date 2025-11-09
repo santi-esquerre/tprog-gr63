@@ -24,8 +24,6 @@ import java.util.Set;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.jasper.compiler.JavacErrorDetail;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -48,18 +46,14 @@ import webservice.DtUsuario;
 import webservice.EdicionService;
 import webservice.EstadoEdicion;
 import webservice.EventoService;
-import webservice.Exception;
-import webservice.ExistePatrocinioException;
 import webservice.ExistePatrocinioException_Exception;
 import webservice.InstitucionNoExistenteException_Exception;
-import webservice.InstitucionRepetidaException;
 import webservice.InstitucionRepetidaException_Exception;
 import webservice.InstitucionService;
 import webservice.NivelPatrocinio;
 import webservice.TipoUsuario;
 import webservice.UsuarioCorreoRepetidoException_Exception;
 import webservice.UsuarioService;
-import webservice.ValidationInputException;
 import webservice.ValidationInputException_Exception;
 
 /**

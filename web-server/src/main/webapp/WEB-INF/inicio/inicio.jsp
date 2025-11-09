@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Set" %>
-<%@ page import="datatypes.DTEvento" %>
-<%@ page import="datatypes.DTEventoDetallado" %>
-<%@ page import="datatypes.DTUsuario" %>
+<%@ page import="webservice.DtEvento" %>
+<%@ page import="webservice.DtEventoDetallado" %>
+<%@ page import="webservice.DtUsuario" %>
 <%
-    @SuppressWarnings("unchecked")
-    List<DTEventoDetallado> eventosDestacados = (List<DTEventoDetallado>) request.getAttribute("eventosDestacados");
-    Boolean sesionIniciada = (Boolean) request.getAttribute("sesionIniciada");
-    DTUsuario usuarioLogueado = (DTUsuario) request.getAttribute("usuarioLogueado");
+  @SuppressWarnings("unchecked")
+  List<DtEventoDetallado> eventosDestacados = (List<DtEventoDetallado>) request.getAttribute("eventosDestacados");
+  Boolean sesionIniciada = (Boolean) request.getAttribute("sesionIniciada");
+  DtUsuario usuarioLogueado = (DtUsuario) request.getAttribute("usuarioLogueado");
     Integer totalEventos = (Integer) request.getAttribute("totalEventos");
     Integer totalEdiciones = (Integer) request.getAttribute("totalEdiciones");
     
@@ -182,7 +182,7 @@
                           alt="Feria del libro"
                         />
                         <div class="carousel-caption text-start">
-                          <h5>Ferias & Cultura</h5>
+                          <h5>Ferias y Cultura</h5>
                           <p class="small">Libros, arte y gastronomía.</p>
                         </div>
                       </div>
@@ -261,19 +261,19 @@
                 </p>
               </div>
               <div class="row g-4 justify-content-center">
-                <% if (eventosDestacados != null && !eventosDestacados.isEmpty()) { 
-                    for (DTEventoDetallado eventoDetallado : eventosDestacados) { 
-                        DTEvento evento = eventoDetallado.evento();
-                        Set<String> categorias = eventoDetallado.categorias();
-                %>
+        <% if (eventosDestacados != null && !eventosDestacados.isEmpty()) { 
+          for (DtEventoDetallado eventoDetallado : eventosDestacados) { 
+            DtEvento evento = eventoDetallado.getEvento();
+            Set<String> categorias = eventoDetallado.getCategorias() != null ? new java.util.HashSet<>(eventoDetallado.getCategorias()) : null;
+        %>
                 <!-- Card -->
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="card h-100 shadow border-0 card-hover">
-                    <% if (evento.foto() != null && !evento.foto().isEmpty()) { %>
+                    <% if (evento != null && evento.getFoto() != null && !evento.getFoto().isEmpty()) { %>
                     <img
                       class="card-img-top"
-                      src="<%= request.getContextPath() %>/image/<%= evento.foto() %>"
-                      alt="<%= evento.nombre() %>"
+                      src="<%= request.getContextPath() %>/image/<%= evento.getFoto() %>"
+                      alt="<%= evento.getNombre() %>"
                       style="height: 200px; object-fit: cover"
                       onerror="this.src='<%= request.getContextPath() %>/image/default.png'"
                     />
@@ -281,7 +281,7 @@
                     <img
                       class="card-img-top"
                       src="<%= request.getContextPath() %>/image/default.png"
-                      alt="<%= evento.nombre() %>"
+                      alt="<%= evento != null ? evento.getNombre() : "" %>"
                       style="height: 200px; object-fit: cover"
                     />
                     <% } %>
@@ -292,10 +292,10 @@
                         <span class="badge bg-primary"><%= categoria %></span>
                         <% } } %>
                       </div>
-                      <h5 class="card-title mb-2"><%= evento.nombre() %></h5>
+                      <h5 class="card-title mb-2"><%= evento != null ? evento.getNombre() : "" %></h5>
                       <p class="card-text small text-muted">
-                        <% if (evento.descripcion() != null) { 
-                            String desc = evento.descripcion();
+            <% if (evento != null && evento.getDescripcion() != null) { 
+              String desc = evento.getDescripcion();
                             if (desc.length() > 80) { %>
                                 <%= desc.substring(0, 80) + "..." %>
                             <% } else { %>
@@ -307,7 +307,7 @@
                       </p>
                       <a
                         class="btn btn-outline-primary w-100"
-                        href="<%= request.getContextPath() %>/evento/<%= evento.nombre() %>"
+                        href="<%= request.getContextPath() %>/evento/<%= evento.getNombre() %>"
                       >
                         Ver más
                       </a>
@@ -509,4 +509,4 @@
           counters.forEach((c) => io.observe(c));
         </script>
       </body>
-    </html>
+    </html>      
