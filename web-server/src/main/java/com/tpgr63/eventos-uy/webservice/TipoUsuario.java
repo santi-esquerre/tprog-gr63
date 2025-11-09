@@ -6,11 +6,11 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para tipoUsuario.
+ * <p>Clase Java para TipoUsuario.
  * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * <pre>{@code
- * <simpleType name="tipoUsuario">
+ * <simpleType name="TipoUsuario">
  *   <restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     <enumeration value="ASISTENTE"/>
  *     <enumeration value="ORGANIZADOR"/>
@@ -19,7 +19,7 @@ import jakarta.xml.bind.annotation.XmlType;
  * }</pre>
  * 
  */
-@XmlType(name = "tipoUsuario")
+@XmlType(name = "TipoUsuario")
 @XmlEnum
 public enum TipoUsuario {
 

@@ -14,6 +14,8 @@ public class DTUsuario implements Serializable {
   private String nombre;
   private String correo;
   protected String foto;
+  // Add explicit field so JAXB/wsimport sees the 'tipo' property (fixes missing gettipo during wsimport)
+  private TipoUsuario tipo;
   
   public DTUsuario() {
   }
@@ -64,11 +66,19 @@ public class DTUsuario implements Serializable {
   }
 
   public TipoUsuario getTipo() {
+    // Prefer the explicit field (set by wsimport clients); if unset, compute from runtime subclass as before.
+    if (this.tipo != null) {
+      return this.tipo;
+    }
     if (this.getClass().getSimpleName().equals("DTAsistente")) {
       return TipoUsuario.ASISTENTE;
     } else {
       return TipoUsuario.ORGANIZADOR;
     }
-
   }
+  
+  public void setTipo(TipoUsuario tipo) {
+    this.tipo = tipo;
+  }
+
 }

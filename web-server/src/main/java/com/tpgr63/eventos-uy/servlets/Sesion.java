@@ -8,13 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.EstadoSesion;
+import webservice.PortFactory;
+import webservice.SesionService;
+import webservice.UsuarioService;
 
 import java.io.IOException;
 
 import controllers.SessionManager;
-import interfaces.Factory;
-import interfaces.ISesionController;
-import interfaces.IUsuarioController;
 
 /**
  * Servlet implementation class Sesion
@@ -37,6 +37,7 @@ public class Sesion extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+	  SesionService sesionPort=PortFactory.get().getSesionPort();
 		// TODO Auto-generated method stub
 		HttpSession objSesion = request.getSession();
 
@@ -63,10 +64,8 @@ public class Sesion extends HttpServlet {
 		}
 		EstadoSesion nuevoEstado;
 
-		ISesionController sesionController = Factory.get().getISesionController();
-
 		// chequea contraseña
-		if (!sesionController.iniciarSesion(usuario, clave)) {
+		if (!sesionPort.iniciarSesion(usuario, clave)) {
 			request.setAttribute("alert_message", "Usuario y/o contraseña incorrectos");
 			nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
 			objSesion.setAttribute("estado_sesion", nuevoEstado);
@@ -76,11 +75,11 @@ public class Sesion extends HttpServlet {
 		} else {
 			nuevoEstado = EstadoSesion.LOGIN_CORRECTO;
 			objSesion.setAttribute("estado_sesion", nuevoEstado);
-			IUsuarioController usuarioController = Factory.get().getIUsuarioController();
+			UsuarioService usuarioPort = PortFactory.get().getUsuarioPort();
 
 			// Obtener el objeto DTUsuario completo
 			try {
-				var dtUsuario = usuarioController.obtenerUsuario(usuario);
+				var dtUsuario = usuarioPort.obtenerUsuario(usuario);
 				request.getSession().setAttribute("usuario_logueado", dtUsuario);
 			} catch (Exception e) {
 				e.printStackTrace();

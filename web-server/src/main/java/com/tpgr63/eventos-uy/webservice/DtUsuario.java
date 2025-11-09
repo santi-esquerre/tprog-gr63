@@ -3,6 +3,7 @@ package webservice;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -21,6 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
  *         <element name="nombre" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         <element name="correo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         <element name="foto" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="tipo" type="{http://webservice/}TipoUsuario" minOccurs="0"/>
  *       </sequence>
  *     </restriction>
  *   </complexContent>
@@ -34,7 +36,8 @@ import jakarta.xml.bind.annotation.XmlType;
     "nickname",
     "nombre",
     "correo",
-    "foto"
+    "foto",
+    "tipo"
 })
 @XmlSeeAlso({
     DtAsistente.class,
@@ -46,6 +49,8 @@ public class DtUsuario {
     protected String nombre;
     protected String correo;
     protected String foto;
+    @XmlSchemaType(name = "string")
+    protected TipoUsuario tipo;
 
     /**
      * Obtiene el valor de la propiedad nickname.
@@ -141,6 +146,30 @@ public class DtUsuario {
      */
     public void setFoto(String value) {
         this.foto = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad tipo.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TipoUsuario }
+     *     
+     */
+    public TipoUsuario getTipo() {
+        return tipo;
+    }
+
+    /**
+     * Define el valor de la propiedad tipo.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TipoUsuario }
+     *     
+     */
+    public void setTipo(TipoUsuario value) {
+        this.tipo = value;
     }
 
 }

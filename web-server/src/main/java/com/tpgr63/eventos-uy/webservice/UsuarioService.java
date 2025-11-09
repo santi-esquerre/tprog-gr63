@@ -104,16 +104,13 @@ public interface UsuarioService {
 
     /**
      * 
-     * @param arg0
      * @return
      *     returns webservice.ArrayList
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerRegistrosUsuarioRequest", output = "http://webservice/UsuarioService/obtenerRegistrosUsuarioResponse")
-    public ArrayList obtenerRegistrosUsuario(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0);
+    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
+    public ArrayList mostrarAsistentes();
 
     /**
      * 
@@ -135,6 +132,19 @@ public interface UsuarioService {
      * 
      * @param arg0
      * @return
+     *     returns webservice.ArrayList
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerRegistrosUsuarioRequest", output = "http://webservice/UsuarioService/obtenerRegistrosUsuarioResponse")
+    public ArrayList obtenerRegistrosUsuario(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns webservice.DtUsuario
      * @throws Exception_Exception
      */
@@ -148,16 +158,6 @@ public interface UsuarioService {
         String arg0)
         throws Exception_Exception
     ;
-
-    /**
-     * 
-     * @return
-     *     returns webservice.ArrayList
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
-    public ArrayList mostrarAsistentes();
 
     /**
      * 
@@ -209,43 +209,6 @@ public interface UsuarioService {
      * @throws UsuarioInexistenteException_Exception
      */
     @WebMethod
-    @Action(input = "http://webservice/UsuarioService/actualizarAsistenteRequest", output = "http://webservice/UsuarioService/actualizarAsistenteResponse", fault = {
-        @FaultAction(className = UsuarioInexistenteException_Exception.class, value = "http://webservice/UsuarioService/actualizarAsistente/Fault/UsuarioInexistenteException"),
-        @FaultAction(className = UsuarioCorreoRepetidoException_Exception.class, value = "http://webservice/UsuarioService/actualizarAsistente/Fault/UsuarioCorreoRepetidoException"),
-        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/actualizarAsistente/Fault/Exception")
-    })
-    public void actualizarAsistente(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0,
-        @WebParam(name = "arg1", partName = "arg1")
-        String arg1,
-        @WebParam(name = "arg2", partName = "arg2")
-        String arg2,
-        @WebParam(name = "arg3", partName = "arg3")
-        String arg3,
-        @WebParam(name = "arg4", partName = "arg4")
-        LocalDate arg4,
-        @WebParam(name = "arg5", partName = "arg5")
-        String arg5,
-        @WebParam(name = "arg6", partName = "arg6")
-        String arg6)
-        throws Exception_Exception, UsuarioCorreoRepetidoException_Exception, UsuarioInexistenteException_Exception
-    ;
-
-    /**
-     * 
-     * @param arg0
-     * @param arg1
-     * @param arg2
-     * @param arg3
-     * @param arg4
-     * @param arg5
-     * @param arg6
-     * @throws Exception_Exception
-     * @throws UsuarioCorreoRepetidoException_Exception
-     * @throws UsuarioInexistenteException_Exception
-     */
-    @WebMethod
     @Action(input = "http://webservice/UsuarioService/actualizarOrganizadorRequest", output = "http://webservice/UsuarioService/actualizarOrganizadorResponse", fault = {
         @FaultAction(className = UsuarioInexistenteException_Exception.class, value = "http://webservice/UsuarioService/actualizarOrganizador/Fault/UsuarioInexistenteException"),
         @FaultAction(className = UsuarioCorreoRepetidoException_Exception.class, value = "http://webservice/UsuarioService/actualizarOrganizador/Fault/UsuarioCorreoRepetidoException"),
@@ -278,15 +241,17 @@ public interface UsuarioService {
      * @param arg4
      * @param arg5
      * @param arg6
+     * @throws Exception_Exception
      * @throws UsuarioCorreoRepetidoException_Exception
-     * @throws UsuarioNicknameRepetidoException_Exception
+     * @throws UsuarioInexistenteException_Exception
      */
     @WebMethod
-    @Action(input = "http://webservice/UsuarioService/crearOrganizadorConSitioWebRequest", output = "http://webservice/UsuarioService/crearOrganizadorConSitioWebResponse", fault = {
-        @FaultAction(className = UsuarioCorreoRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioCorreoRepetidoException"),
-        @FaultAction(className = UsuarioNicknameRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioNicknameRepetidoException")
+    @Action(input = "http://webservice/UsuarioService/actualizarAsistenteRequest", output = "http://webservice/UsuarioService/actualizarAsistenteResponse", fault = {
+        @FaultAction(className = UsuarioInexistenteException_Exception.class, value = "http://webservice/UsuarioService/actualizarAsistente/Fault/UsuarioInexistenteException"),
+        @FaultAction(className = UsuarioCorreoRepetidoException_Exception.class, value = "http://webservice/UsuarioService/actualizarAsistente/Fault/UsuarioCorreoRepetidoException"),
+        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/actualizarAsistente/Fault/Exception")
     })
-    public void crearOrganizadorConSitioWeb(
+    public void actualizarAsistente(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0,
         @WebParam(name = "arg1", partName = "arg1")
@@ -296,13 +261,26 @@ public interface UsuarioService {
         @WebParam(name = "arg3", partName = "arg3")
         String arg3,
         @WebParam(name = "arg4", partName = "arg4")
-        String arg4,
+        LocalDate arg4,
         @WebParam(name = "arg5", partName = "arg5")
         String arg5,
         @WebParam(name = "arg6", partName = "arg6")
         String arg6)
-        throws UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
+        throws Exception_Exception, UsuarioCorreoRepetidoException_Exception, UsuarioInexistenteException_Exception
     ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservice.ArrayList
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
+    public ArrayList obtenerUsuariosPorTipo(
+        @WebParam(name = "arg0", partName = "arg0")
+        TipoUsuario arg0);
 
     /**
      * 
@@ -347,14 +325,36 @@ public interface UsuarioService {
     /**
      * 
      * @param arg0
-     * @return
-     *     returns webservice.ArrayList
+     * @param arg1
+     * @param arg2
+     * @param arg3
+     * @param arg4
+     * @param arg5
+     * @param arg6
+     * @throws UsuarioCorreoRepetidoException_Exception
+     * @throws UsuarioNicknameRepetidoException_Exception
      */
     @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
-    public ArrayList obtenerUsuariosPorTipo(
+    @Action(input = "http://webservice/UsuarioService/crearOrganizadorConSitioWebRequest", output = "http://webservice/UsuarioService/crearOrganizadorConSitioWebResponse", fault = {
+        @FaultAction(className = UsuarioCorreoRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioCorreoRepetidoException"),
+        @FaultAction(className = UsuarioNicknameRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioNicknameRepetidoException")
+    })
+    public void crearOrganizadorConSitioWeb(
         @WebParam(name = "arg0", partName = "arg0")
-        TipoUsuario arg0);
+        String arg0,
+        @WebParam(name = "arg1", partName = "arg1")
+        String arg1,
+        @WebParam(name = "arg2", partName = "arg2")
+        String arg2,
+        @WebParam(name = "arg3", partName = "arg3")
+        String arg3,
+        @WebParam(name = "arg4", partName = "arg4")
+        String arg4,
+        @WebParam(name = "arg5", partName = "arg5")
+        String arg5,
+        @WebParam(name = "arg6", partName = "arg6")
+        String arg6)
+        throws UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
+    ;
 
 }

@@ -6,11 +6,11 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para estadoEdicion.
+ * <p>Clase Java para EstadoEdicion.
  * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * <pre>{@code
- * <simpleType name="estadoEdicion">
+ * <simpleType name="EstadoEdicion">
  *   <restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     <enumeration value="INGRESADA"/>
  *     <enumeration value="ACEPTADA"/>
@@ -20,7 +20,7 @@ import jakarta.xml.bind.annotation.XmlType;
  * }</pre>
  * 
  */
-@XmlType(name = "estadoEdicion")
+@XmlType(name = "EstadoEdicion")
 @XmlEnum
 public enum EstadoEdicion {
 

@@ -6,20 +6,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.EstadoSesion;
+import webservice.DtEdicionDetallada;
+import webservice.DtRegistro;
+import webservice.DtUsuario;
+import webservice.EdicionService;
+import webservice.EstadoEdicion;
+import webservice.PortFactory;
+import webservice.TipoUsuario;
+import webservice.ValidationInputException;
+import webservice.ValidationInputException_Exception;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import controllers.SessionManager;
-import interfaces.Factory;
-import interfaces.IEdicionController;
-import datatypes.DTEdicion;
-import datatypes.DTEdicionDetallada;
-import datatypes.DTUsuario;
-import datatypes.DTRegistro;
-import datatypes.TipoUsuario;
-import exceptions.ValidationInputException;
 
 /**
  * Servlet implementation class Edicion
@@ -52,7 +58,7 @@ public class Edicion extends HttpServlet {
 		String nombreEdicionUrl = pathInfo.substring(1); // nombreDeLaEdicion
 		String nombreEdicion = nombreEdicionUrl.replace('-', ' ');
 
-		Factory factory = Factory.get();
+		PortFactory factory = PortFactory.get();
 
 		boolean usuarioRegistrado = false;
 		String mensajeUsuarioNoLogueado = "Inicie sesión para registrarse en la edición!";
@@ -61,32 +67,32 @@ public class Edicion extends HttpServlet {
 		EstadoSesion estado_sesion = (EstadoSesion) request.getSession().getAttribute("estado_sesion");
 
 		try {
-			IEdicionController edicionController = factory.getIEdicionController();
-			DTEdicionDetallada dtEdicionDetallada = edicionController.obtenerDatosDetalladosEdicion(nombreEdicion);
+			EdicionService edicionPort = factory.getEdicionPort();
+			DtEdicionDetallada dtEdicionDetallada = edicionPort.obtenerDatosDetalladosEdicion(nombreEdicion);
 
 			if ((dtEdicionDetallada != null)
-					&& dtEdicionDetallada.edicion().estado() != datatypes.EstadoEdicion.ACEPTADA) {
+					&& dtEdicionDetallada.getEdicion().getEstado() != EstadoEdicion.ACEPTADA) {
 				response.sendRedirect(request.getContextPath() + "/inicio");
 				return;
 			}
 
 			if (estado_sesion == EstadoSesion.LOGIN_CORRECTO) {
 				Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-				DTUsuario dtUsuarioTemp = null;
+				DtUsuario dtUsuarioTemp = null;
 
-				if (usuarioObj instanceof DTUsuario) {
-					dtUsuarioTemp = (DTUsuario) usuarioObj;
+				if (usuarioObj instanceof DtUsuario) {
+				  dtUsuarioTemp = (DtUsuario) usuarioObj;
 				} else if (usuarioObj instanceof String) {
 					// Retrocompatibilidad: si todavía es String, obtenerlo de la BD
-					var usuarioController = factory.getIUsuarioController();
+					var usuarioPort = factory.getUsuarioPort();
 					try {
-						dtUsuarioTemp = usuarioController.obtenerUsuario((String) usuarioObj);
+						dtUsuarioTemp = usuarioPort.obtenerUsuario((String) usuarioObj);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 
-				final DTUsuario dtUsuario = dtUsuarioTemp;
+				final DtUsuario dtUsuario = dtUsuarioTemp;
 
 				if (dtUsuario == null) {
 					request.setAttribute("errorRegistro", mensajeUsuarioNoLogueado);
@@ -94,16 +100,16 @@ public class Edicion extends HttpServlet {
 				request.setAttribute("usuario", dtUsuario);
 				if ((dtEdicionDetallada != null) && (dtUsuario != null)
 						&& (dtUsuario.getTipo() == TipoUsuario.ASISTENTE)) {
-					usuarioRegistrado = !factory.getIEdicionController()
-							.asistenteNoRegistrado(nombreEdicion, dtUsuario.nickname());
+					usuarioRegistrado = !factory.getEdicionPort()
+							.asistenteNoRegistrado(nombreEdicion, dtUsuario.getNickname());
 					request.setAttribute("usuarioRegistrado", usuarioRegistrado);
 				} else if ((dtEdicionDetallada != null) && (dtUsuario != null)
 						&& (dtUsuario.getTipo() == TipoUsuario.ORGANIZADOR)) {
 					request.setAttribute("errorRegistro", "Solo los asistentes pueden registrarse en una edición.");
 				}
 				if (usuarioRegistrado && (dtEdicionDetallada != null)) {
-					DTRegistro registroUsuario = dtEdicionDetallada.registros().stream()
-							.filter(r -> r.nicknameAsistente().equals(dtUsuario.nickname()))
+					DtRegistro registroUsuario = dtEdicionDetallada.getRegistros().stream()
+							.filter(r -> r.getNicknameAsistente().equals(dtUsuario.getNickname()))
 							.findFirst()
 							.orElse(null);
 					request.setAttribute("datosRegistroUsuario", registroUsuario);
@@ -114,7 +120,7 @@ public class Edicion extends HttpServlet {
 			request.setAttribute("edicionDetallada", dtEdicionDetallada);
 			request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);
 
-		} catch (ValidationInputException e) {
+		} catch (ValidationInputException_Exception e) {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
 		} catch (Exception e) {
@@ -139,15 +145,15 @@ public class Edicion extends HttpServlet {
 		String codigo = request.getParameter("codigoPatrocinio");
 
 		if (action.equals("validarCodigo")) {
-			IEdicionController edicionController = Factory.get().getIEdicionController();
+			EdicionService edicionPort = PortFactory.get().getEdicionPort();
 			boolean codigoValido = false;
 			try {
-				codigoValido = edicionController.verificarCodigoPatrocinio(
+				codigoValido = edicionPort.verificarCodigoPatrocinio(
 						nombreEdicion,
 						nombreTipoRegistro,
 						nicknameAsistente,
 						codigo);
-			} catch (ValidationInputException e) {
+			} catch (ValidationInputException_Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -168,18 +174,19 @@ public class Edicion extends HttpServlet {
 			// Handle registration action
 			// You can add your registration logic here
 		} else if (action.equals("confirmarRegistro")) {
-			IEdicionController edicionController = Factory.get().getIEdicionController();
+			EdicionService edicionPort = PortFactory.get().getEdicionPort();
 			LocalDate fechaActual = LocalDate.now();
-			Date fechaRegistro = java.sql.Date.valueOf(fechaActual);
+			GregorianCalendar gCalendar = GregorianCalendar.from(fechaActual.atStartOfDay(ZoneId.systemDefault()));
 			try {
+	      XMLGregorianCalendar fechaRegistro = DatatypeFactory.newInstance().newXMLGregorianCalendar(gCalendar);
 				if (codigo.isEmpty()) {
-					edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente,
+					edicionPort.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente,
 							fechaRegistro);
 				} else {
-					edicionController.altaRegistroEdicionEvento(nombreEdicion, nombreTipoRegistro, nicknameAsistente,
+					edicionPort.altaRegistroEdicionEventoConCodigo(nombreEdicion, nombreTipoRegistro, nicknameAsistente,
 							fechaRegistro, codigo);
 				}
-			} catch (ValidationInputException e) {
+			} catch (ValidationInputException_Exception e) {
 				// TODO Auto-generated catch block
 				request.setAttribute("errorRegistro", e.getMessage());
 				doGet(request, response);

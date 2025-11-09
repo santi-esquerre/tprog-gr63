@@ -5,6 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import webservice.PortFactory;
+import webservice.PublicadorService;
+import webservice.UsuarioService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,22 +17,12 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import datatypes.DTUsuarioItemListado;
-import datatypes.EstadoEdicion;
-import datatypes.DTAsistente;
-import datatypes.DTEdicion;
-import datatypes.DTOrganizador;
-import datatypes.DTRegistro;
-import datatypes.DTUsuario;
-import interfaces.Factory;
-import interfaces.IEdicionController;
-import interfaces.IUsuarioController;
 
 /**
  * Servlet implementation class Usuarios
@@ -61,8 +54,8 @@ public class Usuarios extends HttpServlet {
     }
 
     // Obtener controlador y lista completa de usuarios
-    IUsuarioController usuarioController = Factory.get().getIUsuarioController();
-    List<DTUsuarioItemListado> listadoUsuarios = usuarioController.obtenerUsuarios();
+    UsuarioService usuarioPort = PortFactory.get().getUsuarioPort();
+    List<DTUsuarioItemListado> listadoUsuarios = usuarioPort.obtenerUsuarios();
 
     // Evitar que sea null
     if (listadoUsuarios == null) listadoUsuarios = List.of();
@@ -119,10 +112,10 @@ public class Usuarios extends HttpServlet {
     }
 
     try {
-      IUsuarioController usuarioController = Factory.get().getIUsuarioController();
+      IusuarioPort usuarioPort = Factory.get().getIusuarioPort();
 
       if ("asistente".equalsIgnoreCase(tipo)) {
-        DTAsistente asistente = usuarioController.seleccionarAsistente(nickname);
+        DTAsistente asistente = usuarioPort.seleccionarAsistente(nickname);
         if (asistente == null) {
           out.print(gson.toJson(Map.of("success", false, "message", "Asistente no encontrado")));
           return;
@@ -146,7 +139,7 @@ public class Usuarios extends HttpServlet {
         out.print(gson.toJson(Map.of("success", true, "data", data)));
         return;
       } else if ("organizador".equalsIgnoreCase(tipo)) {
-        DTOrganizador org = usuarioController.seleccionarOrganizador(nickname);
+        DTOrganizador org = usuarioPort.seleccionarOrganizador(nickname);
         if (org == null) {
           out.print(gson.toJson(Map.of("success", false, "message", "Organizador no encontrado")));
           return;
