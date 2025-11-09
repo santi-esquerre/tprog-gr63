@@ -57,9 +57,9 @@ public class Registro extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
 		}
-		Factory factory = Factory.get();
-		IInstitucionController institucionController = factory.getIInstitucionController();
-		Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
+		webservice.InstitucionServiceService institucionService = new webservice.InstitucionServiceService();
+		webservice.InstitucionService institucionPort = institucionService.getInstitucionServicePort();
+		var instituciones = institucionPort.listarInstituciones();
 		request.setAttribute("instituciones", instituciones);
 		request.getRequestDispatcher("/WEB-INF/registro/registroUsuario.jsp").forward(request, response);
 	}

@@ -10,9 +10,10 @@ import jakarta.xml.ws.WebFault;
  * Generated source version: 3.0
  * 
  */
+@SuppressWarnings("serial")
 @WebFault(name = "CantidadCuposDisponiblesException", targetNamespace = "http://webservice/")
 public class CantidadCuposDisponiblesException_Exception
-    extends Exception
+    extends java.lang.Exception
 {
 
     /**

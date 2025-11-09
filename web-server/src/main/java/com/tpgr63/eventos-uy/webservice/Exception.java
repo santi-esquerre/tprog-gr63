@@ -41,6 +41,17 @@ public class Exception {
      *     {@link String }
      *     
      */
+    public Exception() {}
+
+    public Exception(String message) {
+        this.message = message;
+    }
+
+    public Exception(String message, Throwable cause) {
+        this.message = message;
+        // si quieres, puedes guardar cause en otro atributo
+    }
+    
     public String getMessage() {
         return message;
     }

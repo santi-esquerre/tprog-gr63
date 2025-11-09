@@ -10,9 +10,10 @@ import jakarta.xml.ws.WebFault;
  * Generated source version: 3.0
  * 
  */
+@SuppressWarnings("serial")
 @WebFault(name = "ExistePatrocinioException", targetNamespace = "http://webservice/")
 public class ExistePatrocinioException_Exception
-    extends Exception
+    extends java.lang.Exception
 {
 
     /**
