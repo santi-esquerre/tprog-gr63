@@ -28,12 +28,12 @@ public interface InstitucionService {
     /**
      * 
      * @return
-     *     returns webservice.ArrayList
+     *     returns webservice.DtInstitucionArray
      */
     @WebMethod
     @WebResult(partName = "return")
     @Action(input = "http://webservice/InstitucionService/listarInstitucionesRequest", output = "http://webservice/InstitucionService/listarInstitucionesResponse")
-    public ArrayList listarInstituciones();
+    public DtInstitucionArray listarInstituciones();
 
     /**
      * 

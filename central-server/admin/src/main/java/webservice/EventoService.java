@@ -28,8 +28,8 @@ public class EventoService {
 	public EventoService() {}
 	
 	@WebMethod
-	public ArrayList<String> obtenerCategorias() {
-		return new ArrayList<>(eventoController.obtenerCategorias());
+	public String[] obtenerCategorias() {
+		return eventoController.obtenerCategorias().toArray(new String[0]);
 	}
 	
 	@WebMethod
@@ -70,4 +70,9 @@ public class EventoService {
 		      throws ValidationInputException {
 		return eventoController.obtenerDatosDetalladosEventoAprobadas(nombreEvento);
 	}
+	
+	@WebMethod
+	public boolean AltaEvento(DTEventoAlta evento) throws ValidationInputException {
+    return eventoController.altaEvento(evento);
+  }
 }

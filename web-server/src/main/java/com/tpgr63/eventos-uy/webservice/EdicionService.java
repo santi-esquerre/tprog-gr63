@@ -47,6 +47,19 @@ public interface EdicionService {
     /**
      * 
      * @param arg0
+     * @return
+     *     returns webservice.DtAsistenteArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EdicionService/mostrarAsistentesRequest", output = "http://webservice/EdicionService/mostrarAsistentesResponse")
+    public DtAsistenteArray mostrarAsistentes(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
      * @param arg1
      * @throws ValidationInputException_Exception
      */
@@ -86,7 +99,7 @@ public interface EdicionService {
     })
     public void altaPatrocinio(
         @WebParam(name = "arg0", partName = "arg0")
-        LocalDate arg0,
+        XMLGregorianCalendar arg0,
         @WebParam(name = "arg1", partName = "arg1")
         String arg1,
         @WebParam(name = "arg2", partName = "arg2")
@@ -176,19 +189,6 @@ public interface EdicionService {
     /**
      * 
      * @param arg0
-     * @return
-     *     returns webservice.DtAsistenteArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EdicionService/mostrarAsistentesRequest", output = "http://webservice/EdicionService/mostrarAsistentesResponse")
-    public DtAsistenteArray mostrarAsistentes(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0);
-
-    /**
-     * 
-     * @param arg0
      * @param arg1
      * @param arg2
      * @param arg3
@@ -235,22 +235,6 @@ public interface EdicionService {
      * 
      * @param arg0
      * @param arg1
-     * @return
-     *     returns boolean
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EdicionService/asistenteNoRegistradoRequest", output = "http://webservice/EdicionService/asistenteNoRegistradoResponse")
-    public boolean asistenteNoRegistrado(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0,
-        @WebParam(name = "arg1", partName = "arg1")
-        String arg1);
-
-    /**
-     * 
-     * @param arg0
-     * @param arg1
      * @param arg2
      * @param arg3
      * @return
@@ -273,6 +257,22 @@ public interface EdicionService {
         String arg3)
         throws ValidationInputException_Exception
     ;
+
+    /**
+     * 
+     * @param arg0
+     * @param arg1
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EdicionService/asistenteNoRegistradoRequest", output = "http://webservice/EdicionService/asistenteNoRegistradoResponse")
+    public boolean asistenteNoRegistrado(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0,
+        @WebParam(name = "arg1", partName = "arg1")
+        String arg1);
 
     /**
      * 

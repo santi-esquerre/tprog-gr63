@@ -1,6 +1,7 @@
 
 package webservice;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
@@ -88,27 +89,29 @@ public interface UsuarioService {
         @WebParam(name = "arg5", partName = "arg5")
         String arg5,
         @WebParam(name = "arg6", partName = "arg6")
-        LocalDate arg6)
+        XMLGregorianCalendar arg6)
         throws UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
     ;
 
     /**
      * 
-     * @param arg0
      * @return
-     *     returns webservice.DtUsuario
-     * @throws Exception_Exception
+     *     returns webservice.DtUsuarioItemListadoArray
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuarioRequest", output = "http://webservice/UsuarioService/obtenerUsuarioResponse", fault = {
-        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/obtenerUsuario/Fault/Exception")
-    })
-    public DtUsuario obtenerUsuario(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0)
-        throws Exception_Exception
-    ;
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosRequest", output = "http://webservice/UsuarioService/obtenerUsuariosResponse")
+    public DtUsuarioItemListadoArray obtenerUsuarios();
+
+    /**
+     * 
+     * @return
+     *     returns webservice.DtAsistenteArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
+    public DtAsistenteArray mostrarAsistentes();
 
     /**
      * 
@@ -141,23 +144,21 @@ public interface UsuarioService {
 
     /**
      * 
+     * @param arg0
      * @return
-     *     returns webservice.DtUsuarioItemListadoArray
+     *     returns webservice.DtUsuario
+     * @throws Exception_Exception
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosRequest", output = "http://webservice/UsuarioService/obtenerUsuariosResponse")
-    public DtUsuarioItemListadoArray obtenerUsuarios();
-
-    /**
-     * 
-     * @return
-     *     returns webservice.DtAsistenteArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
-    public DtAsistenteArray mostrarAsistentes();
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuarioRequest", output = "http://webservice/UsuarioService/obtenerUsuarioResponse", fault = {
+        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/obtenerUsuario/Fault/Exception")
+    })
+    public DtUsuario obtenerUsuario(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0)
+        throws Exception_Exception
+    ;
 
     /**
      * 
@@ -224,7 +225,7 @@ public interface UsuarioService {
         @WebParam(name = "arg3", partName = "arg3")
         String arg3,
         @WebParam(name = "arg4", partName = "arg4")
-        LocalDate arg4,
+        XMLGregorianCalendar arg4,
         @WebParam(name = "arg5", partName = "arg5")
         String arg5,
         @WebParam(name = "arg6", partName = "arg6")
@@ -308,19 +309,6 @@ public interface UsuarioService {
     /**
      * 
      * @param arg0
-     * @return
-     *     returns webservice.DtUsuarioItemListadoArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
-    public DtUsuarioItemListadoArray obtenerUsuariosPorTipo(
-        @WebParam(name = "arg0", partName = "arg0")
-        TipoUsuario arg0);
-
-    /**
-     * 
-     * @param arg0
      * @param arg1
      * @param arg2
      * @param arg3
@@ -352,7 +340,7 @@ public interface UsuarioService {
         @WebParam(name = "arg5", partName = "arg5")
         String arg5,
         @WebParam(name = "arg6", partName = "arg6")
-        LocalDate arg6,
+        XMLGregorianCalendar arg6,
         @WebParam(name = "arg7", partName = "arg7")
         String arg7)
         throws InstitucionNoExistenteException_Exception, UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
@@ -392,5 +380,18 @@ public interface UsuarioService {
         String arg6)
         throws UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
     ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservice.DtUsuarioItemListadoArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
+    public DtUsuarioItemListadoArray obtenerUsuariosPorTipo(
+        @WebParam(name = "arg0", partName = "arg0")
+        TipoUsuario arg0);
 
 }

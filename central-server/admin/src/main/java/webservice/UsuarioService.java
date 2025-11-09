@@ -1,16 +1,14 @@
 package webservice;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Date;
 
 import datatypes.DTAsistente;
 import datatypes.DTOrganizador;
-import datatypes.DTRegistro;
 import datatypes.DTRegistroDetallado;
 import datatypes.DTUsuario;
-import datatypes.DTUsuarioItemListado;
 import datatypes.TipoUsuario;
 import exceptions.InstitucionNoExistenteException;
 import exceptions.UsuarioCorreoRepetidoException;
@@ -51,12 +49,16 @@ public class UsuarioService {
             String clave,
             String foto,
             String apellido,
-            LocalDate fechaNacimiento,
+            Date fechaNacimiento,
             String nombreInstitucion)
             throws UsuarioCorreoRepetidoException,
             UsuarioNicknameRepetidoException,
             InstitucionNoExistenteException {
-		usuarioController.crearAsistente(nickname, nombre, correo, clave, foto, apellido, fechaNacimiento, nombreInstitucion);
+
+    LocalDate localDate = fechaNacimiento.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
+		usuarioController.crearAsistente(nickname, nombre, correo, clave, foto, apellido, localDate, nombreInstitucion);
 	}
 	
 	@WebMethod
@@ -67,9 +69,13 @@ public class UsuarioService {
 			String clave,
 			String foto,
 			String apellido,
-			LocalDate fechaNacimiento)
+			Date fechaNacimiento)
 			throws UsuarioCorreoRepetidoException, UsuarioNicknameRepetidoException {
-		usuarioController.crearAsistente(nickname, nombre, correo, clave, foto, apellido, fechaNacimiento);
+
+    LocalDate localDate = fechaNacimiento.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
+		usuarioController.crearAsistente(nickname, nombre, correo, clave, foto, apellido, localDate);
 	}
 	
 	@WebMethod
@@ -138,10 +144,13 @@ public class UsuarioService {
             String nombre,
             String apellido,
             String correo,
-            LocalDate fechaNacimiento,
+            Date fechaNacimiento,
             String foto,
             String clave) throws UsuarioInexistenteException, UsuarioCorreoRepetidoException, Exception {
-		usuarioController.actualizarAsistente(nickname, nombre, apellido, correo, fechaNacimiento, foto, clave);
+	  LocalDate localDate = fechaNacimiento.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
+		usuarioController.actualizarAsistente(nickname, nombre, apellido, correo, localDate, foto, clave);
 	}
 	
 	@WebMethod

@@ -1,6 +1,9 @@
 package webservice;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -72,10 +75,14 @@ public class EdicionService {
 	}
 	
 	@WebMethod
-	public void altaPatrocinio(java.time.LocalDate fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
+	public void altaPatrocinio(Date fecha, String nombreEdicion, String nombreInstitucion, Float aporte,
 	       String nombreTipoRegistro, Integer cantGratuitos, String codigo, NivelPatrocinio nivelPatrocinio)
 	       throws exceptions.ExistePatrocinioException, exceptions.CostoRegistrosGratuitosException, exceptions.CantidadCuposDisponiblesException, exceptions.InstitucionNoExistenteException {
-		edController.altaPatrocinio(fecha, nombreEdicion, nombreInstitucion, aporte, nombreTipoRegistro, cantGratuitos, codigo, nivelPatrocinio);
+
+    LocalDate localDate = fecha.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
+		edController.altaPatrocinio(localDate, nombreEdicion, nombreInstitucion, aporte, nombreTipoRegistro, cantGratuitos, codigo, nivelPatrocinio);
 	}
 	
 	@WebMethod

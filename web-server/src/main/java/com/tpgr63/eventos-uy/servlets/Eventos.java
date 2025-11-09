@@ -5,15 +5,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import webservice.DtEvento;
+import webservice.EventoService;
+import webservice.PortFactory;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-
-import datatypes.DTEvento;
-import datatypes.DTUsuarioItemListado;
-import interfaces.Factory;
-import interfaces.IEventoController;
-import interfaces.IUsuarioController;
 
 /**
  * Servlet implementation class Eventos
@@ -35,8 +33,8 @@ public class Eventos extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Obtener controlador y lista completa de usuarios
-		IEventoController eventoController = Factory.get().getIEventoController();
-		Set<DTEvento> listadoEventos = eventoController.listarEventos();
+		EventoService eventoController = PortFactory.get().getEventoPort();
+		Set<DtEvento> listadoEventos = eventoController.listarEventos().getEvento().stream().collect(java.util.stream.Collectors.toSet());
 
 		// Evitar que sea null
 		if (listadoEventos == null) listadoEventos = Set.of();
@@ -66,7 +64,7 @@ public class Eventos extends HttpServlet {
 		int hasta = Math.min(desde + CANTIDAD_PAGINACION, totalUsuarios);
 
 		// Sublista de la página actual
-		List<DTEvento> paginaEventos = listadoEventos.stream().toList().subList(desde, hasta);
+		List<DtEvento> paginaEventos = listadoEventos.stream().toList().subList(desde, hasta);
 
 		// Pasar datos al JSP
 		request.setAttribute("fin_paginacion", ultimaPagina);
