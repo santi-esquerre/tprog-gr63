@@ -13,7 +13,7 @@ public class PortFactory {
   private static String wsdlLocation = "http://localhost:9050";
   
   private PortFactory() {
-    try (InputStream input = new FileInputStream(System.getProperty("home.dir")  + "/.eventos-uy/config.properties")) {
+    try (InputStream input = new FileInputStream(System.getProperty("user.home")  + "/.eventos-uy/config.properties")) {
         java.util.Properties prop = new java.util.Properties();
         prop.load(input);
         wsdlLocation = prop.getProperty("webservice.endpoint", "http://localhost:9050").strip();

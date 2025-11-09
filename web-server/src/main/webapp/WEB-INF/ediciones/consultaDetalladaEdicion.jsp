@@ -120,14 +120,15 @@
                     </div>
         </div>
         
-    <% String mensajeError = (String) request.getAttribute("errorRegistro"); 
+    <% String mensajeError = (String) request.getAttribute("errorRegistro");
+    Boolean usuarioRegistrado = request.getAttribute("usuarioRegistrado") == null ? (Boolean) request.getAttribute("usuarioRegistrado") : false;
     if (mensajeError != null) { %>
         <div class="container p-5 mt-4">
         	<div class="border border-danger mb-3" style="background-color: rgba(220, 53, 69, 0.3)"><p class="text-center fw-bold" style="color: black;"><%=mensajeError %></p> </div>
         </div>
         <% } %>
         
-        <% if(asistente && (boolean) request.getAttribute("usuarioRegistrado")) {     
+        <% if(asistente && usuarioRegistrado ) {     
          	DtRegistro registroUsuario = (DtRegistro) request.getAttribute("datosRegistroUsuario");
         	%>
         <div class="container p-5 mt-4">
