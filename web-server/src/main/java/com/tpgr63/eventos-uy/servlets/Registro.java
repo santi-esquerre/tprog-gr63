@@ -13,18 +13,19 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-
-import interfaces.Factory;
-import interfaces.IInstitucionController;
-import datatypes.DTInstitucion;
-import exceptions.UsuarioCorreoRepetidoException;
-import exceptions.UsuarioNicknameRepetidoException;
-
+import java.util.GregorianCalendar;
 import java.util.Set;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import model.EstadoSesion;
+import webservice.PortFactory;
+import webservice.UsuarioCorreoRepetidoException_Exception;
+import webservice.UsuarioNicknameRepetidoException_Exception;
+import webservice.UsuarioService;
 import controllers.SessionManager;
 import controllers.ImagesManager;
-import interfaces.IUsuarioController;
 import java.time.LocalDate;
 
 
@@ -57,9 +58,9 @@ public class Registro extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
 		}
-		Factory factory = Factory.get();
-		IInstitucionController institucionController = factory.getIInstitucionController();
-		Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
+		webservice.InstitucionServiceService institucionService = new webservice.InstitucionServiceService();
+		webservice.InstitucionService institucionPort = institucionService.getInstitucionServicePort();
+		var instituciones = institucionPort.listarInstituciones();
 		request.setAttribute("instituciones", instituciones);
 		request.getRequestDispatcher("/WEB-INF/registro/registroUsuario.jsp").forward(request, response);
 	}
@@ -77,8 +78,8 @@ public class Registro extends HttpServlet {
 		String foto = ImagesManager.getImageName(request);
 		
 		System.out.println("Primer Correo: " + correo);
-		Factory factory = Factory.get();
-		IUsuarioController usuarioController = factory.getIUsuarioController();
+		PortFactory factory = PortFactory.get();
+		UsuarioService usuarioController = factory.getUsuarioPort();
 		
 		try {
 			
@@ -87,14 +88,16 @@ public class Registro extends HttpServlet {
 				int dia = Integer.parseInt(request.getParameter("dia"));
 				int mes = Integer.parseInt(request.getParameter("mes"));
 				int anio = Integer.parseInt(request.getParameter("anio"));
-				LocalDate fechaNacimiento = LocalDate.of(anio, mes, dia);
+				GregorianCalendar gc = new GregorianCalendar(anio, mes - 1, dia);
+				XMLGregorianCalendar fechaNacimiento = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 				String apellido = request.getParameter("apellido");
 				String institucion = request.getParameter("institucion");
+				
 				if (institucion.equals("ninguna")) {
 					usuarioController.crearAsistente(nickname, nombre, correo, password, foto, apellido, fechaNacimiento);
 					
 				} else {
-					usuarioController.crearAsistente(nickname, nombre, correo, password, foto, apellido, fechaNacimiento, institucion);
+					usuarioController.crearAsistenteConInstitucion(nickname, nombre, correo, password, foto, apellido, fechaNacimiento, institucion);
 				}
 			}
 			else {
@@ -103,16 +106,16 @@ public class Registro extends HttpServlet {
 				if (linkSitioWeb.isEmpty()) {
 					usuarioController.crearOrganizador(nickname, nombre, correo, password, foto, descripcion);
 				} else {
-					usuarioController.crearOrganizador(nickname, nombre, correo, password, foto, descripcion, linkSitioWeb);
+					usuarioController.crearOrganizadorConSitioWeb(nickname, nombre, correo, password, foto, descripcion, linkSitioWeb);
 				}
 			}
 			
-		} catch (UsuarioNicknameRepetidoException en) {
+		} catch (UsuarioNicknameRepetidoException_Exception en) {
 			request.setAttribute("error", "El nickname ya está en uso. Por favor, elija otro.");
 			doGet(request, response);
 			return;
 		}
-		catch (UsuarioCorreoRepetidoException ec) {
+		catch (UsuarioCorreoRepetidoException_Exception ec) {
 			request.setAttribute("error", "El correo ya está en uso. Por favor, elija otro.");
 			doGet(request, response);
 			return;

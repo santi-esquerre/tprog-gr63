@@ -1,5 +1,9 @@
 package datatypes;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public record DTTipoRegistro(String nombre, String descripcion, float costo, int cupo) {
 
   public String getNombre() {

@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +32,9 @@ import datatypes.DTEdicion;
 import datatypes.DTEdicionDetallada;
 import datatypes.DTEvento;
 import datatypes.DTEventoDetallado;
+import datatypes.DTPatrocinio;
+import datatypes.DTRegistro;
+import datatypes.DTTipoRegistro;
 import interfaces.IEdicionController;
 import interfaces.IEventoController;
 import interfaces.IReloadable;
@@ -55,7 +59,7 @@ public class ConsultaEvento extends JInternalFrame implements IReloadable{
 	private DefaultTableModel eventosTableModel;
 	private DefaultTableModel edicionesTableModel;
 	private List<DTEvento> allEventos; // For filtering
-	private Set<DTEdicion> currentEdiciones; // Current event's editions
+	private List<DTEdicion> currentEdiciones; // Current event's editions
 
 	/**
 	 * Launch the application.
@@ -400,12 +404,12 @@ public class ConsultaEvento extends JInternalFrame implements IReloadable{
 		currentEdiciones = eventoDetallado.ediciones();
 	}
 
-	private void updateEdicionesTable(Set<DTEdicion> ediciones) {
+	private void updateEdicionesTable(List<DTEdicion> list) {
 		edicionesTableModel.setRowCount(0);
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-		for (DTEdicion edicion : ediciones) {
+		for (DTEdicion edicion : list) {
 			Object[] rowData = {
 					edicion.nombre(),
 					edicion.sigla(),
@@ -549,7 +553,7 @@ public class ConsultaEvento extends JInternalFrame implements IReloadable{
 		panel.add(valueLabel, gbc);
 	}
 
-	private JPanel createTiposRegistroPanel(Set<datatypes.DTTipoRegistro> tiposRegistro) {
+	private JPanel createTiposRegistroPanel(ArrayList<DTTipoRegistro> tiposRegistro) {
 		JPanel panel = new JPanel(new BorderLayout());
 
 		String[] columns = { "Nombre", "Descripción", "Costo", "Cupo" };
@@ -575,7 +579,7 @@ public class ConsultaEvento extends JInternalFrame implements IReloadable{
 		return panel;
 	}
 
-	private JPanel createPatrociniosPanel(Set<datatypes.DTPatrocinio> patrocinios) {
+	private JPanel createPatrociniosPanel(ArrayList<DTPatrocinio> patrocinios) {
 		JPanel panel = new JPanel(new BorderLayout());
 
 		String[] columns = { "Institución", "Código", "Nivel", "Monto", "Fecha" };
@@ -603,7 +607,7 @@ public class ConsultaEvento extends JInternalFrame implements IReloadable{
 		return panel;
 	}
 
-	private JPanel createRegistrosPanel(Set<datatypes.DTRegistro> registros) {
+	private JPanel createRegistrosPanel(ArrayList<DTRegistro> registros) {
 		JPanel panel = new JPanel(new BorderLayout());
 
 		String[] columns = { "Asistente", "Tipo Registro", "Costo", "Fecha" };

@@ -1,5 +1,5 @@
-<%@ page import="datatypes.DTEdicionDetallada, datatypes.DTEdicion, datatypes.DTOrganizador, datatypes.DTUsuario, datatypes.DTAsistente,
-	datatypes.DTTipoRegistro, datatypes.DTPatrocinio, datatypes.DTRegistro" %>
+<%@ page import="webservice.DtEdicionDetallada, webservice.DtEdicion, webservice.DtOrganizador, webservice.DtUsuario, webservice.DtAsistente,
+    webservice.DtTipoRegistro, webservice.DtPatrocinio, webservice.DtRegistro, javax.xml.datatype.XMLGregorianCalendar, java.util.Date" %>
 <%@ page import="java.util.Date, java.text.SimpleDateFormat" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -15,35 +15,39 @@
      <!-- NAV -->
      <jsp:include page="/WEB-INF/template/header.jsp" />
      
-     <% var edicionDetallada = (DTEdicionDetallada)request.getAttribute("edicionDetallada"); 
-        var edicion = edicionDetallada.edicion();
-        var organizador = edicionDetallada.organizador();
-        var tiposRegistro = edicionDetallada.tiposRegistro();
-        var patrocinios = edicionDetallada.patrocinios();
-        var registros = edicionDetallada.registros();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        var dtUsuario = (DTUsuario)request.getAttribute("usuario");
-        boolean asistente = dtUsuario instanceof DTAsistente; 
-        boolean organizadorUsuario = dtUsuario instanceof DTOrganizador;
+      <% DtEdicionDetallada edicionDetallada = (DtEdicionDetallada) request.getAttribute("edicionDetallada");
+          DtEdicion edicion = edicionDetallada.getEdicion();
+          DtOrganizador organizador = edicionDetallada.getOrganizador();
+          java.util.List<DtTipoRegistro> tiposRegistro = edicionDetallada.getTiposRegistro();
+          java.util.List<DtPatrocinio> patrocinios = edicionDetallada.getPatrocinios();
+          java.util.List<DtRegistro> registros = edicionDetallada.getRegistros();
+          SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+          DtUsuario dtUsuario = (DtUsuario) request.getAttribute("usuario");
+          boolean asistente = dtUsuario instanceof DtAsistente; 
+          boolean organizadorUsuario = dtUsuario instanceof DtOrganizador;
+      %>
      
-     %>
-     
-        <section class="position-relative" id="imagenEd" style="min-height: 500px; background-image: url('<%= request.getContextPath() %>/image/<%=edicion.foto()%>'); background-size: cover; background-position: center;">
+    <section class="position-relative" id="imagenEd" style="min-height: 500px; background-image: url('<%= request.getContextPath() %>/image/<%=edicion.getFoto()%>'); background-size: cover; background-position: center;">
         <div class="position-absolute bottom-0 start-0 w-100" style="height: 40%;background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
             
             <div class="container h-100 d-flex flex-column justify-content-end pb-4">
 
-                <h1 class="fw-bold text-white fs-2 fs-md-1"><%=edicion.nombre()%></h1>
-                <p class="fs-5 fs-md-5 text-white mb-0 fw-bold"><%=edicion.sigla()%></p>
+                <h1 class="fw-bold text-white fs-2 fs-md-1"><%=edicion.getNombre()%></h1>
+                <p class="fs-5 fs-md-5 text-white mb-0 fw-bold"><%=edicion.getSigla()%></p>
 
                 <div class="row g-2 g-md-3 mt-2 align-items-center">
                     <div class="col-auto d-flex align-items-center">
                         <i class="bi bi-calendar-event-fill text-white me-2"></i>
-                        <p class="fs-5 fs-md-5 text-white mb-0"><%= formatter.format(edicion.fechaInicio()) %> - <%=formatter.format(edicion.fechaFin()) %></p>
+                                <% XMLGregorianCalendar fInicio = edicion.getFechaInicio();
+                                    XMLGregorianCalendar fFin = edicion.getFechaFin();
+                                    Date dInicio = fInicio != null ? fInicio.toGregorianCalendar().getTime() : null;
+                                    Date dFin = fFin != null ? fFin.toGregorianCalendar().getTime() : null;
+                                %>
+                                <p class="fs-5 fs-md-5 text-white mb-0"><%= dInicio != null ? formatter.format(dInicio) : "" %> - <%= dFin != null ? formatter.format(dFin) : "" %></p>
                     </div>
                     <div class="col-auto d-flex align-items-center">
                         <i class="bi bi-geo-alt-fill text-white me-2"></i>
-                        <p class="fs-5 fs-md-5 text-white mb-0"><%=edicion.ciudad() %>, <%=edicion.pais() %></p>
+                        <p class="fs-5 fs-md-5 text-white mb-0"><%=edicion.getCiudad() %>, <%=edicion.getPais() %></p>
                     </div>
                 </div>
             </div>
@@ -64,15 +68,15 @@
                 <div class="row g-3 align-items-center mb-4 p-2">
                     <div class="col-auto">
                         <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle" style="width: 75px; height: 75px; font-size: 2rem;">
-                            <img src="<%= request.getContextPath() %>/image/<%=organizador.foto()%>" class="card-img-top" alt="Foto del organizador"/>
+                            <img src="<%= request.getContextPath() %>/image/<%=organizador.getFoto()%>" class="card-img-top" alt="Foto del organizador"/>
                         </div>
                     </div>
                     <div class="col">
-                        <h4><a href="perfil-organizador.html" class="text-decoration-none text-body"><%=organizador.nombre() %></a></h4>
-                        <p class="mb-0"><%=organizador.correo()%></p>
-                        <p class="mb-0"><%=organizador.descripcion()%></p>
-                        <% if(organizador.linkSitioWeb() != null) { %> 
-                        	<p class="mb-0"><%=organizador.linkSitioWeb()%></p> 
+                        <h4><a href="perfil-organizador.html" class="text-decoration-none text-body"><%=organizador.getNombre() %></a></h4>
+                        <p class="mb-0"><%=organizador.getCorreo()%></p>
+                        <p class="mb-0"><%=organizador.getDescripcion() != null ? organizador.getDescripcion() : "" %></p>
+                        <% if(organizador.getLinkSitioWeb() != null) { %> 
+                         	<p class="mb-0"><%=organizador.getLinkSitioWeb()%></p> 
                         <% } %>
                     </div>
                 </div>
@@ -83,24 +87,26 @@
        <div class="container p-5 mt-4">
                     <div class="row gx-5 justify-content-center align-items-center align-items-stretch" id="tipoRegistro">
                         <!-- Pricing card free-->
-                      <% for(DTTipoRegistro tipoRegistro : tiposRegistro) {
+                      <% for(DtTipoRegistro tipoRegistro : tiposRegistro) {
                     	  request.setAttribute("tipoRegistro", tipoRegistro);
                       %>
                         <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
                             <div class="card mb-5 mb-xl-0 h-100 borderh-100">
                                 <div class="card-body p-5 d-flex flex-column min-vh-50" style="min-height: 50vh;">
-                                    <button type="button" class="btn p-0 m-0 align-self-start" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.nombre()%>consultaModal">
+                                    <button type="button" class="btn p-0 m-0 align-self-start" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.getNombre()%>consultaModal">
                                         <i class="bi bi-question-circle-fill fs-4"></i>
                                     </button>
-                                    <div class="small text-uppercase fw-bold text-muted"><%=tipoRegistro.nombre() %></div>
+                                    <div class="small text-uppercase fw-bold text-muted"><%=tipoRegistro.getNombre() %></div>
                                     <div class="mb-3">
-                                        <span class="display-4 fw-bold">$<%=(int) tipoRegistro.costo()%></span>
+                                        <span class="display-4 fw-bold">$<%=(int) tipoRegistro.getCosto()%></span>
                                     </div>
-                                    <p><%=tipoRegistro.descripcion()%></p>
+                                    <p><%=tipoRegistro.getDescripcion()%></p>
                                     
-                                    <% if(asistente && !((boolean) request.getAttribute("usuarioRegistrado"))) { 
+                                    <% Boolean usuarioRegistradoObj = (Boolean) request.getAttribute("usuarioRegistrado");
+                                    	boolean usuarioRegistrado = usuarioRegistradoObj != null ? usuarioRegistradoObj.booleanValue() : false;
+                                    	if(asistente && !usuarioRegistrado) {
                                     	request.setAttribute("edicion", edicion); %>
-                                    	<div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.nombre() + "registroModal" %>" href="#!">Elegir</a></div>
+                                    	<div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.getNombre() + "registroModal" %>" href="#!">Elegir</a></div>
                                 		<jsp:include page="/WEB-INF/registro/altaRegistroEdicion.jsp" />
                                 	<% } %>
                                 	
@@ -114,15 +120,16 @@
                     </div>
         </div>
         
-        <% String mensajeError = (String) request.getAttribute("errorRegistro"); 
-        if (mensajeError != null) { %>
+    <% String mensajeError = (String) request.getAttribute("errorRegistro");
+    Boolean usuarioRegistrado = request.getAttribute("usuarioRegistrado") == null ? (Boolean) request.getAttribute("usuarioRegistrado") : false;
+    if (mensajeError != null) { %>
         <div class="container p-5 mt-4">
         	<div class="border border-danger mb-3" style="background-color: rgba(220, 53, 69, 0.3)"><p class="text-center fw-bold" style="color: black;"><%=mensajeError %></p> </div>
         </div>
         <% } %>
         
-        <% if(asistente && ((boolean) request.getAttribute("usuarioRegistrado"))) {     	
-        	DTRegistro registroUsuario = (DTRegistro) request.getAttribute("datosRegistroUsuario");
+        <% if(asistente && usuarioRegistrado ) {     
+         	DtRegistro registroUsuario = (DtRegistro) request.getAttribute("datosRegistroUsuario");
         	%>
         <div class="container p-5 mt-4">
         
@@ -131,31 +138,32 @@
         		<p class="fw-bold mb-0 p-0">¡Ya estás registrado a esta edición!<p>
         		<div class="d-flex gap-2 fw-normal">
                     <p class="fw-bold mb-0 p-0">Nickname del usuario registrado: </p>
-                    <p class="mb-0 p-0"><%=registroUsuario.nicknameAsistente() %></p>
+                    <p class="mb-0 p-0"><%=registroUsuario.getNicknameAsistente() %></p>
                 </div>
                 <div class="d-flex gap-2 fw-normal">
                     <p class="fw-bold mb-0 p-0">Nombre del evento: </p>
-                    <p class="mb-0 p-0"><%=registroUsuario.nombreEvento() %></p>
+                    <p class="mb-0 p-0"><%=registroUsuario.getNombreEvento() %></p>
                 </div>
                 <div class="d-flex gap-2 fw-normal">
                     <p class="fw-bold mb-0 p-0">Nombre de la edición: </p>
-                    <p class="mb-0 p-0"><%=registroUsuario.nombreEdicion() %></p>
+                    <p class="mb-0 p-0"><%=registroUsuario.getNombreEdicion() %></p>
                 </div>
                 <div class="d-flex gap-2 fw-normal">
                     <p class="fw-bold mb-0 p-0">Fecha del registro: </p>
-                    <p class="mb-0 p-0"><%=formatter.format(registroUsuario.fecha()) %></p>
+                    <% Date regDate = registroUsuario.getFecha() != null ? registroUsuario.getFecha().toGregorianCalendar().getTime() : null; %>
+                    <p class="mb-0 p-0"><%= regDate != null ? formatter.format(regDate) : "" %></p>
                 </div>
                 <div class="d-flex gap-2 fw-normal">
                     <p class="fw-bold mb-0 p-0">Nombre del tipo de registro: </p>
-                    <p class="mb-0 p-0"><%=registroUsuario.tipoRegistro().nombre() %></p>
+                    <p class="mb-0 p-0"><%= registroUsuario.getTipoRegistro() != null ? registroUsuario.getTipoRegistro().getNombre() : "" %></p>
                 </div>
                 <div class="d-flex gap-2 fw-normal">
                     <p class="fw-bold mb-0 p-0">Costo: </p>
-                    <p class="mb-0 p-0">$<%=(int) registroUsuario.costo() %></p>
+                    <p class="mb-0 p-0">$<%=(int) registroUsuario.getCosto() %></p>
                 </div>
                  <div class="d-flex gap-2 fw-normal">
                     <p class="fw-bold mb-0 p-0">Uso código de patrocinio?: </p>
-                    <p class="mb-0 p-0"><%=registroUsuario.usoCodigo() ? "Sí" : "No" %></p>
+                    <p class="mb-0 p-0"><%= (registroUsuario.isUsoCodigo() != null && registroUsuario.isUsoCodigo()) ? "Sí" : "No" %></p>
                 </div>               
         		
         		</div>
@@ -172,10 +180,10 @@
             <div class="container text-center">
                 <h5 class="mb-0">PATROCINADORES DE LA EDICIÓN</h5>
                 <div class ="d-flex flex-wrap justify-content-center align-items-end mt-4">
-                <% for(var patrocinio : patrocinios) { %>
-                    <a href="#!"class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100 text-decoration-none text-white"  data-bs-toggle="modal" data-bs-target="#<%=patrocinio.institucion().nombre()%>patrocinadorModal">
-                        <p><%=patrocinio.institucion().nombre()%></p>
-                        <img class="img-fluid rounded-pill" src="<%=request.getContextPath() %>/image/<%=patrocinio.institucion().foto().equals("default.png") ? "patrocinadorDefault.png" : patrocinio.institucion().foto() %>" style="width: 100px; height: 100px;" alt="Logo <%=patrocinio.institucion().nombre()%>">
+                <% for(DtPatrocinio patrocinio : patrocinios) { %>
+                    <a href="#!"class="d-flex flex-column align-items-center text-center col-6 col-md-4 col-lg-3 mb-4 h-100 text-decoration-none text-white"  data-bs-toggle="modal" data-bs-target="#<%=patrocinio.getInstitucion().getNombre()%>patrocinadorModal">
+                        <p><%=patrocinio.getInstitucion().getNombre()%></p>
+                        <img class="img-fluid rounded-pill" src="<%=request.getContextPath() %>/image/<%=patrocinio.getInstitucion().getFoto().equals("default.png") ? "patrocinadorDefault.png" : patrocinio.getInstitucion().getFoto() %>" style="width: 100px; height: 100px;" alt="Logo <%=patrocinio.getInstitucion().getNombre()%>">
                     </a>
                  <% request.setAttribute("patrocinador", patrocinio); %>
                 <jsp:include page="/WEB-INF/ediciones/consultaPatrocinadores.jsp" />

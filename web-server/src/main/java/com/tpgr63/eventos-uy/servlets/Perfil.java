@@ -6,31 +6,55 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import controllers.ImagesManager;
 import controllers.SessionManager;
-import datatypes.*;
-import interfaces.Factory;
-import interfaces.IUsuarioController;
-import interfaces.IEdicionController;
-import interfaces.IEventoController;
-import interfaces.IInstitucionController;
+import webservice.PortFactory;
 import model.EstadoSesion;
-import exceptions.*;
+import webservice.CantidadCuposDisponiblesException_Exception;
+import webservice.CostoRegistrosGratuitosException_Exception;
+import webservice.DtAsistente;
+import webservice.DtEdicion;
+import webservice.DtEvento;
+import webservice.DtEventoAlta;
+import webservice.DtEventoDetallado;
+import webservice.DtInstitucion;
+import webservice.DtOrganizador;
+import webservice.DtRegistro;
+import webservice.DtTipoRegistro;
+import webservice.DtUsuario;
+import webservice.EdicionService;
+import webservice.EstadoEdicion;
+import webservice.EventoService;
+import webservice.ExistePatrocinioException_Exception;
+import webservice.InstitucionNoExistenteException_Exception;
+import webservice.InstitucionRepetidaException_Exception;
+import webservice.InstitucionService;
+import webservice.NivelPatrocinio;
+import webservice.TipoUsuario;
+import webservice.UsuarioCorreoRepetidoException_Exception;
+import webservice.UsuarioService;
+import webservice.ValidationInputException_Exception;
 
 /**
  * Servlet implementation class Perfil
@@ -82,36 +106,36 @@ public class Perfil extends HttpServlet {
 		}
 
 		Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-		DTUsuario usuarioLogueado = null;
+		DtUsuario usuarioLogueado = null;
 
-		if (usuarioObj instanceof DTUsuario) {
-			usuarioLogueado = (DTUsuario) usuarioObj;
+		if (usuarioObj instanceof DtUsuario) {
+			usuarioLogueado = (DtUsuario) usuarioObj;
 		}
 
 		if (usuarioLogueado == null) {
 			response.sendRedirect(request.getContextPath() + "/sesion");
 			return;
 		}
-		Factory factory = Factory.get();
-		IUsuarioController usuarioController = factory.getIUsuarioController();
+		PortFactory factory = PortFactory.get();
+		UsuarioService usuarioController = factory.getUsuarioPort();
 
 		try {
 			// Determine user type and load appropriate data
 			if (usuarioLogueado.getTipo() == TipoUsuario.ASISTENTE) {
-				DTAsistente asistente = usuarioController.seleccionarAsistente(usuarioLogueado.nickname());
-				List<DTRegistro> registros = usuarioController.obtenerRegistrosUsuario(usuarioLogueado.nickname());
+				DtAsistente asistente = usuarioController.seleccionarAsistente(usuarioLogueado.getNickname());
+				List<DtRegistro> registros = usuarioController.obtenerRegistrosUsuario(usuarioLogueado.getNickname()).getRegistro();
 
 				request.setAttribute("asistente", asistente);
 				request.setAttribute("registros", registros);
 
 				request.getRequestDispatcher("/WEB-INF/usuarios/perfil-asistente.jsp").forward(request, response);
 			} else {
-				DTOrganizador organizador = usuarioController.seleccionarOrganizador(usuarioLogueado.nickname());
+				DtOrganizador organizador = usuarioController.seleccionarOrganizador(usuarioLogueado.getNickname());
 				request.setAttribute("organizador", organizador);
 
 				request.getRequestDispatcher("/WEB-INF/usuarios/perfil-organizador.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", "Error al cargar el perfil");
 			response.sendRedirect(request.getContextPath() + "/inicio");
@@ -149,10 +173,10 @@ public class Perfil extends HttpServlet {
 		}
 
 		Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-		DTUsuario usuarioLogueado = null;
+		DtUsuario usuarioLogueado = null;
 
-		if (usuarioObj instanceof DTUsuario) {
-			usuarioLogueado = (DTUsuario) usuarioObj;
+		if (usuarioObj instanceof DtUsuario) {
+			usuarioLogueado = (DtUsuario) usuarioObj;
 		}
 
 		if (usuarioLogueado == null) {
@@ -170,11 +194,11 @@ public class Perfil extends HttpServlet {
 		}
 	}
 
-	private void handleEditProfile(HttpServletRequest request, HttpServletResponse response, DTUsuario usuario)
+	private void handleEditProfile(HttpServletRequest request, HttpServletResponse response, DtUsuario usuario)
 			throws IOException {
 		try {
-			Factory factory = Factory.get();
-			IUsuarioController usuarioController = factory.getIUsuarioController();
+			PortFactory factory = PortFactory.get();
+			UsuarioService usuarioController = factory.getUsuarioPort();
 
 			// Get form data
 			String nombre = request.getParameter("nombre");
@@ -184,17 +208,23 @@ public class Perfil extends HttpServlet {
 			String password = request.getParameter("password");
 
 			// Parse date
-			LocalDate fechaNacimiento = null;
+			XMLGregorianCalendar fechaNacimiento = null;
+			GregorianCalendar gCalendar = null;
 			if (fechaNacStr != null && !fechaNacStr.isEmpty()) {
-				fechaNacimiento = LocalDate.parse(fechaNacStr);
+			  gCalendar = GregorianCalendar.from(
+            LocalDate.parse(fechaNacStr)
+                .atStartOfDay(ZoneId.systemDefault()));
+				fechaNacimiento = LocalDate.parse(fechaNacStr) != null
+            ? DatatypeFactory.newInstance().newXMLGregorianCalendar(gCalendar)
+            : null;
 			}
 
 			// Update based on user type
 			if (usuario.getTipo() == TipoUsuario.ASISTENTE) {
-				DTAsistente asistente = usuarioController.seleccionarAsistente(usuario.nickname());
+				DtAsistente asistente = usuarioController.seleccionarAsistente(usuario.getNickname());
 
 				// Handle image upload if present, otherwise keep existing
-				String foto = asistente.foto();
+				String foto = asistente.getFoto();
 				String newFoto = ImagesManager.getImageName(request);
 				// Solo actualiza la foto si hay una nueva imagen (no default.png)
 				if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
@@ -203,18 +233,17 @@ public class Perfil extends HttpServlet {
 				}
 
 				// Use provided values or keep existing ones
-				String finalNombre = (nombre != null && !nombre.isEmpty()) ? nombre : asistente.nombre();
-				String finalApellido = (apellido != null && !apellido.isEmpty()) ? apellido : asistente.apellido();
-				String finalCorreo = (correo != null && !correo.isEmpty()) ? correo : asistente.correo();
-				LocalDate finalFecha = (fechaNacimiento != null) ? fechaNacimiento
-						: asistente.fechaNacimiento().toInstant().atZone(java.time.ZoneId.systemDefault())
-								.toLocalDate();
+				String finalNombre = (nombre != null && !nombre.isEmpty()) ? nombre : asistente.getNombre();
+				String finalApellido = (apellido != null && !apellido.isEmpty()) ? apellido : asistente.getNombre();
+				String finalCorreo = (correo != null && !correo.isEmpty()) ? correo : asistente.getCorreo();
+				
+				XMLGregorianCalendar finalFecha = (fechaNacimiento != null) ? fechaNacimiento: asistente.getFechaNacimiento();
 
 				// Update using the correct method signature
 				// actualizarAsistente(nickname, nombre, apellido, correo, fechaNacimiento,
 				// foto, clave)
 				usuarioController.actualizarAsistente(
-						usuario.nickname(),
+						usuario.getNickname(),
 						finalNombre,
 						finalApellido,
 						finalCorreo,
@@ -223,14 +252,14 @@ public class Perfil extends HttpServlet {
 						password);
 
 				// Reload updated data for session
-				DTAsistente updatedAsistente = usuarioController.seleccionarAsistente(usuario.nickname());
+				DtAsistente updatedAsistente = usuarioController.seleccionarAsistente(usuario.getNickname());
 				request.getSession().setAttribute("usuario_logueado", updatedAsistente);
 
 			} else if (usuario.getTipo() == TipoUsuario.ORGANIZADOR) {
-				DTOrganizador organizador = usuarioController.seleccionarOrganizador(usuario.nickname());
+				DtOrganizador organizador = usuarioController.seleccionarOrganizador(usuario.getNickname());
 
 				// Handle image upload if present, otherwise keep existing
-				String foto = organizador.foto();
+				String foto = organizador.getFoto();
 				String newFoto = ImagesManager.getImageName(request);
 				// Solo actualiza la foto si hay una nueva imagen (no default.png)
 				if (newFoto != null && !newFoto.isEmpty() && !newFoto.equals("default.png")) {
@@ -239,22 +268,22 @@ public class Perfil extends HttpServlet {
 				}
 
 				// Use provided values or keep existing ones
-				String finalNombre = (nombre != null && !nombre.isEmpty()) ? nombre : organizador.nombre();
-				String finalCorreo = (correo != null && !correo.isEmpty()) ? correo : organizador.correo();
+				String finalNombre = (nombre != null && !nombre.isEmpty()) ? nombre : organizador.getNombre();
+				String finalCorreo = (correo != null && !correo.isEmpty()) ? correo : organizador.getCorreo();
 				String finalDescripcion = request.getParameter("descripcion");
 				if (finalDescripcion == null || finalDescripcion.isEmpty()) {
-					finalDescripcion = organizador.descripcion();
+					finalDescripcion = organizador.getDescripcion();
 				}
 				String finalSitioWeb = request.getParameter("sitioWeb");
 				if (finalSitioWeb == null || finalSitioWeb.isEmpty()) {
-					finalSitioWeb = organizador.linkSitioWeb();
+					finalSitioWeb = organizador.getLinkSitioWeb();
 				}
 
 				// Update using the correct method signature
 				// actualizarOrganizador(nickname, nombre, correo, descripcion, linkSitioWeb,
 				// foto, clave)
 				usuarioController.actualizarOrganizador(
-						usuario.nickname(),
+						usuario.getNickname(),
 						finalNombre,
 						finalCorreo,
 						finalDescripcion,
@@ -263,7 +292,7 @@ public class Perfil extends HttpServlet {
 						password);
 
 				// Reload updated data for session
-				DTOrganizador updatedOrganizador = usuarioController.seleccionarOrganizador(usuario.nickname());
+				DtOrganizador updatedOrganizador = usuarioController.seleccionarOrganizador(usuario.getNickname());
 				request.getSession().setAttribute("usuario_logueado", updatedOrganizador);
 			}
 
@@ -271,17 +300,17 @@ public class Perfil extends HttpServlet {
 			request.getSession().setAttribute("success_message", "Perfil actualizado correctamente");
 			response.sendRedirect(request.getContextPath() + "/perfil");
 
-		} catch (UsuarioCorreoRepetidoException e) {
+		} catch (UsuarioCorreoRepetidoException_Exception e) {
 			request.getSession().setAttribute("error_message", "El correo ya está en uso");
 			response.sendRedirect(request.getContextPath() + "/perfil");
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			request.getSession().setAttribute("error_message", "Error al actualizar el perfil: " + e.getMessage());
 			response.sendRedirect(request.getContextPath() + "/perfil");
 		}
 	}
 
-	private void handleDeleteRegistro(HttpServletRequest request, HttpServletResponse response, DTUsuario usuario)
+	private void handleDeleteRegistro(HttpServletRequest request, HttpServletResponse response, DtUsuario usuario)
 			throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
@@ -296,15 +325,15 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 
 			// IMPORTANT NOTE: cancelarRegistroEdicionEvento() exists in the interface but:
 			// 1. It has no parameters (needs edicion and nickname)
 			// 2. The implementation is empty (see EdicionController line 358)
 			//
 			// TODO: You need to either:
-			// A) Modify IEdicionController to add: void
+			// A) Modify EdicionService to add: void
 			// cancelarRegistroEdicionEvento(String nombreEdicion, String nickname)
 			// B) Or implement the existing method to use stored state (edicionRecordada,
 			// etc.)
@@ -316,7 +345,7 @@ public class Perfil extends HttpServlet {
 			out.print(
 					"{\"success\": false, \"message\": \"La funcionalidad de cancelación de registros requiere modificaciones en el backend. Por favor, contacta al administrador del sistema.\"}");
 
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			out.print("{\"success\": false, \"message\": \"Error al cancelar el registro: " + e.getMessage() + "\"}");
 		}
@@ -360,7 +389,7 @@ public class Perfil extends HttpServlet {
 				default:
 					sendApiError(response, "Endpoint no válido");
 			}
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al procesar solicitud: " + e.getMessage());
 		}
@@ -400,7 +429,7 @@ public class Perfil extends HttpServlet {
 				default:
 					sendApiError(response, "Endpoint no válido");
 			}
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al procesar solicitud: " + e.getMessage());
 		}
@@ -410,11 +439,11 @@ public class Perfil extends HttpServlet {
 
 	private void getCategorias(HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
-			IEventoController eventoController = factory.getIEventoController();
-			Set<String> categorias = eventoController.obtenerCategorias();
+			PortFactory factory = PortFactory.get();
+			EventoService eventoController = factory.getEventoPort();
+			List<String> categorias = eventoController.obtenerCategorias().getItem();
 			sendApiSuccess(response, categorias);
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener categorías: " + e.getMessage());
 		}
@@ -422,26 +451,26 @@ public class Perfil extends HttpServlet {
 
 	private void getEventos(HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
-			IEventoController eventoController = factory.getIEventoController();
+			PortFactory factory = PortFactory.get();
+			EventoService eventoController = factory.getEventoPort();
 
 			// Obtener eventos simples primero
-			Set<DTEvento> eventos = eventoController.listarEventos();
+			List<DtEvento> eventos = eventoController.listarEventos().getEvento();
 
-			// Convertir a DTEventoDetallado para incluir categorías
-			List<DTEventoDetallado> eventosDetallados = new ArrayList<>();
-			for (DTEvento evento : eventos) {
+			// Convertir a DtEventoDetallado para incluir categorías
+			List<DtEventoDetallado> eventosDetallados = new ArrayList<>();
+			for (DtEvento evento : eventos) {
 				try {
-					DTEventoDetallado detallado = eventoController.obtenerDatosDetalladosEvento(evento.nombre());
+					DtEventoDetallado detallado = eventoController.obtenerDatosDetalladosEvento(evento.getNombre());
 					eventosDetallados.add(detallado);
-				} catch (Exception e) {
+				} catch (java.lang.Exception e) {
 					// Si no se puede obtener detalle, continuar con siguiente
-					System.err.println("Error obteniendo detalle de evento " + evento.nombre() + ": " + e.getMessage());
+					System.err.println("Error obteniendo detalle de evento " + evento.getNombre() + ": " + e.getMessage());
 				}
 			}
 
 			sendApiSuccess(response, eventosDetallados);
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener eventos: " + e.getMessage());
 		}
@@ -452,64 +481,64 @@ public class Perfil extends HttpServlet {
 			// Si se especifica un evento, obtener ediciones de ese evento
 			String nombreEvento = request.getParameter("evento");
 
-			Factory factory = Factory.get();
+			PortFactory factory = PortFactory.get();
 
 			if (nombreEvento != null && !nombreEvento.isEmpty()) {
 				// Obtener ediciones de un evento específico
-				IEventoController eventoController = factory.getIEventoController();
-				Set<DTEdicion> ediciones = eventoController.mostrarEdiciones(nombreEvento);
+				EventoService eventoController = factory.getEventoPort();
+				Set<DtEdicion> ediciones = new HashSet<>(eventoController.mostrarEdiciones(nombreEvento).getEdicion());
 				sendApiSuccess(response, ediciones);
 			} else {
 				// Obtener TODAS las ediciones del organizador logueado con información del
 				// evento
 				Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-				if (!(usuarioObj instanceof DTUsuario)) {
+				if (!(usuarioObj instanceof DtUsuario)) {
 					sendApiError(response, "Usuario no logueado");
 					return;
 				}
 
-				DTUsuario usuario = (DTUsuario) usuarioObj;
-				IEdicionController edicionController = factory.getIEdicionController();
-				IEventoController eventoController = factory.getIEventoController();
+				DtUsuario usuario = (DtUsuario) usuarioObj;
+				EdicionService edicionController = factory.getEdicionPort();
+				EventoService eventoController = factory.getEventoPort();
 
-				Set<DTEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador(usuario.nickname());
+				Set<DtEdicion> ediciones = edicionController.obtenerEdicionesPorOrganizador(usuario.getNickname()).getEdicion().stream().collect(java.util.stream.Collectors.toSet());
 
 				// Obtener TODOS los eventos del sistema para cruzar con ediciones
-				Set<DTEvento> todosLosEventos = eventoController.listarEventos();
+				Set<DtEvento> todosLosEventos = eventoController.listarEventos().getEvento().stream().collect(java.util.stream.Collectors.toSet());
 
 				// Enriquecer las ediciones con el nombre del evento
 				java.util.List<java.util.Map<String, Object>> edicionesEnriquecidas = new java.util.ArrayList<>();
-				for (DTEdicion edicion : ediciones) {
+				for (DtEdicion edicion : ediciones) {
 					// Buscar el evento al que pertenece esta edición
 					String nombreEventoPadre = "";
-					for (DTEvento evento : todosLosEventos) {
+					for (DtEvento evento : todosLosEventos) {
 						try {
-							Set<DTEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
-							for (DTEdicion ed : edicionesDelEvento) {
-								if (ed.nombre().equals(edicion.nombre())) {
-									nombreEventoPadre = evento.nombre();
+							Set<DtEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.getNombre()).getEdicion().stream().collect(java.util.stream.Collectors.toSet());;
+							for (DtEdicion ed : edicionesDelEvento) {
+								if (ed.getNombre().equals(edicion.getNombre())) {
+									nombreEventoPadre = evento.getNombre();
 									break;
 								}
 							}
 							if (!nombreEventoPadre.isEmpty())
 								break;
-						} catch (Exception e) {
+						} catch (java.lang.Exception e) {
 							// Si falla al obtener ediciones de un evento, continuar con el siguiente
 							continue;
 						}
 					}
 
 					java.util.Map<String, Object> edicionMap = new java.util.HashMap<>();
-					edicionMap.put("nombre", edicion.nombre());
-					edicionMap.put("sigla", edicion.sigla());
-					edicionMap.put("fechaInicio", edicion.fechaInicio());
-					edicionMap.put("fechaFin", edicion.fechaFin());
-					edicionMap.put("fechaAlta", edicion.fechaAlta());
-					edicionMap.put("ciudad", edicion.ciudad());
-					edicionMap.put("pais", edicion.pais());
-					edicionMap.put("foto", edicion.foto());
-					edicionMap.put("imagen", edicion.foto());
-					edicionMap.put("estado", edicion.estado().toString());
+					edicionMap.put("nombre", edicion.getNombre());
+					edicionMap.put("sigla", edicion.getSigla());
+					edicionMap.put("fechaInicio", edicion.getFechaInicio());
+					edicionMap.put("fechaFin", edicion.getFechaFin());
+					edicionMap.put("fechaAlta", edicion.getFechaAlta());
+					edicionMap.put("ciudad", edicion.getCiudad());
+					edicionMap.put("pais", edicion.getPais());
+					edicionMap.put("foto", edicion.getFoto());
+					edicionMap.put("imagen", edicion.getFoto());
+					edicionMap.put("estado", edicion.getEstado().toString());
 					edicionMap.put("nombreEvento", nombreEventoPadre);
 
 					edicionesEnriquecidas.add(edicionMap);
@@ -517,7 +546,7 @@ public class Perfil extends HttpServlet {
 
 				sendApiSuccess(response, edicionesEnriquecidas);
 			}
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener ediciones: " + e.getMessage());
 		}
@@ -525,11 +554,11 @@ public class Perfil extends HttpServlet {
 
 	private void getInstituciones(HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
-			IInstitucionController institucionController = factory.getIInstitucionController();
-			Set<DTInstitucion> instituciones = institucionController.listarInstituciones();
+			PortFactory factory = PortFactory.get();
+			InstitucionService institucionController = factory.getInstitucionPort();
+			Set<DtInstitucion> instituciones = institucionController.listarInstituciones().getInstitucion().stream().collect(java.util.stream.Collectors.toSet());
 			sendApiSuccess(response, instituciones);
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener instituciones: " + e.getMessage());
 		}
@@ -543,11 +572,11 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
-			Set<DTTipoRegistro> tiposRegistro = edicionController.mostrarTiposDeRegistro(nombreEdicion);
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
+			Set<DtTipoRegistro> tiposRegistro = edicionController.mostrarTiposDeRegistro(nombreEdicion).getTipoRegistro().stream().collect(java.util.stream.Collectors.toSet());
 			sendApiSuccess(response, tiposRegistro);
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener tipos de registro: " + e.getMessage());
 		}
@@ -561,11 +590,11 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
-			Set<DTAsistente> asistentes = edicionController.mostrarAsistentes(nombreEdicion);
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
+			Set<DtAsistente> asistentes = edicionController.mostrarAsistentes(nombreEdicion).getAsistente().stream().collect(java.util.stream.Collectors.toSet());
 			sendApiSuccess(response, asistentes);
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener registros: " + e.getMessage());
 		}
@@ -610,22 +639,30 @@ public class Perfil extends HttpServlet {
 						categoriasSet.add(jsonArray.get(i).getAsString());
 					}
 					System.out.println("categorías parseadas: " + categoriasSet);
-				} catch (Exception e) {
+				} catch (java.lang.Exception e) {
 					e.printStackTrace();
 					sendApiError(response, "Error al procesar las categorías");
 					return;
 				}
 			}
 
-			// DTEventoAlta expects: (nombre, descripcion, fechaAlta, sigla, foto,
+			// DtEventoAlta expects: (nombre, descripcion, fechaAlta, sigla, foto,
 			// categorias)
-			DTEventoAlta eventoAlta = new DTEventoAlta(nombre, descripcion, new java.util.Date(), sigla, foto,
-					categoriasSet);
+			DtEventoAlta eventoAlta = new DtEventoAlta();
+			eventoAlta.setNombre(nombre);
+			eventoAlta.setDescripcion(descripcion);
+			LocalDate date = LocalDate.now();
+			GregorianCalendar gcal = GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault()));
+			XMLGregorianCalendar fechaAlta = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+			eventoAlta.setFechaAlta(fechaAlta);
+      eventoAlta.setSigla(sigla);
+      eventoAlta.setFoto(foto);
+			
 
-			System.out.println("DTEventoAlta creado: " + eventoAlta);
+			System.out.println("DtEventoAlta creado: " + eventoAlta);
 
-			Factory factory = Factory.get();
-			IEventoController eventoController = factory.getIEventoController();
+			PortFactory factory = PortFactory.get();
+			EventoService eventoController = factory.getEventoPort();
 
 			System.out.println("Llamando a altaEvento...");
 			boolean creado = eventoController.altaEvento(eventoAlta);
@@ -636,11 +673,11 @@ public class Perfil extends HttpServlet {
 			} else {
 				sendApiError(response, "No se pudo crear el evento");
 			}
-		} catch (ValidationInputException e) {
+		} catch (ValidationInputException_Exception e) {
 			System.out.println("ValidationInputException: " + e.getMessage());
 			e.printStackTrace();
 			sendApiError(response, "Error de validación: " + e.getMessage());
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			System.out.println("Exception general: " + e.getMessage());
 			e.printStackTrace();
 			sendApiError(response, "Error al crear evento: " + e.getMessage());
@@ -650,10 +687,10 @@ public class Perfil extends HttpServlet {
 	private void createEdicion(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
 			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-			DTUsuario usuario = null;
+			DtUsuario usuario = null;
 
-			if (usuarioObj instanceof DTUsuario) {
-				usuario = (DTUsuario) usuarioObj;
+			if (usuarioObj instanceof DtUsuario) {
+				usuario = (DtUsuario) usuarioObj;
 			}
 
 			if (usuario == null) {
@@ -662,7 +699,7 @@ public class Perfil extends HttpServlet {
 			}
 
 			System.out.println("=== DEBUG createEdicion ===");
-			System.out.println("Usuario logueado: " + usuario.nickname());
+			System.out.println("Usuario logueado: " + usuario.getNickname());
 
 			String nombreEvento = request.getParameter("evento");
 			String nombre = request.getParameter("nombre");
@@ -694,27 +731,38 @@ public class Perfil extends HttpServlet {
 			}
 			System.out.println("foto: " + foto);
 
-			// Convert LocalDate to Date for DTEdicion
-			// DTEdicion expects: (nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad,
+			// Convert LocalDate to Date for DtEdicion
+			// DtEdicion expects: (nombre, sigla, fechaInicio, fechaFin, fechaAlta, ciudad,
 			// pais, foto, estado)
-			java.util.Date fechaInicioDate = java.sql.Date.valueOf(fechaInicio);
-			java.util.Date fechaFinDate = java.sql.Date.valueOf(fechaFin);
-			java.util.Date fechaAltaDate = new java.util.Date();
+			GregorianCalendar gcalInicio = GregorianCalendar.from(fechaInicio.atStartOfDay(ZoneId.systemDefault()));
+			GregorianCalendar gcalFin = GregorianCalendar.from(fechaFin.atStartOfDay(ZoneId.systemDefault()));
+			GregorianCalendar gcalAlta = GregorianCalendar.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
+		  XMLGregorianCalendar fechaInicioDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcalInicio);
+			XMLGregorianCalendar fechaFinDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcalFin);
+			XMLGregorianCalendar fechaAltaDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcalAlta);
 
-			DTEdicion edicion = new DTEdicion(nombre, sigla, fechaInicioDate, fechaFinDate, fechaAltaDate,
-					ciudad, pais, foto, EstadoEdicion.INGRESADA);
+			DtEdicion edicion = new DtEdicion();
+			edicion.setNombre(nombre);
+			edicion.setSigla(sigla);
+			edicion.setCiudad(ciudad);
+			edicion.setPais(pais);
+			edicion.setFoto(foto);
+			edicion.setEstado(EstadoEdicion.INGRESADA);
+			edicion.setFechaInicio(fechaInicioDate);
+			edicion.setFechaFin(fechaFinDate);
+			edicion.setFechaAlta(fechaAltaDate);
 
-			System.out.println("DTEdicion creado: " + edicion);
+			System.out.println("DtEdicion creado: " + edicion);
 
-			Factory factory = Factory.get();
-			IEventoController eventoController = factory.getIEventoController();
+			PortFactory factory = PortFactory.get();
+			EventoService eventoController = factory.getEventoPort();
 
 			System.out.println("Llamando a agregarEdicionAEvento con:");
 			System.out.println("  - nombreEvento: " + nombreEvento);
-			System.out.println("  - nickname: " + usuario.nickname());
-			System.out.println("  - edicion: " + edicion.nombre());
+			System.out.println("  - nickname: " + usuario.getNickname());
+			System.out.println("  - edicion: " + edicion.getNombre());
 
-			boolean creada = eventoController.agregarEdicionAEvento(nombreEvento, usuario.nickname(), edicion);
+			boolean creada = eventoController.agregarEdicionAEvento(nombreEvento, usuario.getNickname(), edicion);
 
 			System.out.println("Resultado agregarEdicionAEvento: " + creada);
 
@@ -723,11 +771,11 @@ public class Perfil extends HttpServlet {
 			} else {
 				sendApiError(response, "No se pudo crear la edición");
 			}
-		} catch (ValidationInputException e) {
+		} catch (ValidationInputException_Exception e) {
 			System.out.println("ValidationInputException: " + e.getMessage());
 			e.printStackTrace();
 			sendApiError(response, "Error de validación: " + e.getMessage());
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			System.out.println("Exception general: " + e.getMessage());
 			e.printStackTrace();
 			sendApiError(response, "Error al crear edición: " + e.getMessage());
@@ -752,8 +800,8 @@ public class Perfil extends HttpServlet {
 				ImagesManager.uploadImage(request, response);
 			}
 
-			Factory factory = Factory.get();
-			IInstitucionController institucionController = factory.getIInstitucionController();
+			PortFactory factory = PortFactory.get();
+			InstitucionService institucionController = factory.getInstitucionPort();
 			boolean creada = institucionController.crearInstitucion(nombre, descripcion, sitioWeb, foto);
 
 			if (creada) {
@@ -761,9 +809,9 @@ public class Perfil extends HttpServlet {
 			} else {
 				sendApiError(response, "No se pudo crear la institución");
 			}
-		} catch (InstitucionRepetidaException e) {
+		} catch (InstitucionRepetidaException_Exception e) {
 			sendApiError(response, "Ya existe una institución con ese nombre");
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al crear institución: " + e.getMessage());
 		}
@@ -785,16 +833,20 @@ public class Perfil extends HttpServlet {
 			Float costo = Float.parseFloat(costoStr);
 			Integer cupo = Integer.parseInt(cupoStr);
 
-			DTTipoRegistro tipoRegistro = new DTTipoRegistro(nombre, descripcion, costo, cupo);
+			DtTipoRegistro tipoRegistro = new DtTipoRegistro();
+			tipoRegistro.setNombre(nombre);
+			tipoRegistro.setDescripcion(descripcion);
+			tipoRegistro.setCosto(costo);
+			tipoRegistro.setCupo(cupo);
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 			edicionController.altaTipoRegistro(nombreEdicion, tipoRegistro);
 
 			sendApiSuccess(response, "Tipo de registro creado exitosamente");
-		} catch (ValidationInputException e) {
+		} catch (ValidationInputException_Exception e) {
 			sendApiError(response, "Error de validación: " + e.getMessage());
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al crear tipo de registro: " + e.getMessage());
 		}
@@ -818,7 +870,10 @@ public class Perfil extends HttpServlet {
 			NivelPatrocinio nivel = NivelPatrocinio.valueOf(nivelStr.toUpperCase());
 
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDate fechaAlta = LocalDate.parse(fechaAltaStr, formatter);
+			GregorianCalendar gcal = GregorianCalendar.from(
+        LocalDate.parse(fechaAltaStr, formatter)
+            .atStartOfDay(ZoneId.systemDefault()));
+			XMLGregorianCalendar fechaAlta = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
 
 			// Parsear registros JSON
 			String registrosJson = request.getParameter("registros");
@@ -831,8 +886,8 @@ public class Perfil extends HttpServlet {
 					String nombreTipoRegistro = primerRegistro.get("tipo").getAsString();
 					int cantGratuitos = primerRegistro.get("cantidad").getAsInt();
 
-					Factory factory = Factory.get();
-					IEdicionController edicionController = factory.getIEdicionController();
+					PortFactory factory = PortFactory.get();
+					EdicionService edicionController = factory.getEdicionPort();
 					edicionController.altaPatrocinio(fechaAlta, nombreEdicion, nombreInstitucion, aporte,
 							nombreTipoRegistro, cantGratuitos, codigo, nivel);
 
@@ -843,15 +898,15 @@ public class Perfil extends HttpServlet {
 			} else {
 				sendApiError(response, "Debe agregar al menos un registro gratuito");
 			}
-		} catch (ExistePatrocinioException e) {
+		} catch (ExistePatrocinioException_Exception e) {
 			sendApiError(response, "Ya existe un patrocinio con ese código");
-		} catch (CostoRegistrosGratuitosException e) {
+		} catch (CostoRegistrosGratuitosException_Exception e) {
 			sendApiError(response, "El costo de los registros gratuitos supera el 20% del aporte");
-		} catch (CantidadCuposDisponiblesException e) {
+		} catch (CantidadCuposDisponiblesException_Exception e) {
 			sendApiError(response, "No hay suficientes cupos disponibles");
-		} catch (InstitucionNoExistenteException e) {
+		} catch (InstitucionNoExistenteException_Exception e) {
 			sendApiError(response, "La institución no existe");
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al crear patrocinio: " + e.getMessage());
 		}
@@ -885,7 +940,7 @@ public class Perfil extends HttpServlet {
 				default:
 					sendApiError(response, "Endpoint no válido");
 			}
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al procesar solicitud: " + e.getMessage());
 		}
@@ -913,7 +968,7 @@ public class Perfil extends HttpServlet {
 				default:
 					sendApiError(response, "Endpoint no válido");
 			}
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al procesar solicitud: " + e.getMessage());
 		}
@@ -923,26 +978,26 @@ public class Perfil extends HttpServlet {
 
 	private void getEdicionesDisponibles(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
-			Factory factory = Factory.get();
-			IEventoController eventoController = factory.getIEventoController();
+			PortFactory factory = PortFactory.get();
+			EventoService eventoController = factory.getEventoPort();
 
 			// Obtener todas las ediciones activas/confirmadas
-			Set<DTEvento> todosLosEventos = eventoController.listarEventos();
+			Set<DtEvento> todosLosEventos = eventoController.listarEventos().getEvento().stream().collect(java.util.stream.Collectors.toSet());
 			List<Map<String, Object>> edicionesDisponibles = new ArrayList<>();
 
-			for (DTEvento evento : todosLosEventos) {
-				Set<DTEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.nombre());
+			for (DtEvento evento : todosLosEventos) {
+				Set<DtEdicion> edicionesDelEvento = eventoController.mostrarEdiciones(evento.getNombre()).getEdicion().stream().collect(java.util.stream.Collectors.toSet());
 
-				for (DTEdicion edicion : edicionesDelEvento) {
+				for (DtEdicion edicion : edicionesDelEvento) {
 					// Solo incluir ediciones en estado confirmado
-					if (edicion.estado() == EstadoEdicion.ACEPTADA) {
+					if (edicion.getEstado() == EstadoEdicion.ACEPTADA) {
 						Map<String, Object> edMap = new HashMap<>();
-						edMap.put("nombre", edicion.nombre());
-						edMap.put("nombreEvento", evento.nombre());
+						edMap.put("nombre", edicion.getNombre());
+						edMap.put("nombreEvento", evento.getNombre());
 						edMap.put("fechaInicio",
-								edicion.fechaInicio() != null ? edicion.fechaInicio().toString() : null);
-						edMap.put("fechaFin", edicion.fechaFin() != null ? edicion.fechaFin().toString() : null);
-						edMap.put("imagen", edicion.foto());
+								edicion.getFechaInicio() != null ? edicion.getFechaInicio().toString() : null);
+						edMap.put("fechaFin", edicion.getFechaFin() != null ? edicion.getFechaFin().toString() : null);
+						edMap.put("imagen", edicion.getFoto());
 						edicionesDisponibles.add(edMap);
 					}
 				}
@@ -953,7 +1008,7 @@ public class Perfil extends HttpServlet {
 			result.put("data", edicionesDisponibles);
 			sendApiSuccess(response, result);
 
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al obtener ediciones disponibles: " + e.getMessage());
 		}
@@ -971,14 +1026,14 @@ public class Perfil extends HttpServlet {
 
 			// Obtener usuario logueado
 			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-			if (!(usuarioObj instanceof DTUsuario)) {
+			if (!(usuarioObj instanceof DtUsuario)) {
 				sendApiError(response, "Usuario no autenticado");
 				return;
 			}
-			DTUsuario usuario = (DTUsuario) usuarioObj;
+			DtUsuario usuario = (DtUsuario) usuarioObj;
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 
 			// Verificar código con tipo de registro y nickname del usuario
 			// Nota: Necesitamos el tipo de registro - usaremos validación simple
@@ -990,7 +1045,7 @@ public class Perfil extends HttpServlet {
 			result.put("message", "El código se validará al confirmar el registro");
 			sendApiSuccess(response, result);
 
-		} catch (Exception e) {
+		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 			Map<String, Object> result = new HashMap<>();
 			result.put("success", false);
@@ -1004,11 +1059,11 @@ public class Perfil extends HttpServlet {
 		try {
 			// Obtener usuario logueado
 			Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-			if (!(usuarioObj instanceof DTUsuario)) {
+			if (!(usuarioObj instanceof DtUsuario)) {
 				sendApiError(response, "Usuario no autenticado");
 				return;
 			}
-			DTUsuario usuario = (DTUsuario) usuarioObj;
+			DtUsuario usuario = (DtUsuario) usuarioObj;
 
 			String edicion = request.getParameter("edicion");
 			String tipo = request.getParameter("tipo");
@@ -1019,18 +1074,20 @@ public class Perfil extends HttpServlet {
 				return;
 			}
 
-			Factory factory = Factory.get();
-			IEdicionController edicionController = factory.getIEdicionController();
+			PortFactory factory = PortFactory.get();
+			EdicionService edicionController = factory.getEdicionPort();
 
 			// Crear registro con o sin código de patrocinio
-			Date fecha = new Date(); // Fecha actual
+			GregorianCalendar gCalendar = new GregorianCalendar();
+			gCalendar.setTime(new Date());
+			XMLGregorianCalendar fecha = DatatypeFactory.newInstance().newXMLGregorianCalendar(gCalendar); // Fecha actual
 
 			if (codigoPatrocinio != null && !codigoPatrocinio.trim().isEmpty()) {
 				// Registro con código de patrocinio - la sobrecarga valida el código
-				edicionController.altaRegistroEdicionEvento(
+				edicionController.altaRegistroEdicionEventoConCodigo(
 						edicion,
 						tipo,
-						usuario.nickname(),
+						usuario.getNickname(),
 						fecha,
 						codigoPatrocinio);
 			} else {
@@ -1038,7 +1095,7 @@ public class Perfil extends HttpServlet {
 				edicionController.altaRegistroEdicionEvento(
 						edicion,
 						tipo,
-						usuario.nickname(),
+						usuario.getNickname(),
 						fecha);
 			}
 
@@ -1047,11 +1104,11 @@ public class Perfil extends HttpServlet {
 			result.put("message", "Registro creado exitosamente");
 			sendApiSuccess(response, result);
 
-		} catch (ValidationInputException e) {
+		} catch (ValidationInputException_Exception e) {
 			sendApiError(response, "Error de validación: " + e.getMessage());
 		} catch (IllegalArgumentException e) {
 			sendApiError(response, "Código de patrocinio inválido o ya utilizado");
-		} catch (Exception e) {
+		} catch (java.lang.Exception  e) {
 			e.printStackTrace();
 			sendApiError(response, "Error al crear registro: " + e.getMessage());
 		}
@@ -1070,10 +1127,10 @@ public class Perfil extends HttpServlet {
 		}
 
 		Object usuarioObj = request.getSession().getAttribute("usuario_logueado");
-		DTUsuario usuario = null;
+		DtUsuario usuario = null;
 
-		if (usuarioObj instanceof DTUsuario) {
-			usuario = (DTUsuario) usuarioObj;
+		if (usuarioObj instanceof DtUsuario) {
+			usuario = (DtUsuario) usuarioObj;
 		}
 
 		if (usuario == null || usuario.getTipo() != TipoUsuario.ORGANIZADOR) {

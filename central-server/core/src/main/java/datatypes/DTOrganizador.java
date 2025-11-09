@@ -1,9 +1,19 @@
 package datatypes;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 @SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "DTOrganizador")
 public class DTOrganizador extends DTUsuario {
   private String linkSitioWeb;
   private String descripcion;
+  
+  public DTOrganizador() {
+	  super();
+  }
 
   public DTOrganizador(
       String nickname,

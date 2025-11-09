@@ -5,8 +5,11 @@ import dominio.Edicion;
 import dominio.Patrocinio;
 import dominio.TipoRegistro;
 import jakarta.persistence.EntityManager;
+
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class EdicionRepository {
   private static final EdicionRepository INSTANCE = new EdicionRepository();
@@ -81,14 +84,16 @@ public final class EdicionRepository {
     var dtEdicion = edicion.toDTEdicion();
     var dtOrganizador = edicion.obtenerDTOrganizador();
 
-    var dtTiposRegistro = edicion.listarDTTiposDeRegistro();
+    var dtTiposRegistro = edicion.listarDTTiposDeRegistro().stream()
+    		.collect(Collectors.toCollection(ArrayList::new));
 
-    Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
+    ArrayList<datatypes.DTPatrocinio> dtPatrocinios = new ArrayList<>();
     for (var p : patrocinios) {
       dtPatrocinios.add(p.toDTPatrocinio(p.getInstitucion().toDTInstitucion()));
     }
 
-    var dtRegistros = edicion.obtenerDTRegistros();
+    var dtRegistros = edicion.obtenerDTRegistros().stream()
+		.collect(Collectors.toCollection(ArrayList::new));
 
     return new datatypes.DTEdicionDetallada(
         dtEdicion, dtOrganizador, dtTiposRegistro, dtPatrocinios, dtRegistros);
@@ -135,14 +140,15 @@ public final class EdicionRepository {
     var dtEdicion = edicion.toDTEdicion();
     var dtOrganizador = edicion.obtenerDTOrganizador();
 
-    var dtTiposRegistro = edicion.listarDTTiposDeRegistro();
+    var dtTiposRegistro = edicion.listarDTTiposDeRegistro().stream()
+		.collect(Collectors.toCollection(ArrayList::new));
 
-    Set<datatypes.DTPatrocinio> dtPatrocinios = new LinkedHashSet<>();
+    ArrayList<datatypes.DTPatrocinio> dtPatrocinios = new ArrayList<>();
     for (var p : patrocinios) {
       dtPatrocinios.add(p.toDTPatrocinio(p.getInstitucion().toDTInstitucion()));
     }
 
-    var dtRegistros = edicion.obtenerDTRegistros();
+    var dtRegistros = edicion.obtenerDTRegistros().stream().collect(Collectors.toCollection(ArrayList::new));
 
     return new datatypes.DTEdicionDetallada(
         dtEdicion, dtOrganizador, dtTiposRegistro, dtPatrocinios, dtRegistros);

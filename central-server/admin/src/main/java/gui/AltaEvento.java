@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -211,8 +212,8 @@ public class AltaEvento extends JInternalFrame implements IReloadable {
         try {
             DTEventoAlta eventoData = new DTEventoAlta(nombre, descripcion, fechaAlta, sigla, DEFAULT_FOTO,
                     listCategorias.getSelectedValuesList() != null
-                            ? new HashSet<>(listCategorias.getSelectedValuesList())
-                            : new HashSet<>());
+                            ? new ArrayList<>(listCategorias.getSelectedValuesList())
+                            : new ArrayList<>());
             if (controller.altaEvento(eventoData)) {
                 Dialog.showSuccess("El evento se ha dado de alta correctamente.");
                 parent.reload();	

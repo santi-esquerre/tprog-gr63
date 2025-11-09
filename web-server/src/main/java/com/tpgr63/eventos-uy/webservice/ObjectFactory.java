@@ -24,8 +24,8 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _HolaMundo_QNAME = new QName("http://webservice/", "holaMundo");
-    private final static QName _HolaMundoResponse_QNAME = new QName("http://webservice/", "holaMundoResponse");
+    private final static QName _InstitucionRepetidaException_QNAME = new QName("http://webservice/", "InstitucionRepetidaException");
+    private final static QName _Instituciones_QNAME = new QName("http://webservice/", "instituciones");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: webservice
@@ -35,45 +35,69 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HolaMundo }
+     * Create an instance of {@link InstitucionRepetidaException }
      * 
+     * @return
+     *     the new instance of {@link InstitucionRepetidaException }
      */
-    public HolaMundo createHolaMundo() {
-        return new HolaMundo();
+    public InstitucionRepetidaException createInstitucionRepetidaException() {
+        return new InstitucionRepetidaException();
     }
 
     /**
-     * Create an instance of {@link HolaMundoResponse }
+     * Create an instance of {@link DtInstitucionArray }
      * 
+     * @return
+     *     the new instance of {@link DtInstitucionArray }
      */
-    public HolaMundoResponse createHolaMundoResponse() {
-        return new HolaMundoResponse();
+    public DtInstitucionArray createDtInstitucionArray() {
+        return new DtInstitucionArray();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link HolaMundo }{@code >}
+     * Create an instance of {@link DtPatrocinio }
+     * 
+     * @return
+     *     the new instance of {@link DtPatrocinio }
+     */
+    public DtPatrocinio createDtPatrocinio() {
+        return new DtPatrocinio();
+    }
+
+    /**
+     * Create an instance of {@link DtInstitucion }
+     * 
+     * @return
+     *     the new instance of {@link DtInstitucion }
+     */
+    public DtInstitucion createDtInstitucion() {
+        return new DtInstitucion();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link InstitucionRepetidaException }{@code >}
      * 
      * @param value
      *     Java instance representing xml element's value.
      * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link HolaMundo }{@code >}
+     *     the new instance of {@link JAXBElement }{@code <}{@link InstitucionRepetidaException }{@code >}
      */
-    @XmlElementDecl(namespace = "http://webservice/", name = "holaMundo")
-    public JAXBElement<HolaMundo> createHolaMundo(HolaMundo value) {
-        return new JAXBElement<HolaMundo>(_HolaMundo_QNAME, HolaMundo.class, null, value);
+    @XmlElementDecl(namespace = "http://webservice/", name = "InstitucionRepetidaException")
+    public JAXBElement<InstitucionRepetidaException> createInstitucionRepetidaException(InstitucionRepetidaException value) {
+        return new JAXBElement<>(_InstitucionRepetidaException_QNAME, InstitucionRepetidaException.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link HolaMundoResponse }{@code >}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DtInstitucionArray }{@code >}
      * 
      * @param value
      *     Java instance representing xml element's value.
      * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link HolaMundoResponse }{@code >}
+     *     the new instance of {@link JAXBElement }{@code <}{@link DtInstitucionArray }{@code >}
      */
-    @XmlElementDecl(namespace = "http://webservice/", name = "holaMundoResponse")
-    public JAXBElement<HolaMundoResponse> createHolaMundoResponse(HolaMundoResponse value) {
-        return new JAXBElement<HolaMundoResponse>(_HolaMundoResponse_QNAME, HolaMundoResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://webservice/", name = "instituciones")
+    public JAXBElement<DtInstitucionArray> createInstituciones(DtInstitucionArray value) {
+        return new JAXBElement<>(_Instituciones_QNAME, DtInstitucionArray.class, null, value);
     }
 
 }

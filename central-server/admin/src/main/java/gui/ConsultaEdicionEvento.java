@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -386,7 +387,7 @@ public class ConsultaEdicionEvento extends JInternalFrame implements IReloadable
     try {
       DTEventoDetallado det = eventoController.obtenerDatosDetalladosEvento(nombreEvento);
       nombreEventoSeleccionado = (det != null && det.evento() != null) ? det.evento().nombre() : nombreEvento;
-      Set<DTEdicion> eds = (det != null) ? det.ediciones() : Set.of();
+      Set<DTEdicion> eds = (det != null) ? new HashSet<>(det.ediciones()) : Set.of();
       updateEdicionesTable(eds);
       setEdicionesEnabled(true);
       clearDetallePanel(); // se vacía hasta que elijan una edición

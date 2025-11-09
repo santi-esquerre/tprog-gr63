@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<%@page import="datatypes.TipoUsuario"%>
+<%@page import="webservice.TipoUsuario"%>
 <html lang="en" data-bs-theme="light">
 <%@ page import="java.util.List" %>
-<%@ page import="datatypes.DTEvento" %>
-	<%
-		List<DTEvento> eventos = (List<DTEvento>) request.getAttribute("listado");
-		int finPaginacion = (int) request.getAttribute("fin_paginacion");
-		int pagina = (Integer)request.getAttribute("pagina") ;
-	%>
+<%@ page import="webservice.DtEvento" %>
+    <%
+        List<DtEvento> eventos = (List<DtEvento>) request.getAttribute("listado");
+        Integer finPaginacionObj = (Integer) request.getAttribute("fin_paginacion");
+        int finPaginacion = finPaginacionObj != null ? finPaginacionObj : 1;
+        Integer paginaObj = (Integer) request.getAttribute("pagina");
+        int pagina = paginaObj != null ? paginaObj : 1;
+    %>
     <head>
         <title>Eventos UY - Eventos</title>
         <jsp:include page="/WEB-INF/template/head.jsp" />
@@ -24,21 +26,21 @@
                     </div>
                 <div class="card shadow-sm">
                     <div class="row g-3 card-body">
-                    <% for (DTEvento ev : eventos){ %>
+                    <% for (DtEvento ev : eventos){ %>
                         <div class="col-xl-3 col-lg-4 col-sm-6 col-12">
-                            <a href="<%=request.getContextPath() %>/evento/<%= ev.nombre() %>" class="text-decoration-none">
+                            <a href="<%=request.getContextPath() %>/evento/<%= ev.getNombre() %>" class="text-decoration-none">
                                 <div class="card h-100 shadow-sm border-0 text-start evento-card position-relative overflow-hidden" style="transition: box-shadow 0.3s;">
                                     <img
                                         class="card-img-top"
-                                        src="image/<%= ev.foto()%>"
+                                        src="image/<%= ev.getFoto()%>"
                                         alt="Banner evento"
                                         style="aspect-ratio: 600/350;"
                                     />
                                     <div class="card-body">
-                                        <span class="text-muted text-deco:ration-none"><%=ev.nombre() %></span>
+                                        <span class="text-muted text-deco:ration-none"><%=ev.getNombre() %></span>
                                     </div>
                                     <div class="evento-descripcion position-absolute top-0 start-0 w-100 h-100 bg-white p-3 d-flex align-items-center justify-content-center text-center" style="opacity:0; pointer-events:none; transition: opacity 0.3s;">
-                                        <span class="text-muted"><%= ev.descripcion() %></span>
+                                        <span class="text-muted"><%= ev.getDescripcion() != null ? ev.getDescripcion() : "" %></span>
                                     </div>
                                 </div>
                             </a>

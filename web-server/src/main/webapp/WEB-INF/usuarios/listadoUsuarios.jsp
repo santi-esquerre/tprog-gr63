@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<%@page import="datatypes.TipoUsuario"%>
+<%@page import="webservice.TipoUsuario"%>
 <html lang="en" data-bs-theme="light">
 <%@ page import="java.util.List" %>
-<%@ page import="datatypes.DTUsuarioItemListado" %>
-	<%
-		List<DTUsuarioItemListado> usuarios = (List<DTUsuarioItemListado>) request.getAttribute("listado");
-		int finPaginacion = (int) request.getAttribute("fin_paginacion");
-		int pagina = (Integer)request.getAttribute("pagina") ;
-	%>
+    <%@ page import="webservice.DtUsuarioItemListado" %>
+    <%
+        List<DtUsuarioItemListado> usuarios = (List<DtUsuarioItemListado>) request.getAttribute("listado");
+        Integer finPaginacionObj = (Integer) request.getAttribute("fin_paginacion");
+        int finPaginacion = finPaginacionObj != null ? finPaginacionObj : 1;
+        Integer paginaObj = (Integer) request.getAttribute("pagina");
+        int pagina = paginaObj != null ? paginaObj : 1;
+    %>
     <head>
     	        <title>Eventos UY - Usuarios</title>
         <jsp:include page="/WEB-INF/template/head.jsp" />
@@ -26,20 +28,20 @@
                     
                         <div class="list-group rounded-bottom-0">
                         
-                                                		<% for(DTUsuarioItemListado usu: usuarios) { %>
+                                                		<% for(DtUsuarioItemListado usu: usuarios) { %>
                                                         <a 
                                                         class="list-group-item list-group-item-action d-flex border-start-0 border-end-0 user-item" 
-                                                        href="perfil?tipo=<%=(usu.tipoUsuario() == TipoUsuario.ASISTENTE) ? "asistente" : "organizador" %>&nickname=<%=usu.nickname()%>"
-                                                        data-nickname="<%=usu.nickname()%>"
-                                                        data-tipo="<%=(usu.tipoUsuario() == TipoUsuario.ASISTENTE) ? "asistente" : "organizador" %>"
+                                                        href="perfil?tipo=<%=(usu.getTipoUsuario() == TipoUsuario.ASISTENTE) ? "asistente" : "organizador" %>&nickname=<%=usu.getNickname()%>"
+                                                        data-nickname="<%=usu.getNickname()%>"
+                                                        data-tipo="<%=(usu.getTipoUsuario() == TipoUsuario.ASISTENTE) ? "asistente" : "organizador" %>"
                                                         >
-                                <img class="rounded-1 align-self-center" src="image/<%=usu.foto()%>" style="width: 40px; height: 40px;">
+                                <img class="rounded-1 align-self-center" src="image/<%=usu.getFoto()%>" style="width: 40px; height: 40px;">
 	                                <div class="ms-3">
 	                                    <div class="fw-bold">
-	                                        <%=usu.nickname()%>
-	                                        <span class="badge text-bg-<%=(usu.tipoUsuario() == TipoUsuario.ASISTENTE) ? "primary" : "danger" %>" rounded-pill align-self-center"><%=(usu.tipoUsuario() == TipoUsuario.ASISTENTE) ? "Asistente" : "Organizador" %></span>
+                                            <%=usu.getNickname()%>
+                                            <span class="badge text-bg-<%=(usu.getTipoUsuario() == TipoUsuario.ASISTENTE) ? "primary" : "danger" %>" rounded-pill align-self-center"><%=(usu.getTipoUsuario() == TipoUsuario.ASISTENTE) ? "Asistente" : "Organizador" %></span>
 	                                    </div>
-	                                    <div class="small"><%=usu.correo()%></div>
+                                        <div class="small"><%=usu.getCorreo()%></div>
 	                                </div>
                             </a>
                             <% } %>

@@ -1,18 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.EstadoSesion"%>
 <%@ page import="controllers.SessionManager"%>
-<%@ page import="datatypes.DTUsuario"%>
-<%@ page import="datatypes.TipoUsuario"%> 
+<%@ page import="webservice.DtUsuario"%>
+<%@ page import="webservice.TipoUsuario"%> 
 <%
 SessionManager.initSesion(request); 
 EstadoSesion estadoSesion = (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-DTUsuario usuarioLogueado = (DTUsuario) request.getSession().getAttribute("usuario_logueado");
+DtUsuario usuarioLogueado = (DtUsuario) request.getSession().getAttribute("usuario_logueado");
 String urlPerfil = "";
 if (usuarioLogueado != null) {
   if (usuarioLogueado.getTipo() == TipoUsuario.ASISTENTE) {
-    urlPerfil = request.getContextPath() + "/perfil?nickname=" + usuarioLogueado.nickname() + "&tipo=asistente";
+    urlPerfil = request.getContextPath() + "/perfil?nickname=" + usuarioLogueado.getNickname() + "&tipo=asistente";
   } else {
-    urlPerfil = request.getContextPath() + "/perfil?nickname=" + usuarioLogueado.nickname() + "&tipo=organizador";
+    urlPerfil = request.getContextPath() + "/perfil?nickname=" + usuarioLogueado.getNickname() + "&tipo=organizador";
   }
 }
 %>
@@ -174,7 +174,7 @@ if (usuarioLogueado != null) {
             aria-expanded="false"
           >
             <i class="bi bi-person-circle me-1"></i>
-            <%= usuarioLogueado.nickname() %>
+            <%= usuarioLogueado.getNickname() %>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
@@ -210,3 +210,4 @@ if (usuarioLogueado != null) {
     </div>
   </div>
 </nav>
+            

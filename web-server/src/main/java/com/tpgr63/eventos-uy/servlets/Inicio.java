@@ -6,12 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import controllers.SessionManager;
-import datatypes.DTEvento;
-import datatypes.DTEventoDetallado;
-import datatypes.DTUsuario;
-import exceptions.ValidationInputException;
-import interfaces.Factory;
-import interfaces.IEventoController;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,6 +13,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.EstadoSesion;
+import webservice.DtEvento;
+import webservice.DtEventoDetallado;
+import webservice.DtUsuario;
+import webservice.EventoService;
+import webservice.PortFactory;
+import webservice.ValidationInputException_Exception;
 
 /**
  * Servlet implementation class Inicio.
@@ -27,7 +27,7 @@ import model.EstadoSesion;
 public class Inicio extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private IEventoController eventoController;
+	private EventoService eventoController;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -39,7 +39,7 @@ public class Inicio extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		eventoController = Factory.get().getIEventoController();
+		eventoController = PortFactory.get().getEventoPort();
 	}
 
 	/**
@@ -57,8 +57,8 @@ public class Inicio extends HttpServlet {
 			// Datos de sesión para el header
 			if (estado == EstadoSesion.LOGIN_CORRECTO) {
 				Object usuarioObj = session.getAttribute("usuario_logueado");
-				if (usuarioObj instanceof DTUsuario) {
-					DTUsuario usuario = (DTUsuario) usuarioObj;
+				if (usuarioObj instanceof DtUsuario) {
+					DtUsuario usuario = (DtUsuario) usuarioObj;
 					request.setAttribute("usuarioLogueado", usuario);
 					request.setAttribute("sesionIniciada", true);
 				} else {
@@ -67,21 +67,22 @@ public class Inicio extends HttpServlet {
 				}
 			} else {
 				request.setAttribute("sesionIniciada", false);
-			} // Obtener eventos (retorna Set<DTEvento>)
-			Set<DTEvento> todosEventosSet = eventoController.listarEventos();
-			List<DTEvento> todosEventos = new ArrayList<>(todosEventosSet);
+			} // Obtener eventos (retorna Set<DtEvento>)
+			Set<DtEvento> todosEventosSet = eventoController.listarEventos().getEvento().stream()
+          .collect(java.util.stream.Collectors.toSet());
+			List<DtEvento> todosEventos = new ArrayList<>(todosEventosSet);
 
 			// Obtener eventos destacados detallados (primeros 6 eventos)
-			List<DTEventoDetallado> eventosDestacados = new ArrayList<>();
+			List<DtEventoDetallado> eventosDestacados = new ArrayList<>();
 			int limite = Math.min(6, todosEventos.size());
 
 			for (int i = 0; i < limite; i++) {
-				DTEvento evento = todosEventos.get(i);
+				DtEvento evento = todosEventos.get(i);
 				try {
-					DTEventoDetallado eventoDetallado = eventoController
-							.obtenerDatosDetalladosEventoAprobadas(evento.nombre());
+					DtEventoDetallado eventoDetallado = eventoController
+							.obtenerDatosDetalladosEventoAprobadas(evento.getNombre());
 					eventosDestacados.add(eventoDetallado);
-				} catch (ValidationInputException e) {
+				} catch (ValidationInputException_Exception e) {
 					// Si hay error, continuar con el siguiente
 					e.printStackTrace();
 				}
@@ -95,9 +96,9 @@ public class Inicio extends HttpServlet {
 
 			// Calcular total de ediciones (sumando las de cada evento detallado)
 			int totalEdiciones = 0;
-			for (DTEventoDetallado eventoDetallado : eventosDestacados) {
-				if (eventoDetallado.ediciones() != null) {
-					totalEdiciones += eventoDetallado.ediciones().size();
+			for (DtEventoDetallado eventoDetallado : eventosDestacados) {
+				if (eventoDetallado.getEdiciones() != null) {
+					totalEdiciones += eventoDetallado.getEdiciones().size();
 				}
 			}
 			request.setAttribute("totalEdiciones", totalEdiciones);

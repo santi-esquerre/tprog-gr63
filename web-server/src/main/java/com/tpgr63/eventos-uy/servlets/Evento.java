@@ -5,15 +5,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import repos.EdicionRepository;
+import webservice.DtEventoDetallado;
+import webservice.EventoService;
+import webservice.PortFactory;
+import webservice.ValidationInputException_Exception;
 
 import java.io.IOException;
-
-import datatypes.DTEventoDetallado;
-import exceptions.ValidationInputException;
-import infra.Tx;
-import interfaces.Factory;
-import interfaces.IEventoController;
 
 /**
  * Servlet implementation class Evento
@@ -36,13 +33,13 @@ public class Evento extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String nombre = request.getPathInfo().substring(1); // obtiene "nombreDelEvento" de "/nombreDelEvento"
-		IEventoController eventoController = Factory.get().getIEventoController();
+		EventoService eventoController = PortFactory.get().getEventoPort();
     try {
-      DTEventoDetallado evento = eventoController.obtenerDatosDetalladosEventoAprobadas(nombre);
+      DtEventoDetallado evento = eventoController.obtenerDatosDetalladosEventoAprobadas(nombre);
       request.setAttribute("data_evento", evento);
 
       request.getRequestDispatcher("/WEB-INF/eventos/consultaDetalladaEvento.jsp").forward(request, response);
-    } catch(ValidationInputException e) {
+    } catch(ValidationInputException_Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
       response.sendRedirect(request.getContextPath());

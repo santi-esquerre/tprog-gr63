@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ page import="datatypes.DTAsistente, datatypes.DTRegistro, java.util.List, java.text.SimpleDateFormat" %>
+<%@ page import="webservice.DtAsistente, webservice.DtRegistro, java.util.List, java.text.SimpleDateFormat" %>
 <%
-DTAsistente asistente = (DTAsistente) request.getAttribute("asistente");
-List<DTRegistro> registros = (List<DTRegistro>) request.getAttribute("registros");
+DtAsistente asistente = (DtAsistente) request.getAttribute("asistente");
+List<DtRegistro> registros = (List<DtRegistro>) request.getAttribute("registros");
 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <!DOCTYPE html>
@@ -58,7 +58,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         <div class="card profile-card shadow-sm">
                             <div class="position-relative">
                                 <img 
-                                    src="<%= request.getContextPath() %>/image/<%= asistente.foto() != null ? asistente.foto() : "default.png" %>" 
+                                    src="<%= request.getContextPath() %>/image/<%= asistente.getFoto() != null ? asistente.getFoto() : "default.png" %>" 
                                     class="card-img-top" 
                                     alt="Foto del asistente"
                                 />
@@ -68,9 +68,9 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                 <div class="d-flex align-items-start justify-content-between flex-wrap">
                                     <div>
                                         <h4 class="card-title mb-1" id="asNombre">
-                                            <%= asistente.nombre() %> <%= asistente.apellido() %>
+                                            <%= asistente.getNombre() %> <%= asistente.getApellido() %>
                                         </h4>
-                                        <a href="#" class="text-muted text-decoration-none">@<%= asistente.nickname() %></a>
+                                        <a href="#" class="text-muted text-decoration-none">@<%= asistente.getNickname()%></a>
                                     </div>
                                     <button class="btn btn-outline-primary btn-sm mt-2 mt-sm-0" data-bs-toggle="modal" data-bs-target="#editAssistantModal">
                                         <i class="bi bi-pencil-square me-1"></i> Editar
@@ -79,12 +79,12 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
                                 <p class="mt-3 mb-2">
                                     <i class="bi bi-envelope-fill me-1"></i>
-                                    <span id="asCorreo"><%= asistente.correo() %></span>
+                                    <span id="asCorreo"><%= asistente.getCorreo() %></span>
                                 </p>
 
                                 <p class="mb-1">
                                     <i class="bi bi-calendar-fill me-1"></i>
-                                    Nacimiento: <%= dateFormat.format(asistente.fechaNacimiento()) %>
+                                    Nacimiento: <%= dateFormat.format(asistente.getFechaNacimiento()) %>
                                 </p>
 
                                 <p class="text-muted fst-italic mb-0">
@@ -119,25 +119,25 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                         </thead>
                                         <tbody>
                                             <% if (registros != null && !registros.isEmpty()) { 
-                                                for (DTRegistro reg : registros) { %>
+                                                for (DtRegistro reg : registros) { %>
                                             <tr>
-                                                <td><%= reg.nombreEvento() %></td>
-                                                <td><%= reg.nombreEdicion() %></td>
-                                                <td><%= reg.tipoRegistro().nombre() %></td>
-                                                <td><%= dateFormat.format(reg.fecha()) %></td>
-                                                <td>UYU <%= String.format("%.2f", reg.costo()) %></td>
+                                                <td><%= reg.getNombreEvento() %></td>
+                                                <td><%= reg.getNombreEdicion() %></td>
+                                                <td><%= reg.getTipoRegistro().getNombre() %></td>
+                                                <td><%= dateFormat.format(reg.getFecha()) %></td>
+                                                <td>UYU <%= String.format("%.2f", reg.getCosto()) %></td>
                                                 <td class="text-end">
                                                     <button 
                                                         class="btn btn-sm btn-outline-secondary me-1 btn-view-registro"
-                                                        data-evento="<%= reg.nombreEvento() %>"
-                                                        data-edicion="<%= reg.nombreEdicion() %>"
+                                                        data-evento="<%= reg.getNombreEvento() %>"
+                                                        data-edicion="<%= reg.getNombreEdicion() %>"
                                                         title="Ver detalles"
                                                     >
                                                         <i class="bi bi-eye"></i>
                                                     </button>
                                                     <button 
                                                         class="btn btn-sm btn-outline-danger btn-del-registro" 
-                                                        data-edicion="<%= reg.nombreEdicion() %>"
+                                                        data-edicion="<%= reg.getNombreEdicion() %>"
                                                         title="Cancelar registro"
                                                     >
                                                         <i class="bi bi-trash"></i>
@@ -217,7 +217,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                             type="text" 
                             class="form-control" 
                             id="asInpNombre" 
-                            value="<%= asistente.nombre() %>" 
+                            value="<%= asistente.getNombre() %>" 
                             required 
                         />
                     </div>
@@ -227,7 +227,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                             type="text" 
                             class="form-control" 
                             id="asInpApellido" 
-                            value="<%= asistente.apellido() %>" 
+                            value="<%= asistente.getApellido() %>" 
                             required 
                         />
                     </div>
@@ -237,7 +237,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                             type="email" 
                             class="form-control" 
                             id="asInpCorreo" 
-                            value="<%= asistente.correo() %>" 
+                            value="<%= asistente.getCorreo() %>" 
                             required 
                         />
                     </div>
@@ -247,7 +247,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                             type="date" 
                             class="form-control" 
                             id="asInpFechaNac" 
-                            value="<%= new SimpleDateFormat("yyyy-MM-dd").format(asistente.fechaNacimiento()) %>" 
+                            value="<%= new SimpleDateFormat("yyyy-MM-dd").format(asistente.getFechaNacimiento()) %>" 
                             required 
                         />
                     </div>
