@@ -131,7 +131,6 @@ public final class EventoController implements IEventoController {
 
   @Override
   public DTEventoDetallado obtenerDatosDetalladosEvento(String nombreEvento) throws ValidationInputException {
-	System.out.println("Obteniendo datos detallados del evento: " + nombreEvento);
     if (nombreEvento == null)
       throw new ValidationInputException("nombreEvento requerido");
     EventoRepository eventoRepo = EventoRepository.get();
@@ -143,7 +142,6 @@ public final class EventoController implements IEventoController {
   
   @Override
   public DTEventoDetallado obtenerDatosDetalladosEventoAprobadas(String nombreEvento) throws ValidationInputException {
-  System.out.println("Obteniendo datos detallados del evento: " + nombreEvento);
     if (nombreEvento == null)
       throw new ValidationInputException("nombreEvento requerido");
     EventoRepository eventoRepo = EventoRepository.get();
