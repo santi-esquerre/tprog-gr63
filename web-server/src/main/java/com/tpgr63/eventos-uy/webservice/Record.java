@@ -28,8 +28,10 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "record")
 @XmlSeeAlso({
-    DtPatrocinio.class,
-    DtInstitucion.class
+    DtUsuarioItemListado.class,
+    DtRegistroDetallado.class,
+    DtTipoRegistro.class,
+    DtRegistro.class
 })
 public abstract class Record {
 
