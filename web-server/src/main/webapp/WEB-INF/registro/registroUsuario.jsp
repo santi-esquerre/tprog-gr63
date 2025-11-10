@@ -1,4 +1,4 @@
-<%@page import="webservice.DtInstitucion"%>
+<%@page import="webservice.DtInstitucion, webservice.DtInstitucionArray"%>
 <%@ page import="java.time.LocalDate, java.util.Set, java.util.Map, webservice.DtInstitucion" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -132,7 +132,7 @@
                                 <select class="form-select" name="institucion" aria-label="Institución" id="institucion">
                                     <option value="ninguna" selected>- Elección de institución -</option>
                                     <%
-                                    	Set<DtInstitucion> instituciones = (Set<DtInstitucion>) request.getAttribute("instituciones");
+                                    	var instituciones = ((DtInstitucionArray) request.getAttribute("instituciones")).getInstitucion();
                                     for (DtInstitucion institucion : instituciones) {
                                     	%>
                                     	<option value="<%=institucion.getNombre()%>"><%=institucion.getNombre()%></option>	

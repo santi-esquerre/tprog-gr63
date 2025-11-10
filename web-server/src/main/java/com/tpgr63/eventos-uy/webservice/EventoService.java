@@ -46,16 +46,6 @@ public interface EventoService {
     /**
      * 
      * @return
-     *     returns webservice.StringArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EventoService/obtenerCategoriasRequest", output = "http://webservice/EventoService/obtenerCategoriasResponse")
-    public StringArray obtenerCategorias();
-
-    /**
-     * 
-     * @return
      *     returns webservice.DtEventoArray
      */
     @WebMethod
@@ -65,21 +55,13 @@ public interface EventoService {
 
     /**
      * 
-     * @param arg0
      * @return
-     *     returns webservice.DtEdicionArray
-     * @throws ValidationInputException_Exception
+     *     returns webservice.StringArray
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/EventoService/mostrarEdicionesRequest", output = "http://webservice/EventoService/mostrarEdicionesResponse", fault = {
-        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/mostrarEdiciones/Fault/ValidationInputException")
-    })
-    public DtEdicionArray mostrarEdiciones(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0)
-        throws ValidationInputException_Exception
-    ;
+    @Action(input = "http://webservice/EventoService/obtenerCategoriasRequest", output = "http://webservice/EventoService/obtenerCategoriasResponse")
+    public StringArray obtenerCategorias();
 
     /**
      * 
@@ -109,6 +91,24 @@ public interface EventoService {
      * 
      * @param arg0
      * @return
+     *     returns webservice.DtEdicionArray
+     * @throws ValidationInputException_Exception
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EventoService/mostrarEdicionesRequest", output = "http://webservice/EventoService/mostrarEdicionesResponse", fault = {
+        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/mostrarEdiciones/Fault/ValidationInputException")
+    })
+    public DtEdicionArray mostrarEdiciones(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0)
+        throws ValidationInputException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns webservice.DtEventoDetallado
      * @throws ValidationInputException_Exception
      */
@@ -120,24 +120,6 @@ public interface EventoService {
     public DtEventoDetallado obtenerDatosDetalladosEventoAprobadas(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0)
-        throws ValidationInputException_Exception
-    ;
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns boolean
-     * @throws ValidationInputException_Exception
-     */
-    @WebMethod(operationName = "AltaEvento")
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EventoService/AltaEventoRequest", output = "http://webservice/EventoService/AltaEventoResponse", fault = {
-        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/AltaEvento/Fault/ValidationInputException")
-    })
-    public boolean altaEvento(
-        @WebParam(name = "arg0", partName = "arg0")
-        DtEventoAlta arg0)
         throws ValidationInputException_Exception
     ;
 
@@ -159,6 +141,24 @@ public interface EventoService {
         String arg0,
         @WebParam(name = "arg1", partName = "arg1")
         EstadoEdicion arg1)
+        throws ValidationInputException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns boolean
+     * @throws ValidationInputException_Exception
+     */
+    @WebMethod(operationName = "AltaEvento")
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/EventoService/AltaEventoRequest", output = "http://webservice/EventoService/AltaEventoResponse", fault = {
+        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/AltaEvento/Fault/ValidationInputException")
+    })
+    public boolean altaEvento(
+        @WebParam(name = "arg0", partName = "arg0")
+        DtEventoAlta arg0)
         throws ValidationInputException_Exception
     ;
 

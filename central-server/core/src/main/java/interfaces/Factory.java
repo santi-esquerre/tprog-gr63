@@ -40,4 +40,8 @@ public class Factory {
   public ISesionController getISesionController() {
     return SesionController.get();
   }
+  
+  public IImageController getIImageController() {
+	return logica.ImageController.get();
+  }
 }

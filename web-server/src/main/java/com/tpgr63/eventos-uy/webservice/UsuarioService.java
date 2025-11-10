@@ -28,6 +28,16 @@ public interface UsuarioService {
 
     /**
      * 
+     * @return
+     *     returns webservice.DtUsuarioItemListadoArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosRequest", output = "http://webservice/UsuarioService/obtenerUsuariosResponse")
+    public DtUsuarioItemListadoArray obtenerUsuarios();
+
+    /**
+     * 
      * @param arg0
      * @param arg1
      * @param arg2
@@ -95,39 +105,6 @@ public interface UsuarioService {
 
     /**
      * 
-     * @return
-     *     returns webservice.DtUsuarioItemListadoArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosRequest", output = "http://webservice/UsuarioService/obtenerUsuariosResponse")
-    public DtUsuarioItemListadoArray obtenerUsuarios();
-
-    /**
-     * 
-     * @return
-     *     returns webservice.DtAsistenteArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
-    public DtAsistenteArray mostrarAsistentes();
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns webservice.DtRegistroArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerRegistrosUsuarioRequest", output = "http://webservice/UsuarioService/obtenerRegistrosUsuarioResponse")
-    public DtRegistroArray obtenerRegistrosUsuario(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0);
-
-    /**
-     * 
      * @param arg0
      * @param arg1
      * @return
@@ -146,6 +123,19 @@ public interface UsuarioService {
      * 
      * @param arg0
      * @return
+     *     returns webservice.DtRegistroArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerRegistrosUsuarioRequest", output = "http://webservice/UsuarioService/obtenerRegistrosUsuarioResponse")
+    public DtRegistroArray obtenerRegistrosUsuario(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns webservice.DtUsuario
      * @throws Exception_Exception
      */
@@ -159,6 +149,16 @@ public interface UsuarioService {
         String arg0)
         throws Exception_Exception
     ;
+
+    /**
+     * 
+     * @return
+     *     returns webservice.DtAsistenteArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
+    public DtAsistenteArray mostrarAsistentes();
 
     /**
      * 
@@ -274,6 +274,24 @@ public interface UsuarioService {
      * 
      * @param arg0
      * @return
+     *     returns webservice.DtOrganizador
+     * @throws Exception_Exception
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/seleccionarOrganizadorRequest", output = "http://webservice/UsuarioService/seleccionarOrganizadorResponse", fault = {
+        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/seleccionarOrganizador/Fault/Exception")
+    })
+    public DtOrganizador seleccionarOrganizador(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0)
+        throws Exception_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns webservice.DtAsistente
      * @throws Exception_Exception
      */
@@ -292,18 +310,48 @@ public interface UsuarioService {
      * 
      * @param arg0
      * @return
-     *     returns webservice.DtOrganizador
-     * @throws Exception_Exception
+     *     returns webservice.DtUsuarioItemListadoArray
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/seleccionarOrganizadorRequest", output = "http://webservice/UsuarioService/seleccionarOrganizadorResponse", fault = {
-        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/seleccionarOrganizador/Fault/Exception")
-    })
-    public DtOrganizador seleccionarOrganizador(
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
+    public DtUsuarioItemListadoArray obtenerUsuariosPorTipo(
         @WebParam(name = "arg0", partName = "arg0")
-        String arg0)
-        throws Exception_Exception
+        TipoUsuario arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     * @param arg3
+     * @param arg4
+     * @param arg5
+     * @param arg6
+     * @throws UsuarioCorreoRepetidoException_Exception
+     * @throws UsuarioNicknameRepetidoException_Exception
+     */
+    @WebMethod
+    @Action(input = "http://webservice/UsuarioService/crearOrganizadorConSitioWebRequest", output = "http://webservice/UsuarioService/crearOrganizadorConSitioWebResponse", fault = {
+        @FaultAction(className = UsuarioCorreoRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioCorreoRepetidoException"),
+        @FaultAction(className = UsuarioNicknameRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioNicknameRepetidoException")
+    })
+    public void crearOrganizadorConSitioWeb(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0,
+        @WebParam(name = "arg1", partName = "arg1")
+        String arg1,
+        @WebParam(name = "arg2", partName = "arg2")
+        String arg2,
+        @WebParam(name = "arg3", partName = "arg3")
+        String arg3,
+        @WebParam(name = "arg4", partName = "arg4")
+        String arg4,
+        @WebParam(name = "arg5", partName = "arg5")
+        String arg5,
+        @WebParam(name = "arg6", partName = "arg6")
+        String arg6)
+        throws UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
     ;
 
     /**
@@ -345,53 +393,5 @@ public interface UsuarioService {
         String arg7)
         throws InstitucionNoExistenteException_Exception, UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
     ;
-
-    /**
-     * 
-     * @param arg0
-     * @param arg1
-     * @param arg2
-     * @param arg3
-     * @param arg4
-     * @param arg5
-     * @param arg6
-     * @throws UsuarioCorreoRepetidoException_Exception
-     * @throws UsuarioNicknameRepetidoException_Exception
-     */
-    @WebMethod
-    @Action(input = "http://webservice/UsuarioService/crearOrganizadorConSitioWebRequest", output = "http://webservice/UsuarioService/crearOrganizadorConSitioWebResponse", fault = {
-        @FaultAction(className = UsuarioCorreoRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioCorreoRepetidoException"),
-        @FaultAction(className = UsuarioNicknameRepetidoException_Exception.class, value = "http://webservice/UsuarioService/crearOrganizadorConSitioWeb/Fault/UsuarioNicknameRepetidoException")
-    })
-    public void crearOrganizadorConSitioWeb(
-        @WebParam(name = "arg0", partName = "arg0")
-        String arg0,
-        @WebParam(name = "arg1", partName = "arg1")
-        String arg1,
-        @WebParam(name = "arg2", partName = "arg2")
-        String arg2,
-        @WebParam(name = "arg3", partName = "arg3")
-        String arg3,
-        @WebParam(name = "arg4", partName = "arg4")
-        String arg4,
-        @WebParam(name = "arg5", partName = "arg5")
-        String arg5,
-        @WebParam(name = "arg6", partName = "arg6")
-        String arg6)
-        throws UsuarioCorreoRepetidoException_Exception, UsuarioNicknameRepetidoException_Exception
-    ;
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns webservice.DtUsuarioItemListadoArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
-    public DtUsuarioItemListadoArray obtenerUsuariosPorTipo(
-        @WebParam(name = "arg0", partName = "arg0")
-        TipoUsuario arg0);
 
 }
