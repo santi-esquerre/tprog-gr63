@@ -26,7 +26,7 @@ public class Publicador {
 
       props.load(new FileInputStream(System.getProperty("user.home") + "/.eventos-uy/config.properties"));
 
-      String endpointUrl = props.getProperty("webservice.endpoint", "http://localhost:9050/publicador");
+      String endpointUrl = props.getProperty("webservice.endpoint", "http://localhost:9050");
       System.out.println("Publicando en: " + endpointUrl);
       System.out.println("Primero");
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/edicion", new EdicionService()));
@@ -38,6 +38,8 @@ public class Publicador {
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/sesion", new SesionService()));
       System.out.println("Quinto");
       endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/usuario", new UsuarioService()));
+      System.out.println("Sexto");
+      endpoints.add(Endpoint.publish(endpointUrl.strip() + "/ws/image", new ImageService()));
     }
     catch (Exception e) {
       e.printStackTrace();

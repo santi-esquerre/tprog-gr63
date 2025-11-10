@@ -6,11 +6,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import controllers.ImagesManager;
+
 
 /**
  * Servlet implementation class Imagenes
@@ -40,17 +39,9 @@ public class Imagenes extends HttpServlet {
         }
         
         fileName = fileName.substring(1); // elimina el "/"
-        
-        File carpeta = ImagesManager.getDefaultDirectory(request);
-        File archivo = new File(carpeta, fileName);
-
-        if(!archivo.exists()) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        response.setContentType(getServletContext().getMimeType(fileName));
-        Files.copy(archivo.toPath(), response.getOutputStream());
+            
+        String imageUrl = ImagesManager.getImageUrl(fileName);
+        response.sendRedirect(imageUrl);
 	}
 
 	/**

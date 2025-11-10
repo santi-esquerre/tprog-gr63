@@ -20,6 +20,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import model.EstadoSesion;
+import webservice.InstitucionService;
 import webservice.PortFactory;
 import webservice.UsuarioCorreoRepetidoException_Exception;
 import webservice.UsuarioNicknameRepetidoException_Exception;
@@ -58,8 +59,10 @@ public class Registro extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/inicio");
 			return;
 		}
-		webservice.InstitucionServiceService institucionService = new webservice.InstitucionServiceService();
-		webservice.InstitucionService institucionPort = institucionService.getInstitucionServicePort();
+		PortFactory factory = PortFactory.get();
+		InstitucionService  institucionPort = factory.getInstitucionPort();
+		//webservice.InstitucionServiceService institucionService = new webservice.InstitucionServiceService();
+		//webservice.InstitucionService institucionPort = institucionService.getInstitucionServicePort();
 		var instituciones = institucionPort.listarInstituciones();
 		request.setAttribute("instituciones", instituciones);
 		request.getRequestDispatcher("/WEB-INF/registro/registroUsuario.jsp").forward(request, response);

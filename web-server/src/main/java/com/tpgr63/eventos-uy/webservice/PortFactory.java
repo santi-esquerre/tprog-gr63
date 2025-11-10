@@ -115,6 +115,24 @@ public class PortFactory {
     }
     return null;
   }
+  
+  public  ImageService getImagePort() {
+	    URL wsdlUrl;
+	    try {
+	      wsdlUrl = new URI(wsdlLocation + "/ws/image?wsdl").toURL();
+	      ImageServiceService service = new ImageServiceService(wsdlUrl);
+	      return service.getImageServicePort();
+	    }
+	    catch (MalformedURLException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    }
+	    catch (URISyntaxException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    }
+	    return null;
+	  }
 
   
 }

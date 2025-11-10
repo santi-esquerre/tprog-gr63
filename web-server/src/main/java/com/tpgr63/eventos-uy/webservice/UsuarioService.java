@@ -28,6 +28,16 @@ public interface UsuarioService {
 
     /**
      * 
+     * @return
+     *     returns webservice.DtUsuarioItemListadoArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosRequest", output = "http://webservice/UsuarioService/obtenerUsuariosResponse")
+    public DtUsuarioItemListadoArray obtenerUsuarios();
+
+    /**
+     * 
      * @param arg0
      * @param arg1
      * @param arg2
@@ -95,23 +105,19 @@ public interface UsuarioService {
 
     /**
      * 
+     * @param arg0
+     * @param arg1
      * @return
-     *     returns webservice.DtUsuarioItemListadoArray
+     *     returns webservice.DtRegistroDetallado
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosRequest", output = "http://webservice/UsuarioService/obtenerUsuariosResponse")
-    public DtUsuarioItemListadoArray obtenerUsuarios();
-
-    /**
-     * 
-     * @return
-     *     returns webservice.DtAsistenteArray
-     */
-    @WebMethod
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
-    public DtAsistenteArray mostrarAsistentes();
+    @Action(input = "http://webservice/UsuarioService/obtenerRegistroDetalladoRequest", output = "http://webservice/UsuarioService/obtenerRegistroDetalladoResponse")
+    public DtRegistroDetallado obtenerRegistroDetallado(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0,
+        @WebParam(name = "arg1", partName = "arg1")
+        String arg1);
 
     /**
      * 
@@ -177,6 +183,16 @@ public interface UsuarioService {
         String arg0)
         throws Exception_Exception
     ;
+
+    /**
+     * 
+     * @return
+     *     returns webservice.DtAsistenteArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/mostrarAsistentesRequest", output = "http://webservice/UsuarioService/mostrarAsistentesResponse")
+    public DtAsistenteArray mostrarAsistentes();
 
     /**
      * 
@@ -305,6 +321,19 @@ public interface UsuarioService {
         String arg0)
         throws Exception_Exception
     ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns webservice.DtUsuarioItemListadoArray
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
+    public DtUsuarioItemListadoArray obtenerUsuariosPorTipo(
+        @WebParam(name = "arg0", partName = "arg0")
+        TipoUsuario arg0);
 
     /**
      * 
