@@ -122,6 +122,22 @@ public interface UsuarioService {
     /**
      * 
      * @param arg0
+     * @param arg1
+     * @return
+     *     returns webservice.DtRegistroDetallado
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/obtenerRegistroDetalladoRequest", output = "http://webservice/UsuarioService/obtenerRegistroDetalladoResponse")
+    public DtRegistroDetallado obtenerRegistroDetallado(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0,
+        @WebParam(name = "arg1", partName = "arg1")
+        String arg1);
+
+    /**
+     * 
+     * @param arg0
      * @return
      *     returns webservice.DtRegistroArray
      */
@@ -136,15 +152,33 @@ public interface UsuarioService {
      * 
      * @param arg0
      * @return
-     *     returns webservice.DtUsuario
+     *     returns webservice.DtAsistente
      * @throws Exception_Exception
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/obtenerUsuarioRequest", output = "http://webservice/UsuarioService/obtenerUsuarioResponse", fault = {
-        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/obtenerUsuario/Fault/Exception")
+    @Action(input = "http://webservice/UsuarioService/seleccionarAsistenteRequest", output = "http://webservice/UsuarioService/seleccionarAsistenteResponse", fault = {
+        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/seleccionarAsistente/Fault/Exception")
     })
-    public DtUsuario obtenerUsuario(
+    public DtAsistente seleccionarAsistente(
+        @WebParam(name = "arg0", partName = "arg0")
+        String arg0)
+        throws Exception_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns boolean
+     * @throws Exception_Exception
+     */
+    @WebMethod
+    @WebResult(partName = "return")
+    @Action(input = "http://webservice/UsuarioService/verificarNoExistenciaNicknameRequest", output = "http://webservice/UsuarioService/verificarNoExistenciaNicknameResponse", fault = {
+        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/verificarNoExistenciaNickname/Fault/Exception")
+    })
+    public boolean verificarNoExistenciaNickname(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0)
         throws Exception_Exception
@@ -182,15 +216,15 @@ public interface UsuarioService {
      * 
      * @param arg0
      * @return
-     *     returns boolean
+     *     returns webservice.DtUsuario
      * @throws Exception_Exception
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/verificarNoExistenciaNicknameRequest", output = "http://webservice/UsuarioService/verificarNoExistenciaNicknameResponse", fault = {
-        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/verificarNoExistenciaNickname/Fault/Exception")
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuarioRequest", output = "http://webservice/UsuarioService/obtenerUsuarioResponse", fault = {
+        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/obtenerUsuario/Fault/Exception")
     })
-    public boolean verificarNoExistenciaNickname(
+    public DtUsuario obtenerUsuario(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0)
         throws Exception_Exception
@@ -292,19 +326,14 @@ public interface UsuarioService {
      * 
      * @param arg0
      * @return
-     *     returns webservice.DtAsistente
-     * @throws Exception_Exception
+     *     returns webservice.DtUsuarioItemListadoArray
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://webservice/UsuarioService/seleccionarAsistenteRequest", output = "http://webservice/UsuarioService/seleccionarAsistenteResponse", fault = {
-        @FaultAction(className = Exception_Exception.class, value = "http://webservice/UsuarioService/seleccionarAsistente/Fault/Exception")
-    })
-    public DtAsistente seleccionarAsistente(
+    @Action(input = "http://webservice/UsuarioService/obtenerUsuariosPorTipoRequest", output = "http://webservice/UsuarioService/obtenerUsuariosPorTipoResponse")
+    public DtUsuarioItemListadoArray obtenerUsuariosPorTipo(
         @WebParam(name = "arg0", partName = "arg0")
-        String arg0)
-        throws Exception_Exception
-    ;
+        TipoUsuario arg0);
 
     /**
      * 

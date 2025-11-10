@@ -64,8 +64,10 @@ public class Organizador extends Usuario {
 
   @Override
   public DTOrganizador toDataType() {
-    return new DTOrganizador(
+    DTOrganizador dtOrg = new DTOrganizador(
         getNickname(), getNombre(), getCorreo(), getFoto(), sitioWeb, descripcion);
+    dtOrg.setTipo(TipoUsuario.ORGANIZADOR);
+    return dtOrg;
   }
 
   @Override

@@ -84,7 +84,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
                                 <p class="mb-1">
                                     <i class="bi bi-calendar-fill me-1"></i>
-                                    Nacimiento: <%= dateFormat.format(asistente.getFechaNacimiento()) %>
+                                    Nacimiento: <%= dateFormat.format(asistente.getFechaNacimiento().toGregorianCalendar().getTime()) %>
                                 </p>
 
                                 <p class="text-muted fst-italic mb-0">
@@ -124,7 +124,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                                 <td><%= reg.getNombreEvento() %></td>
                                                 <td><%= reg.getNombreEdicion() %></td>
                                                 <td><%= reg.getTipoRegistro().getNombre() %></td>
-                                                <td><%= dateFormat.format(reg.getFecha()) %></td>
+                                                <td><%= dateFormat.format(reg.getFecha().toGregorianCalendar().getTime()) %></td>
                                                 <td>UYU <%= String.format("%.2f", reg.getCosto()) %></td>
                                                 <td class="text-end">
                                                     <button 
@@ -244,12 +244,12 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     <div class="mb-3">
                         <label for="asInpFechaNac" class="form-label fw-semibold">Fecha de Nacimiento</label>
                         <input 
-                            type="date" 
-                            class="form-control" 
-                            id="asInpFechaNac" 
-                            value="<%= new SimpleDateFormat("yyyy-MM-dd").format(asistente.getFechaNacimiento()) %>" 
-                            required 
-                        />
+    type="date" 
+    class="form-control" 
+    id="asInpFechaNac" 
+    value="<%= new SimpleDateFormat("yyyy-MM-dd").format(asistente.getFechaNacimiento().toGregorianCalendar().getTime()) %>" 
+    required 
+/>
                     </div>
                     <hr />
                     <p class="text-muted small">Dejar en blanco si no deseas cambiar la contraseña</p>
