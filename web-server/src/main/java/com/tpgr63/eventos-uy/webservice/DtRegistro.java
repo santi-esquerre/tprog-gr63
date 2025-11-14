@@ -26,6 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
  *         <element name="fotoAsistente" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         <element name="tipoRegistro" type="{http://webservice/}dtTipoRegistro" minOccurs="0"/>
  *         <element name="usoCodigo" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         <element name="asistenciaConfirmada" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *       </sequence>
  *     </extension>
  *   </complexContent>
@@ -43,7 +44,8 @@ import jakarta.xml.bind.annotation.XmlType;
     "nicknameAsistente",
     "fotoAsistente",
     "tipoRegistro",
-    "usoCodigo"
+    "usoCodigo",
+    "asistenciaConfirmada"
 })
 public class DtRegistro
     extends Record
@@ -58,6 +60,7 @@ public class DtRegistro
     protected String fotoAsistente;
     protected DtTipoRegistro tipoRegistro;
     protected Boolean usoCodigo;
+    protected Boolean asistenciaConfirmada;
 
     /**
      * Obtiene el valor de la propiedad fecha.
@@ -241,6 +244,30 @@ public class DtRegistro
      */
     public void setUsoCodigo(Boolean value) {
         this.usoCodigo = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad asistenciaConfirmada.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAsistenciaConfirmada() {
+        return asistenciaConfirmada;
+    }
+
+    /**
+     * Define el valor de la propiedad asistenciaConfirmada.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAsistenciaConfirmada(Boolean value) {
+        this.asistenciaConfirmada = value;
     }
 
 }

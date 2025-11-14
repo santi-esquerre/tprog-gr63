@@ -127,7 +127,8 @@ public final class UsuarioRepository {
             registro.getAsistente().getNickname(),
             registro.getAsistente().getFoto(),
             registro.getTipo().obtenerDTTipoRegistro(),
-            registro.getPatrocinio() != null ? true: false))
+            registro.getPatrocinio() != null ? true: false,
+            registro.isAsistenciaConfirmada()))
         .toList();
   }
 

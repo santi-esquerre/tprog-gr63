@@ -14,5 +14,6 @@ public record DTRegistro(
         String nicknameAsistente,
         String fotoAsistente,
         DTTipoRegistro tipoRegistro,
-		Boolean usoCodigo) { 
+		Boolean usoCodigo,
+		Boolean asistenciaConfirmada) { 
 }

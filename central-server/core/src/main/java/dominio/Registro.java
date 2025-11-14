@@ -29,6 +29,9 @@ public class Registro extends BaseEntity {
   @Column(nullable = false)
   private float costo;
 
+  @Column(nullable = false)
+  private boolean asistenciaConfirmada;
+  
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(
       name = "asistente_id",
@@ -75,6 +78,10 @@ public class Registro extends BaseEntity {
     return costo;
   }
 
+  public boolean isAsistenciaConfirmada() {
+	return asistenciaConfirmada;
+  }
+  
   public Edicion getEdicion() {
     return edicion;
   }

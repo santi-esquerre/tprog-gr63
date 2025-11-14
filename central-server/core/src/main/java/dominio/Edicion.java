@@ -125,7 +125,7 @@ public class Edicion extends BaseEntity {
           registro.getAsistente().getNickname(),
           registro.getAsistente().getFoto(),
           registro.getTipo().obtenerDTTipoRegistro(),
-          usoCodigo)
+          usoCodigo, registro.isAsistenciaConfirmada())
 		  );
     }
     return out;
