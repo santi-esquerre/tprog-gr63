@@ -162,9 +162,13 @@
                     <p class="mb-0 p-0">$<%=(int) registroUsuario.getCosto() %></p>
                 </div>
                  <div class="d-flex gap-2 fw-normal">
-                    <p class="fw-bold mb-0 p-0">Uso código de patrocinio?: </p>
+                    <p class="fw-bold mb-0 p-0">Usó código de patrocinio?: </p>
                     <p class="mb-0 p-0"><%= (registroUsuario.isUsoCodigo() != null && registroUsuario.isUsoCodigo()) ? "Sí" : "No" %></p>
-                </div>               
+                </div> 
+                <div class="mb-0 mt-0 p-0 d-flex gap-2">
+                     <p class="fw-bold">Asistencia confirmada:</p>
+                     <i class="bi text-primary <%= (registroUsuario.isAsistenciaConfirmada() != null && registroUsuario.isAsistenciaConfirmada()) ? "Sí" : "No" %>"></i>
+                </div>                
         		
         		</div>
         		

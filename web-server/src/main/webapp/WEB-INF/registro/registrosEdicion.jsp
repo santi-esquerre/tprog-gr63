@@ -68,6 +68,11 @@ details[open] .bi-arrow-right-short {
                                         	<p class="fw-bold">Uso de código:</p>
                                          	<i class="bi text-primary <%= (registro.isUsoCodigo() != null && registro.isUsoCodigo()) ? "bi bi-check-circle-fill" : "bi-x-circle-fill" %>"></i>
                                         </div>
+                            	        </div>
+                                        <div class="mb-0 mt-0 p-0 d-flex gap-2">
+                                        	<p class="fw-bold">Asistencia confirmada:</p>
+                                         	<i class="bi text-primary <%= (registro.isAsistenciaConfirmada() != null && registro.isAsistenciaConfirmada()) ? "bi bi-check-circle-fill" : "bi-x-circle-fill" %>"></i>
+                                        </div>                                        
                             </div>
                         </details>
                         </li>                  

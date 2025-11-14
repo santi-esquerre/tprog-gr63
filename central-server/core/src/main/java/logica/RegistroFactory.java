@@ -36,6 +36,9 @@ public final class RegistroFactory {
       var tipoRegistroNuevo = Registro.class.getDeclaredField("tipo");
       tipoRegistroNuevo.setAccessible(true);
       tipoRegistroNuevo.set(registro, tipoRegistro);
+      var asistenciaConfirmadaRegistro = Registro.class.getDeclaredField("asistenciaConfirmada");
+      asistenciaConfirmadaRegistro.setAccessible(true);
+      asistenciaConfirmadaRegistro.set(registro, false);
     } catch (ReflectiveOperationException e) {
       throw new IllegalStateException(e);
     }
