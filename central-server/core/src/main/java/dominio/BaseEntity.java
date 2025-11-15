@@ -19,7 +19,7 @@ public abstract class BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
   @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1)
-  private Long identifier;
+  protected Long identifier;
 
   @Version private long version;
 

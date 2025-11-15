@@ -6,6 +6,8 @@ import datatypes.DTEventoAlta;
 import datatypes.DTEventoDetallado;
 import datatypes.EstadoEdicion;
 import exceptions.ValidationInputException;
+
+import java.util.Date;
 import java.util.Set;
 
 public interface IEventoController {
@@ -16,6 +18,9 @@ public interface IEventoController {
   boolean altaEvento(DTEventoAlta datosEventoAlta) throws ValidationInputException;
 
   Set<DTEvento> listarEventos();
+  
+  Set<DTEvento> listarUltimosEventos(Integer cantidad, Date ultimaFechaAlta, Long ultimoIdentifier)
+	  throws ValidationInputException;
 
   Set<DTEdicion> mostrarEdiciones(String nombreEvento) throws ValidationInputException;
 
