@@ -55,6 +55,7 @@ import webservice.TipoUsuario;
 import webservice.UsuarioCorreoRepetidoException_Exception;
 import webservice.UsuarioService;
 import webservice.ValidationInputException_Exception;
+import webservice.XMLGregorianCalendarAdapter;
 
 /**
  * Servlet implementation class Perfil
@@ -65,8 +66,11 @@ import webservice.ValidationInputException_Exception;
 public class Perfil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Gson gson = new GsonBuilder()
-			.setDateFormat("yyyy-MM-dd")
-			.create();
+      .registerTypeAdapter(javax.xml.datatype.XMLGregorianCalendar.class, new XMLGregorianCalendarAdapter())
+      .registerTypeHierarchyAdapter(XMLGregorianCalendar.class, new XMLGregorianCalendarAdapter())
+      .setDateFormat("yyyy-MM-dd")
+      .setPrettyPrinting()
+      .create();
 
 	/**
 	 * @see HttpServlet#HttpServlet()

@@ -13,6 +13,7 @@ import webservice.EdicionService;
 import webservice.EstadoEdicion;
 import webservice.PortFactory;
 import webservice.UsuarioService;
+import webservice.XMLGregorianCalendarAdapter;
 
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -25,9 +26,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 /**
  * Servlet implementation class Usuarios
  */
@@ -35,7 +37,12 @@ import com.google.gson.GsonBuilder;
 public class Usuarios extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final int CANTIDAD_PAGINACION = 4;
-  private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+  private static final Gson gson = new GsonBuilder()
+      .registerTypeAdapter(javax.xml.datatype.XMLGregorianCalendar.class, new XMLGregorianCalendarAdapter())
+      .registerTypeHierarchyAdapter(XMLGregorianCalendar.class, new XMLGregorianCalendarAdapter())
+      .setDateFormat("yyyy-MM-dd")
+      .setPrettyPrinting()
+      .create();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -149,7 +156,6 @@ public class Usuarios extends HttpServlet {
           out.print(gson.toJson(Map.of("success", false, "message", "Organizador no encontrado")));
           return;
         }
-        
   EdicionService edicionController = PortFactory.get().getEdicionPort();
   List<DtEdicion> dtEdicionesSet = edicionController.obtenerEdicionesPorOrganizador(nickname).getEdicion();
   // Filtrar solo ediciones aceptadas y recolectar en un Set serializable
