@@ -105,7 +105,14 @@ public final class EventoController implements IEventoController {
     EventoRepository eventoRepo = EventoRepository.get();
     return Tx.inTx(eventoRepo::listarEventos);
   }
-
+  
+  @Override
+  public Set<DTEvento> listarUltimosEventos(Integer cantidad, java.util.Date ultimaFechaAlta, Long ultimoIdentifier)
+	  throws ValidationInputException {
+	EventoRepository eventoRepo = EventoRepository.get();
+	return Tx.inTx(entityManager -> eventoRepo.listarUltimosEventos(entityManager, cantidad, ultimaFechaAlta, ultimoIdentifier));
+  }
+  
   @Override
   public Set<DTEdicion> mostrarEdiciones(String nombreEvento) throws ValidationInputException {
     if (nombreEvento == null) throw new ValidationInputException("nombreEvento requerido");

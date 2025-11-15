@@ -44,6 +44,40 @@ public final class EventoRepository {
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
+  public Set<datatypes.DTEvento> listarUltimosEventos(
+	  EntityManager entityManager, Integer cantidad, java.util.Date ultimaFechaAlta, Long ultimoIdentifier) {
+	if (ultimoIdentifier == null || ultimaFechaAlta == null || ultimoIdentifier <= 0) {
+		return entityManager
+			.createQuery(
+				"""
+					select e from Evento e
+					where e.finalizado = false
+					order by e.fechaAlta desc, e.identifier desc
+					""",
+					Evento.class)
+			.setMaxResults(cantidad)
+			.getResultStream()
+			.map(Evento::obtenerDTEvento)
+			.collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	return entityManager
+		.createQuery(
+			"""
+		select e from Evento e
+		where (e.fechaAlta < :fechaAltaDesde
+		  or (e.fechaAlta = :fechaAltaDesde and e.identifier < :ultimoIdentifier)) and e.finalizado = false
+		order by e.fechaAlta desc, e.identifier desc
+	  """,
+			Evento.class)
+		.setParameter("fechaAltaDesde", new java.sql.Date(ultimaFechaAlta.getTime()))
+		.setParameter("ultimoIdentifier", ultimoIdentifier)
+		.setMaxResults(cantidad)
+		.getResultStream()
+		.map(Evento::obtenerDTEvento)
+		.collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+  
+  
   /** Obtiene los datos detallados de un evento, incluyendo categorías y ediciones */
   public datatypes.DTEventoDetallado obtenerDatosDetalladosEvento(
       EntityManager entityManager, String nombreEvento) {

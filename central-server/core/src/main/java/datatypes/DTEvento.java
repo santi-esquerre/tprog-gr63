@@ -14,15 +14,17 @@ public class DTEvento implements Serializable {
 	String descripcion;
 	Date fechaAlta;
 	String foto;
+	Long identifier;
 	
 	public DTEvento() {}
 	
-	public DTEvento(String nombre, String sigla, String descripcion, Date fechaAlta, String foto) {
+	public DTEvento(String nombre, String sigla, String descripcion, Date fechaAlta, String foto, Long identifier) {
 		this.nombre = nombre;
 		this.sigla = sigla;
 		this.descripcion = descripcion;
 		this.fechaAlta = fechaAlta;
 		this.foto = foto;
+		this.identifier = identifier;
 	}
 	
 	public String nombre() {

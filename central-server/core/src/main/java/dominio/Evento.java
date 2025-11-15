@@ -41,6 +41,9 @@ public class Evento extends BaseEntity {
 
   @Column(nullable = false, length = 300)
   private String foto;
+  
+  @Column(nullable = false)
+  private boolean finalizado;
 
   @ManyToMany
   @JoinTable(
@@ -64,18 +67,20 @@ public class Evento extends BaseEntity {
       Date fechaAlta,
       String sigla,
       String foto,
-      Set<Categoria> cats) {
+      Set<Categoria> cats,
+      boolean finalizado) {
     this.nombre = nombre;
     this.descripcion = descripcion;
     this.fechaAlta = fechaAlta;
     this.sigla = sigla;
     this.foto = foto;
     if (cats != null) categorias.addAll(cats);
+    this.finalizado = finalizado;
   }
 
   // DCD
   public datatypes.DTEvento obtenerDTEvento() {
-    return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta, foto);
+    return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta, foto, getId());
   }
 
   public Set<datatypes.DTEdicion> listarDTEdiciones() {
@@ -112,7 +117,7 @@ public class Evento extends BaseEntity {
   }
 
   public datatypes.DTEvento toDTEvento() {
-    return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta, foto);
+    return new datatypes.DTEvento(nombre, sigla, descripcion, fechaAlta, foto, getId());
   }
 
   public datatypes.DTEventoDetallado toDTEventoDetallado() {

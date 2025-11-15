@@ -24,7 +24,7 @@ public final class EventoFactory {
       String foto,
       Set<Categoria> categorias) {
     if (EventoRepository.get().existeEvento(entityManager, nombre)) return false;
-    var evento = new Evento(nombre, descripcion, fechaAlta, sigla, foto, categorias);
+    var evento = new Evento(nombre, descripcion, fechaAlta, sigla, foto, categorias, false);
     entityManager.persist(evento);
     return true;
   }

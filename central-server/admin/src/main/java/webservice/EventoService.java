@@ -1,6 +1,7 @@
 package webservice;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -17,9 +18,10 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.jws.soap.SOAPBinding.ParameterStyle;
 import jakarta.jws.soap.SOAPBinding.Style;
+import jakarta.jws.soap.SOAPBinding.Use;
 
 @WebService
-@SOAPBinding(style = Style.RPC, parameterStyle = ParameterStyle.WRAPPED)
+@SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public class EventoService {
 	
 	private IEventoController eventoController = Factory.get().getIEventoController();
@@ -40,6 +42,12 @@ public class EventoService {
 	@WebMethod
 	public DTEventoArray listarEventos() {
 		return new DTEventoArray(new ArrayList<>(eventoController.listarEventos()));
+	}
+	
+	@WebMethod
+	public DTEventoArray listarUltimosEventos(Integer cantidad, Date ultimaFechaAlta, Long ultimoIdentifier)
+			  throws ValidationInputException { 
+		return new DTEventoArray(new ArrayList<>(eventoController.listarUltimosEventos(cantidad, ultimaFechaAlta, ultimoIdentifier)));
 	}
 	
 	@WebMethod
