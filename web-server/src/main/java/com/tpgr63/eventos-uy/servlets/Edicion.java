@@ -65,10 +65,11 @@ public class Edicion extends HttpServlet {
 
 		SessionManager.initSesion(request);
 		EstadoSesion estado_sesion = (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-
 		try {
 			EdicionService edicionPort = factory.getEdicionPort();
 			DtEdicionDetallada dtEdicionDetallada = edicionPort.obtenerDatosDetalladosEdicion(nombreEdicion);
+
+
 
 			if ((dtEdicionDetallada != null)
 					&& dtEdicionDetallada.getEdicion().getEstado() != EstadoEdicion.ACEPTADA) {
@@ -117,6 +118,7 @@ public class Edicion extends HttpServlet {
 			} else {
 				request.setAttribute("errorRegistro", mensajeUsuarioNoLogueado);
 			}
+			
 			request.setAttribute("edicionDetallada", dtEdicionDetallada);
 			request.getRequestDispatcher("/WEB-INF/ediciones/consultaDetalladaEdicion.jsp").forward(request, response);
 
