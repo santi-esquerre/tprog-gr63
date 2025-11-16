@@ -233,8 +233,6 @@
         var abrirModal = '<%= abrirModalTR != null ? abrirModalTR : ""%>';
     	</script>
     	<% abrirModalTR = null; %>
-
-    	<script src="script.js"></script>
     	<script src="<%= request.getContextPath() %>/media/js/pages/consultaDetalladaEdicion.js"></script>
     </body>
     </html>
