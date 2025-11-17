@@ -7,7 +7,7 @@ DtTipoRegistro tipoRegistro = (DtTipoRegistro) request.getAttribute("tipoRegistr
 
 %>
 
-<div class="modal fade" id="<%=tipoRegistro.getNombre()%>consultaModal" tabindex="-1" aria-labelledby="tipoRegistroModalLabel" aria-hidden="true">
+<div class="modal fade" id="<%=tipoRegistro.getNombre().replace(' ','-')%>consultaModal" tabindex="-1" aria-labelledby="tipoRegistroModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">

@@ -12,7 +12,7 @@ DtAsistente dtAsistente = (DtAsistente) dtUsuario;
 %>
 
   
-  <div class="modal fade" id="<%=tipoRegistro.getNombre()%>registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+  <div class="modal fade" id="<%=tipoRegistro.getNombre().replace(' ','-')%>registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">

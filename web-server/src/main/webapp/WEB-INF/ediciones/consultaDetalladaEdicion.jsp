@@ -96,7 +96,7 @@
                             <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
                                 <div class="card mb-5 mb-xl-0 h-100 borderh-100">
                                     <div class="card-body p-5 d-flex flex-column min-vh-50" style="min-height: 50vh;">
-                                        <button type="button" class="btn p-0 m-0 align-self-start" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.getNombre()%>consultaModal">
+                                        <button type="button" class="btn p-0 m-0 align-self-start" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.getNombre().replace(' ', '-')%>consultaModal">
                                             <i class="bi bi-question-circle-fill fs-4"></i>
                                         </button>
                                         <div class="small text-uppercase fw-bold text-muted"><%=tipoRegistro.getNombre() %></div>
@@ -108,7 +108,7 @@
                                         <%
                                         	if(asistente && !usuarioRegistrado) {
                                         	request.setAttribute("edicion", edicion); %>
-                                        	<div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.getNombre() + "registroModal" %>" href="#!">Elegir</a></div>
+                                        	<div class="d-grid mt-auto"><a class="btn btn-dark rounded-4 fs-5" data-bs-toggle="modal" data-bs-target="#<%=tipoRegistro.getNombre().replace(' ', '-') + "registroModal" %>" href="#!">Elegir</a></div>
                                     		<jsp:include page="/WEB-INF/registro/altaRegistroEdicion.jsp" />
                                     	<% } %>
                                     	
