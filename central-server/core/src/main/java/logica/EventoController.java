@@ -53,11 +53,13 @@ public final class EventoController implements IEventoController {
   @Override
   public Set<String> obtenerCategorias() {
     CategoriaRepository catRepo = CategoriaRepository.get();
-    return Tx.inTx(
+    Set<String> resultado =
+    Tx.inTx(
         entityManager ->
             catRepo.obtenerCategorias(entityManager).stream()
                 .map(Categoria::getNombre)
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
+     return resultado;
   }
 
   /**

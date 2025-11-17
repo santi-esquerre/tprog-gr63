@@ -1,14 +1,17 @@
 
 package webservice;
 
+import java.util.List;
+import javax.xml.datatype.XMLGregorianCalendar;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebResult;
 import jakarta.jws.WebService;
-import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.ws.Action;
 import jakarta.xml.ws.FaultAction;
+import jakarta.xml.ws.RequestWrapper;
+import jakarta.xml.ws.ResponseWrapper;
 
 
 /**
@@ -18,7 +21,6 @@ import jakarta.xml.ws.FaultAction;
  * 
  */
 @WebService(name = "EventoService", targetNamespace = "http://webservice/")
-@SOAPBinding(style = SOAPBinding.Style.RPC)
 @XmlSeeAlso({
     ObjectFactory.class
 })
@@ -33,12 +35,14 @@ public interface EventoService {
      * @throws ValidationInputException_Exception
      */
     @WebMethod
-    @WebResult(partName = "return")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerDatosDetalladosEvento", targetNamespace = "http://webservice/", className = "webservice.ObtenerDatosDetalladosEvento")
+    @ResponseWrapper(localName = "obtenerDatosDetalladosEventoResponse", targetNamespace = "http://webservice/", className = "webservice.ObtenerDatosDetalladosEventoResponse")
     @Action(input = "http://webservice/EventoService/obtenerDatosDetalladosEventoRequest", output = "http://webservice/EventoService/obtenerDatosDetalladosEventoResponse", fault = {
         @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/obtenerDatosDetalladosEvento/Fault/ValidationInputException")
     })
     public DtEventoDetallado obtenerDatosDetalladosEvento(
-        @WebParam(name = "arg0", partName = "arg0")
+        @WebParam(name = "arg0", targetNamespace = "")
         String arg0)
         throws ValidationInputException_Exception
     ;
@@ -49,19 +53,23 @@ public interface EventoService {
      *     returns webservice.DtEventoArray
      */
     @WebMethod
-    @WebResult(partName = "return")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "listarEventos", targetNamespace = "http://webservice/", className = "webservice.ListarEventos")
+    @ResponseWrapper(localName = "listarEventosResponse", targetNamespace = "http://webservice/", className = "webservice.ListarEventosResponse")
     @Action(input = "http://webservice/EventoService/listarEventosRequest", output = "http://webservice/EventoService/listarEventosResponse")
     public DtEventoArray listarEventos();
 
     /**
      * 
      * @return
-     *     returns webservice.StringArray
+     *     returns java.util.List<java.lang.String>
      */
     @WebMethod
-    @WebResult(partName = "return")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerCategorias", targetNamespace = "http://webservice/", className = "webservice.ObtenerCategorias")
+    @ResponseWrapper(localName = "obtenerCategoriasResponse", targetNamespace = "http://webservice/", className = "webservice.ObtenerCategoriasResponse")
     @Action(input = "http://webservice/EventoService/obtenerCategoriasRequest", output = "http://webservice/EventoService/obtenerCategoriasResponse")
-    public StringArray obtenerCategorias();
+    public List<String> obtenerCategorias();
 
     /**
      * 
@@ -73,16 +81,18 @@ public interface EventoService {
      * @throws ValidationInputException_Exception
      */
     @WebMethod
-    @WebResult(partName = "return")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "agregarEdicionAEvento", targetNamespace = "http://webservice/", className = "webservice.AgregarEdicionAEvento")
+    @ResponseWrapper(localName = "agregarEdicionAEventoResponse", targetNamespace = "http://webservice/", className = "webservice.AgregarEdicionAEventoResponse")
     @Action(input = "http://webservice/EventoService/agregarEdicionAEventoRequest", output = "http://webservice/EventoService/agregarEdicionAEventoResponse", fault = {
         @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/agregarEdicionAEvento/Fault/ValidationInputException")
     })
     public boolean agregarEdicionAEvento(
-        @WebParam(name = "arg0", partName = "arg0")
+        @WebParam(name = "arg0", targetNamespace = "")
         String arg0,
-        @WebParam(name = "arg1", partName = "arg1")
+        @WebParam(name = "arg1", targetNamespace = "")
         String arg1,
-        @WebParam(name = "arg2", partName = "arg2")
+        @WebParam(name = "arg2", targetNamespace = "")
         DtEdicion arg2)
         throws ValidationInputException_Exception
     ;
@@ -95,12 +105,14 @@ public interface EventoService {
      * @throws ValidationInputException_Exception
      */
     @WebMethod
-    @WebResult(partName = "return")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "mostrarEdiciones", targetNamespace = "http://webservice/", className = "webservice.MostrarEdiciones")
+    @ResponseWrapper(localName = "mostrarEdicionesResponse", targetNamespace = "http://webservice/", className = "webservice.MostrarEdicionesResponse")
     @Action(input = "http://webservice/EventoService/mostrarEdicionesRequest", output = "http://webservice/EventoService/mostrarEdicionesResponse", fault = {
         @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/mostrarEdiciones/Fault/ValidationInputException")
     })
     public DtEdicionArray mostrarEdiciones(
-        @WebParam(name = "arg0", partName = "arg0")
+        @WebParam(name = "arg0", targetNamespace = "")
         String arg0)
         throws ValidationInputException_Exception
     ;
@@ -113,13 +125,61 @@ public interface EventoService {
      * @throws ValidationInputException_Exception
      */
     @WebMethod
-    @WebResult(partName = "return")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "obtenerDatosDetalladosEventoAprobadas", targetNamespace = "http://webservice/", className = "webservice.ObtenerDatosDetalladosEventoAprobadas")
+    @ResponseWrapper(localName = "obtenerDatosDetalladosEventoAprobadasResponse", targetNamespace = "http://webservice/", className = "webservice.ObtenerDatosDetalladosEventoAprobadasResponse")
     @Action(input = "http://webservice/EventoService/obtenerDatosDetalladosEventoAprobadasRequest", output = "http://webservice/EventoService/obtenerDatosDetalladosEventoAprobadasResponse", fault = {
         @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/obtenerDatosDetalladosEventoAprobadas/Fault/ValidationInputException")
     })
     public DtEventoDetallado obtenerDatosDetalladosEventoAprobadas(
-        @WebParam(name = "arg0", partName = "arg0")
+        @WebParam(name = "arg0", targetNamespace = "")
         String arg0)
+        throws ValidationInputException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     * @return
+     *     returns webservice.DtEventoArray
+     * @throws ValidationInputException_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "listarUltimosEventos", targetNamespace = "http://webservice/", className = "webservice.ListarUltimosEventos")
+    @ResponseWrapper(localName = "listarUltimosEventosResponse", targetNamespace = "http://webservice/", className = "webservice.ListarUltimosEventosResponse")
+    @Action(input = "http://webservice/EventoService/listarUltimosEventosRequest", output = "http://webservice/EventoService/listarUltimosEventosResponse", fault = {
+        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/listarUltimosEventos/Fault/ValidationInputException")
+    })
+    public DtEventoArray listarUltimosEventos(
+        @WebParam(name = "arg0", targetNamespace = "")
+        Integer arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        XMLGregorianCalendar arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        Long arg2)
+        throws ValidationInputException_Exception
+    ;
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns boolean
+     * @throws ValidationInputException_Exception
+     */
+    @WebMethod(operationName = "AltaEvento")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "AltaEvento", targetNamespace = "http://webservice/", className = "webservice.AltaEvento")
+    @ResponseWrapper(localName = "AltaEventoResponse", targetNamespace = "http://webservice/", className = "webservice.AltaEventoResponse")
+    @Action(input = "http://webservice/EventoService/AltaEventoRequest", output = "http://webservice/EventoService/AltaEventoResponse", fault = {
+        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/AltaEvento/Fault/ValidationInputException")
+    })
+    public boolean altaEvento(
+        @WebParam(name = "arg0", targetNamespace = "")
+        DtEventoAlta arg0)
         throws ValidationInputException_Exception
     ;
 
@@ -132,33 +192,17 @@ public interface EventoService {
      * @throws ValidationInputException_Exception
      */
     @WebMethod
-    @WebResult(partName = "return")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "mostrarEdicionesPorEstado", targetNamespace = "http://webservice/", className = "webservice.MostrarEdicionesPorEstado")
+    @ResponseWrapper(localName = "mostrarEdicionesPorEstadoResponse", targetNamespace = "http://webservice/", className = "webservice.MostrarEdicionesPorEstadoResponse")
     @Action(input = "http://webservice/EventoService/mostrarEdicionesPorEstadoRequest", output = "http://webservice/EventoService/mostrarEdicionesPorEstadoResponse", fault = {
         @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/mostrarEdicionesPorEstado/Fault/ValidationInputException")
     })
     public DtEdicionArray mostrarEdicionesPorEstado(
-        @WebParam(name = "arg0", partName = "arg0")
+        @WebParam(name = "arg0", targetNamespace = "")
         String arg0,
-        @WebParam(name = "arg1", partName = "arg1")
+        @WebParam(name = "arg1", targetNamespace = "")
         EstadoEdicion arg1)
-        throws ValidationInputException_Exception
-    ;
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns boolean
-     * @throws ValidationInputException_Exception
-     */
-    @WebMethod(operationName = "AltaEvento")
-    @WebResult(partName = "return")
-    @Action(input = "http://webservice/EventoService/AltaEventoRequest", output = "http://webservice/EventoService/AltaEventoResponse", fault = {
-        @FaultAction(className = ValidationInputException_Exception.class, value = "http://webservice/EventoService/AltaEvento/Fault/ValidationInputException")
-    })
-    public boolean altaEvento(
-        @WebParam(name = "arg0", partName = "arg0")
-        DtEventoAlta arg0)
         throws ValidationInputException_Exception
     ;
 

@@ -30,8 +30,8 @@ public class EventoService {
 	public EventoService() {}
 	
 	@WebMethod
-	public String[] obtenerCategorias() {
-		return eventoController.obtenerCategorias().toArray(new String[0]);
+	public List<String> obtenerCategorias() {
+		return eventoController.obtenerCategorias().stream().toList();
 	}
 	
 	@WebMethod

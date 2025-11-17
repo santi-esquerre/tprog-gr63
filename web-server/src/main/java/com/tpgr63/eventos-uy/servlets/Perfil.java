@@ -209,7 +209,9 @@ public class Perfil extends HttpServlet {
 			String apellido = request.getParameter("apellido");
 			String correo = request.getParameter("correo");
 			String fechaNacStr = request.getParameter("fechaNacimiento");
-			String password = request.getParameter("password");
+			String password = request.getParameter("password") == null || request.getParameter("password").isEmpty()
+          ? ""
+          : request.getParameter("password");
 
 			// Parse date
 			XMLGregorianCalendar fechaNacimiento = null;
@@ -445,7 +447,7 @@ public class Perfil extends HttpServlet {
 		try {
 			PortFactory factory = PortFactory.get();
 			EventoService eventoController = factory.getEventoPort();
-			List<String> categorias = eventoController.obtenerCategorias().getItem();
+			List<String> categorias = eventoController.obtenerCategorias();
 			sendApiSuccess(response, categorias);
 		} catch (java.lang.Exception e) {
 			e.printStackTrace();
@@ -661,6 +663,7 @@ public class Perfil extends HttpServlet {
 			eventoAlta.setFechaAlta(fechaAlta);
       eventoAlta.setSigla(sigla);
       eventoAlta.setFoto(foto);
+      eventoAlta.getCategorias().addAll(categoriasSet);
 			
 
 			System.out.println("DtEventoAlta creado: " + eventoAlta);

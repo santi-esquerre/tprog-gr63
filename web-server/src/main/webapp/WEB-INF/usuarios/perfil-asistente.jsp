@@ -98,9 +98,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     <section class="col-12 col-lg-8">
                         <header class="d-flex align-items-center justify-content-between flex-wrap mb-3">
                             <h3 class="fw-bold m-0">Mis Registros</h3>
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addRegistroModal">
-                                <i class="bi bi-plus-circle me-1"></i> Nuevo Registro
-                            </button>
                         </header>
 
                         <div class="card shadow-sm">
@@ -127,21 +124,15 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                                 <td><%= dateFormat.format(reg.getFecha().toGregorianCalendar().getTime()) %></td>
                                                 <td>UYU <%= String.format("%.2f", reg.getCosto()) %></td>
                                                 <td class="text-end">
-                                                    <button 
+                                                    <a 
                                                         class="btn btn-sm btn-outline-secondary me-1 btn-view-registro"
                                                         data-evento="<%= reg.getNombreEvento() %>"
                                                         data-edicion="<%= reg.getNombreEdicion() %>"
                                                         title="Ver detalles"
+                                                        href="<%= request.getContextPath() %>/edicion/<%= reg.getNombreEdicion() %>#registro-success"
                                                     >
                                                         <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button 
-                                                        class="btn btn-sm btn-outline-danger btn-del-registro" 
-                                                        data-edicion="<%= reg.getNombreEdicion() %>"
-                                                        title="Cancelar registro"
-                                                    >
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <% } 
@@ -162,24 +153,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             </div>
         </section>
     </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-dark py-4 mt-auto">
-        <div class="container px-3">
-            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                <div class="col-auto">
-                    <small class="text-white">Copyright &copy; Eventos.uy 2024</small>
-                </div>
-                <div class="col-auto">
-                    <a class="link-light small" href="#!">Privacidad</a>
-                    <span class="text-white mx-1">&middot;</span>
-                    <a class="link-light small" href="#!">Términos</a>
-                    <span class="text-white mx-1">&middot;</span>
-                    <a class="link-light small" href="#!">Contacto</a>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- =======================
          MODALS
@@ -372,13 +345,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             </form>
         </div>
     </div>
-                        Cerrar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Confirmación Eliminar -->
     <div 
         class="modal fade" 
@@ -447,15 +413,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-        // Handle view registro button
-        document.querySelectorAll('.btn-view-registro').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const evento = e.currentTarget.dataset.evento;
-                const edicion = e.currentTarget.dataset.edicion;
-                // Redirect to edition details page
-                window.location.href = '<%= request.getContextPath() %>/edicion?evento=' + encodeURIComponent(evento) + '&edicion=' + encodeURIComponent(edicion);
-            });
-        });
 
         // Handle delete registro button
         document.querySelectorAll('.btn-del-registro').forEach(btn => {
