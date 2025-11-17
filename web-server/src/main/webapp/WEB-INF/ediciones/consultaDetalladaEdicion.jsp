@@ -134,7 +134,7 @@
             	%>
             <div class="container p-5 mt-4">
             
-            	<div class="border border-success p-2 mb-3 d-flex justify-content-center" style="background-color: rgba(40, 167, 69, 0.3)">
+            	<div id="registro-success" class="border border-success p-2 mb-3 d-flex justify-content-center" style="background-color: rgba(40, 167, 69, 0.3)">
             		<div> 	
             		<p class="fw-bold mb-0 p-0">¡Ya estás registrado a esta edición!<p>
             		<div class="d-flex gap-2 fw-normal">

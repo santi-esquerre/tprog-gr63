@@ -127,14 +127,15 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                                 <td><%= dateFormat.format(reg.getFecha().toGregorianCalendar().getTime()) %></td>
                                                 <td>UYU <%= String.format("%.2f", reg.getCosto()) %></td>
                                                 <td class="text-end">
-                                                    <button 
+                                                    <a 
                                                         class="btn btn-sm btn-outline-secondary me-1 btn-view-registro"
                                                         data-evento="<%= reg.getNombreEvento() %>"
                                                         data-edicion="<%= reg.getNombreEdicion() %>"
                                                         title="Ver detalles"
+                                                        href="<%= request.getContextPath() %>/edicion/<%= reg.getNombreEdicion() %>#registro-success"
                                                     >
                                                         <i class="bi bi-eye"></i>
-                                                    </button>
+                                                    </a>
                                                     <button 
                                                         class="btn btn-sm btn-outline-danger btn-del-registro" 
                                                         data-edicion="<%= reg.getNombreEdicion() %>"
@@ -447,15 +448,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-        // Handle view registro button
-        document.querySelectorAll('.btn-view-registro').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const evento = e.currentTarget.dataset.evento;
-                const edicion = e.currentTarget.dataset.edicion;
-                // Redirect to edition details page
-                window.location.href = '<%= request.getContextPath() %>/edicion?evento=' + encodeURIComponent(evento) + '&edicion=' + encodeURIComponent(edicion);
-            });
-        });
 
         // Handle delete registro button
         document.querySelectorAll('.btn-del-registro').forEach(btn => {
