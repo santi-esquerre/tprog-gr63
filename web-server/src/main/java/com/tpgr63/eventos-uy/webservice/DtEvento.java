@@ -23,6 +23,7 @@ import jakarta.xml.bind.annotation.XmlType;
  *         <element name="descripcion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         <element name="fechaAlta" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         <element name="foto" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         <element name="identifier" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *       </sequence>
  *     </restriction>
  *   </complexContent>
@@ -37,7 +38,8 @@ import jakarta.xml.bind.annotation.XmlType;
     "sigla",
     "descripcion",
     "fechaAlta",
-    "foto"
+    "foto",
+    "identifier"
 })
 public class DtEvento {
 
@@ -47,6 +49,7 @@ public class DtEvento {
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar fechaAlta;
     protected String foto;
+    protected Long identifier;
 
     /**
      * Obtiene el valor de la propiedad nombre.
@@ -166,6 +169,30 @@ public class DtEvento {
      */
     public void setFoto(String value) {
         this.foto = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad identifier.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * Define el valor de la propiedad identifier.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setIdentifier(Long value) {
+        this.identifier = value;
     }
 
 }

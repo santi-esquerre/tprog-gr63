@@ -447,7 +447,7 @@ public class Perfil extends HttpServlet {
 		try {
 			PortFactory factory = PortFactory.get();
 			EventoService eventoController = factory.getEventoPort();
-			List<String> categorias = eventoController.obtenerCategorias().getItem();
+			List<String> categorias = eventoController.obtenerCategorias();
 			sendApiSuccess(response, categorias);
 		} catch (java.lang.Exception e) {
 			e.printStackTrace();
@@ -663,6 +663,7 @@ public class Perfil extends HttpServlet {
 			eventoAlta.setFechaAlta(fechaAlta);
       eventoAlta.setSigla(sigla);
       eventoAlta.setFoto(foto);
+      eventoAlta.getCategorias().addAll(categoriasSet);
 			
 
 			System.out.println("DtEventoAlta creado: " + eventoAlta);
