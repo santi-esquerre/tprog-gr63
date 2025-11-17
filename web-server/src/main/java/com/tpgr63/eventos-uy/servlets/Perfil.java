@@ -209,7 +209,9 @@ public class Perfil extends HttpServlet {
 			String apellido = request.getParameter("apellido");
 			String correo = request.getParameter("correo");
 			String fechaNacStr = request.getParameter("fechaNacimiento");
-			String password = request.getParameter("password");
+			String password = request.getParameter("password") == null || request.getParameter("password").isEmpty()
+          ? ""
+          : request.getParameter("password");
 
 			// Parse date
 			XMLGregorianCalendar fechaNacimiento = null;

@@ -43,7 +43,7 @@
                                         <div class="invalid-feedback" data-sb-feedback="usuario:required">Debe ingresar un nickname o correo electrónico</div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="clave" name="clave" type="password" placeholder="name@example.com" minlength="8" required/>
+                                        <input class="form-control" id="clave" name="clave" type="password" placeholder="name@example.com" minlength="1" required/>
                                         <label for="clave">Contraseña</label>
                                         <div class="invalid-feedback" data-sb-feedback="clave:required">Debe ingresar su contraseña</div>
                                     </div>

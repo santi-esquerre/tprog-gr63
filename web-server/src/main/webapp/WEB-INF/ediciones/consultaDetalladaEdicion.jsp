@@ -59,15 +59,7 @@
         <main class="flex-shrink-0 mt-5 mb-5">
             <div class="container p-5 rounded-4 border bg-white shadow-sm">
                 <section>
-                <% if (organizadorUsuario) { %>
-                    <div class="d-flex justify-content-end">
-                        <a class="btn btn-outline-primary mb-3 me-2" data-bs-toggle="modal" data-bs-target="#registrosEdicionModal" href="#!">Ver registros</a>
-                    </div> 
-                    
-                <jsp:include page="/WEB-INF/registro/registrosEdicion.jsp"/>    
-               <% } %>     
-                    
-                    <h3>Organizador </h3>
+                <h3>Organizador </h3>
                     <div class="row g-3 align-items-center mb-4 p-2">
                         <div class="col-auto">
                             <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle" style="width: 75px; height: 75px; font-size: 2rem;">
@@ -83,6 +75,15 @@
                             <% } %>
                         </div>
                     </div>
+                <% if (organizadorUsuario) { %>
+                    <div class="d-flex justify-content-end">
+                        <a class="btn btn-outline-primary mb-3 me-2" data-bs-toggle="modal" data-bs-target="#registrosEdicionModal" href="#!">Ver registros</a>
+                    </div> 
+                    
+                <jsp:include page="/WEB-INF/registro/registrosEdicion.jsp"/>    
+               <% } %>     
+                    
+                    
                 </section>
             </div>
             
@@ -196,24 +197,6 @@
                     </div>
                </div>
         		</div>	
-          <div class="container px-3">
-            <div
-              class="row align-items-center justify-content-between flex-column flex-sm-row"
-            >
-              <div class="col-auto">
-                <div class="small m-0 text-white">
-                  Copyright &copy; Eventos.uy 2025
-                </div>
-              </div>
-              <div class="col-auto">
-                <a class="link-light small" href="#!">Privacy</a>
-                <span class="text-white mx-1">&middot;</span>
-                <a class="link-light small" href="#!">Terms</a>
-                <span class="text-white mx-1">&middot;</span>
-                <a class="link-light small" href="#!">Contact</a>
-              </div>
-            </div>
-          </div>
         </footer>
         
 

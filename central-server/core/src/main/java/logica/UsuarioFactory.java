@@ -25,7 +25,7 @@ public final class UsuarioFactory {
       String apellido,
       LocalDate fechaNacimiento,
       Institucion institucion) {
-    var asistente = new Asistente(nickname, nombre, apellido, clave, foto, correo, fechaNacimiento);
+    var asistente = new Asistente(nickname, nombre, correo, clave, foto, apellido, fechaNacimiento);
     asistente.setInstitucion(institucion);
     institucion.addAsistente(asistente);
     entm.persist(asistente);
